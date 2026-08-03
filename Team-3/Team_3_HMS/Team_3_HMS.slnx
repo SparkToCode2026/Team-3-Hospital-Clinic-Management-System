@@ -1,3 +1,7 @@
 <Solution>
+  <Folder Name="/Solution Items/">
+    <File Path="ERDDiagram1.drawio.png" />
+    <File Path="MappingDiagramProject.png" />
+  </Folder>
   <Project Path="Team_3_HMS/Team_3_HMS.csproj" />
 </Solution>
