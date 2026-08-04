@@ -23,5 +23,7 @@ namespace Team_3_HMS.Models
 
         [JsonIgnore]
         public DoctorProfile Profile { get; set; }
+
+     
     }
 }

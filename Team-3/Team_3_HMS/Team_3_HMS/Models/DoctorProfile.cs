@@ -29,6 +29,17 @@ namespace Team_3_HMS.Models
         [JsonIgnore]
         public List<Department>? Departments { get; set; }
 
+        //conducts relationship 1:N with Appointment
+        [InverseProperty("DoctorProfile")]
+        [JsonIgnore]
+        public List<Appointment>? Appointments { get; set; }
 
+        //practices relationship M:N with Specialization
+        [ForeignKey("Specialization")]
+        [Required]
+        public int SpecializationId { get; set; }
+
+        [JsonIgnore]
+        public List<Specialization>? Specializations { get; set; }
     }
 }
