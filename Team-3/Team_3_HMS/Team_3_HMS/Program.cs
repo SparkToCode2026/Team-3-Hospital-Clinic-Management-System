@@ -13,7 +13,7 @@ namespace Team_3_HMS
 
             // Add services to the container.
             //dbcontext
-            builder.Services.AddDbContext<DBContext>(options =>
+            builder.Services.AddDbContext<ProjectContext>(options =>
              options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
             //builder.Services.AddControllers();

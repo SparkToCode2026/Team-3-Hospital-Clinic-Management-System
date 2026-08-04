@@ -4,9 +4,6 @@ namespace Team_3_HMS
 {
     public class ProjectContext : DbContext
     {
-       
-            
-
             public ProjectContext(DbContextOptions<ProjectContext> options) : base(options)
             {
 
