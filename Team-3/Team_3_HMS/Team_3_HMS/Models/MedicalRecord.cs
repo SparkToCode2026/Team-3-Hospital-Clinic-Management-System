@@ -6,6 +6,7 @@ namespace Team_3_HMS.Models
 {
     public class MedicalRecord
     {
+        [Key]
         public int MedicalRecordID { get; set; }
 
         public string Diagnosis { get; set; } = string.Empty;

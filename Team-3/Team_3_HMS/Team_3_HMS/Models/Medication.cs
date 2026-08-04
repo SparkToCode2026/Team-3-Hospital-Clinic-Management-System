@@ -6,13 +6,14 @@ namespace Team_3_HMS.Models
 {
     public class Medication
     {
+        [Key]
         public int MedicationID { get; set; }
 
-        public string Name { get; set; } = string.Empty;
+        public string Name { get; set; }
 
-        public string GenericName { get; set; } = string.Empty;
+        public string GenericName { get; set; }
 
-        public string DosageForm { get; set; } = string.Empty;
+        public string DosageForm { get; set; }
 
         public decimal UnitPrice { get; set; }
 

@@ -6,6 +6,7 @@ namespace Team_3_HMS.Models
 {
     public class Prescription
     {
+        [Key]
         public int PrescriptionID { get; set; }
 
         public DateTime IssuedDate { get; set; }
