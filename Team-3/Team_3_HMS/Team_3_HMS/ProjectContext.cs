@@ -2,13 +2,10 @@
 using Team_3_HMS.Models;
 namespace Team_3_HMS
 {
-    public class ProjectContext 
+    public class ProjectContext : DbContext
     {
-        public class DBContext : DbContext
-        {
-            
-
-            public DBContext(DbContextOptions<DBContext> options) : base(options)
+        
+            public ProjectContext(DbContextOptions<ProjectContext> options) : base(options)
             {
 
             }
@@ -36,4 +33,4 @@ namespace Team_3_HMS
         }
 
     }
-}
+
