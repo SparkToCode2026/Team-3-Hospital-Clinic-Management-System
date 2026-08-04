@@ -1,7 +1,6 @@
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
-using static Team_3_HMS.ProjectContext;
 
 namespace Team_3_HMS
 {
