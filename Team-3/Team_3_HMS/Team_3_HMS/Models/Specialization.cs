@@ -13,12 +13,12 @@ namespace Team_3_HMS.Models
 
         public string Description { get; set; }
 
-        //practiced relationship M:N with DoctorProfile
-        [ForeignKey("Doctor_specialization")]
+        //practices relationship M:N with DoctorProfile
+        [ForeignKey("doctors")]
         [Required]
         public int DoctorProfileId { get; set; }
 
         [JsonIgnore]
-        public List<DoctorProfile>? Doctor_specialization { get; set; }
+        public List<DoctorProfile>? doctors { get; set; }
     }
 }

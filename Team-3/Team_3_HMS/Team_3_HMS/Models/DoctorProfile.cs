@@ -35,11 +35,11 @@ namespace Team_3_HMS.Models
         public List<Appointment>? Appointments { get; set; }
 
         //practices relationship M:N with Specialization
-        [ForeignKey("Specialization")]
+        [ForeignKey("specializations")]
         [Required]
         public int SpecializationId { get; set; }
 
         [JsonIgnore]
-        public List<Specialization>? Specializations { get; set; }
+        public List<Specialization>? specializations { get; set; }
     }
 }
