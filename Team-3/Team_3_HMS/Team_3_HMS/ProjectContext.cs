@@ -27,6 +27,12 @@ namespace Team_3_HMS
 
             public DbSet<DoctorSpecialization> DoctorSpecializations { get; set; }
 
+            public DbSet<Appointment> Appointments { get; set; }
+
+            public DbSet<Room> Rooms { get; set; }
+
+            public DbSet<LabTest> LabTests { get; set; }
+
 
         }
 
