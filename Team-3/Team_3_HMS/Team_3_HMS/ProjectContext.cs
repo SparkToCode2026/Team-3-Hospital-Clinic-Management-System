@@ -2,10 +2,17 @@
 using Team_3_HMS.Models;
 namespace Team_3_HMS
 {
-    public class ProjectContext 
+    public class ProjectContext : DbContext
     {
-        public class DBContext : DbContext
-        {
+       
+            
+
+            public ProjectContext(DbContextOptions<ProjectContext> options) : base(options)
+            {
+
+            }
+
+
             public DbSet<MedicalRecord> MedicalRecords { get; set; } = null!;
 
             public DbSet<Prescription> Prescriptions { get; set; } = null!;
@@ -18,14 +25,6 @@ namespace Team_3_HMS
 
             public DbSet<Specialization> Specializations { get; set; }
 
-            public DBContext(DbContextOptions<DBContext> options) : base(options)
-            {
-
-            }
-            
-
-           
-
             public DbSet<Appointment> Appointments { get; set; }
 
             public DbSet<Room> Rooms { get; set; }
@@ -33,7 +32,7 @@ namespace Team_3_HMS
             public DbSet<LabTest> LabTests { get; set; }
 
 
-        }
+        
 
     }
 }
