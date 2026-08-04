@@ -39,5 +39,13 @@ namespace Team_3_HMS.Models
         [JsonIgnore]
         public Room? room { get; set; }
 
+        //provides relationship 1:1 with medical record
+        [ForeignKey("MedicalRecord")]
+        [Required]
+        public int MedicalRecordID { get; set; }
+
+        [JsonIgnore]
+        public MedicalRecord? MedicalRecord { get; set; }
+
     }
 }
