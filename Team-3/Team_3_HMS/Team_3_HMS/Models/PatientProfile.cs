@@ -24,7 +24,7 @@ namespace Team_3_HMS.Models
         [Required]
         public string emergencyContact { get; set; }
 
-        //owns
+        //owns relationship creation 1:1 with user
 
         [ForeignKey("user")]
         [Required]

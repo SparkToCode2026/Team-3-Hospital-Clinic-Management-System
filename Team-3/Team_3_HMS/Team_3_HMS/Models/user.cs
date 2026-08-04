@@ -24,7 +24,7 @@ namespace Team_3_HMS.Models
         [Required]
         public string Phone { get; set; }
 
-        //owns
+        //owns relationship 1:1
 
         [InverseProperty("user")]
         [JsonIgnore]
