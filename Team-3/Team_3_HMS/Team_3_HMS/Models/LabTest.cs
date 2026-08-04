@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Team_3_HMS.Models
 {
@@ -16,5 +17,12 @@ namespace Team_3_HMS.Models
         public decimal Cost { get; set; }
 
         public string Result { get; set; }
+
+        //orders relationship 1:N with medical record
+        [ForeignKey("records")]
+        [Required]
+        public int MedicalRecordId { get; set; }
+
+        public MedicalRecord records { get; set; }
     }
 }
