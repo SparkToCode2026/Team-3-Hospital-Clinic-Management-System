@@ -30,7 +30,7 @@ namespace Team_3_HMS.Models
         public List<Prescription>? Prescriptions { get; set; }
 
         //orders relationship 1:N with lab test
-        [InverseProperty("records")]
+        [InverseProperty("record")]
         [JsonIgnore]
         public List<LabTest>? LabTests { get; set; }
     }

@@ -19,10 +19,10 @@ namespace Team_3_HMS.Models
         public string Result { get; set; }
 
         //orders relationship 1:N with medical record
-        [ForeignKey("records")]
+        [ForeignKey("record")]
         [Required]
         public int MedicalRecordId { get; set; }
 
-        public MedicalRecord records { get; set; }
+        public MedicalRecord record { get; set; }
     }
 }
