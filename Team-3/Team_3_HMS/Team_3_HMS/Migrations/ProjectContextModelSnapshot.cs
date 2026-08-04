@@ -66,9 +66,6 @@ namespace Team_3_HMS.Migrations
                     b.Property<int>("DoctorProfileId")
                         .HasColumnType("int");
 
-                    b.Property<int>("MedicalRecordID")
-                        .HasColumnType("int");
-
                     b.Property<int>("PatientProfileID")
                         .HasColumnType("int");
 
@@ -86,9 +83,6 @@ namespace Team_3_HMS.Migrations
                     b.HasKey("AppointmentId");
 
                     b.HasIndex("DoctorProfileId");
-
-                    b.HasIndex("MedicalRecordID")
-                        .IsUnique();
 
                     b.HasIndex("PatientProfileID");
 
@@ -205,8 +199,8 @@ namespace Team_3_HMS.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<double>("Cost")
-                        .HasColumnType("float");
+                    b.Property<decimal>("Cost")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("MedicalRecordId")
                         .HasColumnType("int");
@@ -259,6 +253,9 @@ namespace Team_3_HMS.Migrations
 
                     b.HasKey("MedicalRecordID");
 
+                    b.HasIndex("AppointmentId")
+                        .IsUnique();
+
                     b.ToTable("MedicalRecords");
                 });
 
@@ -281,9 +278,6 @@ namespace Team_3_HMS.Migrations
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("PrescriptionID")
-                        .HasColumnType("int");
 
                     b.Property<double>("UnitPrice")
                         .HasColumnType("float");
@@ -348,13 +342,7 @@ namespace Team_3_HMS.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("MedicalRecordID")
-                        .HasColumnType("int");
-
                     b.Property<int>("MedicalRecordId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("MedicationID")
                         .HasColumnType("int");
 
                     b.Property<string>("Notes")
@@ -487,12 +475,6 @@ namespace Team_3_HMS.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Team_3_HMS.Models.MedicalRecord", "MedicalRecord")
-                        .WithOne("AppointmentID")
-                        .HasForeignKey("Team_3_HMS.Models.Appointment", "MedicalRecordID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Team_3_HMS.Models.PatientProfile", "PatientProfile")
                         .WithMany("Appointments")
                         .HasForeignKey("PatientProfileID")
@@ -506,8 +488,6 @@ namespace Team_3_HMS.Migrations
                         .IsRequired();
 
                     b.Navigation("DoctorProfile");
-
-                    b.Navigation("MedicalRecord");
 
                     b.Navigation("PatientProfile");
 
@@ -558,6 +538,17 @@ namespace Team_3_HMS.Migrations
                     b.Navigation("record");
                 });
 
+            modelBuilder.Entity("Team_3_HMS.Models.MedicalRecord", b =>
+                {
+                    b.HasOne("Team_3_HMS.Models.Appointment", "Appointment")
+                        .WithOne("MedicalRecord")
+                        .HasForeignKey("Team_3_HMS.Models.MedicalRecord", "AppointmentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Appointment");
+                });
+
             modelBuilder.Entity("Team_3_HMS.Models.PatientProfile", b =>
                 {
                     b.HasOne("Team_3_HMS.Models.user", "user")
@@ -572,7 +563,7 @@ namespace Team_3_HMS.Migrations
             modelBuilder.Entity("Team_3_HMS.Models.Prescription", b =>
                 {
                     b.HasOne("Team_3_HMS.Models.MedicalRecord", "Medical")
-                        .WithMany("Prescriptions")
+                        .WithMany("p")
                         .HasForeignKey("MedicalRecordId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -582,6 +573,8 @@ namespace Team_3_HMS.Migrations
 
             modelBuilder.Entity("Team_3_HMS.Models.Appointment", b =>
                 {
+                    b.Navigation("MedicalRecord");
+
                     b.Navigation("invoice");
                 });
 
@@ -594,11 +587,9 @@ namespace Team_3_HMS.Migrations
 
             modelBuilder.Entity("Team_3_HMS.Models.MedicalRecord", b =>
                 {
-                    b.Navigation("AppointmentID");
-
                     b.Navigation("LabTests");
 
-                    b.Navigation("Prescriptions");
+                    b.Navigation("p");
                 });
 
             modelBuilder.Entity("Team_3_HMS.Models.PatientProfile", b =>

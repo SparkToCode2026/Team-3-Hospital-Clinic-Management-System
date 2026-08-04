@@ -21,11 +21,6 @@ namespace Team_3_HMS.Models
         [Required]
         public double UnitPrice { get; set; }
 
-        //lists relation with prescription M:N 11
-        [ForeignKey("Prescriptions")]
-        [Required]
-        public int PrescriptionID { get; set; }
-
         [JsonIgnore]
         public List<Prescription>? Prescriptions { get; set; }
     }
