@@ -18,12 +18,13 @@ namespace Team_3_HMS.Models
         public string TestDate { get; set; }
 
         [Required]
-        public double Cost { get; set; }
+        [Column(TypeName = "decimal(18,2)")]
+        public decimal Cost { get; set; }
 
         [Required]
         public string Result { get; set; }
 
-        //orders relationship 1:N with medical record 10
+        // 1:N with MedicalRecord
         [ForeignKey("record")]
         [Required]
         public int MedicalRecordId { get; set; }

@@ -10,33 +10,30 @@ namespace Team_3_HMS.Models
         public int MedicalRecordID { get; set; }
 
         [Required]
-        public string Diagnosis { get; set; } = string.Empty;
+        public string Diagnosis { get; set; }
 
         [Required]
-        public string TreatmentPlan { get; set; } = string.Empty;
+        public string TreatmentPlan { get; set; }
 
         [Required]
-        public string Symptom { get; set; } = string.Empty;
+        public string Symptom { get; set; }
 
         [Required]
         public string RecordDate { get; set; }
 
-        [Required]
+        // Foreign key matching Appointment
+        [ForeignKey("Appointment")]
         public int AppointmentId { get; set; }
 
-
-        //provides relationship 1:1 with appointment
-        [InverseProperty("MedicalRecord")]
         [JsonIgnore]
-        public Appointment? AppointmentID { get; set; }
+        public Appointment? Appointment { get; set; }
 
-        //contains relationship 1:N with prescription 12
-
-        [InverseProperty("Medical")]
+        // 1:N relationship with Prescription
+        [InverseProperty("MedicalRecord")]
         [JsonIgnore]
         public List<Prescription>? Prescriptions { get; set; }
 
-        //orders relationship 1:N with lab test
+        // 1:N relationship with LabTest
         [InverseProperty("record")]
         [JsonIgnore]
         public List<LabTest>? LabTests { get; set; }

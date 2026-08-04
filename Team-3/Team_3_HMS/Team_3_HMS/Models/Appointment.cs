@@ -8,6 +8,7 @@ namespace Team_3_HMS.Models
     {
         [Key]
         public int AppointmentId { get; set; }
+
         [Required]
         public string Status { get; set; }
 
@@ -17,7 +18,7 @@ namespace Team_3_HMS.Models
         [Required]
         public string ReasonForVisit { get; set; }
 
-        //books relationship 1:N with PatientProfile 6
+        // 1:N with PatientProfile
         [ForeignKey("PatientProfile")]
         [Required]
         public int PatientProfileID { get; set; }
@@ -25,8 +26,7 @@ namespace Team_3_HMS.Models
         [JsonIgnore]
         public PatientProfile? PatientProfile { get; set; }
 
-        //conducts relationship 1:N with DoctorProfile
-
+        // 1:N with DoctorProfile
         [ForeignKey("DoctorProfile")]
         [Required]
         public int DoctorProfileId { get; set; }
@@ -34,27 +34,21 @@ namespace Team_3_HMS.Models
         [JsonIgnore]
         public DoctorProfile? DoctorProfile { get; set; }
 
-        //hosts relationship 1:N with Room 7
-
-        [ForeignKey("Room")]
+        // 1:N with Room
+        [ForeignKey("room")]
         [Required]
         public int RoomId { get; set; }
 
         [JsonIgnore]
         public Room? room { get; set; }
 
-        //provides relationship 1:1 with medical record 8
-        [ForeignKey("MedicalRecord")]
-        [Required]
-        public int MedicalRecordID { get; set; }
-
+        [InverseProperty("Appointment")]
         [JsonIgnore]
         public MedicalRecord? MedicalRecord { get; set; }
 
-        //generates relationship 1:1 with Invoice 9
+        // 1:1 with Invoice
         [InverseProperty("Appointment")]
         [JsonIgnore]
         public Invoice? invoice { get; set; }
-
     }
 }
