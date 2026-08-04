@@ -26,6 +26,7 @@ namespace Team_3_HMS.Models
         //conducts relationship 1:N with DoctorProfile
 
         [ForeignKey("DoctorProfile")]
+        [Required]
         public int DoctorProfileId { get; set; }
 
         [JsonIgnore]
@@ -34,6 +35,7 @@ namespace Team_3_HMS.Models
         //hosts relationship 1:N with Room
 
         [ForeignKey("Room")]
+        [Required]
         public int RoomId { get; set; }
 
         [JsonIgnore]
@@ -46,6 +48,11 @@ namespace Team_3_HMS.Models
 
         [JsonIgnore]
         public MedicalRecord? MedicalRecord { get; set; }
+
+        //generates relationship 1:N with Invoice 
+        [InverseProperty("Appointment")]
+        [JsonIgnore]
+        public Invoice invoice { get; set; }
 
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 
 namespace Team_3_HMS.Models
@@ -20,6 +21,12 @@ namespace Team_3_HMS.Models
         [Required]
         public string IssuedDate { get; set; }
 
+        //generates relationship 1:N with Appointment
+        [ForeignKey("Appointment")]
+        [Required]
+        public int AppointmentID { get; set; }
 
+        [JsonIgnore]
+        public Appointment? Appointment { get; set; }
     }
 }
