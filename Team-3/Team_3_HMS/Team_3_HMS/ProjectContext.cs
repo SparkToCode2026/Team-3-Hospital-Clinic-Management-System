@@ -6,6 +6,14 @@ namespace Team_3_HMS
     {
         public class DBContext : DbContext
         {
+            
+
+            public DBContext(DbContextOptions<DBContext> options) : base(options)
+            {
+
+            }
+
+
             public DbSet<MedicalRecord> MedicalRecords { get; set; } = null!;
 
             public DbSet<Prescription> Prescriptions { get; set; } = null!;
@@ -17,14 +25,6 @@ namespace Team_3_HMS
             public DbSet<Department> Departments { get; set; }
 
             public DbSet<Specialization> Specializations { get; set; }
-
-            public DBContext(DbContextOptions<DBContext> options) : base(options)
-            {
-
-            }
-            
-
-           
 
             public DbSet<Appointment> Appointments { get; set; }
 
