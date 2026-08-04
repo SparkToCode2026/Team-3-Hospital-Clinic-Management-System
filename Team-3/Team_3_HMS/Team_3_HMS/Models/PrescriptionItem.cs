@@ -2,8 +2,8 @@
 {
     public class PrescriptionItem
     {
-        public int PrescriptionId { get; set; }
+        public int PrescriptionID { get; set; }
 
-        public int MedicationId { get; set; }
+        public int MedicationID { get; set; }
     }
 }
