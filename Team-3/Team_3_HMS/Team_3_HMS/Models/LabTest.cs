@@ -18,7 +18,7 @@ namespace Team_3_HMS.Models
         public string TestDate { get; set; }
 
         [Required]
-        public decimal Cost { get; set; }
+        public double Cost { get; set; }
 
         [Required]
         public string Result { get; set; }
