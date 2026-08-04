@@ -23,5 +23,13 @@ namespace Team_3_HMS.Models
 
         [JsonIgnore]
         public MedicalRecord? Medical { get; set; }
+
+        //lists relation with medication M:N
+        [ForeignKey("Medications")]
+        [Required]
+        public int MedicationID { get; set; }
+
+        [JsonIgnore]
+        public List<Medication> Medications { get; set; }
     }
 }
