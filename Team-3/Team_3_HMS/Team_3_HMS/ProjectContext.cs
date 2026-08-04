@@ -6,12 +6,19 @@ namespace Team_3_HMS
     {
         public class DBContext : DbContext
         {
+            
 
-          
+
             public DBContext(DbContextOptions<DBContext> options) : base(options)
             {
 
             }
+
+            //registering models
+
+            public DbSet<user> Users { get; set; }
+            public DbSet<PatientProfile> PatientProfiles { get; set; }
+            public DbSet<Invoice> Invoices { get; set; }
             public DbSet<MedicalRecord> MedicalRecords { get; set; } = null!;
 
             public DbSet<Prescription> Prescriptions { get; set; } = null!;
