@@ -4,17 +4,33 @@ namespace Team_3_HMS
 {
     public class ProjectContext : DbContext
     {
-
-        //registering models
-
-        public DbSet<user> Users { get; set; }
-        public DbSet<PatientProfile> PatientProfiles { get; set; }
-        public DbSet<Invoice> Invoices { get; set; }
-
-
-        public ProjectContext(DbContextOptions<ProjectContext> options) : base(options)
+        
+            public ProjectContext(DbContextOptions<ProjectContext> options) : base(options)
             {
 
             }
+
+
+            public DbSet<MedicalRecord> MedicalRecords { get; set; } = null!;
+
+            public DbSet<Prescription> Prescriptions { get; set; } = null!;
+
+            public DbSet<Medication> Medications { get; set; } = null!;
+
+            public DbSet<DoctorProfile> DoctorProfiles { get; set; }
+
+            public DbSet<Department> Departments { get; set; }
+
+            public DbSet<Specialization> Specializations { get; set; }
+
+            public DbSet<Appointment> Appointments { get; set; }
+
+            public DbSet<Room> Rooms { get; set; }
+
+            public DbSet<LabTest> LabTests { get; set; }
+
+
+        }
+
     }
-}
+
