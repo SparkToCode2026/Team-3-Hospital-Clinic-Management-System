@@ -22,5 +22,11 @@ namespace Team_3_HMS.Models
         [InverseProperty("MedicalRecord")]
         [JsonIgnore]
         public int AppointmentID { get; set; }
+
+        //contains relationship 1:N with prescription
+
+        [InverseProperty("Medical")]
+        [JsonIgnore]
+        public List<Prescription>? Prescriptions { get; set; }
     }
 }

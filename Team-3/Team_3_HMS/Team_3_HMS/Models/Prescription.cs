@@ -1,4 +1,8 @@
-﻿namespace Team_3_HMS.Models
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
+
+namespace Team_3_HMS.Models
 {
     public class Prescription
     {
@@ -11,5 +15,13 @@
         public string Notes { get; set; } = string.Empty;
 
         public int MedicalRecordID { get; set; }
+
+        //contains relationship 1:N with medical record
+        [ForeignKey("Medical")]
+        [Required]
+        public int MedicalRecordId { get; set; }
+
+        [JsonIgnore]
+        public MedicalRecord? Medical { get; set; }
     }
 }
