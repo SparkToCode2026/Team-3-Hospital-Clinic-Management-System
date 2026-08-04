@@ -24,10 +24,17 @@ namespace Team_3_HMS.Models
         [Required]
         public string Phone { get; set; }
 
-        //owns relationship 1:1
+        //owns relationship 1:1 with PatientProfile
 
         [InverseProperty("user")]
         [JsonIgnore]
         public PatientProfile? Profile { get; set; }
+
+        //has relationship 1:1 with DoctorProfile
+
+        [InverseProperty("userid")]
+        [JsonIgnore]
+        public DoctorProfile? DoctorProfile { get; set; }
+
     }
 }

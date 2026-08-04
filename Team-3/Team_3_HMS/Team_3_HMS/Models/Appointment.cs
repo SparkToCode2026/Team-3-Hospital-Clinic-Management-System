@@ -1,4 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace Team_3_HMS.Models
 {
@@ -12,5 +14,14 @@ namespace Team_3_HMS.Models
         public DateTime AppointmentDateTime { get; set; }
 
         public string ReasonForVisit { get; set; }
+
+        //books relationship 1:N with PatientProfile
+        [ForeignKey("PatientProfile")]
+        [Required]
+        public int PatientProfileID { get; set; }
+
+        [JsonIgnore]
+        public PatientProfile? PatientProfile { get; set; }
+
     }
 }

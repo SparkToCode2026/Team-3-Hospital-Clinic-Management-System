@@ -1,4 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace Team_3_HMS.Models
 {
@@ -12,5 +14,14 @@ namespace Team_3_HMS.Models
 
         public string BuildingLocation { get; set; }
 
+
+        //employs relationship 1:N with DoctorProfile
+
+        [ForeignKey("Profile")]
+        [Required]
+        public int DoctorProfileId { get; set; }
+
+        [JsonIgnore]
+        public DoctorProfile Profile { get; set; }
     }
 }

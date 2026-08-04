@@ -32,5 +32,11 @@ namespace Team_3_HMS.Models
 
         [JsonIgnore]
         public user? user { get; set; }
+
+        //books relationship 1:N with Appointment
+
+        [InverseProperty("PatientProfile")]
+        [JsonIgnore]
+        public List<Appointment>? Appointments { get; set; }
     }
 }
