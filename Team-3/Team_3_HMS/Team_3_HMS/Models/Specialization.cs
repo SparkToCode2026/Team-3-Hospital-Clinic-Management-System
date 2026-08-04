@@ -9,8 +9,10 @@ namespace Team_3_HMS.Models
         [Key]
         public int SpecializationId { get; set; }
 
+        [Required]
         public string Name { get; set; }
 
+        [Required]
         public string Description { get; set; }
 
         //practices relationship M:N with DoctorProfile

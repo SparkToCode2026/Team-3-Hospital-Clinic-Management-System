@@ -9,12 +9,16 @@ namespace Team_3_HMS.Models
         [Key]
         public int PrescriptionID { get; set; }
 
-        public DateTime IssuedDate { get; set; }
+        [Required]
+        public string IssuedDate { get; set; }
 
+        [Required]
         public string Instructions { get; set; } = string.Empty;
-
+        
+        [Required]
         public string Notes { get; set; } = string.Empty;
 
+        [Required]
         public int MedicalRecordID { get; set; }
 
         //contains relationship 1:N with medical record
@@ -31,6 +35,6 @@ namespace Team_3_HMS.Models
         public int MedicationID { get; set; }
 
         [JsonIgnore]
-        public List<Medication> Medications { get; set; }
+        public List<Medication>? Medications { get; set; }
     }
 }

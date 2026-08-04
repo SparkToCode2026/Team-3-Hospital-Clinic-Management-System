@@ -9,15 +9,19 @@ namespace Team_3_HMS.Models
         [Key]
         public int MedicationID { get; set; }
 
+        [Required]
         public string Name { get; set; }
 
+        [Required]
         public string GenericName { get; set; }
-
+        
+        [Required]
         public string DosageForm { get; set; }
 
-        public decimal UnitPrice { get; set; }
+        [Required]
+        public double UnitPrice { get; set; }
 
-        //lists relation with prescription M:N
+        //lists relation with prescription M:N 11
         [ForeignKey("Prescriptions")]
         [Required]
         public int PrescriptionID { get; set; }

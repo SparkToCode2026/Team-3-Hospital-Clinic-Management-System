@@ -9,10 +9,13 @@ namespace Team_3_HMS.Models
         [Key]
         public int RoomId { get; set; }
 
+        [Required]
         public string RoomNumber { get; set; }
 
+        [Required]
         public string Type { get; set; }
 
+        [Required]
         public bool IsAvailable { get; set; }
 
         //hosts relationship 1:N with Appointment

@@ -9,23 +9,28 @@ namespace Team_3_HMS.Models
         [Key]
         public int MedicalRecordID { get; set; }
 
+        [Required]
         public string Diagnosis { get; set; } = string.Empty;
 
+        [Required]
         public string TreatmentPlan { get; set; } = string.Empty;
 
+        [Required]
         public string Symptom { get; set; } = string.Empty;
 
-        public DateTime RecordDate { get; set; }
+        [Required]
+        public string RecordDate { get; set; }
 
+        [Required]
         public int AppointmentId { get; set; }
 
 
         //provides relationship 1:1 with appointment
         [InverseProperty("MedicalRecord")]
         [JsonIgnore]
-        public int AppointmentID { get; set; }
+        public Appointment? AppointmentID { get; set; }
 
-        //contains relationship 1:N with prescription
+        //contains relationship 1:N with prescription 12
 
         [InverseProperty("Medical")]
         [JsonIgnore]

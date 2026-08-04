@@ -8,10 +8,14 @@ namespace Team_3_HMS.Models
     {
         [Key]
         public int DepartmentId { get; set; }
+
+        [Required]
         public string Name { get; set; }
 
+        [Required]
         public string Description { get; set; }
 
+        [Required]
         public string BuildingLocation { get; set; }
 
 
@@ -22,7 +26,7 @@ namespace Team_3_HMS.Models
         public int DoctorProfileId { get; set; }
 
         [JsonIgnore]
-        public DoctorProfile Profile { get; set; }
+        public DoctorProfile? Profile { get; set; }
 
      
     }

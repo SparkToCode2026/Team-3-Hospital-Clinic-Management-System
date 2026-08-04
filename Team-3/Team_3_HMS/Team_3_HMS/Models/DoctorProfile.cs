@@ -9,11 +9,14 @@ namespace Team_3_HMS.Models
         [Key]
         public int DoctorProfileId { get; set; }
 
+        [Required]
         public string LicenseNumber { get; set; }
 
+        [Required]
         public int YearsOfExperience { get; set; }
 
-        public decimal ConsultationFee { get; set; }
+        [Required]
+        public double ConsultationFee { get; set; }
 
         //has relationship 1:1 with user
         [ForeignKey("userid")]
@@ -24,17 +27,17 @@ namespace Team_3_HMS.Models
         public user? userid { get; set; }
 
 
-        //employs relationship 1:N with Department
+        //employs relationship 1:N with Department 3
         [InverseProperty("Profile")]
         [JsonIgnore]
         public List<Department>? Departments { get; set; }
 
-        //conducts relationship 1:N with Appointment
+        //conducts relationship 1:N with Appointment 4
         [InverseProperty("DoctorProfile")]
         [JsonIgnore]
         public List<Appointment>? Appointments { get; set; }
 
-        //practices relationship M:N with Specialization
+        //practices relationship M:N with Specialization 5
         [ForeignKey("specializations")]
         [Required]
         public int SpecializationId { get; set; }
