@@ -31,6 +31,13 @@ namespace Team_3_HMS.Models
         [JsonIgnore]
         public DoctorProfile? DoctorProfile { get; set; }
 
+        //hosts relationship 1:N with Room
+
+        [ForeignKey("Room")]
+        public int RoomId { get; set; }
+
+        [JsonIgnore]
+        public Room? room { get; set; }
 
     }
 }
