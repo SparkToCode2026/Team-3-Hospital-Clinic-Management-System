@@ -23,6 +23,6 @@ namespace Team_3_HMS.Models
         public int PrescriptionID { get; set; }
 
         [JsonIgnore]
-        public List<Prescription> Prescriptions { get; set; }
+        public List<Prescription>? Prescriptions { get; set; }
     }
 }

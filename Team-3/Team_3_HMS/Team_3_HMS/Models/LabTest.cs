@@ -23,6 +23,6 @@ namespace Team_3_HMS.Models
         [Required]
         public int MedicalRecordId { get; set; }
 
-        public MedicalRecord record { get; set; }
+        public MedicalRecord? record { get; set; }
     }
 }

@@ -8,11 +8,13 @@ namespace Team_3_HMS.Models
     {
         [Key]
         public int AppointmentId { get; set; }
-
+        [Required]
         public string Status { get; set; }
 
+        [Required]
         public DateTime AppointmentDateTime { get; set; }
 
+        [Required]
         public string ReasonForVisit { get; set; }
 
         //books relationship 1:N with PatientProfile
@@ -52,7 +54,7 @@ namespace Team_3_HMS.Models
         //generates relationship 1:1 with Invoice 
         [InverseProperty("Appointment")]
         [JsonIgnore]
-        public Invoice invoice { get; set; }
+        public Invoice? invoice { get; set; }
 
     }
 }
