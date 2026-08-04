@@ -12,12 +12,17 @@ namespace Team_3_HMS
 
             }
 
+            public DbSet<user> Users { get; set; }
 
-            public DbSet<MedicalRecord> MedicalRecords { get; set; } = null!;
+            public DbSet<PatientProfile> PatientProfiles { get; set; }
 
-            public DbSet<Prescription> Prescriptions { get; set; } = null!;
+            public DbSet<Invoice> Invoices { get; set; }
 
-            public DbSet<Medication> Medications { get; set; } = null!;
+            public DbSet<MedicalRecord> MedicalRecords { get; set; }
+
+            public DbSet<Prescription> Prescriptions { get; set; }
+
+            public DbSet<Medication> Medications { get; set; }
 
             public DbSet<DoctorProfile> DoctorProfiles { get; set; }
 
