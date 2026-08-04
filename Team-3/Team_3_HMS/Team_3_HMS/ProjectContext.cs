@@ -7,17 +7,19 @@ namespace Team_3_HMS
     {
         public class DBContext : DbContext
         {
-            //registering models
-
-            public DbSet<user> Users { get; set; }
-            public DbSet<PatientProfile> PatientProfiles { get; set; }
-            public DbSet<Invoice> Invoices { get; set; }
+            
 
 
             public DBContext(DbContextOptions<DBContext> options) : base(options)
             {
 
             }
+
+            //registering models
+
+            public DbSet<user> Users { get; set; }
+            public DbSet<PatientProfile> PatientProfiles { get; set; }
+            public DbSet<Invoice> Invoices { get; set; }
         }
 
     }
