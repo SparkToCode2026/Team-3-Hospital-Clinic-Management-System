@@ -21,7 +21,7 @@ namespace Team_3_HMS.Models
         [Required]
         public string IssuedDate { get; set; }
 
-        //generates relationship 1:N with Appointment
+        //generates relationship 1:1 with Appointment
         [ForeignKey("Appointment")]
         [Required]
         public int AppointmentID { get; set; }

@@ -49,7 +49,7 @@ namespace Team_3_HMS.Models
         [JsonIgnore]
         public MedicalRecord? MedicalRecord { get; set; }
 
-        //generates relationship 1:N with Invoice 
+        //generates relationship 1:1 with Invoice 
         [InverseProperty("Appointment")]
         [JsonIgnore]
         public Invoice invoice { get; set; }
