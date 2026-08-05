@@ -21,15 +21,15 @@ namespace Team_3_HMS.Controllers
             context.DoctorProfiles.Add(doctor);
 
             context.SaveChanges();
-            
+
             return Ok(doctor.DoctorProfileId);
         }
         // Method: PUT update all doctor profile details
         [HttpPut("UpdateDoctorProfile")]
         public IActionResult UpdateDoctorProfile(int id, DoctorProfile updatedDoctor)
         {
-           DoctorProfile doctor = context.DoctorProfiles
-           .FirstOrDefault(d => d.DoctorProfileId == id);
+            DoctorProfile doctor = context.DoctorProfiles
+            .FirstOrDefault(d => d.DoctorProfileId == id);
             if (doctor == null)
             {
                 return NotFound();
@@ -39,7 +39,7 @@ namespace Team_3_HMS.Controllers
             doctor.ConsultationFee = updatedDoctor.ConsultationFee;
             doctor.userID = updatedDoctor.userID;
             doctor.SpecializationId = updatedDoctor.SpecializationId;
-         
+
             context.SaveChanges();
             return Ok("Doctor profile updated successfully");
         }
@@ -82,13 +82,24 @@ namespace Team_3_HMS.Controllers
         // Method: GET all doctors
         [HttpGet("GetAllDoctorProfiles")]
         public IActionResult GetAllDoctorProfiles()
-        { 
-        List<DoctorProfile> doctors = context.DoctorProfiles
-                .Include(d => d.Departments)
-                .Include(d => d.specializations)
-                .ToList();
+        {
+            List<DoctorProfile> doctors = context.DoctorProfiles
+                    .Include(d => d.Departments)
+                    .Include(d => d.specializations)
+                    .ToList();
             return Ok(doctors);
         }
-
+        // Method: GET To Find doctor by Id
+        [HttpGet("GetDoctorProfile")]
+        public IActionResult GetDoctorProfile(int id)
+        {
+            DoctorProfile doctor = context.DoctorProfiles
+            .FirstOrDefault(d => d.DoctorProfileId == id);
+            if (doctor == null)
+            {
+                return NotFound("Doctor profile not found");
+            }
+            return Ok(doctor);
+        }
     }
 }
