@@ -10,9 +10,9 @@ namespace Team_3_HMS.Controllers
     {
         private ProjectContext context;
 
-        public DoctorProfileController(ProjectContext context)
+        public DoctorProfileController(ProjectContext _context)
         {
-            context = context;
+            context = _context;
         }
         // Method: POST create new doctor Profile
         [HttpPost("AddDoctorProfile")]
@@ -22,7 +22,11 @@ namespace Team_3_HMS.Controllers
 
             context.SaveChanges();
 
-            return Ok(doctor.DoctorProfileId);
+            return Ok(new
+            {
+                message = "Doctor profile added successfully",
+                doctor = doctor
+            });
         }
         // Method: PUT update all doctor profile details
         [HttpPut("UpdateDoctorProfile")]
@@ -32,7 +36,7 @@ namespace Team_3_HMS.Controllers
             .FirstOrDefault(d => d.DoctorProfileId == id);
             if (doctor == null)
             {
-                return NotFound();
+                return NotFound("Doctor profile not found");
             }
             doctor.LicenseNumber = updatedDoctor.LicenseNumber;
             doctor.YearsOfExperience = updatedDoctor.YearsOfExperience;
@@ -41,9 +45,12 @@ namespace Team_3_HMS.Controllers
             doctor.SpecializationId = updatedDoctor.SpecializationId;
 
             context.SaveChanges();
-            return Ok("Doctor profile updated successfully");
+            return Ok(new
+            {
+                message = "Doctor profile updated successfully",
+                updatedDoctor = doctor
+            });
         }
-
         // Method: PATCH Update one field (Consultation Fee)
 
         [HttpPatch("UpdateConsultationFee")]
@@ -61,7 +68,11 @@ namespace Team_3_HMS.Controllers
             doctor.ConsultationFee = newFee;
 
             context.SaveChanges();
-            return Ok("Consultation fee updated successfully");
+            return Ok(new
+            {
+                message = "Consultation fee updated successfully",
+                updatedDoctor = doctor
+            });
         }
         // Method: DELETE to remove doctor profile by ID
         [HttpDelete("RemoveDoctorProfile")]
@@ -73,14 +84,19 @@ namespace Team_3_HMS.Controllers
             {
                 return NotFound("doctor Profile not found");
             }
+            var deletedDoctor = doctor;
             // remove doctor profile from database
             context.DoctorProfiles.Remove(doctor);
             context.SaveChanges();
-            return Ok("Doctor profile deleted successfully");
+            return Ok(new
+            {
+                message = "Doctor profile deleted successfully",
+                deletedDoctor = deletedDoctor
+            });
         }
 
-        // Method: GET all doctors
-        [HttpGet("GetAllDoctorProfiles")]
+            // Method: GET all doctors
+            [HttpGet("GetAllDoctorProfiles")]
         public IActionResult GetAllDoctorProfiles()
         {
             List<DoctorProfile> doctors = context.DoctorProfiles
