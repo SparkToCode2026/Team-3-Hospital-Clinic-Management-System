@@ -118,5 +118,14 @@ namespace Team_3_HMS.Controllers
             .ToList();
             return Ok(departments);
         }
+        // GET Sort Departments by name
+        [HttpGet("GetDepartmentsSorted")]
+        public IActionResult GetDepartmentsSorted()
+        {
+            List<Department> departments = context.Departments
+            .OrderBy(d => d.Name)
+            .ToList();
+            return Ok(departments);
+        }
     }
 }
