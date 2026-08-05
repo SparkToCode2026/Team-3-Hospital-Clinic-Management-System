@@ -65,6 +65,24 @@ namespace Team_3_HMS.Controllers
                 updatedDepartment = department
             });
         }
-        
+        // DELETE to Remove Department
+        [HttpDelete("RemoveDepartment")]
+        public IActionResult RemoveDepartment(int id)
+        {
+            Department department = context.Departments
+            .FirstOrDefault(d => d.DepartmentId == id);
+            if (department == null)
+            {
+                return NotFound("Department not found");
+            }
+            var deletedDepartment = department;
+            context.Departments.Remove(department);
+            context.SaveChanges();
+            return Ok(new
+            {
+                message = "Department removed successfully",
+                deletedDepartment = deletedDepartment
+            });
+        }
     }
 }
