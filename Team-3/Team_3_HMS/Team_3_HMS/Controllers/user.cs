@@ -132,6 +132,14 @@ public class UserController : ControllerBase
         return Ok(foundUser);
     }
 
+    [Authorize(Roles = "Admin")]
+    [HttpGet("count-by-role/{role}")]
+    public IActionResult GetUserCountByRole(string role)
+    {
+        int totalCount = _context.Users.Count(u => u.role != null && u.role.ToLower() == role.ToLower());
+        return Ok(totalCount);
+    }
+
 
     private string GenerateJwtToken(user userToSign)
     {
