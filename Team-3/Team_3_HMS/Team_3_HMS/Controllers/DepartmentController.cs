@@ -109,5 +109,14 @@ namespace Team_3_HMS.Controllers
             
                 return Ok(department);
             }
+        // GET Filter Departments by name
+        [HttpGet("GetDepartmentsByName")]
+        public IActionResult GetDepartmentsByName(string name)
+        {
+            List<Department> departments = context.Departments
+            .Where(d => d.Name.Contains(name))
+            .ToList();
+            return Ok(departments);
+        }
     }
 }
