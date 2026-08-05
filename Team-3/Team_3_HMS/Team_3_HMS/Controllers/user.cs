@@ -42,6 +42,21 @@ public class UserController : ControllerBase
     }
 
 
+    [HttpPost("login")]
+    public IActionResult Login(string email, string password)
+    {
+        user foundUser = _context.Users.FirstOrDefault(u => u.email == email && u.PasswordHash == password);
+        if (foundUser == null)
+        {
+            return Unauthorized("Invalid email or password.");
+        }
+
+        string token = GenerateJwtToken(foundUser);
+
+        return Ok(token);
+    }
+
+
     private string GenerateJwtToken(user userToSign)
     {
         var claims = new[]
