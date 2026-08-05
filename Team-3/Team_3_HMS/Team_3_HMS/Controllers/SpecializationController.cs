@@ -105,5 +105,15 @@ namespace Team_3_HMS.Controllers
             }
             return Ok(specialization);
         }
+        // GET Filter Specializations by name
+        [HttpGet("GetSpecializationsByName")]
+        public IActionResult GetSpecializationsByName(string name)
+        {
+            List<Specialization> specializations = context.Specializations
+            .Where(s => s.Name.Contains(name))
+            .ToList();
+           
+            return Ok(specializations);
+        }
     }
 }
