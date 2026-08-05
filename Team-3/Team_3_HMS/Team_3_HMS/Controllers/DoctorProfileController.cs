@@ -101,5 +101,14 @@ namespace Team_3_HMS.Controllers
             }
             return Ok(doctor);
         }
+        // Method: GET Filter doctors Example: doctors with experience >= years
+        [HttpGet("GetDoctorsByExperience")]
+        public IActionResult GetDoctorsByExperience(int years)
+        {
+            List<DoctorProfile> doctors = context.DoctorProfiles
+            .Where(d => d.YearsOfExperience >= years)
+            .ToList();
+            return Ok(doctors);
+        }
     }
 }
