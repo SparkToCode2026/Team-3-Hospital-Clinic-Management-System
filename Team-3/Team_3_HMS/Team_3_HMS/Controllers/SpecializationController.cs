@@ -44,5 +44,25 @@ namespace Team_3_HMS.Controllers
                 updatedSpecialization = specialization
             });
         }
+        // PATCH Update one field (Description)
+        [HttpPatch("UpdateSpecializationDescription")]
+        public IActionResult UpdateSpecializationDescription(int id, string newDescription)
+        {
+            // To Find Specialization by ID
+            Specialization specialization = context.Specializations
+            .FirstOrDefault(s => s.SpecializationId == id);
+            if (specialization == null)
+            {
+                return NotFound("Specialization not found");
+            }
+            specialization.Description = newDescription;
+            context.SaveChanges();
+            return Ok(new
+            {
+                message = "Specialization description updated successfully",
+                updatedSpecialization = specialization
+            });
+
+        }
     }
 }
