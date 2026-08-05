@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Team_3_HMS.Models;
 
 namespace Team_3_HMS.Controllers
@@ -83,6 +84,15 @@ namespace Team_3_HMS.Controllers
                 message = "Department removed successfully",
                 deletedDepartment = deletedDepartment
             });
+        }
+        // GET All Departments include(related Doctor)
+        [HttpGet("GetAllDepartments")]
+        public IActionResult GetAllDepartments()
+        {
+        List<Department> departments = context.Departments
+        .Include(d => d.Profile)
+        .ToList();
+            return Ok(departments);
         }
     }
 }
