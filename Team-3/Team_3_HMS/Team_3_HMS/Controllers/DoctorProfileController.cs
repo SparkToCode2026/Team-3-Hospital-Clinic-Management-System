@@ -110,5 +110,14 @@ namespace Team_3_HMS.Controllers
             .ToList();
             return Ok(doctors);
         }
+        // Method: GET Sort doctors by consultation fee
+        [HttpGet("GetDoctorsSortedByFee")]
+        public IActionResult GetDoctorsSortedByFee()
+        {
+            List<DoctorProfile> doctors = context.DoctorProfiles
+            .OrderBy(d => d.ConsultationFee)
+            .ToList();
+            return Ok(doctors);
+        }
     }
 }
