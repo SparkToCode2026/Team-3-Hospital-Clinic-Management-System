@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Team_3_HMS.Models;
 
@@ -15,6 +16,7 @@ namespace Team_3_HMS.Controllers
             context = _context;
         }
         // Method: POST create new doctor Profile
+        [Authorize(Roles = "Admin")]
         [HttpPost("AddDoctorProfile")]
         public IActionResult AddDoctorProfile(DoctorProfile doctor)
         {
@@ -29,6 +31,7 @@ namespace Team_3_HMS.Controllers
             });
         }
         // Method: PUT update all doctor profile details
+        [Authorize(Roles = "Admin")]
         [HttpPut("UpdateDoctorProfile")]
         public IActionResult UpdateDoctorProfile(int id, DoctorProfile updatedDoctor)
         {
@@ -52,7 +55,7 @@ namespace Team_3_HMS.Controllers
             });
         }
         // Method: PATCH Update one field (Consultation Fee)
-
+        [Authorize(Roles = "Admin")]
         [HttpPatch("UpdateConsultationFee")]
         public IActionResult UpdateConsultationFee(int id, double newFee)
         {
@@ -75,6 +78,7 @@ namespace Team_3_HMS.Controllers
             });
         }
         // Method: DELETE to remove doctor profile by ID
+        [Authorize(Roles = "Admin")]
         [HttpDelete("RemoveDoctorProfile")]
         public IActionResult RemoveDoctorProfile(int id)
         {
@@ -111,6 +115,7 @@ namespace Team_3_HMS.Controllers
         {
             DoctorProfile doctor = context.DoctorProfiles
             .FirstOrDefault(d => d.DoctorProfileId == id);
+            
             if (doctor == null)
             {
                 return NotFound("Doctor profile not found");

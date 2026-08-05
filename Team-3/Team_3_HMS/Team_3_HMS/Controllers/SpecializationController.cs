@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Team_3_HMS.Models;
 
@@ -15,6 +16,7 @@ namespace Team_3_HMS.Controllers
             context = _context;
         }
         // (POST) Create new Specialization
+        [Authorize(Roles = "Admin")]
         [HttpPost("AddSpecialization")]
         public IActionResult AddSpecialization(Specialization specialization)
         {
@@ -27,6 +29,8 @@ namespace Team_3_HMS.Controllers
             });
         }
         // PUT to Update all Specialization details
+        [Authorize(Roles = "Admin")]
+        [HttpPut("UpdateSpecialization")]
         public IActionResult UpdateSpecialization(int id, Specialization updatedSpecialization)
         {
             Specialization specialization = context.Specializations
@@ -46,6 +50,7 @@ namespace Team_3_HMS.Controllers
             });
         }
         // PATCH Update one field (Description)
+        [Authorize(Roles = "Admin")]
         [HttpPatch("UpdateSpecializationDescription")]
         public IActionResult UpdateSpecializationDescription(int id, string newDescription)
         {
@@ -66,6 +71,7 @@ namespace Team_3_HMS.Controllers
 
         }
         // DELETE to Remove Specialization
+        [Authorize(Roles = "Admin")]
         [HttpDelete("RemoveSpecialization")]
         public IActionResult RemoveSpecialization(int id)
         {

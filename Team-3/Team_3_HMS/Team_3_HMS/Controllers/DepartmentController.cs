@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Team_3_HMS.Models;
 
@@ -15,6 +16,7 @@ namespace Team_3_HMS.Controllers
             context = _context;
         }
         // Method: POST To Create new Department
+        [Authorize(Roles = "Admin")]
         [HttpPost("AddDepartment")]
         public IActionResult AddDepartment(Department department)
         {
@@ -27,6 +29,7 @@ namespace Team_3_HMS.Controllers
             });
         }
         // PUT to Update all Department details
+        [Authorize(Roles = "Admin")]
         [HttpPut("UpdateDepartment")]
         public IActionResult UpdateDepartment(int id, Department updatedDepartment)
         {
@@ -48,6 +51,7 @@ namespace Team_3_HMS.Controllers
             });
         }
         // PATCH Update one field (Building Location)
+        [Authorize(Roles = "Admin")]
         [HttpPatch("UpdateBuildingLocation")]
         public IActionResult UpdateBuildingLocation(int id, string newLocation)
         {
@@ -67,6 +71,7 @@ namespace Team_3_HMS.Controllers
             });
         }
         // DELETE to Remove Department
+        [Authorize(Roles = "Admin")]
         [HttpDelete("RemoveDepartment")]
         public IActionResult RemoveDepartment(int id)
         {
