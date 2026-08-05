@@ -94,5 +94,20 @@ namespace Team_3_HMS.Controllers
         .ToList();
             return Ok(departments);
         }
+        // GET Department by Id
+        [HttpGet("GetDepartmentByID")]
+        public IActionResult GetDepartmentByID(int id)
+        {
+            Department department = context.Departments
+            .FirstOrDefault(d => d.DepartmentId == id);
+            if(department == null)
+            {
+                return NotFound("Department not found");
+
+            }
+            
+            
+                return Ok(department);
+            }
     }
 }
