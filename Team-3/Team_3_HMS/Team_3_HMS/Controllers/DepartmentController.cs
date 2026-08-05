@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Team_3_HMS.Models;
 
 namespace Team_3_HMS.Controllers
 {
@@ -12,6 +13,17 @@ namespace Team_3_HMS.Controllers
         {
             context = _context;
         }
-
+        // Method: POST To Create new Department
+        [HttpPost("AddDepartment")]
+        public IActionResult AddDepartment(Department department)
+        {
+            context.Departments.Add(department);
+            context.SaveChanges();
+            return Ok(new
+            {
+                message = "Department added successfully",
+                department = department
+            });
+        }
     }
 }
