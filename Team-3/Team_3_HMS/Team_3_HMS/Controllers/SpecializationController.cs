@@ -93,5 +93,17 @@ namespace Team_3_HMS.Controllers
             .ToList();
             return Ok(specializations);
         }
+        // GET to Find Specialization by Id
+        [HttpGet("GetSpecialization")]
+        public IActionResult GetSpecialization(int id)
+        {
+            Specialization specialization = context.Specializations
+            .FirstOrDefault(s => s.SpecializationId == id);
+            if (specialization == null)
+            {
+                return NotFound("Specialization not found");
+            }
+            return Ok(specialization);
+        }
     }
 }
