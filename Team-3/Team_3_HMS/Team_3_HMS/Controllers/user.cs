@@ -95,6 +95,42 @@ public class UserController : ControllerBase
         return Ok("Password updated successfully.");
     }
 
+    [Authorize(Roles = "Admin")]
+    [HttpDelete("delete/{id}")]
+    public IActionResult DeleteUser(int id)
+    {
+        user existingUser = _context.Users.FirstOrDefault(u => u.userID == id);
+        if (existingUser == null)
+        {
+            return NotFound("User not found.");
+        }
+
+        _context.Users.Remove(existingUser);
+        _context.SaveChanges();
+
+        return Ok("User account deleted successfully.");
+    }
+
+    [Authorize(Roles = "Admin")]
+    [HttpGet("all")]
+    public IActionResult GetAllUsers()
+    {
+        List<user> users = _context.Users.ToList();
+        return Ok(users);
+    }
+
+    [Authorize]
+    [HttpGet("find/{id}")]
+    public IActionResult GetUserById(int id)
+    {
+        user foundUser = _context.Users.FirstOrDefault(u => u.userID == id);
+        if (foundUser == null)
+        {
+            return NotFound("User not found.");
+        }
+
+        return Ok(foundUser);
+    }
 
 
     private string GenerateJwtToken(user userToSign)
