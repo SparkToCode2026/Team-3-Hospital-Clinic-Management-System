@@ -64,5 +64,24 @@ namespace Team_3_HMS.Controllers
             });
 
         }
+        // DELETE to Remove Specialization
+        [HttpDelete("RemoveSpecialization")]
+        public IActionResult RemoveSpecialization(int id)
+        {
+            Specialization specialization = context.Specializations
+            .FirstOrDefault(s => s.SpecializationId == id);
+            if (specialization == null)
+            {
+                return NotFound("Specialization not found");
+            }
+            var deletedSpecialization = specialization;
+            context.Specializations.Remove(specialization);
+            context.SaveChanges();
+            return Ok(new
+            {
+                message = "Specialization removed successfully",
+                deletedSpecialization = deletedSpecialization
+            });
+        }
     }
 }
