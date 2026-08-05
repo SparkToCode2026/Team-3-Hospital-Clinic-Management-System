@@ -115,5 +115,14 @@ namespace Team_3_HMS.Controllers
            
             return Ok(specializations);
         }
+        // GET to Sort Specializations by name
+        [HttpGet("GetSpecializationsSorted")]
+        public IActionResult GetSpecializationsSorted()
+        {
+            List<Specialization> specializations = context.Specializations
+            .OrderBy(s => s.Name)
+            .ToList();
+            return Ok(specializations);
+        }
     }
 }
