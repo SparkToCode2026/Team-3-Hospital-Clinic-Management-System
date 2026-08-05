@@ -42,5 +42,25 @@ namespace Team_3_HMS.Controllers
             context.SaveChanges();
             return Ok("Doctor profile updated successfully");
         }
+
+        // Method: PATCH Update one field (Consultation Fee)
+
+        [HttpPatch("UpdateConsultationFee")]
+        public IActionResult UpdateConsultationFee(int id, double newFee)
+        {
+            // To Find Doctor by ID
+            DoctorProfile doctor = context.DoctorProfiles
+           .FirstOrDefault(d => d.DoctorProfileId == id);
+
+            if (doctor == null)
+            {
+                return NotFound("Doctor profile not found");
+            }
+            // Change only the consultation fee
+            doctor.ConsultationFee = newFee;
+
+            context.SaveChanges();
+            return Ok("Consultation fee updated successfully");
+        }
     }
 }
