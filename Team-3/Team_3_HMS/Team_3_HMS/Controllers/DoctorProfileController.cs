@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Team_3_HMS.Models;
 
 namespace Team_3_HMS.Controllers
@@ -77,5 +78,17 @@ namespace Team_3_HMS.Controllers
             context.SaveChanges();
             return Ok("Doctor profile deleted successfully");
         }
+
+        // Method: GET all doctors
+        [HttpGet("GetAllDoctorProfiles")]
+        public IActionResult GetAllDoctorProfiles()
+        { 
+        List<DoctorProfile> doctors = context.DoctorProfiles
+                .Include(d => d.Departments)
+                .Include(d => d.specializations)
+                .ToList();
+            return Ok(doctors);
+        }
+
     }
 }
