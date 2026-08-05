@@ -25,5 +25,24 @@ namespace Team_3_HMS.Controllers
                 specialization = specialization
             });
         }
+        // PUT to Update all Specialization details
+        public IActionResult UpdateSpecialization(int id, Specialization updatedSpecialization)
+        {
+            Specialization specialization = context.Specializations
+            .FirstOrDefault(s => s.SpecializationId == id);
+            if (specialization == null)
+            {
+                return NotFound("Specialization not found");
+            }
+            specialization.Name = updatedSpecialization.Name;
+            specialization.Description = updatedSpecialization.Description;
+            specialization.DoctorProfileId = updatedSpecialization.DoctorProfileId;
+            context.SaveChanges();
+            return Ok(new
+            {
+                message = "Specialization updated successfully",
+                updatedSpecialization = specialization
+            });
+        }
     }
 }
