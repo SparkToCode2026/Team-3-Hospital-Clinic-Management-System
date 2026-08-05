@@ -76,7 +76,7 @@ namespace Team_3_HMS.Controllers
 
             return NoContent();
         }
-        // Case 3: Update diagnosis and treatment plan only
+        // Case 3:
         [HttpPatch("{id}/diagnosis")]
         [Authorize(Roles = "Doctor,Admin")]
         public async Task<IActionResult> UpdateDiagnosis(
@@ -100,6 +100,23 @@ namespace Team_3_HMS.Controllers
             existingRecord.Diagnosis = request.Diagnosis;
             existingRecord.TreatmentPlan = request.TreatmentPlan;
 
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
+        // Case 4: 
+        [HttpDelete("{id}")]
+        [Authorize(Roles = "Doctor,Admin")]
+        public async Task<IActionResult> DeleteMedicalRecord(int id)
+        {
+            var medicalRecord = await _context.MedicalRecords.FindAsync(id);
+
+            if (medicalRecord == null)
+            {
+                return NotFound("Medical record not found.");
+            }
+
+            _context.MedicalRecords.Remove(medicalRecord);
             await _context.SaveChangesAsync();
 
             return NoContent();
