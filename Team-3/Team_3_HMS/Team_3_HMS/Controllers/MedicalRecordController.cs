@@ -76,5 +76,39 @@ namespace Team_3_HMS.Controllers
 
             return NoContent();
         }
+        // Case 3: Update diagnosis and treatment plan only
+        [HttpPatch("{id}/diagnosis")]
+        [Authorize(Roles = "Doctor,Admin")]
+        public async Task<IActionResult> UpdateDiagnosis(
+            int id,
+            UpdateDiagnosisRequest request)
+        {
+            var existingRecord = await _context.MedicalRecords.FindAsync(id);
+
+            if (existingRecord == null)
+            {
+                return NotFound("Medical record not found.");
+            }
+
+            if (string.IsNullOrWhiteSpace(request.Diagnosis) ||
+                string.IsNullOrWhiteSpace(request.TreatmentPlan))
+            {
+                return BadRequest(
+                    "Diagnosis and treatment plan are required.");
+            }
+
+            existingRecord.Diagnosis = request.Diagnosis;
+            existingRecord.TreatmentPlan = request.TreatmentPlan;
+
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
+        public class UpdateDiagnosisRequest
+        {
+            public string Diagnosis { get; set; } = string.Empty;
+
+            public string TreatmentPlan { get; set; } = string.Empty;
+        }
     }
 }
