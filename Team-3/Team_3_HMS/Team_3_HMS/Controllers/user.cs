@@ -1,9 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 namespace Team_3_HMS.Controllers;
+
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-
 using System.Text;
 using Team_3_HMS.Models;
 
@@ -55,6 +56,24 @@ public class UserController : ControllerBase
 
         return Ok(token);
     }
+
+    [Authorize]
+    [HttpPut("update/{id}")]
+    public IActionResult UpdateUser(int id, [FromBody] user updatedData)
+    {
+        user existingUser = _context.Users.FirstOrDefault(u => u.userID == id);
+        if (existingUser == null)
+        {
+            return NotFound("User not found.");
+        }
+
+        existingUser.Fullname = updatedData.Fullname;
+        existingUser.Phone = updatedData.Phone;
+
+        _context.SaveChanges();
+        return Ok("User details updated successfully.");
+    }
+
 
 
     private string GenerateJwtToken(user userToSign)
