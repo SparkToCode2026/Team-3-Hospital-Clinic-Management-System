@@ -23,5 +23,24 @@ namespace Team_3_HMS.Controllers
             
             return Ok(doctor.DoctorProfileId);
         }
+        // Method: PUT update all doctor profile details
+        [HttpPut("UpdateDoctorProfile")]
+        public IActionResult UpdateDoctorProfile(int id, DoctorProfile updatedDoctor)
+        {
+           DoctorProfile doctor = context.DoctorProfiles
+           .FirstOrDefault(d => d.DoctorProfileId == id);
+            if (doctor == null)
+            {
+                return NotFound();
+            }
+            doctor.LicenseNumber = updatedDoctor.LicenseNumber;
+            doctor.YearsOfExperience = updatedDoctor.YearsOfExperience;
+            doctor.ConsultationFee = updatedDoctor.ConsultationFee;
+            doctor.userID = updatedDoctor.userID;
+            doctor.SpecializationId = updatedDoctor.SpecializationId;
+         
+            context.SaveChanges();
+            return Ok("Doctor profile updated successfully");
+        }
     }
 }
