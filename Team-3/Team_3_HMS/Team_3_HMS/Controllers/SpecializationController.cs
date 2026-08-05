@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Team_3_HMS.Models;
 
 namespace Team_3_HMS.Controllers
@@ -82,6 +83,15 @@ namespace Team_3_HMS.Controllers
                 message = "Specialization removed successfully",
                 deletedSpecialization = deletedSpecialization
             });
+        }
+        // GET  all Specializations (data)
+        [HttpGet("GetAllSpecializations")]
+        public IActionResult GetAllSpecializations()
+        {
+            List<Specialization> specializations = context.Specializations
+            .Include(s => s.doctors)
+            .ToList();
+            return Ok(specializations);
         }
     }
 }
