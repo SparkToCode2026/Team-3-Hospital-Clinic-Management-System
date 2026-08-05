@@ -74,6 +74,27 @@ public class UserController : ControllerBase
         return Ok("User details updated successfully.");
     }
 
+    [Authorize]
+    [HttpPut("change-password/{id}")]
+    public IActionResult ChangePassword(int id, string oldPassword, string newPassword)
+    {
+        user existingUser = _context.Users.FirstOrDefault(u => u.userID == id);
+        if (existingUser == null)
+        {
+            return NotFound("User not found.");
+        }
+
+        if (existingUser.PasswordHash != oldPassword)
+        {
+            return BadRequest("Incorrect current password.");
+        }
+
+        existingUser.PasswordHash = newPassword;
+        _context.SaveChanges();
+
+        return Ok("Password updated successfully.");
+    }
+
 
 
     private string GenerateJwtToken(user userToSign)
