@@ -30,7 +30,7 @@ namespace Team_3_HMS.Controllers
         public IActionResult UpdateDepartment(int id, Department updatedDepartment)
         {
             Department department = context.Departments
-            .FirstOrDefault(d => d.DepartmentId == id); //update by id 
+            .FirstOrDefault(d => d.DepartmentId == id);
             if (department == null)
             {
                 return NotFound("Department not found");
@@ -46,5 +46,25 @@ namespace Team_3_HMS.Controllers
                 updatedDepartment = department
             });
         }
+        // PATCH Update one field (Building Location)
+        [HttpPatch("UpdateBuildingLocation")]
+        public IActionResult UpdateBuildingLocation(int id, string newLocation)
+        {
+            // To Find Department by ID
+            Department department = context.Departments
+            .FirstOrDefault(d => d.DepartmentId == id);
+            if (department == null)
+            {
+                return NotFound("Department not found");
+            }
+            department.BuildingLocation = newLocation;
+            context.SaveChanges();
+            return Ok(new
+            {
+                message = "Building location updated successfully",
+                updatedDepartment = department
+            });
+        }
+        
     }
 }
