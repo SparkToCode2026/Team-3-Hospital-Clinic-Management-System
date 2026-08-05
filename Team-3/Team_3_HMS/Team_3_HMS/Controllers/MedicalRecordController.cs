@@ -175,6 +175,68 @@ namespace Team_3_HMS.Controllers
 
             return Ok(records);
         }
+        // Case 6: 
+        [HttpGet("{id}")]
+        [Authorize]
+        public async Task<IActionResult> GetMedicalRecordById(int id)
+        {
+            var query = _context.MedicalRecords
+                .Include(m => m.Appointment)
+                .ThenInclude(a => a!.PatientProfile)
+                .Where(m => m.MedicalRecordID == id);
+
+            // Patient can only view their own medical record
+            if (User.IsInRole("Patient"))
+            {
+                var userIdClaim =
+                    User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+                if (!int.TryParse(userIdClaim, out int userId))
+                {
+                    return Unauthorized(
+                        "User ID was not found in the token.");
+                }
+
+                query = query.Where(m =>
+                    m.Appointment != null &&
+                    m.Appointment.PatientProfile != null &&
+                    m.Appointment.PatientProfile.userID == userId);
+            }
+            else if (!User.IsInRole("Doctor") &&
+                     !User.IsInRole("Admin"))
+            {
+                return Forbid();
+            }
+
+            var medicalRecord = await query
+                .Select(m => new
+                {
+                    m.MedicalRecordID,
+                    m.Diagnosis,
+                    m.TreatmentPlan,
+                    m.Symptom,
+                    m.RecordDate,
+                    m.AppointmentId,
+
+                    Appointment = m.Appointment == null
+                        ? null
+                        : new
+                        {
+                            m.Appointment.AppointmentDateTime,
+                            m.Appointment.ReasonForVisit,
+                            m.Appointment.PatientProfileID
+                        }
+                })
+                .FirstOrDefaultAsync();
+
+            if (medicalRecord == null)
+            {
+                return NotFound(
+                    "Medical record not found or access is not allowed.");
+            }
+
+            return Ok(medicalRecord);
+        }
         public class UpdateDiagnosisRequest
         {
             public string Diagnosis { get; set; } = string.Empty;
