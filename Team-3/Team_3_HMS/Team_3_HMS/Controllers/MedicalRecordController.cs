@@ -1,9 +1,10 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
-using Team_3_HMS.Models;
+using System.Security.Claims;
 using Team_3_HMS;
+using Team_3_HMS.Models;
 
 namespace Team_3_HMS.Controllers
 {
@@ -120,6 +121,59 @@ namespace Team_3_HMS.Controllers
             await _context.SaveChangesAsync();
 
             return NoContent();
+        }
+        // Case 5: 
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> GetMedicalRecords()
+        {
+            var query = _context.MedicalRecords
+                .Include(m => m.Appointment)
+                .ThenInclude(a => a!.PatientProfile)
+                .AsQueryable();
+
+            // Patients can only view their own medical records
+            if (User.IsInRole("Patient"))
+            {
+                var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+                if (!int.TryParse(userIdClaim, out int userId))
+                {
+                    return Unauthorized("User ID was not found in the token.");
+                }
+
+                query = query.Where(m =>
+                    m.Appointment != null &&
+                    m.Appointment.PatientProfile != null &&
+                    m.Appointment.PatientProfile.userID == userId);
+            }
+            else if (!User.IsInRole("Doctor") && !User.IsInRole("Admin"))
+            {
+                return Forbid();
+            }
+
+            var records = await query
+                .Select(m => new
+                {
+                    m.MedicalRecordID,
+                    m.Diagnosis,
+                    m.TreatmentPlan,
+                    m.Symptom,
+                    m.RecordDate,
+                    m.AppointmentId,
+
+                    Appointment = m.Appointment == null
+                        ? null
+                        : new
+                        {
+                            m.Appointment.AppointmentDateTime,
+                            m.Appointment.ReasonForVisit,
+                            m.Appointment.PatientProfileID
+                        }
+                })
+                .ToListAsync();
+
+            return Ok(records);
         }
         public class UpdateDiagnosisRequest
         {
