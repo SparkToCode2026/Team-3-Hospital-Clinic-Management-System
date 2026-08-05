@@ -62,5 +62,20 @@ namespace Team_3_HMS.Controllers
             context.SaveChanges();
             return Ok("Consultation fee updated successfully");
         }
+        // Method: DELETE to remove doctor profile by ID
+        [HttpDelete("RemoveDoctorProfile")]
+        public IActionResult RemoveDoctorProfile(int id)
+        {
+            DoctorProfile doctor = context.DoctorProfiles
+           .FirstOrDefault(d => d.DoctorProfileId == id);
+            if (doctor == null)
+            {
+                return NotFound("doctor Profile not found");
+            }
+            // remove doctor profile from database
+            context.DoctorProfiles.Remove(doctor);
+            context.SaveChanges();
+            return Ok("Doctor profile deleted successfully");
+        }
     }
 }
