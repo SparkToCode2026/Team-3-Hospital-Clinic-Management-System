@@ -304,6 +304,60 @@ namespace Team_3_HMS.Controllers
 
             return Ok(records);
         }
+        // Case 8: 
+        [HttpGet("summary")]
+        [Authorize]
+        public async Task<IActionResult> GetMedicalRecordsSummary()
+        {
+            var query = _context.MedicalRecords
+                .Include(m => m.Appointment)
+                .ThenInclude(a => a!.PatientProfile)
+                .AsQueryable();
+
+            // Patient can only view the summary of their own records
+            if (User.IsInRole("Patient"))
+            {
+                var userIdClaim =
+                    User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+                if (!int.TryParse(userIdClaim, out int userId))
+                {
+                    return Unauthorized(
+                        "User ID was not found in the token.");
+                }
+
+                query = query.Where(m =>
+                    m.Appointment != null &&
+                    m.Appointment.PatientProfile != null &&
+                    m.Appointment.PatientProfile.userID == userId);
+            }
+            else if (!User.IsInRole("Doctor") &&
+                     !User.IsInRole("Admin"))
+            {
+                return Forbid();
+            }
+
+            var totalRecords = await query.CountAsync();
+
+            var sortedRecords = await query
+                .OrderByDescending(m => m.RecordDate)
+                .Select(m => new
+                {
+                    m.MedicalRecordID,
+                    m.Diagnosis,
+                    m.TreatmentPlan,
+                    m.Symptom,
+                    m.RecordDate,
+                    m.AppointmentId
+                })
+                .ToListAsync();
+
+            return Ok(new
+            {
+                TotalRecords = totalRecords,
+                Records = sortedRecords
+            });
+        }
         public class UpdateDiagnosisRequest
         {
             public string Diagnosis { get; set; } = string.Empty;
