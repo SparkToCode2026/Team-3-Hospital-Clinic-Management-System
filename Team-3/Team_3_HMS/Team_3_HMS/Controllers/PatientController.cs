@@ -150,7 +150,7 @@ namespace Team_3_HMS.Controllers
 
         // 8. SEARCH PROFILES BY BLOOD GROUP OR GENDER
         // GET: api/PatientProfile/search?bloodGroup=A+&gender=Male
-        [Authorize(Roles = "Admin,Doctor")]
+        [Authorize(Roles = "Doctor")]
         [HttpGet("search")]
         public IActionResult Search(string? bloodGroup, string? gender)
         {
