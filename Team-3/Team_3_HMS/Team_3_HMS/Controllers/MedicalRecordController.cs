@@ -237,6 +237,73 @@ namespace Team_3_HMS.Controllers
 
             return Ok(medicalRecord);
         }
+        // Case 7: 
+        [HttpGet("filter")]
+        [Authorize]
+        public async Task<IActionResult> FilterMedicalRecords(string diagnosis)
+        {
+            if (string.IsNullOrWhiteSpace(diagnosis))
+            {
+                return BadRequest("Diagnosis is required.");
+            }
+
+            var query = _context.MedicalRecords
+                .Include(m => m.Appointment)
+                .ThenInclude(a => a!.PatientProfile)
+                .AsQueryable();
+
+            // Patient can only filter their own medical records
+            if (User.IsInRole("Patient"))
+            {
+                var userIdClaim =
+                    User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+                if (!int.TryParse(userIdClaim, out int userId))
+                {
+                    return Unauthorized(
+                        "User ID was not found in the token.");
+                }
+
+                query = query.Where(m =>
+                    m.Appointment != null &&
+                    m.Appointment.PatientProfile != null &&
+                    m.Appointment.PatientProfile.userID == userId);
+            }
+            else if (!User.IsInRole("Doctor") &&
+                     !User.IsInRole("Admin"))
+            {
+                return Forbid();
+            }
+
+            var records = await query
+                .Where(m => m.Diagnosis.Contains(diagnosis))
+                .Select(m => new
+                {
+                    m.MedicalRecordID,
+                    m.Diagnosis,
+                    m.TreatmentPlan,
+                    m.Symptom,
+                    m.RecordDate,
+                    m.AppointmentId,
+
+                    Appointment = m.Appointment == null
+                        ? null
+                        : new
+                        {
+                            m.Appointment.AppointmentDateTime,
+                            m.Appointment.ReasonForVisit,
+                            m.Appointment.PatientProfileID
+                        }
+                })
+                .ToListAsync();
+
+            if (records.Count == 0)
+            {
+                return NotFound("No matching medical records were found.");
+            }
+
+            return Ok(records);
+        }
         public class UpdateDiagnosisRequest
         {
             public string Diagnosis { get; set; } = string.Empty;
