@@ -240,6 +240,37 @@ namespace Team_3_HMS.Controllers
 
             return Ok(labTests);
         }
+        // Case 8: 
+        [HttpGet("summary")]
+        [Authorize(Roles = "Doctor,Admin")]
+        public async Task<IActionResult> GetLabTestSummary()
+        {
+            var totalLabTests = await _context.LabTests.CountAsync();
+
+            var totalCost = await _context.LabTests
+                .SumAsync(l => (decimal?)l.Cost) ?? 0;
+
+            var labTests = await _context.LabTests
+                .OrderByDescending(l => l.TestDate)
+                .Select(l => new
+                {
+                    l.LabTestId,
+                    l.TestName,
+                    l.Category,
+                    l.TestDate,
+                    l.Cost,
+                    l.Result,
+                    l.MedicalRecordId
+                })
+                .ToListAsync();
+
+            return Ok(new
+            {
+                TotalLabTests = totalLabTests,
+                TotalCost = totalCost,
+                LabTests = labTests
+            });
+        }
         public class UpdateLabTestResultRequest
         {
             public string Result { get; set; } = string.Empty;
