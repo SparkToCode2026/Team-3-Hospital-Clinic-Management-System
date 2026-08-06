@@ -16,6 +16,15 @@ namespace Team_3_HMS.Controllers
             _context = context;
         }
 
-        
+        // 1. GET ALL PROFILES
+        // GET: api/PatientProfile/all
+        [Authorize(Roles = "Admin")]
+        [HttpGet("all")]
+        public IActionResult GetAll()
+        {
+            var profiles = _context.PatientProfiles.ToList();
+            return Ok(profiles);
+        }
+
     }
 }
