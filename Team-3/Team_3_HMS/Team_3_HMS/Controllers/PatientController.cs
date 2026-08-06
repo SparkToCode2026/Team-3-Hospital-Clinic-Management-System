@@ -43,6 +43,22 @@ namespace Team_3_HMS.Controllers
             return Ok(profile);
         }
 
+        // 3. FIND PROFILE BY USER ID (NEW CASE)
+        // GET: api/PatientProfile/user/1
+        [Authorize]
+        [HttpGet("user/{userId}")]
+        public IActionResult GetByUserId(int userId)
+        {
+            var profile = _context.PatientProfiles.FirstOrDefault(p => p.userID == userId);
+
+            if (profile == null)
+            {
+                return NotFound("Patient profile not found for this user.");
+            }
+
+            return Ok(profile);
+        }
+
 
     }
 }
