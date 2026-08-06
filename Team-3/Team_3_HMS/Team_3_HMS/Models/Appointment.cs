@@ -13,7 +13,7 @@ namespace Team_3_HMS.Models
         public string Status { get; set; }
 
         [Required]
-        public string AppointmentDateTime { get; set; }
+        public DateTime AppointmentDateTime { get; set; }
 
         [Required]
         public string ReasonForVisit { get; set; }

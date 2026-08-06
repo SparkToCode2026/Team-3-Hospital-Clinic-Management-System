@@ -18,6 +18,8 @@ namespace Team_3_HMS
             builder.Services.AddDbContext<ProjectContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+            builder.Services.AddScoped<IEmailService, EmailService>();
+
             builder.Services.AddControllers(options =>
             {
                 options.SuppressImplicitRequiredAttributeForNonNullableReferenceTypes = true;
@@ -105,6 +107,45 @@ namespace Team_3_HMS
             app.MapControllers();
 
             app.Run();
+        }
+    }
+
+    public interface IEmailService
+    {
+        Task SendEmailAsync(string toEmail, string subject, string body);
+    }
+
+    public class EmailService : IEmailService
+    {
+        private readonly IConfiguration _config;
+
+        public EmailService(IConfiguration config)
+        {
+            _config = config;
+        }
+
+        public async Task SendEmailAsync(string toEmail, string subject, string body)
+        {
+            var message = new MimeKit.MimeMessage();
+            message.From.Add(new MimeKit.MailboxAddress(
+                _config["EmailSettings:SenderName"],
+                _config["EmailSettings:SenderEmail"]));
+            message.To.Add(MimeKit.MailboxAddress.Parse(toEmail));
+            message.Subject = subject;
+            message.Body = new MimeKit.TextPart("plain") { Text = body };
+
+            using var client = new MailKit.Net.Smtp.SmtpClient();
+            await client.ConnectAsync(
+                _config["EmailSettings:SmtpServer"],
+                int.Parse(_config["EmailSettings:Port"]),
+                MailKit.Security.SecureSocketOptions.StartTls);
+
+            await client.AuthenticateAsync(
+                _config["EmailSettings:SenderEmail"],
+                _config["EmailSettings:Password"]);
+
+            await client.SendAsync(message);
+            await client.DisconnectAsync(true);
         }
     }
 }
