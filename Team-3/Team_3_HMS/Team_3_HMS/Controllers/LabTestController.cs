@@ -130,6 +130,37 @@ namespace Team_3_HMS.Controllers
 
             return NoContent();
         }
+        // Case 5: 
+        [HttpGet]
+        [Authorize(Roles = "Doctor,Admin")]
+        public async Task<IActionResult> GetLabTests()
+        {
+            var labTests = await _context.LabTests
+                .Include(l => l.record)
+                .Select(l => new
+                {
+                    l.LabTestId,
+                    l.TestName,
+                    l.Category,
+                    l.TestDate,
+                    l.Cost,
+                    l.Result,
+                    l.MedicalRecordId,
+
+                    MedicalRecord = l.record == null
+                        ? null
+                        : new
+                        {
+                            l.record.MedicalRecordID,
+                            l.record.Diagnosis,
+                            l.record.TreatmentPlan,
+                            l.record.RecordDate
+                        }
+                })
+                .ToListAsync();
+
+            return Ok(labTests);
+        }
         public class UpdateLabTestResultRequest
         {
             public string Result { get; set; } = string.Empty;
