@@ -96,5 +96,38 @@ namespace Team_3_HMS.Controllers
             return Ok("Patient profile updated successfully.");
         }
 
+        // 6. UPDATE CURRENT LOGGED-IN USER'S PROFILE (NEW CASE)
+        // PUT: api/PatientProfile/update-my-profile
+        [Authorize]
+        [HttpPut("update-my-profile")]
+        public IActionResult UpdateMyProfile([FromBody] PatientProfile updatedData)
+        {
+            // Extract the user ID directly from the logged-in user's JWT token
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (string.IsNullOrEmpty(userIdClaim))
+            {
+                return Unauthorized("Unable to read user ID from token.");
+            }
+
+            int currentUserId = int.Parse(userIdClaim);
+            var existing = _context.PatientProfiles.FirstOrDefault(p => p.userID == currentUserId);
+
+            if (existing == null)
+            {
+                return NotFound("Your patient profile was not found.");
+            }
+
+            existing.DateOfBirth = updatedData.DateOfBirth;
+            existing.gender = updatedData.gender;
+            existing.Address = updatedData.Address;
+            existing.emergencyContact = updatedData.emergencyContact;
+            existing.BloodGroup = updatedData.BloodGroup;
+
+            _context.SaveChanges();
+
+            return Ok("Your patient profile was updated successfully.");
+        }
+
     }
 }
