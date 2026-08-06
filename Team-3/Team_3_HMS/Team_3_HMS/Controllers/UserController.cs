@@ -21,7 +21,7 @@ namespace Team_3_HMS.Controllers
             _context = context;
             _config = config;
         }
-
+        
         // 1. POST: Register public user
         [HttpPost("register")]
         public IActionResult Register([FromBody] user newUser)
