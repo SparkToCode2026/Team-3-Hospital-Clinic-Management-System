@@ -161,6 +161,44 @@ namespace Team_3_HMS.Controllers
 
             return Ok(labTests);
         }
+        // Case 6: 
+        [HttpGet("{id}")]
+        [Authorize(Roles = "Doctor,Admin")]
+        public async Task<IActionResult> GetLabTestById(int id)
+        {
+            var labTest = await _context.LabTests
+                .Include(l => l.record)
+                .Where(l => l.LabTestId == id)
+                .Select(l => new
+                {
+                    l.LabTestId,
+                    l.TestName,
+                    l.Category,
+                    l.TestDate,
+                    l.Cost,
+                    l.Result,
+                    l.MedicalRecordId,
+
+                    MedicalRecord = l.record == null
+                        ? null
+                        : new
+                        {
+                            l.record.MedicalRecordID,
+                            l.record.Diagnosis,
+                            l.record.TreatmentPlan,
+                            l.record.Symptom,
+                            l.record.RecordDate
+                        }
+                })
+                .FirstOrDefaultAsync();
+
+            if (labTest == null)
+            {
+                return NotFound("Lab test not found.");
+            }
+
+            return Ok(labTest);
+        }
         public class UpdateLabTestResultRequest
         {
             public string Result { get; set; } = string.Empty;
