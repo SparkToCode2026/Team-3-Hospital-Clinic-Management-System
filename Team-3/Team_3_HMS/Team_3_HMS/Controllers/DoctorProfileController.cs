@@ -16,7 +16,7 @@ namespace Team_3_HMS.Controllers
             context = _context;
         }
         // Method: POST create new doctor Profile
-     //   [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin")]
         [HttpPost("AddDoctorProfile")]
         public IActionResult AddDoctorProfile(DoctorProfile doctor)
         {
@@ -31,7 +31,7 @@ namespace Team_3_HMS.Controllers
             });
         }
         // Method: PUT update all doctor profile details
-       // [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin")]
         [HttpPut("UpdateDoctorProfile")]
         public IActionResult UpdateDoctorProfile(int id, DoctorProfile updatedDoctor)
         {
@@ -55,7 +55,7 @@ namespace Team_3_HMS.Controllers
             });
         }
         // Method: PATCH Update one field (Consultation Fee)
-        //[Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin")]
         [HttpPatch("UpdateConsultationFee")]
         public IActionResult UpdateConsultationFee(int id, double newFee)
         {
@@ -78,7 +78,7 @@ namespace Team_3_HMS.Controllers
             });
         }
         // Method: DELETE to remove doctor profile by ID
-        //[Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin")]
         [HttpDelete("RemoveDoctorProfile")]
         public IActionResult RemoveDoctorProfile(int id)
         {
