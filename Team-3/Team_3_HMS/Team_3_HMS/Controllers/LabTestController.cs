@@ -199,6 +199,47 @@ namespace Team_3_HMS.Controllers
 
             return Ok(labTest);
         }
+        // Case 7: 
+        [HttpGet("filter")]
+        [Authorize(Roles = "Doctor,Admin")]
+        public async Task<IActionResult> FilterLabTests(string category)
+        {
+            if (string.IsNullOrWhiteSpace(category))
+            {
+                return BadRequest("Lab test category is required.");
+            }
+
+            var labTests = await _context.LabTests
+                .Include(l => l.record)
+                .Where(l => l.Category.Contains(category))
+                .Select(l => new
+                {
+                    l.LabTestId,
+                    l.TestName,
+                    l.Category,
+                    l.TestDate,
+                    l.Cost,
+                    l.Result,
+                    l.MedicalRecordId,
+
+                    MedicalRecord = l.record == null
+                        ? null
+                        : new
+                        {
+                            l.record.MedicalRecordID,
+                            l.record.Diagnosis,
+                            l.record.RecordDate
+                        }
+                })
+                .ToListAsync();
+
+            if (labTests.Count == 0)
+            {
+                return NotFound("No matching lab tests were found.");
+            }
+
+            return Ok(labTests);
+        }
         public class UpdateLabTestResultRequest
         {
             public string Result { get; set; } = string.Empty;
