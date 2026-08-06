@@ -1,12 +1,22 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Team_3_HMS.Models;
 
 namespace Team_3_HMS.Controllers
 {
-    public class PrescriptionController : Controller
+    [ApiController]
+    [Route("api/[controller]")]
+    [Authorize]
+    public class PrescriptionController : ControllerBase
     {
-        public IActionResult Index()
+        private readonly ProjectContext _context;
+        private readonly IEmailService _emailService;
+
+        public PrescriptionController(ProjectContext context, IEmailService emailService)
         {
-            return View();
+            _context = context;
+            _emailService = emailService;
         }
     }
 }
