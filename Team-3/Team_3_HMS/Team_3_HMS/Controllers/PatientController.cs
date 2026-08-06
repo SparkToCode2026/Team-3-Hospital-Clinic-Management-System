@@ -71,5 +71,30 @@ namespace Team_3_HMS.Controllers
             return Ok("Patient profile created successfully.");
         }
 
+
+        // 5. UPDATE PATIENT PROFILE BY ID
+        // PUT: api/PatientProfile/update/1
+        [Authorize]
+        [HttpPut("update/{id}")]
+        public IActionResult Update(int id, [FromBody] PatientProfile updatedData)
+        {
+            var existing = _context.PatientProfiles.Find(id);
+
+            if (existing == null)
+            {
+                return NotFound("Patient profile not found.");
+            }
+
+            existing.DateOfBirth = updatedData.DateOfBirth;
+            existing.gender = updatedData.gender;
+            existing.Address = updatedData.Address;
+            existing.emergencyContact = updatedData.emergencyContact;
+            existing.BloodGroup = updatedData.BloodGroup;
+
+            _context.SaveChanges();
+
+            return Ok("Patient profile updated successfully.");
+        }
+
     }
 }
