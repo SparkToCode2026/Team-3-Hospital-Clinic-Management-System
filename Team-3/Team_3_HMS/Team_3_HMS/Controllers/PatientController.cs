@@ -129,5 +129,24 @@ namespace Team_3_HMS.Controllers
             return Ok("Your patient profile was updated successfully.");
         }
 
+        // 7. DELETE PATIENT PROFILE
+        // DELETE: api/PatientProfile/delete/1
+        [Authorize(Roles = "Admin")]
+        [HttpDelete("delete/{id}")]
+        public IActionResult Delete(int id)
+        {
+            var profile = _context.PatientProfiles.Find(id);
+
+            if (profile == null)
+            {
+                return NotFound("Patient profile not found.");
+            }
+
+            _context.PatientProfiles.Remove(profile);
+            _context.SaveChanges();
+
+            return Ok("Patient profile deleted successfully.");
+        }
+
     }
 }
