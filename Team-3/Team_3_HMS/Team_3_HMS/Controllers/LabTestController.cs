@@ -43,5 +43,50 @@ namespace Team_3_HMS.Controllers
                 $"/api/LabTest/{labTest.LabTestId}",
                 labTest);
         }
+        // Case 2: 
+        [HttpPut("{id}")]
+        [Authorize(Roles = "Doctor,Admin")]
+        public async Task<IActionResult> UpdateLabTest(
+            int id,
+            LabTest updatedLabTest)
+        {
+            if (id != updatedLabTest.LabTestId)
+            {
+                return BadRequest("Lab test ID does not match.");
+            }
+
+            var existingLabTest = await _context.LabTests.FindAsync(id);
+
+            if (existingLabTest == null)
+            {
+                return NotFound("Lab test not found.");
+            }
+
+            var medicalRecordExists = await _context.MedicalRecords
+                .AnyAsync(m =>
+                    m.MedicalRecordID == updatedLabTest.MedicalRecordId);
+
+            if (!medicalRecordExists)
+            {
+                return BadRequest("Medical record not found.");
+            }
+
+            if (updatedLabTest.Cost < 0)
+            {
+                return BadRequest("Lab test cost cannot be negative.");
+            }
+
+            existingLabTest.TestName = updatedLabTest.TestName;
+            existingLabTest.Category = updatedLabTest.Category;
+            existingLabTest.TestDate = updatedLabTest.TestDate;
+            existingLabTest.Cost = updatedLabTest.Cost;
+            existingLabTest.Result = updatedLabTest.Result;
+            existingLabTest.MedicalRecordId =
+                updatedLabTest.MedicalRecordId;
+
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
     }
 }
