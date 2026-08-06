@@ -26,5 +26,23 @@ namespace Team_3_HMS.Controllers
             return Ok(profiles);
         }
 
+
+        // 2. FIND PROFILE BY PATIENT ID
+        // GET: api/PatientProfile/find/1
+        [Authorize]
+        [HttpGet("find/{id}")]
+        public IActionResult GetById(int id)
+        {
+            var profile = _context.PatientProfiles.Find(id);
+
+            if (profile == null)
+            {
+                return NotFound("Patient profile not found.");
+            }
+
+            return Ok(profile);
+        }
+
+
     }
 }
