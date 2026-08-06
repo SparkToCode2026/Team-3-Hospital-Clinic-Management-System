@@ -113,6 +113,23 @@ namespace Team_3_HMS.Controllers
 
             return NoContent();
         }
+        // Case 4: 
+        [HttpDelete("{id}")]
+        [Authorize(Roles = "Doctor,Admin")]
+        public async Task<IActionResult> DeleteLabTest(int id)
+        {
+            var labTest = await _context.LabTests.FindAsync(id);
+
+            if (labTest == null)
+            {
+                return NotFound("Lab test not found.");
+            }
+
+            _context.LabTests.Remove(labTest);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
         public class UpdateLabTestResultRequest
         {
             public string Result { get; set; } = string.Empty;
