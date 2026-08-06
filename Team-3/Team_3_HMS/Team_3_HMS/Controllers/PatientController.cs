@@ -43,7 +43,7 @@ namespace Team_3_HMS.Controllers
             return Ok(profile);
         }
 
-        // 3. FIND PROFILE BY USER ID (NEW CASE)
+        // 3. FIND PROFILE BY USER ID
         // GET: api/PatientProfile/user/1
         [Authorize]
         [HttpGet("user/{userId}")]
@@ -96,7 +96,7 @@ namespace Team_3_HMS.Controllers
             return Ok("Patient profile updated successfully.");
         }
 
-        // 6. UPDATE CURRENT LOGGED-IN USER'S PROFILE (NEW CASE)
+        // 6. UPDATE CURRENT LOGGED-IN USER'S PROFILE
         // PUT: api/PatientProfile/update-my-profile
         [Authorize]
         [HttpPut("update-my-profile")]
@@ -148,5 +148,26 @@ namespace Team_3_HMS.Controllers
             return Ok("Patient profile deleted successfully.");
         }
 
+        // 8. SEARCH PROFILES BY BLOOD GROUP OR GENDER
+        // GET: api/PatientProfile/search?bloodGroup=A+&gender=Male
+        [Authorize(Roles = "Admin,Doctor")]
+        [HttpGet("search")]
+        public IActionResult Search(string? bloodGroup, string? gender)
+        {
+            var query = _context.PatientProfiles.AsQueryable();
+
+            if (!string.IsNullOrEmpty(bloodGroup))
+            {
+                query = query.Where(p => p.BloodGroup == bloodGroup);
+            }
+
+            if (!string.IsNullOrEmpty(gender))
+            {
+                query = query.Where(p => p.gender == gender);
+            }
+
+            var results = query.ToList();
+            return Ok(results);
+        }
     }
 }
