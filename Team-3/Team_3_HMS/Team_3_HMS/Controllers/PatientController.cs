@@ -59,6 +59,17 @@ namespace Team_3_HMS.Controllers
             return Ok(profile);
         }
 
+        // 4. CREATE PATIENT PROFILE
+        // POST: api/PatientProfile/create
+        [Authorize]
+        [HttpPost("create")]
+        public IActionResult Create([FromBody] PatientProfile profile)
+        {
+            _context.PatientProfiles.Add(profile);
+            _context.SaveChanges();
+
+            return Ok("Patient profile created successfully.");
+        }
 
     }
 }
