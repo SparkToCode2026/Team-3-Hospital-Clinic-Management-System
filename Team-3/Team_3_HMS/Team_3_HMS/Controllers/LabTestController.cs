@@ -88,5 +88,34 @@ namespace Team_3_HMS.Controllers
 
             return NoContent();
         }
+        // Case 3:
+        [HttpPatch("{id}/result")]
+        [Authorize(Roles = "Doctor,Admin")]
+        public async Task<IActionResult> UpdateLabTestResult(
+            int id,
+            UpdateLabTestResultRequest request)
+        {
+            var existingLabTest = await _context.LabTests.FindAsync(id);
+
+            if (existingLabTest == null)
+            {
+                return NotFound("Lab test not found.");
+            }
+
+            if (string.IsNullOrWhiteSpace(request.Result))
+            {
+                return BadRequest("Lab test result is required.");
+            }
+
+            existingLabTest.Result = request.Result;
+
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
+        public class UpdateLabTestResultRequest
+        {
+            public string Result { get; set; } = string.Empty;
+        }
     }
 }
