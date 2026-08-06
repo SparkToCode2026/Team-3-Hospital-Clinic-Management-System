@@ -23,9 +23,7 @@ namespace Team_3_HMS
                 options.SuppressImplicitRequiredAttributeForNonNullableReferenceTypes = true;
             });
 
-            // ==========================================
             // JWT Authentication & Authorization Setup
-            // ==========================================
             string jwtKey = builder.Configuration["Jwt:Key"] ?? "ThisIsAVerySecretKeyForTeam3HospitalManagementSystem2026!";
 
             builder.Services.AddAuthentication(options =>
