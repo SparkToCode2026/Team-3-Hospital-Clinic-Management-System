@@ -4,6 +4,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Security.Claims;
 using System.Text;
+using Team_3_HMS.Controllers;
 
 namespace Team_3_HMS
 {
@@ -19,6 +20,8 @@ namespace Team_3_HMS
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
             builder.Services.AddScoped<IEmailService, EmailService>();
+
+            builder.Services.AddHostedService<AppointmentReminderService>();
 
             builder.Services.AddControllers(options =>
             {

@@ -22,6 +22,11 @@ namespace Team_3_HMS.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateAppointment([FromBody] Appointment appointment)
         {
+            if (!DateTime.TryParse(appointment.AppointmentDateTime, out _))
+            {
+                return BadRequest("AppointmentDateTime must be a valid date/time string, e.g. 2026-08-15T14:30:00");
+            }
+
             _context.Appointments.Add(appointment);
             await _context.SaveChangesAsync();
 
@@ -44,6 +49,11 @@ namespace Team_3_HMS.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateAppointment(int id, [FromBody] Appointment updated)
         {
+            if (!DateTime.TryParse(updated.AppointmentDateTime, out _))
+            {
+                return BadRequest("AppointmentDateTime must be a valid date/time string, e.g. 2026-08-15T14:30:00");
+            }
+
             var appointment = await _context.Appointments.FindAsync(id);
             if (appointment == null) return NotFound();
 
@@ -106,10 +116,13 @@ namespace Team_3_HMS.Controllers
         [HttpGet("sorted")]
         public async Task<IActionResult> GetSortedByDate()
         {
-            var results = await _context.Appointments
-                .OrderByDescending(a => a.AppointmentDateTime)
-                .ToListAsync();
-            return Ok(results);
+            var appointments = await _context.Appointments.ToListAsync();
+
+            var sorted = appointments
+                .OrderByDescending(a => DateTime.TryParse(a.AppointmentDateTime, out var dt) ? dt : DateTime.MinValue)
+                .ToList();
+
+            return Ok(sorted);
         }
 
         [HttpGet("count")]
@@ -117,6 +130,53 @@ namespace Team_3_HMS.Controllers
         {
             var count = await _context.Appointments.CountAsync();
             return Ok(count);
+        }
+    }
+
+    public class AppointmentReminderService : BackgroundService
+    {
+        private readonly IServiceProvider _serviceProvider;
+
+        public AppointmentReminderService(IServiceProvider serviceProvider)
+        {
+            _serviceProvider = serviceProvider;
+        }
+
+        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+        {
+            while (!stoppingToken.IsCancellationRequested)
+            {
+                using (var scope = _serviceProvider.CreateScope())
+                {
+                    var context = scope.ServiceProvider.GetRequiredService<ProjectContext>();
+                    var emailService = scope.ServiceProvider.GetRequiredService<IEmailService>();
+
+                    var appointments = await context.Appointments
+                        .Include(a => a.PatientProfile)
+                            .ThenInclude(p => p.user)
+                        .ToListAsync();
+
+                    foreach (var appt in appointments)
+                    {
+                        if (DateTime.TryParse(appt.AppointmentDateTime, out var appointmentDate))
+                        {
+                            var reminderTime = appointmentDate.AddHours(-24);
+
+                            if (DateTime.Now >= reminderTime && DateTime.Now < reminderTime.AddMinutes(30)
+                                && appt.PatientProfile?.user?.email != null)
+                            {
+                                await emailService.SendEmailAsync(
+                                    appt.PatientProfile.user.email,
+                                    "Appointment Reminder",
+                                    $"Reminder: your appointment is tomorrow at {appointmentDate}."
+                                );
+                            }
+                        }
+                    }
+                }
+
+                await Task.Delay(TimeSpan.FromMinutes(30), stoppingToken);
+            }
         }
     }
 }
