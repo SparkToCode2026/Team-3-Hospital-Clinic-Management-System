@@ -95,6 +95,23 @@ namespace Team_3_HMS.Controllers
 
             return Ok(medications);
         }
+        [HttpGet("sort")]
+        public async Task<IActionResult> SortByPrice()
+        {
+            var medications = await _context.Medications
+                .OrderBy(x => x.UnitPrice)
+                .ToListAsync();
+
+            return Ok(medications);
+        }
+
+        [HttpGet("count")]
+        public async Task<IActionResult> CountMedication()
+        {
+            var count = await _context.Medications.CountAsync();
+
+            return Ok(count);
+        }
 
 
     }
