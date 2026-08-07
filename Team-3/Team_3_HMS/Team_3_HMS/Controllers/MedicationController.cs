@@ -86,6 +86,16 @@ namespace Team_3_HMS.Controllers
 
             return Ok(medication);
         }
+        [HttpGet("search/{name}")]
+        public async Task<IActionResult> SearchMedication(string name)
+        {
+            var medications = await _context.Medications
+                .Where(x => x.Name.Contains(name))
+                .ToListAsync();
+
+            return Ok(medications);
+        }
+
 
     }
 }
