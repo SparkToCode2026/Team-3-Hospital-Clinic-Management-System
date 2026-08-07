@@ -76,6 +76,17 @@ namespace Team_3_HMS.Controllers
 
             return NoContent();
         }
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetMedication(int id)
+        {
+            var medication = await _context.Medications.FindAsync(id);
+
+            if (medication == null)
+                return NotFound();
+
+            return Ok(medication);
+        }
+
     }
 }
 
