@@ -65,5 +65,20 @@ namespace Team_3_HMS.Controllers
 
             return NoContent();
         }
+        [HttpPatch("{id}/notes")]
+        [Authorize(Roles = "Doctor,Admin")]
+        public async Task<IActionResult> UpdateNotes(int id, [FromBody] string notes)
+        {
+            var prescription = await _context.Prescriptions.FindAsync(id);
+
+            if (prescription == null)
+                return NotFound();
+
+            prescription.Notes = notes;
+
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
     }
 }
