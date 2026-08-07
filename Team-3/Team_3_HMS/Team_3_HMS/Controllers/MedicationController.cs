@@ -44,6 +44,21 @@ namespace Team_3_HMS.Controllers
 
             return NoContent();
         }
+        [HttpPatch("{id}/price")]
+        [Authorize(Roles = "Admin,Doctor")]
+        public async Task<IActionResult> UpdatePrice(int id, [FromBody] double price)
+        {
+            var medication = await _context.Medications.FindAsync(id);
+
+            if (medication == null)
+                return NotFound();
+
+            medication.UnitPrice = price;
+
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
 
 
     }
