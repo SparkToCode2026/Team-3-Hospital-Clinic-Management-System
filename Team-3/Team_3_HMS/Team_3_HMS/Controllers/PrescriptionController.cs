@@ -48,5 +48,22 @@ namespace Team_3_HMS.Controllers
 
             return Ok(prescription);
         }
+        [HttpPut("{id}")]
+        [Authorize(Roles = "Doctor,Admin")]
+        public async Task<IActionResult> UpdatePrescription(int id, [FromBody] Prescription updated)
+        {
+            var prescription = await _context.Prescriptions.FindAsync(id);
+
+            if (prescription == null)
+                return NotFound();
+
+            prescription.IssuedDate = updated.IssuedDate;
+            prescription.Instructions = updated.Instructions;
+            prescription.Notes = updated.Notes;
+
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
     }
 }
