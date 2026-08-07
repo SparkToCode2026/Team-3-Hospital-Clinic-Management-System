@@ -26,6 +26,7 @@ namespace Team_3_HMS.Controllers
 
             return Ok(medication);
         }
+
         [HttpPut("{id}")]
         [Authorize(Roles = "Admin,Doctor")]
         public async Task<IActionResult> UpdateMedication(int id, [FromBody] Medication updated)
@@ -44,6 +45,7 @@ namespace Team_3_HMS.Controllers
 
             return NoContent();
         }
+
         [HttpPatch("{id}/price")]
         [Authorize(Roles = "Admin,Doctor")]
         public async Task<IActionResult> UpdatePrice(int id, [FromBody] double price)
@@ -59,6 +61,7 @@ namespace Team_3_HMS.Controllers
 
             return NoContent();
         }
+
         [HttpDelete("{id}")]
         [Authorize(Roles = "Admin,Doctor")]
         public async Task<IActionResult> DeleteMedication(int id)
@@ -73,8 +76,6 @@ namespace Team_3_HMS.Controllers
 
             return NoContent();
         }
-
-
     }
 }
 
