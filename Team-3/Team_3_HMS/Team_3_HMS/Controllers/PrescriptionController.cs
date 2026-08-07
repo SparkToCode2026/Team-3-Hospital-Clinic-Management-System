@@ -116,5 +116,24 @@ namespace Team_3_HMS.Controllers
 
             return Ok(prescription);
         }
+        [HttpGet("search/{date}")]
+        public async Task<IActionResult> SearchByDate(string date)
+        {
+            var prescriptions = await _context.Prescriptions
+                .Where(p => p.IssuedDate.Contains(date))
+                .ToListAsync();
+
+            return Ok(prescriptions);
+        }
+
+        [HttpGet("sort")]
+        public async Task<IActionResult> SortByDate()
+        {
+            var prescriptions = await _context.Prescriptions
+                .OrderBy(p => p.IssuedDate)
+                .ToListAsync();
+
+            return Ok(prescriptions);
+        }
     }
 }
