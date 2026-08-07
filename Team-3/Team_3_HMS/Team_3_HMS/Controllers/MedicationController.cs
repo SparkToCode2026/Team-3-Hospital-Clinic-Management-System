@@ -16,5 +16,21 @@ namespace Team_3_HMS.Controllers
         {
             _context = context;
         }
+
+        [HttpPost]
+        [Authorize(Roles = "Admin,Doctor")]
+        public async Task<IActionResult> CreateMedication([FromBody] Medication medication)
+        {
+            _context.Medications.Add(medication);
+            await _context.SaveChangesAsync();
+
+            return Ok(medication);
+        }
+
     }
 }
+
+
+
+
+
