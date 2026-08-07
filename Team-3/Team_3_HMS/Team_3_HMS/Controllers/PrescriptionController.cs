@@ -18,5 +18,35 @@ namespace Team_3_HMS.Controllers
             _context = context;
             _emailService = emailService;
         }
+
+        [HttpPost]
+        [Authorize(Roles = "Doctor,Admin")]
+        public async Task<IActionResult> CreatePrescription([FromBody] Prescription prescription)
+        {
+            _context.Prescriptions.Add(prescription);
+            await _context.SaveChangesAsync();
+
+            var record = await _context.MedicalRecords
+                .Include(m => m.Appointment)
+                .ThenInclude(a => a.PatientProfile)
+                .FirstOrDefaultAsync(m => m.MedicalRecordID == prescription.MedicalRecordId);
+
+            if (record?.Appointment?.PatientProfile != null)
+            {
+                var patient = await _context.Users.FirstOrDefaultAsync(u =>
+                    u.userID == record.Appointment.PatientProfile.userID);
+
+                if (patient != null)
+                {
+                    await _emailService.SendEmailAsync(
+                        patient.email,
+                        "Prescription Created",
+                        $"Your prescription has been created.\n\nInstructions: {prescription.Instructions}"
+                    );
+                }
+            }
+
+            return Ok(prescription);
+        }
     }
 }
