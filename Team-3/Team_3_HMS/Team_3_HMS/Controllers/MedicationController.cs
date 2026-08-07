@@ -59,6 +59,20 @@ namespace Team_3_HMS.Controllers
 
             return NoContent();
         }
+        [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin,Doctor")]
+        public async Task<IActionResult> DeleteMedication(int id)
+        {
+            var medication = await _context.Medications.FindAsync(id);
+
+            if (medication == null)
+                return NotFound();
+
+            _context.Medications.Remove(medication);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
 
 
     }
