@@ -135,5 +135,12 @@ namespace Team_3_HMS.Controllers
 
             return Ok(prescriptions);
         }
+        [HttpGet("count")]
+        public async Task<IActionResult> CountPrescriptions()
+        {
+            var count = await _context.Prescriptions.CountAsync();
+
+            return Ok(count);
+        }
     }
 }
