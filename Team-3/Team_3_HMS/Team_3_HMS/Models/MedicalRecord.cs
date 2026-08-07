@@ -35,6 +35,8 @@ namespace Team_3_HMS.Models
         [InverseProperty("record")]
         [JsonIgnore]
         public List<LabTest>? LabTests { get; set; }
+
+        [NotMapped]
         public object PatientProfile { get; internal set; }
     }
 }
