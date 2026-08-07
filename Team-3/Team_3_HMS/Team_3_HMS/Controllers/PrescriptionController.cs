@@ -95,5 +95,26 @@ namespace Team_3_HMS.Controllers
 
             return NoContent();
         }
+        [HttpGet]
+        public async Task<IActionResult> GetAllPrescriptions()
+        {
+            var prescriptions = await _context.Prescriptions
+                .Include(p => p.Medical)
+                .Include(p => p.Medications)
+                .ToListAsync();
+
+            return Ok(prescriptions);
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetPrescription(int id)
+        {
+            var prescription = await _context.Prescriptions.FindAsync(id);
+
+            if (prescription == null)
+                return NotFound();
+
+            return Ok(prescription);
+        }
     }
 }
