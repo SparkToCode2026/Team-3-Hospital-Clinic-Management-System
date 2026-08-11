@@ -96,67 +96,174 @@
             <!-- Dashboard Content -->
             <section class="dashboard-content">
 
-                    <!-- Page Header -->
-                    <div class="page-header">
-                        <h1>Medical Records Dashboard</h1>
+                <!-- Page Header -->
+                <div class="page-header">
+                    <h1>Medical Records Dashboard</h1>
 
-                        <p>
-                            Manage patient historical records, diagnoses, and lab diagnostics.
-                        </p>
+                    <p>
+                        Manage patient historical records, diagnoses, and lab diagnostics.
+                    </p>
+                </div>
+
+                <!-- Summary Cards -->
+                <div class="summary-grid">
+
+                    <div class="summary-card">
+                        <div>
+                            <span class="summary-label">Total Medical Records</span>
+                            <h2>1,247</h2>
+                        </div>
+
+                        <span class="summary-change success-text">
+                            +12%
+                        </span>
                     </div>
 
-                    <!-- Summary Cards -->
-                    <div class="summary-grid">
-
-                        <div class="summary-card">
-                            <div>
-                                <span class="summary-label">Total Medical Records</span>
-                                <h2>1,247</h2>
-                            </div>
-
-                            <span class="summary-change success-text">
-                                +12%
-                            </span>
+                    <div class="summary-card">
+                        <div>
+                            <span class="summary-label">Total Lab Test Costs</span>
+                            <h2>$284,530</h2>
                         </div>
 
-                        <div class="summary-card">
-                            <div>
-                                <span class="summary-label">Total Lab Test Costs</span>
-                                <h2>$284,530</h2>
-                            </div>
-
-                            <span class="summary-change success-text">
-                                +8.4%
-                            </span>
-                        </div>
-
+                        <span class="summary-change success-text">
+                            +8.4%
+                        </span>
                     </div>
 
-                    <!-- Records Toolbar -->
-                    <div class="records-toolbar">
+                </div>
 
-                        <div class="records-filters">
+                <!-- Records Toolbar -->
+                <div class="records-toolbar">
 
-                            <input type="search"
-                                   class="form-control diagnosis-search"
-                                   placeholder="Search by diagnosis...">
+                    <div class="records-filters">
 
-                            <select class="form-select records-filter">
-                                <option selected>All Records</option>
-                                <option>Recent Records</option>
-                                <option>Older Records</option>
-                            </select>
+                        <input type="search"
+                               class="form-control diagnosis-search"
+                               placeholder="Search by diagnosis...">
 
-                        </div>
-
-                        <button type="button"
-                                class="btn new-record-btn">
-                            + New Record
-                        </button>
+                        <select class="form-select records-filter">
+                            <option selected>All Records</option>
+                            <option>Recent Records</option>
+                            <option>Older Records</option>
+                        </select>
 
                     </div>
 
-                </section>
+                    <button type="button"
+                            class="btn new-record-btn">
+                        + New Record
+                    </button>
+
+                </div>
+
+
+                <!-- Medical Records Table -->
+                <div class="records-table-container">
+
+                    <div class="table-responsive">
+
+                        <table class="table records-table align-middle">
+
+                            <thead>
+                                <tr>
+                                    <th>Record ID</th>
+                                    <th>Patient</th>
+                                    <th>Diagnosis</th>
+                                    <th>Symptoms</th>
+                                    <th>Record Date</th>
+                                    <th>Appointment ID</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+
+                                <tr>
+                                    <td>#MR-1024</td>
+                                    <td>Emily Carter</td>
+                                    <td>Type 2 Diabetes</td>
+                                    <td>Fatigue, Increased Thirst</td>
+                                    <td>2026-08-04</td>
+                                    <td>#APT-204</td>
+
+                                    <td>
+                                        <button type="button"
+                                                class="btn btn-sm btn-outline-primary">
+                                            View
+                                        </button>
+
+                                        <button type="button"
+                                                class="btn btn-sm btn-outline-secondary">
+                                            Edit
+                                        </button>
+
+                                        <button type="button"
+                                                class="btn btn-sm btn-outline-danger">
+                                            Delete
+                                        </button>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td>#MR-1023</td>
+                                    <td>James Wilson</td>
+                                    <td>Hypertension</td>
+                                    <td>Headache, Dizziness</td>
+                                    <td>2026-08-03</td>
+                                    <td>#APT-199</td>
+
+                                    <td>
+                                        <button type="button"
+                                                class="btn btn-sm btn-outline-primary">
+                                            View
+                                        </button>
+
+                                        <button type="button"
+                                                class="btn btn-sm btn-outline-secondary">
+                                            Edit
+                                        </button>
+
+                                        <button type="button"
+                                                class="btn btn-sm btn-outline-danger">
+                                            Delete
+                                        </button>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td>#MR-1022</td>
+                                    <td>Sophia Miller</td>
+                                    <td>Asthma</td>
+                                    <td>Shortness of Breath</td>
+                                    <td>2026-08-02</td>
+                                    <td>#APT-193</td>
+
+                                    <td>
+                                        <button type="button"
+                                                class="btn btn-sm btn-outline-primary">
+                                            View
+                                        </button>
+
+                                        <button type="button"
+                                                class="btn btn-sm btn-outline-secondary">
+                                            Edit
+                                        </button>
+
+                                        <button type="button"
+                                                class="btn btn-sm btn-outline-danger">
+                                            Delete
+                                        </button>
+                                    </td>
+                                </tr>
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+            </section>
 
 
         </main>
