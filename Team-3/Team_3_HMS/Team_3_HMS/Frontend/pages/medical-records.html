@@ -150,7 +150,9 @@
                     </div>
 
                     <button type="button"
-                            class="btn new-record-btn">
+                            class="btn new-record-btn"
+                            data-bs-toggle="modal"
+                            data-bs-target="#newRecordModal">
                         + New Record
                     </button>
 
@@ -412,6 +414,135 @@
                     <button type="button"
                             class="btn btn-sm btn-outline-primary">
                         Update Result
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+    <!-- Create Medical Record Modal -->
+    <div class="modal fade"
+         id="newRecordModal"
+         tabindex="-1"
+         aria-labelledby="newRecordModalLabel"
+         aria-hidden="true">
+
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+
+            <div class="modal-content record-form-modal">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+
+                    <div>
+                        <small class="text-muted">Medical Records</small>
+
+                        <h5 class="modal-title"
+                            id="newRecordModalLabel">
+                            Create New Medical Record
+                        </h5>
+                    </div>
+
+                    <button type="button"
+                            class="btn-close"
+                            data-bs-dismiss="modal"
+                            aria-label="Close">
+                    </button>
+
+                </div>
+
+                <!-- Modal Body -->
+                <div class="modal-body">
+
+                    <form>
+
+                        <div class="row g-3">
+
+                            <!-- Appointment ID -->
+                            <div class="col-md-6">
+                                <label for="appointmentId"
+                                       class="form-label">
+                                    Appointment ID
+                                </label>
+
+                                <input type="number"
+                                       class="form-control"
+                                       id="appointmentId"
+                                       placeholder="Enter appointment ID">
+                            </div>
+
+                            <!-- Record Date -->
+                            <div class="col-md-6">
+                                <label for="recordDate"
+                                       class="form-label">
+                                    Record Date
+                                </label>
+
+                                <input type="date"
+                                       class="form-control"
+                                       id="recordDate">
+                            </div>
+
+                            <!-- Diagnosis -->
+                            <div class="col-12">
+                                <label for="diagnosis"
+                                       class="form-label">
+                                    Diagnosis
+                                </label>
+
+                                <input type="text"
+                                       class="form-control"
+                                       id="diagnosis"
+                                       placeholder="Enter diagnosis">
+                            </div>
+
+                            <!-- Symptoms -->
+                            <div class="col-12">
+                                <label for="symptoms"
+                                       class="form-label">
+                                    Symptoms
+                                </label>
+
+                                <textarea class="form-control"
+                                          id="symptoms"
+                                          rows="3"
+                                          placeholder="Enter patient symptoms"></textarea>
+                            </div>
+
+                            <!-- Treatment Plan -->
+                            <div class="col-12">
+                                <label for="treatmentPlan"
+                                       class="form-label">
+                                    Treatment Plan
+                                </label>
+
+                                <textarea class="form-control"
+                                          id="treatmentPlan"
+                                          rows="4"
+                                          placeholder="Enter treatment plan"></textarea>
+                            </div>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+                <!-- Modal Footer -->
+                <div class="modal-footer">
+
+                    <button type="button"
+                            class="btn btn-outline-secondary"
+                            data-bs-dismiss="modal">
+                        Cancel
+                    </button>
+
+                    <button type="button"
+                            class="btn new-record-btn">
+                        Create Record
                     </button>
 
                 </div>
