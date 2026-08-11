@@ -1,0 +1,306 @@
+*, *::before, *::after { box-sizing: border-box; }
+
+:root {
+  --blue-dark:    #0a2a5e;
+  --blue-mid:     #1155a8;
+  --blue-light:   #2979d8;
+  --blue-accent:  #1a6ff5;
+  --white:        #ffffff;
+  --gray-bg:      #f5f6f8;
+  --gray-border:  #d9dde6;
+  --gray-text:    #6b7280;
+  --text-dark:    #111827;
+  --warn-bg:      #fffbe6;
+  --warn-border:  #f5c518;
+  --warn-text:    #7d5a00;
+  --err-bg:       #fff1f0;
+  --err-border:   #fca5a5;
+  --err-text:     #b91c1c;
+}
+
+html, body {
+  height: 100%;
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+  background: var(--gray-bg);
+}
+
+/* ─── Layout ─────────────────────────────────────── */
+.auth-wrapper {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* ─── Left Panel ─────────────────────────────────── */
+.left-panel {
+  width: 45%;
+  background: linear-gradient(160deg, var(--blue-light) 0%, var(--blue-mid) 40%, var(--blue-dark) 100%);
+  display: flex;
+  flex-direction: column;
+  padding: 2rem 2.5rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.left-panel::before {
+  content: '';
+  position: absolute;
+  top: -80px; right: -80px;
+  width: 260px; height: 260px;
+  background: rgba(255,255,255,0.06);
+  border-radius: 50%;
+}
+
+.left-panel::after {
+  content: '';
+  position: absolute;
+  bottom: -60px; left: -60px;
+  width: 200px; height: 200px;
+  background: rgba(255,255,255,0.05);
+  border-radius: 50%;
+}
+
+/* Logo */
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  z-index: 1;
+}
+
+.brand-icon {
+  width: 44px; height: 44px;
+  background: rgba(255,255,255,0.18);
+  border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  backdrop-filter: blur(4px);
+  border: 1px solid rgba(255,255,255,0.25);
+}
+
+.brand-icon i {
+  font-size: 1.3rem;
+  color: #fff;
+}
+
+.brand-name {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: -0.01em;
+}
+
+/* Illustration */
+.illustration-wrap {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+  padding: 1.5rem 0;
+}
+
+.illustration-wrap img {
+  width: 100%;
+  max-width: 360px;
+  border-radius: 16px;
+  object-fit: cover;
+}
+
+/* Tagline */
+.tagline {
+  z-index: 1;
+  margin-bottom: 1.5rem;
+}
+
+.tagline h1 {
+  font-size: 1.45rem;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 0.5rem;
+  line-height: 1.35;
+}
+
+.tagline p {
+  font-size: 0.82rem;
+  color: rgba(255,255,255,0.72);
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* Footer */
+.left-footer {
+  z-index: 1;
+  font-size: 0.72rem;
+  color: rgba(255,255,255,0.45);
+}
+
+/* ─── Right Panel ────────────────────────────────── */
+.right-panel {
+  width: 55%;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 2rem;
+}
+
+.auth-card {
+  width: 100%;
+  max-width: 420px;
+}
+
+.auth-card h2 {
+  font-size: 1.9rem;
+  font-weight: 700;
+  color: var(--text-dark);
+  margin-bottom: 0.3rem;
+  letter-spacing: -0.02em;
+}
+
+.auth-card .subtitle {
+  font-size: 0.85rem;
+  color: var(--gray-text);
+  margin-bottom: 1.8rem;
+}
+
+/* Tab Toggle */
+.tab-toggle {
+  display: flex;
+  border: 1px solid var(--gray-border);
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 1.8rem;
+}
+
+.tab-btn {
+  flex: 1;
+  padding: 0.6rem 1rem;
+  font-size: 0.88rem;
+  font-weight: 500;
+  border: none;
+  background: transparent;
+  color: var(--gray-text);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.tab-btn.active {
+  background: #fff;
+  color: var(--text-dark);
+  font-weight: 600;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+}
+
+.tab-btn:first-child { border-right: 1px solid var(--gray-border); }
+
+/* Form */
+.form-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--gray-text);
+  margin-bottom: 0.35rem;
+}
+
+.form-control {
+  border: 1px solid var(--gray-border);
+  border-radius: 8px;
+  padding: 0.65rem 0.9rem;
+  font-size: 0.9rem;
+  color: var(--text-dark);
+  background: #fff;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.form-control:focus {
+  border-color: var(--blue-accent);
+  box-shadow: 0 0 0 3px rgba(26,111,245,0.12);
+  outline: none;
+}
+
+/* Remember / Forgot row */
+.remember-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0.6rem 0 1.4rem;
+}
+
+.remember-row label {
+  font-size: 0.83rem;
+  color: var(--gray-text);
+  cursor: pointer;
+}
+
+.remember-row input[type="checkbox"] {
+  accent-color: var(--blue-accent);
+  margin-right: 0.4rem;
+}
+
+.forgot-link {
+  font-size: 0.83rem;
+  color: var(--blue-accent);
+  text-decoration: none;
+  font-weight: 500;
+  transition: opacity 0.15s;
+}
+
+.forgot-link:hover { opacity: 0.75; }
+
+/* Submit Button */
+.btn-signin {
+  width: 100%;
+  padding: 0.75rem;
+  background: var(--blue-accent);
+  border: none;
+  border-radius: 8px;
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: #fff;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s, box-shadow 0.2s;
+  letter-spacing: 0.01em;
+}
+
+.btn-signin:hover {
+  background: #155fe0;
+  box-shadow: 0 4px 14px rgba(26,111,245,0.35);
+}
+
+.btn-signin:active { transform: scale(0.99); }
+
+/* Alerts */
+.alert-custom {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  border-radius: 8px;
+  padding: 0.7rem 0.9rem;
+  font-size: 0.82rem;
+  line-height: 1.5;
+  margin-top: 1rem;
+}
+
+.alert-custom i { font-size: 1rem; margin-top: 0.05rem; flex-shrink: 0; }
+
+.alert-warn {
+  background: var(--warn-bg);
+  border: 1px solid var(--warn-border);
+  color: var(--warn-text);
+}
+
+.alert-error {
+  background: var(--err-bg);
+  border: 1px solid var(--err-border);
+  color: var(--err-text);
+}
+
+/* ─── Register Form (hidden by default) ─────────── */
+#register-form { display: none; }
+
+/* ─── Responsive ─────────────────────────────────── */
+@media (max-width: 768px) {
+  .left-panel { display: none; }
+  .right-panel { width: 100%; padding: 2rem 1.25rem; }
+}

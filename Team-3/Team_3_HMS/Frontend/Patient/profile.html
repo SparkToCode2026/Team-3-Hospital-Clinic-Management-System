@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Profile – MedCore Patient Portal</title>
+  <meta name="description" content="View and update your personal contact details, medical file, and login credentials." />
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="css/patient.css" rel="stylesheet" />
+
+</head>
+<body>
+<div class="portal-wrapper">
+
+  <!-- ══════════════════ SIDEBAR ══════════════════ -->
+  <aside class="sidebar">
+
+    <!-- Brand -->
+    <div class="sidebar-brand">
+      <div class="sidebar-logo">
+        <i class="bi bi-hospital"></i>
+      </div>
+      <div>
+        <div class="sidebar-brand-name">MedCore</div>
+        <div class="sidebar-brand-sub">HMS Platform</div>
+      </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="sidebar-nav">
+
+      <!-- Disabled (coming soon) -->
+      <span class="nav-item disabled">
+        <i class="bi bi-grid-1x2"></i> Dashboard
+      </span>
+
+      <!-- ACTIVE: My Profile -->
+      <a href="profile.html" class="nav-item active">
+        <i class="bi bi-person"></i> My Profile
+      </a>
+
+      <!-- Disabled -->
+      <span class="nav-item disabled">
+        <i class="bi bi-calendar-check"></i> Appointments
+      </span>
+      <span class="nav-item disabled">
+        <i class="bi bi-capsule"></i> Prescriptions
+      </span>
+      <a href="invoices.html" class="nav-item">
+        <i class="bi bi-receipt"></i> My Invoices
+      </a>
+
+      <div class="nav-divider"></div>
+
+      <span class="nav-item disabled">
+        <i class="bi bi-shield-lock"></i> Change Password
+      </span>
+      <span class="nav-item disabled">
+        <i class="bi bi-box-arrow-left"></i> Logout
+      </span>
+
+    </nav>
+
+    <!-- Bottom user info -->
+    <div class="sidebar-user">
+      <div class="sidebar-user-avatar">SJ</div>
+      <div>
+        <div class="sidebar-user-name">Sarah Jenkins</div>
+        <div class="sidebar-user-role">Patient · ID 2014</div>
+      </div>
+    </div>
+
+  </aside>
+
+  <!-- ══════════════════ MAIN CONTENT ══════════════════ -->
+  <div class="main-content">
+
+    <!-- Topbar -->
+    <header class="topbar">
+      <span class="topbar-title">My Profile Settings</span>
+      <div class="topbar-actions">
+        <button class="topbar-icon-btn" title="Notifications">
+          <i class="bi bi-bell"></i>
+          <span class="notif-badge"></span>
+        </button>
+        <div class="topbar-avatar">SJ</div>
+        <span class="topbar-user-label">Sarah J.</span>
+      </div>
+    </header>
+
+    <!-- Page Body -->
+    <main class="page-body">
+
+      <!-- Success banner -->
+      <div class="alert alert-success" id="save-alert" style="display:none;">
+        <i class="bi bi-check-circle-fill"></i>
+        <span>Profile updated successfully. All changes have been synced with core hospital directory.</span>
+      </div>
+
+      <div class="profile-cols">
+
+        <!-- ── LEFT: Forms ── -->
+        <div>
+
+          <!-- Core Contact Account -->
+          <div class="card">
+            <div class="card-header">
+              <span class="card-title">Core Contact Account</span>
+            </div>
+
+            <div class="form-grid">
+              <div class="form-group">
+                <label class="form-label" for="full-name">Full Name</label>
+                <input type="text" id="full-name" class="form-control" value="Sarah Jenkins" />
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="email-address">Email Address</label>
+                <input type="email" id="email-address" class="form-control" value="sarah.jenkins@medcore.com" />
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="phone-number">Phone Number</label>
+                <input type="tel" id="phone-number" class="form-control" value="+1 (555) 342-8921" />
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="account-type">Account Type</label>
+                <input type="text" id="account-type" class="form-control" value="Standard Patient Portal" readonly />
+              </div>
+            </div>
+
+            <p class="form-hint">
+              <i class="bi bi-clock"></i> Last updated: 14 mins ago
+            </p>
+
+            <div style="margin-top:1.1rem; display:flex; justify-content:flex-end;">
+              <button class="btn btn-primary" onclick="saveContact()">
+                <i class="bi bi-floppy"></i> Save Core Account Changes
+              </button>
+            </div>
+          </div>
+
+          <!-- Patient Medical File -->
+          <div class="card">
+            <div class="card-header">
+              <span class="card-title">Patient Medical File</span>
+            </div>
+
+            <div class="form-grid">
+              <div class="form-group">
+                <label class="form-label" for="dob">Date of Birth</label>
+                <input type="date" id="dob" class="form-control" value="1991-08-24" />
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="gender">Gender</label>
+                <select id="gender" class="form-control">
+                  <option>Female</option>
+                  <option>Male</option>
+                  <option>Other / Prefer not to say</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="blood-group">Blood Group</label>
+                <select id="blood-group" class="form-control">
+                  <option>A Positive (A+)</option>
+                  <option>A Negative (A−)</option>
+                  <option>B Positive (B+)</option>
+                  <option>B Negative (B−)</option>
+                  <option selected>O Positive (O+)</option>
+                  <option>O Negative (O−)</option>
+                  <option>AB Positive (AB+)</option>
+                  <option>AB Negative (AB−)</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="emergency-phone">Emergency Contact Phone</label>
+                <input type="tel" id="emergency-phone" class="form-control" value="+1 (555) 998-2194" />
+              </div>
+              <div class="form-group span-2">
+                <label class="form-label" for="address">Residential Address</label>
+                <input type="text" id="address" class="form-control" value="742 Evergreen Terrace, Springfield, OR 97477" />
+              </div>
+            </div>
+
+            <p class="form-hint">
+              <i class="bi bi-database-lock"></i> Directly linked to Electronic Health Record (EHR)
+            </p>
+
+            <div style="margin-top:1.1rem; display:flex; justify-content:flex-end;">
+              <button class="btn btn-primary" onclick="saveContact()">
+                <i class="bi bi-floppy"></i> Update Health Details
+              </button>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- ── RIGHT: Security + Invoices ── -->
+        <div>
+
+          <!-- Security & Password -->
+          <div class="card">
+            <div class="card-header">
+              <span class="card-title">Security &amp; Password</span>
+              <i class="bi bi-shield-check" style="color:var(--green); font-size:1rem;"></i>
+            </div>
+
+            <div style="display:flex; flex-direction:column; gap:0.9rem;">
+              <div class="form-group">
+                <label class="form-label" for="current-password">Current Password</label>
+                <input type="password" id="current-password" class="form-control" placeholder="Enter current password" />
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="new-password">New Password</label>
+                <input type="password" id="new-password" class="form-control" placeholder="Enter new password" />
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="confirm-password">Confirm Password</label>
+                <input type="password" id="confirm-password" class="form-control" placeholder="Re-enter new password" />
+              </div>
+            </div>
+
+            <div id="pw-error" class="alert alert-error" style="display:none; margin-top:0.9rem;">
+              <i class="bi bi-x-circle-fill"></i>
+              <span>Passwords do not match. Please try again.</span>
+            </div>
+
+            <button class="btn btn-secondary" style="width:100%; margin-top:1rem; justify-content:center;" onclick="changePassword()">
+              <i class="bi bi-key"></i> Change Password
+            </button>
+          </div>
+
+          <!-- Recent Invoices -->
+          <div class="card">
+            <div class="card-header">
+              <span class="card-title">Recent Invoices</span>
+              <span style="font-size:0.78rem; font-weight:600; color:var(--brand-accent); cursor:default;">View All</span>
+            </div>
+
+            <div style="display:flex; flex-direction:column; gap:0.65rem;">
+
+              <div style="display:flex; align-items:center; justify-content:space-between; padding:0.65rem 0.75rem; border:1px solid var(--border); border-radius:8px;">
+                <div>
+                  <div style="font-size:0.85rem; font-weight:600; color:var(--text-primary);">INV-9923</div>
+                  <div style="font-size:0.75rem; color:var(--text-secondary);">Oct 24, 2025</div>
+                </div>
+                <div style="text-align:right; display:flex; flex-direction:column; align-items:flex-end; gap:0.25rem;">
+                  <div style="font-size:0.88rem; font-weight:700;">$150.00</div>
+                  <span class="badge badge-success">Paid</span>
+                </div>
+              </div>
+
+              <div style="display:flex; align-items:center; justify-content:space-between; padding:0.65rem 0.75rem; border:1px solid var(--border); border-radius:8px;">
+                <div>
+                  <div style="font-size:0.85rem; font-weight:600; color:var(--text-primary);">INV-9812</div>
+                  <div style="font-size:0.75rem; color:var(--text-secondary);">Oct 12, 2025</div>
+                </div>
+                <div style="text-align:right; display:flex; flex-direction:column; align-items:flex-end; gap:0.25rem;">
+                  <div style="font-size:0.88rem; font-weight:700;">$320.00</div>
+                  <span class="badge badge-warn">Pending</span>
+                </div>
+              </div>
+
+              <div style="display:flex; align-items:center; justify-content:space-between; padding:0.65rem 0.75rem; border:1px solid var(--border); border-radius:8px;">
+                <div>
+                  <div style="font-size:0.85rem; font-weight:600; color:var(--text-primary);">INV-9745</div>
+                  <div style="font-size:0.75rem; color:var(--text-secondary);">Sep 28, 2025</div>
+                </div>
+                <div style="text-align:right; display:flex; flex-direction:column; align-items:flex-end; gap:0.25rem;">
+                  <div style="font-size:0.88rem; font-weight:700;">$85.00</div>
+                  <span class="badge badge-success">Paid</span>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+      </div><!-- /profile-cols -->
+    </main>
+  </div>
+
+</div><!-- /portal-wrapper -->
+
+<script>
+  function saveContact() {
+    const banner = document.getElementById('save-alert');
+    banner.style.display = 'flex';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    setTimeout(() => { banner.style.display = 'none'; }, 5000);
+  }
+
+  function changePassword() {
+    const np  = document.getElementById('new-password').value;
+    const cp  = document.getElementById('confirm-password').value;
+    const err = document.getElementById('pw-error');
+
+    err.style.display = 'none';
+    if (!np) return;
+
+    if (np !== cp) {
+      err.style.display = 'flex';
+      return;
+    }
+
+    // Passwords match — show success banner
+    saveContact();
+    document.getElementById('current-password').value = '';
+    document.getElementById('new-password').value = '';
+    document.getElementById('confirm-password').value = '';
+  }
+</script>
+</body>
+</html>
