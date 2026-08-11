@@ -25,7 +25,6 @@
   <ItemGroup>
     <Folder Include="Frontend\css\" />
     <Folder Include="Frontend\image\" />
-    <Folder Include="Frontend\pages\" />
   </ItemGroup>
 
 </Project>
