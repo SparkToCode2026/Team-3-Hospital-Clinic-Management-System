@@ -352,7 +352,9 @@
                     <span class="details-label">Diagnosis</span>
 
                     <button type="button"
-                            class="btn btn-sm btn-outline-primary">
+                            class="btn btn-sm btn-outline-primary"
+                            data-bs-toggle="modal"
+                            data-bs-target="#editDiagnosisModal">
                         Edit Diagnosis
                     </button>
                 </div>
@@ -543,6 +545,94 @@
                     <button type="button"
                             class="btn new-record-btn">
                         Create Record
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+    <!-- Edit Diagnosis Modal -->
+    <div class="modal fade"
+         id="editDiagnosisModal"
+         tabindex="-1"
+         aria-labelledby="editDiagnosisModalLabel"
+         aria-hidden="true">
+
+        <div class="modal-dialog modal-dialog-centered">
+
+            <div class="modal-content record-form-modal">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+
+                    <div>
+                        <small class="text-muted">Medical Record #MR-1024</small>
+
+                        <h5 class="modal-title"
+                            id="editDiagnosisModalLabel">
+                            Edit Diagnosis
+                        </h5>
+                    </div>
+
+                    <button type="button"
+                            class="btn-close"
+                            data-bs-dismiss="modal"
+                            aria-label="Close">
+                    </button>
+
+                </div>
+
+                <!-- Modal Body -->
+                <div class="modal-body">
+
+                    <form>
+
+                        <div class="mb-3">
+
+                            <label for="editDiagnosis"
+                                   class="form-label">
+                                Diagnosis
+                            </label>
+
+                            <input type="text"
+                                   class="form-control"
+                                   id="editDiagnosis"
+                                   value="Type 2 Diabetes">
+
+                        </div>
+
+                        <div>
+
+                            <label for="editTreatmentPlan"
+                                   class="form-label">
+                                Treatment Plan
+                            </label>
+
+                            <textarea class="form-control"
+                                      id="editTreatmentPlan"
+                                      rows="4">Continue medication, monitor blood glucose levels, and schedule a follow-up consultation.</textarea>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+                <!-- Modal Footer -->
+                <div class="modal-footer">
+
+                    <button type="button"
+                            class="btn btn-outline-secondary"
+                            data-bs-dismiss="modal">
+                        Cancel
+                    </button>
+
+                    <button type="button"
+                            class="btn new-record-btn">
+                        Save Changes
                     </button>
 
                 </div>
