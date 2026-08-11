@@ -1,0 +1,16 @@
+﻿:root {
+    --background-white: #FFFFFF;
+    --background-light: #F9FAFB;
+    --text-dark: #111827;
+    --primary: #0284C7;
+    --success: #16A34A;
+    --warning: #D97706;
+    --error: #DC2626;
+}
+
+body {
+    margin: 0;
+    background-color: var(--background-light);
+    color: var(--text-dark);
+    font-family: Arial, sans-serif;
+}
