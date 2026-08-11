@@ -307,3 +307,28 @@ body {
         font-size: 12px;
         margin-right: 4px;
     }
+.records-pagination {
+    padding: 14px 18px;
+    border-top: 1px solid #E5E7EB;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    background-color: var(--background-white);
+}
+
+.pagination-info {
+    margin: 0;
+    font-size: 13px;
+    color: #6B7280;
+}
+
+.pagination .page-link {
+    color: var(--primary);
+}
+
+.pagination .page-item.active .page-link {
+    background-color: var(--primary);
+    border-color: var(--primary);
+    color: white;
+}
