@@ -105,3 +105,79 @@ body {
         text-decoration: none;
         font-weight: 600;
     }
+.main-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.topbar {
+    height: 72px;
+    background-color: var(--background-white);
+    border-bottom: 1px solid #E5E7EB;
+    padding: 16px 30px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.search-box {
+    width: 100%;
+    max-width: 430px;
+}
+
+    .search-box .form-control {
+        border: 1px solid #D1D5DB;
+        border-radius: 8px;
+        font-size: 14px;
+        padding: 10px 14px;
+    }
+
+        .search-box .form-control:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(2, 132, 199, 0.12);
+        }
+
+.user-profile {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.user-info {
+    display: flex;
+    flex-direction: column;
+    text-align: right;
+}
+
+    .user-info strong {
+        font-size: 14px;
+        color: var(--text-dark);
+    }
+
+    .user-info small {
+        font-size: 11px;
+        color: #6B7280;
+    }
+
+.dashboard-content {
+    padding: 32px;
+}
+
+.page-header {
+    margin-bottom: 24px;
+}
+
+    .page-header h1 {
+        margin: 0 0 6px;
+        font-size: 28px;
+        font-weight: 700;
+        color: var(--text-dark);
+    }
+
+    .page-header p {
+        margin: 0;
+        color: #6B7280;
+        font-size: 14px;
+    }
+
