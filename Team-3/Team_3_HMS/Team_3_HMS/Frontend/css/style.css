@@ -549,3 +549,81 @@ body {
             width: 100%;
         }
 }
+/* =========================
+   Create Medical Record Modal
+   ========================= */
+
+.record-form-modal {
+    border: none;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+    .record-form-modal .modal-header {
+        padding: 22px 24px;
+        border-bottom: 1px solid #E5E7EB;
+        background-color: var(--background-white);
+    }
+
+    .record-form-modal .modal-title {
+        margin-top: 4px;
+        font-size: 20px;
+        font-weight: 700;
+        color: var(--text-dark);
+    }
+
+    .record-form-modal .modal-body {
+        padding: 24px;
+        background-color: var(--background-white);
+    }
+
+    .record-form-modal .form-label {
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--text-dark);
+    }
+
+    .record-form-modal .form-control {
+        border: 1px solid #D1D5DB;
+        border-radius: 8px;
+        font-size: 14px;
+        padding: 10px 12px;
+    }
+
+        .record-form-modal .form-control:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(2, 132, 199, 0.12);
+        }
+
+    .record-form-modal textarea {
+        resize: vertical;
+    }
+
+    .record-form-modal .modal-footer {
+        padding: 16px 24px;
+        border-top: 1px solid #E5E7EB;
+        background-color: #F9FAFB;
+    }
+
+        .record-form-modal .modal-footer .btn {
+            min-width: 110px;
+            font-size: 14px;
+        }
+/* Create Medical Record Modal - Mobile */
+@media (max-width: 768px) {
+
+    .record-form-modal .modal-header,
+    .record-form-modal .modal-body,
+    .record-form-modal .modal-footer {
+        padding-left: 18px;
+        padding-right: 18px;
+    }
+
+    .record-form-modal .modal-footer {
+        flex-direction: column;
+    }
+
+        .record-form-modal .modal-footer .btn {
+            width: 100%;
+        }
+}
