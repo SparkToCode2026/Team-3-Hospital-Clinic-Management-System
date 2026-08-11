@@ -188,7 +188,9 @@
 
                                     <td>
                                         <button type="button"
-                                                class="btn btn-sm btn-outline-primary">
+                                                class="btn btn-sm btn-outline-primary"
+                                                data-bs-toggle="offcanvas"
+                                                data-bs-target="#recordDetails">
                                             View
                                         </button>
 
@@ -214,7 +216,9 @@
 
                                     <td>
                                         <button type="button"
-                                                class="btn btn-sm btn-outline-primary">
+                                                class="btn btn-sm btn-outline-primary"
+                                                data-bs-toggle="offcanvas"
+                                                data-bs-target="#recordDetails">
                                             View
                                         </button>
 
@@ -240,7 +244,9 @@
 
                                     <td>
                                         <button type="button"
-                                                class="btn btn-sm btn-outline-primary">
+                                                class="btn btn-sm btn-outline-primary"
+                                                data-bs-toggle="offcanvas"
+                                                data-bs-target="#recordDetails">
                                             View
                                         </button>
 
@@ -260,42 +266,42 @@
 
                         </table>
                     </div>
-                        <!-- Pagination -->
-                        <div class="records-pagination">
+                    <!-- Pagination -->
+                    <div class="records-pagination">
 
-                            <p class="pagination-info">
-                                Showing 1 to 3 of 1,247 records
-                            </p>
+                        <p class="pagination-info">
+                            Showing 1 to 3 of 1,247 records
+                        </p>
 
-                            <nav aria-label="Medical records pagination">
+                        <nav aria-label="Medical records pagination">
 
-                                <ul class="pagination pagination-sm mb-0">
+                            <ul class="pagination pagination-sm mb-0">
 
-                                    <li class="page-item disabled">
-                                        <a class="page-link" href="#">Previous</a>
-                                    </li>
+                                <li class="page-item disabled">
+                                    <a class="page-link" href="#">Previous</a>
+                                </li>
 
-                                    <li class="page-item active">
-                                        <a class="page-link" href="#">1</a>
-                                    </li>
+                                <li class="page-item active">
+                                    <a class="page-link" href="#">1</a>
+                                </li>
 
-                                    <li class="page-item">
-                                        <a class="page-link" href="#">2</a>
-                                    </li>
+                                <li class="page-item">
+                                    <a class="page-link" href="#">2</a>
+                                </li>
 
-                                    <li class="page-item">
-                                        <a class="page-link" href="#">3</a>
-                                    </li>
+                                <li class="page-item">
+                                    <a class="page-link" href="#">3</a>
+                                </li>
 
-                                    <li class="page-item">
-                                        <a class="page-link" href="#">Next</a>
-                                    </li>
+                                <li class="page-item">
+                                    <a class="page-link" href="#">Next</a>
+                                </li>
 
-                                </ul>
+                            </ul>
 
-                            </nav>
+                        </nav>
 
-                        
+
 
                     </div>
 
@@ -305,6 +311,117 @@
 
         </main>
     </div>
+    <!-- Medical Record Details -->
+    <div class="offcanvas offcanvas-end record-details"
+         tabindex="-1"
+         id="recordDetails"
+         aria-labelledby="recordDetailsLabel">
+
+        <div class="offcanvas-header">
+
+            <div>
+                <small class="text-muted">Medical Record</small>
+                <h5 class="offcanvas-title"
+                    id="recordDetailsLabel">
+                    #MR-1024
+                </h5>
+            </div>
+
+            <button type="button"
+                    class="btn-close"
+                    data-bs-dismiss="offcanvas"
+                    aria-label="Close">
+            </button>
+
+        </div>
+
+        <div class="offcanvas-body">
+
+            <!-- Patient -->
+            <div class="details-section">
+                <span class="details-label">Patient</span>
+                <h6>Emily Carter</h6>
+            </div>
+
+            <!-- Diagnosis -->
+            <div class="details-section">
+
+                <div class="details-header">
+                    <span class="details-label">Diagnosis</span>
+
+                    <button type="button"
+                            class="btn btn-sm btn-outline-primary">
+                        Edit Diagnosis
+                    </button>
+                </div>
+
+                <p>Type 2 Diabetes</p>
+
+            </div>
+
+            <!-- Symptoms -->
+            <div class="details-section">
+                <span class="details-label">Symptoms</span>
+                <p>Fatigue, Increased Thirst</p>
+            </div>
+
+            <!-- Treatment Plan -->
+            <div class="details-section">
+                <span class="details-label">Treatment Plan</span>
+                <p>
+                    Continue medication, monitor blood glucose levels,
+                    and schedule a follow-up consultation.
+                </p>
+            </div>
+
+            <!-- Record Information -->
+            <div class="details-section">
+
+                <div class="row">
+
+                    <div class="col-6">
+                        <span class="details-label">Record Date</span>
+                        <p>2026-08-04</p>
+                    </div>
+
+                    <div class="col-6">
+                        <span class="details-label">Appointment ID</span>
+                        <p>#APT-204</p>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- Lab Tests -->
+            <div class="details-section">
+
+                <div class="details-header">
+                    <span class="details-label">Lab Tests</span>
+                </div>
+
+                <div class="lab-test-item">
+
+                    <div>
+                        <strong>HbA1c Test</strong>
+                        <p class="mb-0 text-muted">
+                            Category: Blood Test
+                        </p>
+                    </div>
+
+                    <button type="button"
+                            class="btn btn-sm btn-outline-primary">
+                        Update Result
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
 
