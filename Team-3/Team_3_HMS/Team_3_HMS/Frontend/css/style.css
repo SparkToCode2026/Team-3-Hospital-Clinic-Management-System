@@ -442,4 +442,110 @@ body {
         flex-direction: column;
         align-items: flex-start;
     }
+   
+}
+/* =========================
+   Medical Record Details
+   ========================= */
+
+.record-details {
+    width: 460px !important;
+    background-color: var(--background-white);
+}
+
+    .record-details .offcanvas-header {
+        padding: 22px 24px;
+        border-bottom: 1px solid #E5E7EB;
+    }
+
+    .record-details .offcanvas-title {
+        margin-top: 4px;
+        font-size: 20px;
+        font-weight: 700;
+        color: var(--text-dark);
+    }
+
+    .record-details .offcanvas-body {
+        padding: 24px;
+    }
+
+.details-section {
+    padding: 18px 0;
+    border-bottom: 1px solid #E5E7EB;
+}
+
+    .details-section:first-child {
+        padding-top: 0;
+    }
+
+    .details-section:last-child {
+        border-bottom: none;
+    }
+
+.details-label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 11px;
+    font-weight: 700;
+    color: #6B7280;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.details-section h6 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text-dark);
+}
+
+.details-section p {
+    margin: 8px 0 0;
+    font-size: 14px;
+    line-height: 1.6;
+    color: #374151;
+}
+
+.details-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.lab-test-item {
+    margin-top: 12px;
+    padding: 14px;
+    background-color: var(--background-light);
+    border: 1px solid #E5E7EB;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+}
+
+    .lab-test-item strong {
+        font-size: 14px;
+        color: var(--text-dark);
+    }
+
+    .lab-test-item p {
+        font-size: 12px;
+    }
+/* Medical Record Details - Mobile */
+@media (max-width: 768px) {
+
+    .record-details {
+        width: 100% !important;
+    }
+
+    .lab-test-item {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+        .lab-test-item .btn {
+            width: 100%;
+        }
 }
