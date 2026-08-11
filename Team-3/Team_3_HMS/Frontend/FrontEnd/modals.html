@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Aegis HMS - Modals & Dialogs</title>
+
+    <link rel="stylesheet" href="hs.css">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+    <!-- SIDEBAR -->
+
+    <aside class="sidebar">
+
+        <div class="logo">
+
+            <div class="logo-icon">
+                <i class="bi bi-truck ambulance"></i>
+                <span>+</span>
+            </div>
+
+            <div>
+                <h2>Aegis HMS</h2>
+                <span>Admin Console</span>
+            </div>
+
+        </div>
+
+        <div class="nav-title">ADMINISTRATION</div>
+
+        <nav>
+
+            <a href="index.html" class="nav-item">
+                <span>
+                    <i class="bi bi-grid"></i>
+                </span>
+                Dashboard Overview
+            </a>
+
+            <a href="doctors.html" class="nav-item">
+                <span>
+                    <i class="bi bi-person"></i>
+                </span>
+                Doctor Profiles
+            </a>
+
+            <a href="departments.html" class="nav-item">
+                <span>
+                    <i class="bi bi-hospital"></i>
+                </span>
+                Departments
+            </a>
+
+            <a href="specializations.html" class="nav-item">
+                <span>
+                    <i class="bi bi-award"></i>
+                </span>
+                Specializations
+            </a>
+
+            <a href="modals.html" class="nav-item active">
+                <span>
+                    <i class="bi bi-gear"></i>
+                </span>
+                Modals & Dialogs
+            </a>
+
+        </nav>
+
+    </aside>
+
+
+    <!-- MAIN -->
+
+    <main class="main">
+
+        <!-- HEADER -->
+
+        <header class="header">
+
+            <div class="search">
+
+                <span>⌕</span>
+
+                <input type="text" placeholder="Search doctors, departments, specs...">
+
+            </div>
+
+
+            <div class="admin">
+
+                <span>Logged in as Admin</span>
+
+                <span>
+                    <i class="bi bi-bell"></i>
+                </span>
+
+                <span class="line"></span>
+
+                <div class="avatar">
+                    HA
+                </div>
+
+                <div>
+
+                    <strong>H. Administrator</strong>
+
+                    <small>
+                        HMS Head of Ops
+                    </small>
+
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <!-- CONTENT -->
+
+        <div class="content">
+
+            <section id="modals">
+
+                <div class="page-header">
+
+                    
+
+                </div>
+
+
+                <div class="modal-underlay">
+
+                    <span>Underlay Preview</span>
+
+
+                    <div class="modal-playground">
+
+                        <h2>
+                            HMS Modals & Alerts Playground
+                        </h2>
+
+                        <p>
+                            Operational Sheet
+                        </p>
+
+
+                        <div class="modal-layout">
+
+
+                            <!-- ADD DOCTOR FORM -->
+
+                            <div class="form-modal">
+
+                                <h3>
+                                    Add New Doctor Profile
+                                </h3>
+
+
+                                <label>
+                                    Doctor Name
+                                </label>
+
+                                <input type="text" placeholder="Enter doctor name">
+
+
+                                <label>
+                                    License Number
+                                </label>
+
+                                <input type="text" class="error-input" placeholder="Enter license number">
+
+
+                                <span class="required">
+                                    Required Field
+                                </span>
+
+
+                                <p class="error-message">
+                                    Please input a valid medical registry license identifier.
+                                </p>
+
+
+                                <div class="two-columns">
+
+                                    <div>
+
+                                        <label>
+                                            Experience
+                                        </label>
+
+                                        <input type="number" placeholder="Years">
+
+                                    </div>
+
+
+                                    <div>
+
+                                        <label>
+                                            Consultation Fee
+                                        </label>
+
+                                        <input type="number" placeholder="150">
+
+                                    </div>
+
+                                </div>
+
+
+                                <label>
+                                    Specialization
+                                </label>
+
+                                <select>
+
+                                    <option>
+                                        Orthopedic Surgery
+                                    </option>
+
+                                </select>
+
+
+                                <label>
+                                    Department
+                                </label>
+
+                                <select>
+
+                                    <option>
+                                        Orthopedics
+                                    </option>
+
+                                </select>
+
+
+                                <div class="modal-buttons">
+
+                                    <button class="cancel-btn">
+                                        Cancel
+                                    </button>
+
+                                    <button class="primary-btn">
+                                        Save Profile
+                                    </button>
+
+                                </div>
+
+                            </div>
+
+
+                            <!-- ACTIONS -->
+
+                            <div class="actions">
+
+
+                                <!-- UPDATE FEE -->
+
+                                <div class="action-card">
+
+                                    <h3>
+                                        Update Consultation Fee
+                                    </h3>
+
+                                    <p>
+                                        Current fee:
+                                        <strong>$150.00</strong>
+                                    </p>
+
+
+                                    <div class="action-row">
+
+                                        <input type="number" value="165">
+
+                                        <button class="outline-btn">
+                                            Update
+                                        </button>
+
+                                    </div>
+
+                                </div>
+
+
+                                <!-- DELETE -->
+
+                                <div class="action-card danger-card">
+
+                                    <h3>
+                                        Delete Doctor Profile?
+                                    </h3>
+
+                                    <p>
+                                        This action will unlink schedules and associated profile data.
+                                    </p>
+
+
+                                    <div class="action-row">
+
+                                        <button class="cancel-btn">
+                                            Cancel
+                                        </button>
+
+                                        <button class="delete-btn">
+                                            Delete Profile
+                                        </button>
+
+                                    </div>
+
+                                </div>
+
+
+                                <!-- SUCCESS -->
+
+                                <div class="toast success-toast">
+
+                                    ✓ Doctor profile added successfully
+
+                                </div>
+
+
+                                <!-- ERROR -->
+
+                                <div class="toast error-toast">
+
+                                    ! Database Error — Doctor profile not found
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+        </div>
+
+    </main>
+
+
+    <!-- NAVIGATION -->
+
+    <script>
+
+        const navItems =
+            document.querySelectorAll(".nav-item");
+
+        navItems.forEach(function (item) {
+
+            item.addEventListener("click", function () {
+
+                navItems.forEach(function (nav) {
+
+                    nav.classList.remove("active");
+
+                });
+
+                this.classList.add("active");
+
+            });
+
+        });
+
+    </script>
+
+</body>
+
+</html>
