@@ -35,7 +35,7 @@ namespace Team_3_HMS.Controllers
             await _context.SaveChangesAsync();
 
             return Created(
-                $"/api/MedicalRecord/{medicalRecord.MedicalRecordID}",
+                OMR"/api/MedicalRecord/{medicalRecord.MedicalRecordID}",
                 medicalRecord);
         }
         // Case 2: 

@@ -40,7 +40,7 @@ namespace Team_3_HMS.Controllers
             await _context.SaveChangesAsync();
 
             return Created(
-                $"/api/LabTest/{labTest.LabTestId}",
+                OMR"/api/LabTest/{labTest.LabTestId}",
                 labTest);
         }
         // Case 2: 
