@@ -264,3 +264,46 @@ body {
         background-color: #0369A1;
         color: white;
     }
+.records-table-container {
+    background-color: var(--background-white);
+    border: 1px solid #E5E7EB;
+    border-top: none;
+    border-radius: 0 0 10px 10px;
+    overflow: hidden;
+}
+
+.records-table {
+    margin-bottom: 0;
+    font-size: 13px;
+}
+
+    .records-table thead th {
+        background-color: #F9FAFB;
+        color: #6B7280;
+        font-size: 12px;
+        font-weight: 600;
+        text-transform: uppercase;
+        padding: 14px 16px;
+        border-bottom: 1px solid #E5E7EB;
+        white-space: nowrap;
+    }
+
+    .records-table tbody td {
+        padding: 16px;
+        color: var(--text-dark);
+        border-bottom: 1px solid #F3F4F6;
+        vertical-align: middle;
+    }
+
+    .records-table tbody tr:last-child td {
+        border-bottom: none;
+    }
+
+    .records-table tbody tr:hover {
+        background-color: #F9FAFB;
+    }
+
+    .records-table .btn {
+        font-size: 12px;
+        margin-right: 4px;
+    }
