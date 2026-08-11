@@ -222,3 +222,45 @@ body {
 .success-text {
     color: var(--success);
 }
+.records-toolbar {
+    background-color: var(--background-white);
+    border: 1px solid #E5E7EB;
+    border-bottom: none;
+    border-radius: 10px 10px 0 0;
+    padding: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.records-filters {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex: 1;
+}
+
+.diagnosis-search {
+    max-width: 320px;
+    font-size: 14px;
+}
+
+.records-filter {
+    max-width: 180px;
+    font-size: 14px;
+}
+
+.new-record-btn {
+    background-color: var(--primary);
+    color: white;
+    border: none;
+    font-size: 14px;
+    font-weight: 600;
+    padding: 10px 16px;
+}
+
+    .new-record-btn:hover {
+        background-color: #0369A1;
+        color: white;
+    }

@@ -96,8 +96,15 @@
             <!-- Dashboard Content -->
             <section class="dashboard-content">
 
-                <div class="page-header">
-                    <h1>Medical Records Dashboard</h1>
+                    <!-- Page Header -->
+                    <div class="page-header">
+                        <h1>Medical Records Dashboard</h1>
+
+                        <p>
+                            Manage patient historical records, diagnoses, and lab diagnostics.
+                        </p>
+                    </div>
+
                     <!-- Summary Cards -->
                     <div class="summary-grid">
 
@@ -125,12 +132,32 @@
 
                     </div>
 
-                    <p>
-                        Manage patient historical records, diagnoses, and lab diagnostics.
-                    </p>
-                </div>
+                    <!-- Records Toolbar -->
+                    <div class="records-toolbar">
 
-            </section>
+                        <div class="records-filters">
+
+                            <input type="search"
+                                   class="form-control diagnosis-search"
+                                   placeholder="Search by diagnosis...">
+
+                            <select class="form-select records-filter">
+                                <option selected>All Records</option>
+                                <option>Recent Records</option>
+                                <option>Older Records</option>
+                            </select>
+
+                        </div>
+
+                        <button type="button"
+                                class="btn new-record-btn">
+                            + New Record
+                        </button>
+
+                    </div>
+
+                </section>
+
 
         </main>
     </div>
