@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -7,14 +7,14 @@
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0">
 
-    <title>Lab Tests | HMS Clinical</title>
+    <title>Medical Records | HMS Clinical</title>
 
     <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
           rel="stylesheet">
 
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
@@ -39,7 +39,6 @@
 
             </div>
 
-
             <nav class="sidebar-nav">
 
                 <a href="#"
@@ -48,12 +47,12 @@
                 </a>
 
                 <a href="medical-records.html"
-                   class="nav-item">
+                   class="nav-item active">
                     Medical Records
                 </a>
 
                 <a href="lab-tests.html"
-                   class="nav-item active">
+                   class="nav-item">
                     Lab Tests
                 </a>
 
@@ -62,18 +61,17 @@
                     Appointments
                 </a>
 
-                <a href="#"
+                <a href="patients.html"
                    class="nav-item">
                     Patients
                 </a>
 
-                <a href="#"
+                <a href="doctor-profile.html"
                    class="nav-item">
-                    Settings
+                    Settings & Profile
                 </a>
 
             </nav>
-
 
             <div class="sidebar-help">
 
@@ -104,10 +102,9 @@
 
                     <input type="search"
                            class="form-control"
-                           placeholder="Search lab test, category, or medical record...">
+                           placeholder="Search patient, medical ID, or diagnosis...">
 
                 </div>
-
 
                 <div class="user-profile">
 
@@ -121,21 +118,19 @@
             </header>
 
 
-            <!-- =========================
-                 Dashboard Content
-                 ========================= -->
+            <!-- Dashboard Content -->
             <section class="dashboard-content">
 
                 <!-- Page Header -->
                 <div class="page-header">
 
                     <h1>
-                        Lab Tests Management
+                        Medical Records Dashboard
                     </h1>
 
                     <p>
-                        Manage laboratory tests, results, categories,
-                        costs, and related medical records.
+                        Manage patient historical records, diagnoses,
+                        and lab diagnostics.
                     </p>
 
                 </div>
@@ -151,15 +146,15 @@
                         <div>
 
                             <span class="summary-label">
-                                Total Lab Tests
+                                Total Medical Records
                             </span>
 
-                            <h2>3,842</h2>
+                            <h2>1,247</h2>
 
                         </div>
 
                         <span class="summary-change success-text">
-                            +9.2%
+                            +12%
                         </span>
 
                     </div>
@@ -170,7 +165,7 @@
                         <div>
 
                             <span class="summary-label">
-                                Total Lab Test Cost
+                                Total Lab Test Costs
                             </span>
 
                             <h2>OMR284,530</h2>
@@ -187,7 +182,7 @@
 
 
                 <!-- =========================
-                     Lab Tests Toolbar
+                     Records Toolbar
                      ========================= -->
                 <div class="records-toolbar">
 
@@ -195,29 +190,20 @@
 
                         <input type="search"
                                class="form-control diagnosis-search"
-                               placeholder="Search by test name...">
-
+                               placeholder="Search by diagnosis...">
 
                         <select class="form-select records-filter">
 
                             <option selected>
-                                All Categories
+                                All Records
                             </option>
 
                             <option>
-                                Blood Test
+                                Recent Records
                             </option>
 
                             <option>
-                                Urine Test
-                            </option>
-
-                            <option>
-                                Imaging
-                            </option>
-
-                            <option>
-                                Pathology
+                                Older Records
                             </option>
 
                         </select>
@@ -228,9 +214,9 @@
                     <button type="button"
                             class="btn new-record-btn"
                             data-bs-toggle="modal"
-                            data-bs-target="#addLabTestModal">
+                            data-bs-target="#newRecordModal">
 
-                        + Add Lab Test
+                        + New Record
 
                     </button>
 
@@ -238,7 +224,7 @@
 
 
                 <!-- =========================
-                     Lab Tests Table
+                     Medical Records Table
                      ========================= -->
                 <div class="records-table-container">
 
@@ -249,13 +235,12 @@
                             <thead>
 
                                 <tr>
-                                    <th>Test ID</th>
-                                    <th>Test Name</th>
-                                    <th>Category</th>
-                                    <th>Test Date</th>
-                                    <th>Result</th>
-                                    <th>Cost</th>
-                                    <th>Medical Record ID</th>
+                                    <th>Record ID</th>
+                                    <th>Patient</th>
+                                    <th>Diagnosis</th>
+                                    <th>Symptoms</th>
+                                    <th>Record Date</th>
+                                    <th>Appointment ID</th>
                                     <th>Actions</th>
                                 </tr>
 
@@ -264,30 +249,30 @@
 
                             <tbody>
 
-                                <!-- Lab Test 1 -->
+                                <!-- Record 1 -->
                                 <tr>
-
-                                    <td>#LT-501</td>
-
-                                    <td>HbA1c Test</td>
-
-                                    <td>Blood Test</td>
-
-                                    <td>2026-08-04</td>
-
-                                    <td>7.1%</td>
-
-                                    <td>OMR45.00</td>
 
                                     <td>#MR-1024</td>
 
+                                    <td>Emily Carter</td>
+
+                                    <td>Type 2 Diabetes</td>
+
+                                    <td>
+                                        Fatigue, Increased Thirst
+                                    </td>
+
+                                    <td>2026-08-04</td>
+
+                                    <td>#APT-204</td>
+
                                     <td>
 
                                         <button type="button"
                                                 class="btn btn-sm btn-outline-primary"
                                                 data-bs-toggle="offcanvas"
-                                                data-bs-target="#labTestDetails"
-                                                aria-controls="labTestDetails">
+                                                data-bs-target="#recordDetails"
+                                                aria-controls="recordDetails">
 
                                             View
 
@@ -297,7 +282,7 @@
                                         <button type="button"
                                                 class="btn btn-sm btn-outline-secondary"
                                                 data-bs-toggle="modal"
-                                                data-bs-target="#editLabTestModal">
+                                                data-bs-target="#editRecordModal">
 
                                             Edit
 
@@ -305,19 +290,9 @@
 
 
                                         <button type="button"
-                                                class="btn btn-sm btn-outline-primary"
-                                                data-bs-toggle="modal"
-                                                data-bs-target="#updateLabResultModal">
-
-                                            Result
-
-                                        </button>
-
-
-                                        <button type="button"
                                                 class="btn btn-sm btn-outline-danger"
                                                 data-bs-toggle="modal"
-                                                data-bs-target="#deleteLabTestModal">
+                                                data-bs-target="#deleteRecordModal">
 
                                             Delete
 
@@ -328,29 +303,30 @@
                                 </tr>
 
 
-                                <!-- Lab Test 2 -->
+                                <!-- Record 2 -->
                                 <tr>
-
-                                    <td>#LT-500</td>
-
-                                    <td>Complete Blood Count</td>
-
-                                    <td>Blood Test</td>
-
-                                    <td>2026-08-03</td>
-
-                                    <td>Normal</td>
-
-                                    <td>OMR35.00</td>
 
                                     <td>#MR-1023</td>
 
+                                    <td>James Wilson</td>
+
+                                    <td>Hypertension</td>
+
+                                    <td>
+                                        Headache, Dizziness
+                                    </td>
+
+                                    <td>2026-08-03</td>
+
+                                    <td>#APT-199</td>
+
                                     <td>
 
                                         <button type="button"
                                                 class="btn btn-sm btn-outline-primary"
                                                 data-bs-toggle="offcanvas"
-                                                data-bs-target="#labTestDetails">
+                                                data-bs-target="#recordDetails"
+                                                aria-controls="recordDetails">
 
                                             View
 
@@ -360,7 +336,7 @@
                                         <button type="button"
                                                 class="btn btn-sm btn-outline-secondary"
                                                 data-bs-toggle="modal"
-                                                data-bs-target="#editLabTestModal">
+                                                data-bs-target="#editRecordModal">
 
                                             Edit
 
@@ -368,19 +344,9 @@
 
 
                                         <button type="button"
-                                                class="btn btn-sm btn-outline-primary"
-                                                data-bs-toggle="modal"
-                                                data-bs-target="#updateLabResultModal">
-
-                                            Result
-
-                                        </button>
-
-
-                                        <button type="button"
                                                 class="btn btn-sm btn-outline-danger"
                                                 data-bs-toggle="modal"
-                                                data-bs-target="#deleteLabTestModal">
+                                                data-bs-target="#deleteRecordModal">
 
                                             Delete
 
@@ -391,29 +357,30 @@
                                 </tr>
 
 
-                                <!-- Lab Test 3 -->
+                                <!-- Record 3 -->
                                 <tr>
 
-                                    <td>#LT-499</td>
+                                    <td>#MR-1022</td>
 
-                                    <td>Urinalysis</td>
+                                    <td>Sophia Miller</td>
 
-                                    <td>Urine Test</td>
+                                    <td>Asthma</td>
+
+                                    <td>
+                                        Shortness of Breath
+                                    </td>
 
                                     <td>2026-08-02</td>
 
-                                    <td>Negative</td>
-
-                                    <td>OMR20.00</td>
-
-                                    <td>#MR-1022</td>
+                                    <td>#APT-193</td>
 
                                     <td>
 
                                         <button type="button"
                                                 class="btn btn-sm btn-outline-primary"
                                                 data-bs-toggle="offcanvas"
-                                                data-bs-target="#labTestDetails">
+                                                data-bs-target="#recordDetails"
+                                                aria-controls="recordDetails">
 
                                             View
 
@@ -423,7 +390,7 @@
                                         <button type="button"
                                                 class="btn btn-sm btn-outline-secondary"
                                                 data-bs-toggle="modal"
-                                                data-bs-target="#editLabTestModal">
+                                                data-bs-target="#editRecordModal">
 
                                             Edit
 
@@ -431,19 +398,9 @@
 
 
                                         <button type="button"
-                                                class="btn btn-sm btn-outline-primary"
-                                                data-bs-toggle="modal"
-                                                data-bs-target="#updateLabResultModal">
-
-                                            Result
-
-                                        </button>
-
-
-                                        <button type="button"
                                                 class="btn btn-sm btn-outline-danger"
                                                 data-bs-toggle="modal"
-                                                data-bs-target="#deleteLabTestModal">
+                                                data-bs-target="#deleteRecordModal">
 
                                             Delete
 
@@ -464,11 +421,11 @@
                     <div class="records-pagination">
 
                         <p class="pagination-info">
-                            Showing 1 to 3 of 3,842 lab tests
+                            Showing 1 to 3 of 1,247 records
                         </p>
 
 
-                        <nav aria-label="Lab tests pagination">
+                        <nav aria-label="Medical records pagination">
 
                             <ul class="pagination pagination-sm mb-0">
 
@@ -535,27 +492,25 @@
                      Hidden for now
                      ========================= -->
                 <div class="system-state-card d-none"
-                     id="emptyLabTestsState">
+                     id="emptyRecordsState">
 
                     <div class="state-icon">
                         +
                     </div>
 
-                    <h4>
-                        No Lab Tests Found
-                    </h4>
+                    <h4>No Medical Records Found</h4>
 
                     <p>
-                        No lab tests match the selected category
-                        or search criteria.
+                        No medical records match the selected
+                        search or filter criteria.
                     </p>
 
                     <button type="button"
                             class="btn new-record-btn"
                             data-bs-toggle="modal"
-                            data-bs-target="#addLabTestModal">
+                            data-bs-target="#newRecordModal">
 
-                        Add First Lab Test
+                        Create First Record
 
                     </button>
 
@@ -567,19 +522,17 @@
                      Hidden for now
                      ========================= -->
                 <div class="system-state-card unauthorized-state d-none"
-                     id="labUnauthorizedState">
+                     id="unauthorizedState">
 
                     <div class="state-icon unauthorized-icon">
                         !
                     </div>
 
-                    <h4>
-                        Access Restricted
-                    </h4>
+                    <h4>Access Restricted</h4>
 
                     <p>
-                        You do not have permission to manage
-                        laboratory test records.
+                        You do not have permission to perform
+                        this action or access this medical record.
                     </p>
 
                 </div>
@@ -592,25 +545,25 @@
 
 
     <!-- =====================================================
-         Lab Test Details Offcanvas
+         Medical Record Details Offcanvas
          ===================================================== -->
     <div class="offcanvas offcanvas-end record-details"
          tabindex="-1"
-         id="labTestDetails"
-         aria-labelledby="labTestDetailsLabel">
+         id="recordDetails"
+         aria-labelledby="recordDetailsLabel">
 
         <div class="offcanvas-header">
 
             <div>
 
                 <small class="text-muted">
-                    Lab Test
+                    Medical Record
                 </small>
 
                 <h5 class="offcanvas-title"
-                    id="labTestDetailsLabel">
+                    id="recordDetailsLabel">
 
-                    #LT-501
+                    #MR-1024
 
                 </h5>
 
@@ -628,45 +581,78 @@
 
         <div class="offcanvas-body">
 
+            <!-- Patient -->
             <div class="details-section">
 
                 <span class="details-label">
-                    Test Name
+                    Patient
                 </span>
 
                 <h6>
-                    HbA1c Test
+                    Emily Carter
                 </h6>
 
             </div>
 
 
+            <!-- Diagnosis -->
             <div class="details-section">
 
-                <span class="details-label">
-                    Category
-                </span>
+                <div class="details-header">
+
+                    <span class="details-label">
+                        Diagnosis
+                    </span>
+
+
+                    <button type="button"
+                            class="btn btn-sm btn-outline-primary"
+                            data-bs-toggle="modal"
+                            data-bs-target="#editDiagnosisModal">
+
+                        Edit Diagnosis
+
+                    </button>
+
+                </div>
 
                 <p>
-                    Blood Test
+                    Type 2 Diabetes
                 </p>
 
             </div>
 
 
+            <!-- Symptoms -->
             <div class="details-section">
 
                 <span class="details-label">
-                    Result
+                    Symptoms
                 </span>
 
                 <p>
-                    7.1%
+                    Fatigue, Increased Thirst
                 </p>
 
             </div>
 
 
+            <!-- Treatment Plan -->
+            <div class="details-section">
+
+                <span class="details-label">
+                    Treatment Plan
+                </span>
+
+                <p>
+                    Continue medication, monitor blood glucose
+                    levels, and schedule a follow-up consultation.
+                </p>
+
+            </div>
+
+
+            <!-- Record Information -->
             <div class="details-section">
 
                 <div class="row">
@@ -674,7 +660,7 @@
                     <div class="col-6">
 
                         <span class="details-label">
-                            Test Date
+                            Record Date
                         </span>
 
                         <p>
@@ -687,11 +673,11 @@
                     <div class="col-6">
 
                         <span class="details-label">
-                            Cost
+                            Appointment ID
                         </span>
 
                         <p>
-                            OMR45.00
+                            #APT-204
                         </p>
 
                     </div>
@@ -701,29 +687,47 @@
             </div>
 
 
+            <!-- Lab Tests -->
             <div class="details-section">
 
-                <span class="details-label">
-                    Medical Record ID
-                </span>
+                <div class="details-header">
 
-                <p>
-                    #MR-1024
-                </p>
+                    <span class="details-label">
+                        Lab Tests
+                    </span>
 
-            </div>
+                </div>
 
 
-            <div class="details-section">
+                <div class="lab-test-item">
 
-                <button type="button"
-                        class="btn new-record-btn w-100"
-                        data-bs-toggle="modal"
-                        data-bs-target="#updateLabResultModal">
+                    <div>
 
-                    Update Result
+                        <strong>
+                            HbA1c Test
+                        </strong>
 
-                </button>
+                        <p class="mb-0 text-muted">
+                            Category: Blood Test
+                        </p>
+
+                        <small class="text-success">
+                            Result: 7.1%
+                        </small>
+
+                    </div>
+
+
+                    <button type="button"
+                            class="btn btn-sm btn-outline-primary"
+                            data-bs-toggle="modal"
+                            data-bs-target="#updateResultModal">
+
+                        Update Result
+
+                    </button>
+
+                </div>
 
             </div>
 
@@ -733,12 +737,12 @@
 
 
     <!-- =====================================================
-         Add Lab Test Modal
+         Create Medical Record Modal
          ===================================================== -->
     <div class="modal fade"
-         id="addLabTestModal"
+         id="newRecordModal"
          tabindex="-1"
-         aria-labelledby="addLabTestModalLabel"
+         aria-labelledby="newRecordModalLabel"
          aria-hidden="true">
 
         <div class="modal-dialog modal-dialog-centered modal-lg">
@@ -750,13 +754,13 @@
                     <div>
 
                         <small class="text-muted">
-                            Laboratory
+                            Medical Records
                         </small>
 
                         <h5 class="modal-title"
-                            id="addLabTestModalLabel">
+                            id="newRecordModalLabel">
 
-                            Add New Lab Test
+                            Create New Medical Record
 
                         </h5>
 
@@ -776,19 +780,21 @@
 
                     <!-- Success State -->
                     <div class="alert alert-success d-none"
+                         id="createRecordSuccess"
                          role="alert">
 
-                        Lab test created successfully.
+                        Medical record created successfully.
 
                     </div>
 
 
                     <!-- Error State -->
                     <div class="alert alert-danger d-none"
+                         id="createRecordError"
                          role="alert">
 
-                        Unable to create the lab test.
-                        Check the medical record and cost values.
+                        Unable to create the medical record.
+                        Please verify the appointment information.
 
                     </div>
 
@@ -797,128 +803,106 @@
 
                         <div class="row g-3">
 
-                            <!-- Test Name -->
+                            <!-- Appointment ID -->
                             <div class="col-md-6">
 
-                                <label for="testName"
+                                <label for="appointmentId"
                                        class="form-label">
 
-                                    Test Name
+                                    Appointment ID
 
                                 </label>
 
 
-                                <input type="text"
+                                <input type="number"
                                        class="form-control"
-                                       id="testName"
-                                       name="testName"
-                                       placeholder="Enter test name"
+                                       id="appointmentId"
+                                       name="appointmentId"
+                                       placeholder="Enter appointment ID"
                                        required>
 
                             </div>
 
 
-                            <!-- Category -->
+                            <!-- Record Date -->
                             <div class="col-md-6">
 
-                                <label for="testCategory"
+                                <label for="recordDate"
                                        class="form-label">
 
-                                    Category
-
-                                </label>
-
-
-                                <input type="text"
-                                       class="form-control"
-                                       id="testCategory"
-                                       name="category"
-                                       placeholder="Enter test category"
-                                       required>
-
-                            </div>
-
-
-                            <!-- Test Date -->
-                            <div class="col-md-6">
-
-                                <label for="testDate"
-                                       class="form-label">
-
-                                    Test Date
+                                    Record Date
 
                                 </label>
 
 
                                 <input type="date"
                                        class="form-control"
-                                       id="testDate"
-                                       name="testDate"
+                                       id="recordDate"
+                                       name="recordDate"
                                        required>
 
                             </div>
 
 
-                            <!-- Cost -->
-                            <div class="col-md-6">
-
-                                <label for="testCost"
-                                       class="form-label">
-
-                                    Cost
-
-                                </label>
-
-
-                                <input type="number"
-                                       class="form-control"
-                                       id="testCost"
-                                       name="cost"
-                                       min="0"
-                                       step="0.01"
-                                       placeholder="0.00"
-                                       required>
-
-                            </div>
-
-
-                            <!-- Medical Record ID -->
-                            <div class="col-md-6">
-
-                                <label for="medicalRecordId"
-                                       class="form-label">
-
-                                    Medical Record ID
-
-                                </label>
-
-
-                                <input type="number"
-                                       class="form-control"
-                                       id="medicalRecordId"
-                                       name="medicalRecordId"
-                                       placeholder="Enter medical record ID"
-                                       required>
-
-                            </div>
-
-
-                            <!-- Result -->
+                            <!-- Diagnosis -->
                             <div class="col-12">
 
-                                <label for="testResult"
+                                <label for="diagnosis"
                                        class="form-label">
 
-                                    Result
+                                    Diagnosis
+
+                                </label>
+
+
+                                <input type="text"
+                                       class="form-control"
+                                       id="diagnosis"
+                                       name="diagnosis"
+                                       placeholder="Enter diagnosis"
+                                       required>
+
+                            </div>
+
+
+                            <!-- Symptoms -->
+                            <div class="col-12">
+
+                                <label for="symptoms"
+                                       class="form-label">
+
+                                    Symptoms
 
                                 </label>
 
 
                                 <textarea class="form-control"
-                                          id="testResult"
-                                          name="result"
+                                          id="symptoms"
+                                          name="symptom"
                                           rows="3"
-                                          placeholder="Enter test result"></textarea>
+                                          placeholder="Enter patient symptoms"
+                                          required></textarea>
+
+                            </div>
+
+
+                            <!-- Treatment Plan -->
+                            <div class="col-12">
+
+                                <label for="treatmentPlan"
+                                       class="form-label">
+
+                                    Treatment Plan
+
+                                </label>
+
+
+                                <textarea class="form-control"
+                                          id="treatmentPlan"
+                                          name="treatmentPlan"
+                                          rows="4"
+                                          placeholder="Enter treatment plan"
+                                          required></textarea>
 
                             </div>
 
@@ -943,7 +927,7 @@
                     <button type="button"
                             class="btn new-record-btn">
 
-                        Add Lab Test
+                        Create Record
 
                     </button>
 
@@ -957,12 +941,12 @@
 
 
     <!-- =====================================================
-         Edit Lab Test Modal
+         Full Edit Medical Record Modal
          ===================================================== -->
     <div class="modal fade"
-         id="editLabTestModal"
+         id="editRecordModal"
          tabindex="-1"
-         aria-labelledby="editLabTestModalLabel"
+         aria-labelledby="editRecordModalLabel"
          aria-hidden="true">
 
         <div class="modal-dialog modal-dialog-centered modal-lg">
@@ -974,13 +958,13 @@
                     <div>
 
                         <small class="text-muted">
-                            Lab Test #LT-501
+                            Medical Record #MR-1024
                         </small>
 
                         <h5 class="modal-title"
-                            id="editLabTestModalLabel">
+                            id="editRecordModalLabel">
 
-                            Edit Lab Test
+                            Edit Medical Record
 
                         </h5>
 
@@ -1002,117 +986,95 @@
 
                         <div class="row g-3">
 
-                            <!-- Test Name -->
+                            <!-- Appointment ID -->
                             <div class="col-md-6">
 
-                                <label for="editTestName"
+                                <label for="editAppointmentId"
                                        class="form-label">
 
-                                    Test Name
+                                    Appointment ID
 
                                 </label>
 
 
-                                <input type="text"
+                                <input type="number"
                                        class="form-control"
-                                       id="editTestName"
-                                       value="HbA1c Test">
+                                       id="editAppointmentId"
+                                       value="204">
 
                             </div>
 
 
-                            <!-- Category -->
+                            <!-- Record Date -->
                             <div class="col-md-6">
 
-                                <label for="editTestCategory"
+                                <label for="editRecordDate"
                                        class="form-label">
 
-                                    Category
-
-                                </label>
-
-
-                                <input type="text"
-                                       class="form-control"
-                                       id="editTestCategory"
-                                       value="Blood Test">
-
-                            </div>
-
-
-                            <!-- Test Date -->
-                            <div class="col-md-6">
-
-                                <label for="editTestDate"
-                                       class="form-label">
-
-                                    Test Date
+                                    Record Date
 
                                 </label>
 
 
                                 <input type="date"
                                        class="form-control"
-                                       id="editTestDate"
+                                       id="editRecordDate"
                                        value="2026-08-04">
 
                             </div>
 
 
-                            <!-- Cost -->
-                            <div class="col-md-6">
-
-                                <label for="editTestCost"
-                                       class="form-label">
-
-                                    Cost
-
-                                </label>
-
-
-                                <input type="number"
-                                       class="form-control"
-                                       id="editTestCost"
-                                       min="0"
-                                       step="0.01"
-                                       value="45.00">
-
-                            </div>
-
-
-                            <!-- Medical Record ID -->
-                            <div class="col-md-6">
-
-                                <label for="editMedicalRecordId"
-                                       class="form-label">
-
-                                    Medical Record ID
-
-                                </label>
-
-
-                                <input type="number"
-                                       class="form-control"
-                                       id="editMedicalRecordId"
-                                       value="1024">
-
-                            </div>
-
-
-                            <!-- Result -->
+                            <!-- Diagnosis -->
                             <div class="col-12">
 
-                                <label for="editTestResult"
+                                <label for="fullEditDiagnosis"
                                        class="form-label">
 
-                                    Result
+                                    Diagnosis
+
+                                </label>
+
+
+                                <input type="text"
+                                       class="form-control"
+                                       id="fullEditDiagnosis"
+                                       value="Type 2 Diabetes">
+
+                            </div>
+
+
+                            <!-- Symptoms -->
+                            <div class="col-12">
+
+                                <label for="editSymptoms"
+                                       class="form-label">
+
+                                    Symptoms
 
                                 </label>
 
 
                                 <textarea class="form-control"
-                                          id="editTestResult"
-                                          rows="3">7.1%</textarea>
+                                          id="editSymptoms"
+                                          rows="3">Fatigue, Increased Thirst</textarea>
+
+                            </div>
+
+
+                            <!-- Treatment Plan -->
+                            <div class="col-12">
+
+                                <label for="fullEditTreatmentPlan"
+                                       class="form-label">
+
+                                    Treatment Plan
+
+                                </label>
+
+
+                                <textarea class="form-control"
+                                          id="fullEditTreatmentPlan"
+                                          rows="4">Continue medication, monitor blood glucose levels, and schedule a follow-up consultation.</textarea>
 
                             </div>
 
@@ -1137,7 +1099,7 @@
                     <button type="button"
                             class="btn new-record-btn">
 
-                        Save Lab Test
+                        Save Record
 
                     </button>
 
@@ -1151,12 +1113,12 @@
 
 
     <!-- =====================================================
-         Update Result Modal
+         Edit Diagnosis Modal
          ===================================================== -->
     <div class="modal fade"
-         id="updateLabResultModal"
+         id="editDiagnosisModal"
          tabindex="-1"
-         aria-labelledby="updateLabResultModalLabel"
+         aria-labelledby="editDiagnosisModalLabel"
          aria-hidden="true">
 
         <div class="modal-dialog modal-dialog-centered">
@@ -1168,11 +1130,122 @@
                     <div>
 
                         <small class="text-muted">
-                            Lab Test #LT-501
+                            Medical Record #MR-1024
+                        </small>
+
+
+                        <h5 class="modal-title"
+                            id="editDiagnosisModalLabel">
+
+                            Edit Diagnosis
+
+                        </h5>
+
+                    </div>
+
+
+                    <button type="button"
+                            class="btn-close"
+                            data-bs-dismiss="modal"
+                            aria-label="Close">
+                    </button>
+
+                </div>
+
+
+                <div class="modal-body">
+
+                    <form>
+
+                        <div class="mb-3">
+
+                            <label for="editDiagnosis"
+                                   class="form-label">
+
+                                Diagnosis
+
+                            </label>
+
+
+                            <input type="text"
+                                   class="form-control"
+                                   id="editDiagnosis"
+                                   value="Type 2 Diabetes">
+
+                        </div>
+
+
+                        <div>
+
+                            <label for="editTreatmentPlan"
+                                   class="form-label">
+
+                                Treatment Plan
+
+                            </label>
+
+
+                            <textarea class="form-control"
+                                      id="editTreatmentPlan"
+                                      rows="4">Continue medication, monitor blood glucose levels, and schedule a follow-up consultation.</textarea>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+
+                <div class="modal-footer">
+
+                    <button type="button"
+                            class="btn btn-outline-secondary"
+                            data-bs-dismiss="modal">
+
+                        Cancel
+
+                    </button>
+
+
+                    <button type="button"
+                            class="btn new-record-btn">
+
+                        Save Changes
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         Update Lab Test Result Modal
+         ===================================================== -->
+    <div class="modal fade"
+         id="updateResultModal"
+         tabindex="-1"
+         aria-labelledby="updateResultModalLabel"
+         aria-hidden="true">
+
+        <div class="modal-dialog modal-dialog-centered">
+
+            <div class="modal-content record-form-modal">
+
+                <div class="modal-header">
+
+                    <div>
+
+                        <small class="text-muted">
+                            Lab Test
                         </small>
 
                         <h5 class="modal-title"
-                            id="updateLabResultModalLabel">
+                            id="updateResultModalLabel">
 
                             Update Lab Test Result
 
@@ -1194,7 +1267,7 @@
 
                     <div class="mb-3">
 
-                        <label for="resultTestName"
+                        <label for="labTestName"
                                class="form-label">
 
                             Test Name
@@ -1204,7 +1277,7 @@
 
                         <input type="text"
                                class="form-control"
-                               id="resultTestName"
+                               id="labTestName"
                                value="HbA1c Test"
                                readonly>
 
@@ -1213,7 +1286,7 @@
 
                     <div>
 
-                        <label for="updatedLabResult"
+                        <label for="labResult"
                                class="form-label">
 
                             Result
@@ -1222,9 +1295,9 @@
 
 
                         <textarea class="form-control"
-                                  id="updatedLabResult"
-                                  rows="4"
-                                  placeholder="Enter updated result">7.1%</textarea>
+                                  id="labResult"
+                                  rows="3"
+                                  placeholder="Enter lab test result">7.1%</textarea>
 
                     </div>
 
@@ -1259,12 +1332,12 @@
 
 
     <!-- =====================================================
-         Delete Lab Test Modal
+         Delete Medical Record Modal
          ===================================================== -->
     <div class="modal fade"
-         id="deleteLabTestModal"
+         id="deleteRecordModal"
          tabindex="-1"
-         aria-labelledby="deleteLabTestModalLabel"
+         aria-labelledby="deleteRecordModalLabel"
          aria-hidden="true">
 
         <div class="modal-dialog modal-dialog-centered">
@@ -1274,9 +1347,9 @@
                 <div class="modal-header">
 
                     <h5 class="modal-title"
-                        id="deleteLabTestModalLabel">
+                        id="deleteRecordModalLabel">
 
-                        Delete Lab Test
+                        Delete Medical Record
 
                     </h5>
 
@@ -1298,14 +1371,14 @@
 
 
                     <h6>
-                        Are you sure you want to delete this lab test?
+                        Are you sure you want to delete this record?
                     </h6>
 
 
                     <p>
 
-                        Lab Test
-                        <strong>#LT-501</strong>
+                        Medical Record
+                        <strong>#MR-1024</strong>
                         will be permanently deleted.
 
                         This action cannot be undone.
@@ -1329,7 +1402,7 @@
                     <button type="button"
                             class="btn btn-danger">
 
-                        Delete Lab Test
+                        Delete Record
 
                     </button>
 

@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Doctor Profiles Dashboard – MedCore HMS</title>
+  <meta name="description" content="Manage active physicians, consultation fees, and department assignments." />
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="css/admin.css" rel="stylesheet" />
+  <style>
+    .toast {
+      padding: 0.85rem 1.1rem;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      margin-bottom: 1.25rem;
+      transition: all 0.2s ease;
+    }
+    .success-toast {
+      background: var(--green-bg);
+      border: 1px solid #bbf7d0;
+      color: var(--green);
+    }
+    .error-toast {
+      background: var(--red-bg);
+      border: 1px solid var(--red-border);
+      color: var(--red);
+    }
+    .form-modal-box {
+      background: #ffffff;
+      border-radius: 16px;
+      width: 100%;
+      max-width: 520px;
+      padding: 1.75rem;
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    .form-modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .form-modal-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin: 0;
+    }
+    .form-modal-body {
+      display: flex;
+      flex-direction: column;
+      gap: 0.85rem;
+    }
+    .modal-label {
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-secondary);
+      margin-bottom: 0.2rem;
+      display: block;
+    }
+    .two-columns {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.85rem;
+    }
+    .error-input {
+      border-color: var(--red) !important;
+      background: var(--red-bg) !important;
+    }
+    .required-text {
+      color: var(--red);
+      font-size: 0.72rem;
+      font-weight: 600;
+    }
+    .error-message {
+      color: var(--red-alert-text);
+      font-size: 0.75rem;
+      margin: -0.4rem 0 0 0;
+    }
+    .modal-buttons {
+      display: flex;
+      justify-content: flex-end;
+      gap: 0.75rem;
+      padding-top: 0.75rem;
+      border-top: 1px solid var(--border);
+      margin-top: 0.5rem;
+    }
+
+    /* Danger / Delete Card Modal */
+    .danger-card-box {
+      background: #ffffff;
+      border: 1px solid var(--red-alert-border);
+      border-radius: 16px;
+      width: 100%;
+      max-width: 440px;
+      padding: 1.75rem;
+      text-align: center;
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+    }
+    .danger-card-icon {
+      width: 52px; height: 52px;
+      background: #fee2e2;
+      color: var(--red);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 1rem;
+      font-size: 1.4rem;
+    }
+    .danger-card-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 0.4rem;
+    }
+    .danger-card-desc {
+      font-size: 0.83rem;
+      color: var(--text-secondary);
+      line-height: 1.5;
+      margin-bottom: 1.5rem;
+    }
+    .action-row-buttons {
+      display: flex;
+      gap: 0.75rem;
+    }
+    .cancel-btn-lg {
+      flex: 1;
+      padding: 0.65rem;
+      background: var(--bg-page);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      cursor: pointer;
+    }
+    .delete-btn-lg {
+      flex: 1;
+      padding: 0.65rem;
+      background: var(--red);
+      color: #ffffff;
+      border: none;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.18s;
+    }
+    .delete-btn-lg:hover {
+      background: #b91c1c;
+    }
+  </style>
+</head>
+<body>
+<div class="portal-wrapper">
+
+  <!-- ══════════════════ SIDEBAR ══════════════════ -->
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <div class="sidebar-logo">
+        <i class="bi bi-hospital"></i>
+      </div>
+      <div>
+        <div class="sidebar-brand-name">MedCore</div>
+        <div class="sidebar-brand-sub">HMS Platform</div>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a href="dashboard.html" class="nav-item">
+        <i class="bi bi-grid-1x2"></i> Dashboard
+      </a>
+      <a href="doctors.html" class="nav-item active">
+        <i class="bi bi-person-badge"></i> Doctor Profiles
+      </a>
+      <a href="departments.html" class="nav-item">
+        <i class="bi bi-hospital"></i> Departments
+      </a>
+      <a href="specializations.html" class="nav-item">
+        <i class="bi bi-award"></i> Specializations
+      </a>
+      <span class="nav-item disabled">
+        <i class="bi bi-people"></i> User Management
+      </span>
+      <span class="nav-item disabled">
+        <i class="bi bi-receipt"></i> Invoices
+      </span>
+      <span class="nav-item disabled">
+        <i class="bi bi-gear"></i> Settings
+      </span>
+    </nav>
+
+    <div class="sidebar-user">
+      <div class="sidebar-user-avatar">AC</div>
+      <div>
+        <div class="sidebar-user-name">Admin Console</div>
+        <div class="sidebar-user-role">UID: ADM-2022</div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ══════════════════ MAIN CONTENT ══════════════════ -->
+  <div class="main-content">
+
+    <!-- Topbar -->
+    <header class="topbar">
+      <span class="topbar-title">Doctor Profiles Dashboard</span>
+      <div class="topbar-actions">
+        <button class="topbar-icon-btn" title="Notifications">
+          <i class="bi bi-bell"></i>
+        </button>
+        <div class="topbar-avatar">SJ</div>
+        <span class="topbar-user-label">Sarah J. (Admin)</span>
+      </div>
+    </header>
+
+    <!-- Page Body -->
+    <main class="page-body">
+
+      <!-- SUCCESS TOAST BANNER -->
+      <div class="toast success-toast" id="toastSuccess" style="display: none;">
+        ✓ Doctor profile added successfully
+      </div>
+
+      <!-- ERROR TOAST BANNER -->
+      <div class="toast error-toast" id="toastError" style="display: none;">
+        ! Database Error — Doctor profile not found
+      </div>
+
+      <!-- Dedicated Doctor Dashboard Stats Grid -->
+      <div class="admin-stats-grid">
+        <div class="admin-stat-card">
+          <div>
+            <div class="admin-stat-label">Total Active Physicians</div>
+            <div class="admin-stat-val">86</div>
+          </div>
+          <div class="admin-stat-icon">
+            <i class="bi bi-person-badge"></i>
+          </div>
+        </div>
+
+        <div class="admin-stat-card">
+          <div>
+            <div class="admin-stat-label">Average Consult Fee</div>
+            <div class="admin-stat-val">$180.00</div>
+          </div>
+          <div class="admin-stat-icon">
+            <i class="bi bi-currency-dollar"></i>
+          </div>
+        </div>
+
+        <div class="admin-stat-card">
+          <div>
+            <div class="admin-stat-label">Clinical Divisions Covered</div>
+            <div class="admin-stat-val">6 Departments</div>
+          </div>
+          <div class="admin-stat-icon">
+            <i class="bi bi-hospital"></i>
+          </div>
+        </div>
+      </div>
+
+      <!-- Header Action Row -->
+      <div class="table-header-row" style="margin-bottom: 1.25rem;">
+        <div>
+          <div class="table-title" style="font-size: 1.1rem;">Physician Directory & Roster</div>
+        </div>
+        <button class="btn-add-user" onclick="openAddDoctorModal()">
+          + Add Doctor Profile
+        </button>
+      </div>
+
+      <!-- Search & Filter Card -->
+      <div class="search-filter-card">
+        <div class="search-filter-form">
+          <div class="filter-group" style="flex: 1;">
+            <span class="filter-label">SEARCH</span>
+            <input type="text" class="edit-form-control" placeholder="Search by name or specialty..." style="width: 100%;" />
+          </div>
+          <div class="filter-group">
+            <span class="filter-label">EXPERIENCE</span>
+            <select class="filter-select">
+              <option selected>All Levels</option>
+              <option>8+ Years</option>
+              <option>10+ Years</option>
+              <option>15+ Years</option>
+            </select>
+          </div>
+          <div class="filter-group">
+            <span class="filter-label">SORT FEE</span>
+            <select class="filter-select">
+              <option selected>Fee: High to Low</option>
+              <option>Fee: Low to High</option>
+            </select>
+          </div>
+          <button class="btn-search-blue" onclick="triggerErrorToast()">Filter</button>
+        </div>
+      </div>
+
+      <!-- Doctor Table Card -->
+      <div class="card" style="padding: 0; overflow: hidden;">
+        <div class="table-responsive">
+          <table class="user-table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>DOCTOR NAME</th>
+                <th>LICENSE NO.</th>
+                <th>EXPERIENCE</th>
+                <th>CONSULT FEE</th>
+                <th>SPECIALIZATION</th>
+                <th>DEPARTMENT</th>
+                <th>ACTIONS</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Doctor 1 -->
+              <tr>
+                <td class="usr-id">DOC-001</td>
+                <td>
+                  <div style="display: flex; align-items: center; gap: 0.65rem;">
+                    <div style="width: 32px; height: 32px; border-radius: 50%; background: #e0f2fe; color: #0284c7; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.78rem;">SA</div>
+                    <strong>Dr. Sarah Ahmed</strong>
+                  </div>
+                </td>
+                <td>LIC-48291</td>
+                <td>15 Years</td>
+                <td style="font-weight: 700; color: var(--brand-accent);">$220.00</td>
+                <td>Cardiology</td>
+                <td><span class="role-badge doctor">Cardiology</span></td>
+                <td>
+                  <button class="btn-tbl-edit" onclick="window.location.href='doctor-profile.html'">Edit</button>
+                  <button class="btn-tbl-delete" onclick="openDeleteDoctorModal('DOC-001', 'Dr. Sarah Ahmed')">Delete</button>
+                </td>
+              </tr>
+
+              <!-- Doctor 2 -->
+              <tr>
+                <td class="usr-id">DOC-002</td>
+                <td>
+                  <div style="display: flex; align-items: center; gap: 0.65rem;">
+                    <div style="width: 32px; height: 32px; border-radius: 50%; background: #e0f2fe; color: #0284c7; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.78rem;">KM</div>
+                    <strong>Dr. Khalid Mansoor</strong>
+                  </div>
+                </td>
+                <td>LIC-37105</td>
+                <td>13 Years</td>
+                <td style="font-weight: 700; color: var(--brand-accent);">$200.00</td>
+                <td>Neurosurgery</td>
+                <td><span class="role-badge admin">Neurology</span></td>
+                <td>
+                  <button class="btn-tbl-edit" onclick="window.location.href='doctor-profile.html'">Edit</button>
+                  <button class="btn-tbl-delete" onclick="openDeleteDoctorModal('DOC-002', 'Dr. Khalid Mansoor')">Delete</button>
+                </td>
+              </tr>
+
+              <!-- Doctor 3 -->
+              <tr>
+                <td class="usr-id">DOC-003</td>
+                <td>
+                  <div style="display: flex; align-items: center; gap: 0.65rem;">
+                    <div style="width: 32px; height: 32px; border-radius: 50%; background: #e0f2fe; color: #0284c7; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.78rem;">LN</div>
+                    <strong>Dr. Lina Noor</strong>
+                  </div>
+                </td>
+                <td>LIC-55920</td>
+                <td>11 Years</td>
+                <td style="font-weight: 700; color: var(--brand-accent);">$185.00</td>
+                <td>Orthopedic Surgery</td>
+                <td><span class="role-badge patient">Orthopedics</span></td>
+                <td>
+                  <button class="btn-tbl-edit" onclick="window.location.href='doctor-profile.html'">Edit</button>
+                  <button class="btn-tbl-delete" onclick="openDeleteDoctorModal('DOC-003', 'Dr. Lina Noor')">Delete</button>
+                </td>
+              </tr>
+
+              <!-- Doctor 4 -->
+              <tr>
+                <td class="usr-id">DOC-004</td>
+                <td>
+                  <div style="display: flex; align-items: center; gap: 0.65rem;">
+                    <div style="width: 32px; height: 32px; border-radius: 50%; background: #e0f2fe; color: #0284c7; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.78rem;">OA</div>
+                    <strong>Dr. Omar Ali</strong>
+                  </div>
+                </td>
+                <td>LIC-60412</td>
+                <td>10 Years</td>
+                <td style="font-weight: 700; color: var(--brand-accent);">$170.00</td>
+                <td>Pediatric Care</td>
+                <td><span class="role-badge doctor">Pediatrics</span></td>
+                <td>
+                  <button class="btn-tbl-edit" onclick="window.location.href='doctor-profile.html'">Edit</button>
+                  <button class="btn-tbl-delete" onclick="openDeleteDoctorModal('DOC-004', 'Dr. Omar Ali')">Delete</button>
+                </td>
+              </tr>
+
+              <!-- Doctor 5 -->
+              <tr>
+                <td class="usr-id">DOC-005</td>
+                <td>
+                  <div style="display: flex; align-items: center; gap: 0.65rem;">
+                    <div style="width: 32px; height: 32px; border-radius: 50%; background: #e0f2fe; color: #0284c7; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.78rem;">FH</div>
+                    <strong>Dr. Fatima Hassan</strong>
+                  </div>
+                </td>
+                <td>LIC-22874</td>
+                <td>9 Years</td>
+                <td style="font-weight: 700; color: var(--brand-accent);">$160.00</td>
+                <td>Medical Oncology</td>
+                <td><span class="role-badge" style="background: #fef2f2; color: #dc2626;">Oncology</span></td>
+                <td>
+                  <button class="btn-tbl-edit" onclick="window.location.href='doctor-profile.html'">Edit</button>
+                  <button class="btn-tbl-delete" onclick="openDeleteDoctorModal('DOC-005', 'Dr. Fatima Hassan')">Delete</button>
+                </td>
+              </tr>
+
+              <!-- Doctor 6 -->
+              <tr>
+                <td class="usr-id">DOC-006</td>
+                <td>
+                  <div style="display: flex; align-items: center; gap: 0.65rem;">
+                    <div style="width: 32px; height: 32px; border-radius: 50%; background: #e0f2fe; color: #0284c7; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.78rem;">YA</div>
+                    <strong>Dr. Yasir Ahmed</strong>
+                  </div>
+                </td>
+                <td>LIC-91833</td>
+                <td>8 Years</td>
+                <td style="font-weight: 700; color: var(--brand-accent);">$150.00</td>
+                <td>Emergency Medicine</td>
+                <td><span class="role-badge" style="background: #fff7ed; color: #c2410c;">Emergency</span></td>
+                <td>
+                  <button class="btn-tbl-edit" onclick="window.location.href='doctor-profile.html'">Edit</button>
+                  <button class="btn-tbl-delete" onclick="openDeleteDoctorModal('DOC-006', 'Dr. Yasir Ahmed')">Delete</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Table Footer / Pagination -->
+        <div style="padding: 0.85rem 1.25rem; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border);">
+          <span style="font-size: 0.8rem; color: var(--text-secondary);">Showing 1 to 6 of 86 Doctors</span>
+          <div style="display: flex; gap: 0.35rem;">
+            <button class="btn-filter">Previous</button>
+            <button class="btn-add-user" style="padding: 0.35rem 0.75rem;">1</button>
+            <button class="btn-filter">2</button>
+            <button class="btn-filter">3</button>
+            <button class="btn-filter">Next</button>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+</div>
+
+<!-- ══════════════════ ADD DOCTOR FORM MODAL DIALOG ══════════════════ -->
+<div class="modal-backdrop" id="addDoctorModal" style="display: none;">
+  <div class="form-modal-box">
+    
+    <div class="form-modal-header">
+      <h3 class="form-modal-title">Add New Doctor Profile</h3>
+      <button type="button" onclick="closeAddDoctorModal()" style="background: transparent; border: none; font-size: 1.2rem; cursor: pointer; color: var(--text-secondary);" title="Close">
+        <i class="bi bi-x-lg"></i>
+      </button>
+    </div>
+
+    <div class="form-modal-body">
+      <div>
+        <label class="modal-label">Doctor Name</label>
+        <input type="text" class="edit-form-control" placeholder="Enter doctor name" style="width: 100%;" />
+      </div>
+
+      <div>
+        <label class="modal-label">License Number</label>
+        <input type="text" class="edit-form-control error-input" placeholder="Enter license number" style="width: 100%;" />
+        <span class="required-text">Required Field</span>
+        <p class="error-message">Please input a valid medical registry license identifier.</p>
+      </div>
+
+      <div class="two-columns">
+        <div>
+          <label class="modal-label">Experience</label>
+          <input type="number" class="edit-form-control" placeholder="Years" style="width: 100%;" />
+        </div>
+        <div>
+          <label class="modal-label">Consultation Fee</label>
+          <input type="number" class="edit-form-control" placeholder="150" style="width: 100%;" />
+        </div>
+      </div>
+
+      <div>
+        <label class="modal-label">Specialization</label>
+        <select class="filter-select" style="width: 100%;">
+          <option selected>Orthopedic Surgery</option>
+          <option>Cardiology</option>
+          <option>Neurosurgery</option>
+          <option>Pediatric Care</option>
+          <option>Medical Oncology</option>
+          <option>Emergency Medicine</option>
+        </select>
+      </div>
+
+      <div>
+        <label class="modal-label">Department</label>
+        <select class="filter-select" style="width: 100%;">
+          <option selected>Orthopedics</option>
+          <option>Cardiology</option>
+          <option>Neurology</option>
+          <option>Pediatrics</option>
+          <option>Oncology</option>
+          <option>Emergency</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="modal-buttons">
+      <button class="btn-modal-cancel" onclick="closeAddDoctorModal()">Cancel</button>
+      <button class="btn-search-blue" onclick="saveDoctorProfile()">Save Profile</button>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════════════════ DELETE DOCTOR MODAL DIALOG ══════════════════ -->
+<div class="modal-backdrop" id="deleteDoctorModal" style="display: none;">
+  <div class="danger-card-box">
+    <div class="danger-card-icon">
+      <i class="bi bi-exclamation-triangle-fill"></i>
+    </div>
+    <h3 class="danger-card-title">Delete Doctor Profile?</h3>
+    <p class="danger-card-desc">This action will unlink schedules and associated profile data.</p>
+    
+    <div class="action-row-buttons">
+      <button class="cancel-btn-lg" onclick="closeDeleteDoctorModal()">Cancel</button>
+      <button class="delete-btn-lg" onclick="confirmDeleteDoctor()">Delete Profile</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  let targetDoctorId = null;
+
+  function openAddDoctorModal() {
+    document.getElementById('addDoctorModal').style.display = 'flex';
+  }
+
+  function closeAddDoctorModal() {
+    document.getElementById('addDoctorModal').style.display = 'none';
+  }
+
+  function saveDoctorProfile() {
+    closeAddDoctorModal();
+    triggerSuccessToast();
+  }
+
+  function openDeleteDoctorModal(docId, docName) {
+    targetDoctorId = docId;
+    document.getElementById('deleteDoctorModal').style.display = 'flex';
+  }
+
+  function closeDeleteDoctorModal() {
+    document.getElementById('deleteDoctorModal').style.display = 'none';
+  }
+
+  function confirmDeleteDoctor() {
+    closeDeleteDoctorModal();
+    triggerErrorToast();
+  }
+
+  function triggerSuccessToast() {
+    const successToast = document.getElementById('toastSuccess');
+    const errorToast = document.getElementById('toastError');
+    errorToast.style.display = 'none';
+    successToast.style.display = 'flex';
+    setTimeout(() => {
+      successToast.style.display = 'none';
+    }, 4000);
+  }
+
+  function triggerErrorToast() {
+    const successToast = document.getElementById('toastSuccess');
+    const errorToast = document.getElementById('toastError');
+    successToast.style.display = 'none';
+    errorToast.style.display = 'flex';
+    setTimeout(() => {
+      errorToast.style.display = 'none';
+    }, 4000);
+  }
+</script>
+</body>
+</html>
