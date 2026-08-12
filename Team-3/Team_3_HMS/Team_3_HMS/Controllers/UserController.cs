@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -37,6 +37,12 @@ namespace Team_3_HMS.Controllers
                 return BadRequest("Email is already registered.");
             }
 
+            // Hash the password using BCrypt
+            if (!string.IsNullOrEmpty(newUser.PasswordHash))
+            {
+                newUser.PasswordHash = BCrypt.Net.BCrypt.HashPassword(newUser.PasswordHash);
+            }
+
             _context.Users.Add(newUser);
             _context.SaveChanges();
 
@@ -46,8 +52,29 @@ namespace Team_3_HMS.Controllers
         [HttpPost("login")]
         public IActionResult Login(string email, string password)
         {
-            var user = _context.Users.FirstOrDefault(u => u.email == email && u.PasswordHash == password);
+            var user = _context.Users.FirstOrDefault(u => u.email == email);
+            
             if (user == null)
+            {
+                return Unauthorized("Invalid email or password.");
+            }
+
+            bool isValid = false;
+
+            // Verify password using BCrypt
+            if (!string.IsNullOrEmpty(user.PasswordHash) && user.PasswordHash.StartsWith("$2"))
+            {
+                isValid = BCrypt.Net.BCrypt.Verify(password, user.PasswordHash);
+            }
+            // Fallback & automatic upgrade for existing unhashed plain-text passwords
+            else if (user.PasswordHash == password)
+            {
+                isValid = true;
+                user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(password);
+                _context.SaveChanges();
+            }
+
+            if (!isValid)
             {
                 return Unauthorized("Invalid email or password.");
             }
@@ -104,12 +131,22 @@ namespace Team_3_HMS.Controllers
                 return NotFound("User not found.");
             }
 
-            if (user.PasswordHash != oldPassword)
+            bool isOldPasswordValid = false;
+            if (!string.IsNullOrEmpty(user.PasswordHash) && user.PasswordHash.StartsWith("$2"))
+            {
+                isOldPasswordValid = BCrypt.Net.BCrypt.Verify(oldPassword, user.PasswordHash);
+            }
+            else
+            {
+                isOldPasswordValid = (user.PasswordHash == oldPassword);
+            }
+
+            if (!isOldPasswordValid)
             {
                 return BadRequest("Incorrect current password.");
             }
 
-            user.PasswordHash = newPassword;
+            user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(newPassword);
             _context.SaveChanges();
 
             return Ok(new { message = "Password updated successfully." });
