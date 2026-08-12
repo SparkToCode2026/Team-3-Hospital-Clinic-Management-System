@@ -1,275 +1,208 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Doctor Profile & Settings | HMS Clinical</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Doctor Profile &amp; Settings | HMS Clinical</title>
+  <meta name="description" content="Manage your clinical profile, license, consultation fee, and account credentials.">
 
-    <!-- Bootstrap -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- Custom CSS -->
-    <link rel="stylesheet" href="style.css">
-    <style>
-        .profile-cols {
-            display: grid;
-            grid-template-columns: 1fr 360px;
-            gap: 24px;
-        }
-
-        .card-header-bar {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding-bottom: 14px;
-            margin-bottom: 18px;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .card-header-bar h5 {
-            margin: 0;
-            font-size: 17px;
-            font-weight: 700;
-            color: var(--text-dark);
-        }
-
-        @media (max-width: 992px) {
-            .profile-cols {
-                grid-template-columns: 1fr;
-            }
-        }
-    </style>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
+<div class="portal-wrapper">
 
-    <div class="app-layout">
-
-        <!-- =========================
-             Sidebar
-             ========================= -->
-        <aside class="sidebar">
-
-            <div class="brand">
-                <div class="brand-icon">+</div>
-                <div>
-                    <h5>HMS Clinical</h5>
-                    <small>Enterprise Portal</small>
-                </div>
-            </div>
-
-            <nav class="sidebar-nav">
-                <a href="#" class="nav-item">Dashboard</a>
-                <a href="medical-records.html" class="nav-item">Medical Records</a>
-                <a href="lab-tests.html" class="nav-item">Lab Tests</a>
-                <a href="#" class="nav-item">Appointments</a>
-                <a href="patients.html" class="nav-item">Patients</a>
-                <a href="doctor-profile.html" class="nav-item active">Settings & Profile</a>
-            </nav>
-
-            <div class="sidebar-help">
-                <strong>Need Assistance?</strong>
-                <p>Contact clinical IT helpline for urgent system access requests.</p>
-                <a href="#">Access IT Support →</a>
-            </div>
-
-        </aside>
-
-        <!-- =========================
-             Main Content
-             ========================= -->
-        <main class="main-content">
-
-            <!-- Top Bar -->
-            <header class="topbar">
-                <div class="search-box">
-                    <input type="search" class="form-control" placeholder="Search medical records, patients, or lab tests...">
-                </div>
-
-                <div class="user-profile">
-                    <div class="user-info">
-                        <strong>Dr. Sarah Chen</strong>
-                        <small>Chief Endocrinologist</small>
-                    </div>
-                </div>
-            </header>
-
-            <!-- Dashboard Content -->
-            <section class="dashboard-content">
-
-                <!-- Success Alert -->
-                <div class="alert alert-success d-none mb-4" id="saveSuccessAlert" role="alert">
-                    Doctor profile updated successfully. All changes synced with clinical registry.
-                </div>
-
-                <!-- Page Header -->
-                <div class="page-header">
-                    <h1>Doctor Profile & Settings</h1>
-                    <p>Manage your account credentials, clinical profile details, and consultation fees.</p>
-                </div>
-
-                <!-- Profile 2-Column Grid -->
-                <div class="profile-cols">
-
-                    <!-- LEFT COLUMN: Forms -->
-                    <div class="d-flex flex-column gap-4">
-
-                        <!-- Core Contact Account -->
-                        <div class="summary-card flex-column align-items-stretch" style="background-color: var(--background-white);">
-                            <div class="card-header-bar">
-                                <h5>Core Physician Account</h5>
-                                <span class="badge bg-success-subtle text-success border border-success-subtle px-2 py-1">Active Physician</span>
-                            </div>
-
-                            <div class="row g-3">
-                                <div class="col-md-6">
-                                    <label class="form-label text-muted small fw-bold text-uppercase">Doctor Name</label>
-                                    <input type="text" class="form-control" value="Dr. Sarah Chen" id="docName">
-                                </div>
-                                <div class="col-md-6">
-                                    <label class="form-label text-muted small fw-bold text-uppercase">Email Address</label>
-                                    <input type="email" class="form-control" value="dr.sarah.chen@hmsclinical.com" id="docEmail">
-                                </div>
-                                <div class="col-md-6">
-                                    <label class="form-label text-muted small fw-bold text-uppercase">Phone Number</label>
-                                    <input type="tel" class="form-control" value="+1 (555) 219-2831" id="docPhone">
-                                </div>
-                                <div class="col-md-6">
-                                    <label class="form-label text-muted small fw-bold text-uppercase">License Number</label>
-                                    <input type="text" class="form-control" value="LIC-48291" id="docLicense">
-                                </div>
-                            </div>
-
-                            <div class="d-flex justify-content-end mt-4">
-                                <button class="btn new-record-btn" onclick="saveProfileChanges()">
-                                    Save Account Changes
-                                </button>
-                            </div>
-                        </div>
-
-                        <!-- Doctor Professional File -->
-                        <div class="summary-card flex-column align-items-stretch" style="background-color: var(--background-white);">
-                            <div class="card-header-bar">
-                                <h5>Doctor Professional File</h5>
-                            </div>
-
-                            <div class="row g-3">
-                                <div class="col-md-6">
-                                    <label class="form-label text-muted small fw-bold text-uppercase">Years of Experience</label>
-                                    <input type="number" class="form-control" value="15" id="docExp">
-                                </div>
-                                <div class="col-md-6">
-                                    <label class="form-label text-muted small fw-bold text-uppercase">Primary Department</label>
-                                    <select class="form-select" id="docDept">
-                                        <option selected>Endocrinology</option>
-                                        <option>Cardiology</option>
-                                        <option>Neurology</option>
-                                        <option>Pediatrics</option>
-                                        <option>Oncology</option>
-                                    </select>
-                                </div>
-                                <div class="col-md-6">
-                                    <label class="form-label text-muted small fw-bold text-uppercase">Specialization</label>
-                                    <select class="form-select" id="docSpec">
-                                        <option selected>Endocrine & Metabolic Surgery</option>
-                                        <option>Cardiology</option>
-                                        <option>Neurosurgery</option>
-                                        <option>Pediatric Care</option>
-                                    </select>
-                                </div>
-                                <div class="col-md-6">
-                                    <label class="form-label text-muted small fw-bold text-uppercase">Office Location</label>
-                                    <input type="text" class="form-control" value="Building A, Suite 304" id="docOffice">
-                                </div>
-                            </div>
-
-                            <div class="d-flex justify-content-end mt-4">
-                                <button class="btn new-record-btn" onclick="saveProfileChanges()">
-                                    Update Professional File
-                                </button>
-                            </div>
-                        </div>
-
-                    </div>
-
-                    <!-- RIGHT COLUMN: Security & Actions -->
-                    <div>
-
-                        <!-- Security & Password -->
-                        <div class="summary-card flex-column align-items-stretch mb-4" style="background-color: var(--background-white);">
-                            <div class="card-header-bar">
-                                <h5>Security &amp; Password</h5>
-                            </div>
-
-                            <div class="d-flex flex-column gap-3">
-                                <div>
-                                    <label class="form-label text-muted small fw-bold text-uppercase">Current Password</label>
-                                    <input type="password" class="form-control" placeholder="Enter current password">
-                                </div>
-                                <div>
-                                    <label class="form-label text-muted small fw-bold text-uppercase">New Password</label>
-                                    <input type="password" class="form-control" placeholder="Enter new password">
-                                </div>
-                                <div>
-                                    <label class="form-label text-muted small fw-bold text-uppercase">Confirm Password</label>
-                                    <input type="password" class="form-control" placeholder="Re-enter new password">
-                                </div>
-                            </div>
-
-                            <button class="btn btn-outline-secondary w-100 mt-4" onclick="saveProfileChanges()">
-                                Change Password
-                            </button>
-                        </div>
-
-                        <!-- ACTIONS: UPDATE CONSULTATION FEE -->
-                        <div class="actions">
-                            <div class="summary-card flex-column align-items-stretch" style="background-color: var(--background-white);">
-                                <div class="card-header-bar">
-                                    <h5>Update Consultation Fee</h5>
-                                </div>
-
-                                <p class="text-muted small mb-3">
-                                    Current fee: <strong class="text-dark fs-6" id="currentFeeDisplay">$150.00</strong>
-                                </p>
-
-                                <div class="d-flex gap-2">
-                                    <input type="number" class="form-control" value="165" id="feeInput" style="font-size: 14px;">
-                                    <button class="btn new-record-btn text-nowrap" onclick="updateConsultationFee()">
-                                        Update
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </section>
-
-        </main>
-
+  <!-- ══ SIDEBAR ══ -->
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <div class="sidebar-logo"><i class="bi bi-hospital"></i></div>
+      <div>
+        <div class="sidebar-brand-name">HMS Clinical</div>
+        <div class="sidebar-brand-sub">Doctor Portal</div>
+      </div>
     </div>
+    <nav class="sidebar-nav">
+      <a href="dashboard.html" class="nav-item"><i class="bi bi-grid-1x2-fill"></i> Dashboard</a>
+      <a href="medical-records.html" class="nav-item"><i class="bi bi-journal-medical"></i> Medical Records</a>
+      <a href="lab-tests.html" class="nav-item"><i class="bi bi-virus"></i> Lab Tests</a>
+      <a href="#" class="nav-item"><i class="bi bi-calendar-check"></i> Appointments</a>
+      <a href="patients.html" class="nav-item"><i class="bi bi-people"></i> Patients</a>
+      <a href="doctor-profile.html" class="nav-item active"><i class="bi bi-person-gear"></i> Settings &amp; Profile</a>
+    </nav>
+    <div class="sidebar-user">
+      <div class="sidebar-user-avatar">SC</div>
+      <div>
+        <div class="sidebar-user-name">Dr. Sarah Chen</div>
+        <div class="sidebar-user-role">Chief Endocrinologist</div>
+      </div>
+    </div>
+  </aside>
 
-    <script>
-        function saveProfileChanges() {
-            const alertBox = document.getElementById('saveSuccessAlert');
-            alertBox.classList.remove('d-none');
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-            setTimeout(() => {
-                alertBox.classList.add('d-none');
-            }, 4000);
-        }
+  <!-- ══ MAIN CONTENT ══ -->
+  <div class="main-content">
+    <header class="topbar">
+      <span class="topbar-title">Settings &amp; Profile</span>
+      <div class="topbar-actions">
+        <button class="topbar-icon-btn" title="Notifications"><i class="bi bi-bell"></i></button>
+        <div class="topbar-avatar">SC</div>
+        <span class="topbar-user-label">Dr. Sarah Chen</span>
+      </div>
+    </header>
 
-        function updateConsultationFee() {
-            const feeVal = document.getElementById('feeInput').value;
-            if (feeVal) {
-                document.getElementById('currentFeeDisplay').textContent = '$' + parseFloat(feeVal).toFixed(2);
-                saveProfileChanges();
-            }
-        }
-    </script>
+    <main class="page-body">
+
+      <!-- Success Alert -->
+      <div class="alert alert-success d-none" id="saveSuccessAlert" role="alert">
+        <i class="bi bi-check-circle-fill"></i>
+        <span>Doctor profile updated successfully. All changes synced with clinical registry.</span>
+      </div>
+
+      <!-- Page Header -->
+      <div class="page-header">
+        <h1>Doctor Profile &amp; Settings</h1>
+        <p>Manage your account credentials, clinical profile details, and consultation fees.</p>
+      </div>
+
+      <!-- Profile 2-col -->
+      <div class="profile-cols">
+
+        <!-- LEFT: Forms -->
+        <div class="d-flex flex-column gap-3">
+
+          <!-- Core Account -->
+          <div class="card">
+            <div class="card-header">
+              <span class="card-title">Core Physician Account</span>
+              <span class="badge badge-success">Active Physician</span>
+            </div>
+            <div class="form-grid">
+              <div class="form-group">
+                <label class="form-label">Doctor Name</label>
+                <input type="text" class="form-control" value="Dr. Sarah Chen" id="docName">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Email Address</label>
+                <input type="email" class="form-control" value="dr.sarah.chen@hmsclinical.com" id="docEmail">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Phone Number</label>
+                <input type="tel" class="form-control" value="+1 (555) 219-2831" id="docPhone">
+              </div>
+              <div class="form-group">
+                <label class="form-label">License Number</label>
+                <input type="text" class="form-control" value="LIC-48291" id="docLicense">
+              </div>
+            </div>
+            <div class="d-flex justify-content-end mt-3">
+              <button class="btn-primary" onclick="saveProfileChanges()">Save Account Changes</button>
+            </div>
+          </div>
+
+          <!-- Professional File -->
+          <div class="card">
+            <div class="card-header">
+              <span class="card-title">Doctor Professional File</span>
+            </div>
+            <div class="form-grid">
+              <div class="form-group">
+                <label class="form-label">Years of Experience</label>
+                <input type="number" class="form-control" value="15" id="docExp">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Primary Department</label>
+                <select class="form-control" id="docDept">
+                  <option selected>Endocrinology</option>
+                  <option>Cardiology</option>
+                  <option>Neurology</option>
+                  <option>Pediatrics</option>
+                  <option>Oncology</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Specialization</label>
+                <select class="form-control" id="docSpec">
+                  <option selected>Endocrine &amp; Metabolic Surgery</option>
+                  <option>Cardiology</option>
+                  <option>Neurosurgery</option>
+                  <option>Pediatric Care</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Office Location</label>
+                <input type="text" class="form-control" value="Building A, Suite 304" id="docOffice">
+              </div>
+            </div>
+            <div class="d-flex justify-content-end mt-3">
+              <button class="btn-primary" onclick="saveProfileChanges()">Update Professional File</button>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- RIGHT: Security + Fee -->
+        <div>
+
+          <!-- Security -->
+          <div class="card mb-3">
+            <div class="card-header">
+              <span class="card-title">Security &amp; Password</span>
+            </div>
+            <div class="d-flex flex-column gap-3">
+              <div class="form-group">
+                <label class="form-label">Current Password</label>
+                <input type="password" class="form-control" placeholder="Enter current password">
+              </div>
+              <div class="form-group">
+                <label class="form-label">New Password</label>
+                <input type="password" class="form-control" placeholder="Enter new password">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Confirm Password</label>
+                <input type="password" class="form-control" placeholder="Re-enter new password">
+              </div>
+            </div>
+            <div class="mt-3">
+              <button class="btn-secondary w-100" onclick="saveProfileChanges()">Change Password</button>
+            </div>
+          </div>
+
+          <!-- Update Consultation Fee -->
+          <div class="card">
+            <div class="card-header">
+              <span class="card-title">Update Consultation Fee</span>
+            </div>
+            <p style="font-size:.83rem;color:var(--text-secondary);margin-bottom:.85rem;">
+              Current fee: <strong id="currentFeeDisplay" style="color:var(--text-primary);font-size:1rem;">$150.00</strong>
+            </p>
+            <div class="d-flex gap-2">
+              <div class="input-group">
+                <span class="input-group-text">$</span>
+                <input type="number" class="form-control" value="165" id="feeInput">
+              </div>
+              <button class="btn-primary text-nowrap" onclick="updateConsultationFee()">Update</button>
+            </div>
+          </div>
+
+        </div>
+      </div><!-- /profile-cols -->
+    </main>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  function saveProfileChanges() {
+    const a = document.getElementById('saveSuccessAlert');
+    a.classList.remove('d-none');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    setTimeout(() => a.classList.add('d-none'), 4000);
+  }
+  function updateConsultationFee() {
+    const v = document.getElementById('feeInput').value;
+    if (v) { document.getElementById('currentFeeDisplay').textContent = '$' + parseFloat(v).toFixed(2); saveProfileChanges(); }
+  }
+</script>
 </body>
-
 </html>
