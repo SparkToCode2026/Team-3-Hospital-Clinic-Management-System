@@ -1,220 +1,228 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Specializations Dashboard – MedCore HMS</title>
-  <meta name="description" content="Manage clinical sub-specialties, active medical specialists, and roster assignments." />
+  <meta name="description"
+    content="Manage clinical sub-specialties, active medical specialists, and roster assignments." />
 
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
   <link href="css/admin.css" rel="stylesheet" />
 </head>
+
 <body>
-<div class="portal-wrapper">
+  <div class="portal-wrapper">
 
-  <!-- ══════════════════ SIDEBAR ══════════════════ -->
-  <aside class="sidebar">
-    <div class="sidebar-brand">
-      <div class="sidebar-logo">
-        <i class="bi bi-hospital"></i>
-      </div>
-      <div>
-        <div class="sidebar-brand-name">MedCore</div>
-        <div class="sidebar-brand-sub">HMS Platform</div>
-      </div>
-    </div>
-
-    <nav class="sidebar-nav">
-      <a href="dashboard.html" class="nav-item">
-        <i class="bi bi-grid-1x2"></i> Dashboard
-      </a>
-      <a href="doctors.html" class="nav-item">
-        <i class="bi bi-person-badge"></i> Doctor Profiles
-      </a>
-      <a href="departments.html" class="nav-item">
-        <i class="bi bi-hospital"></i> Departments
-      </a>
-      <a href="specializations.html" class="nav-item active">
-        <i class="bi bi-award"></i> Specializations
-      </a>
-      <span class="nav-item disabled">
-        <i class="bi bi-people"></i> User Management
-      </span>
-      <span class="nav-item disabled">
-        <i class="bi bi-receipt"></i> Invoices
-      </span>
-    </nav>
-
-    <div class="sidebar-user">
-      <div>
-        <div class="sidebar-user-name">Admin Console</div>
-        <div class="sidebar-user-role">UID: ADM-2022</div>
-      </div>
-    </div>
-  </aside>
-
-  <!-- ══════════════════ MAIN CONTENT ══════════════════ -->
-  <div class="main-content">
-
-    <!-- Topbar -->
-    <header class="topbar">
-      <span class="topbar-title">Specializations Dashboard</span>
-      <div class="topbar-actions">
-        <span class="topbar-user-label">Sarah J. (Admin)</span>
-        <a href="../Assets/login.html" class="btn-logout" title="Log Out"><i class="bi bi-box-arrow-right"></i> Log Out</a>
-      </div>
-    </header>
-
-    <!-- Page Body -->
-    <main class="page-body">
-
-      <!-- Dedicated Specialization Dashboard Stats Grid -->
-      <div class="admin-stats-grid">
-        <div class="admin-stat-card">
-          <div>
-            <div class="admin-stat-label">Total Specializations</div>
-            <div class="admin-stat-val">18</div>
-          </div>
-          <div class="admin-stat-icon">
-            <i class="bi bi-award"></i>
-          </div>
+    <!-- ══════════════════ SIDEBAR ══════════════════ -->
+    <aside class="sidebar">
+      <div class="sidebar-brand">
+        <div class="sidebar-logo">
+          <i class="bi bi-hospital"></i>
         </div>
-
-        <div class="admin-stat-card">
-          <div>
-            <div class="admin-stat-label">Active Specialists</div>
-            <div class="admin-stat-val">69</div>
-          </div>
-          <div class="admin-stat-icon">
-            <i class="bi bi-person-badge"></i>
-          </div>
-        </div>
-
-        <div class="admin-stat-card">
-          <div>
-            <div class="admin-stat-label">Medical Disciplines</div>
-            <div class="admin-stat-val">12</div>
-          </div>
-          <div class="admin-stat-icon">
-            <i class="bi bi-journal-medical"></i>
-          </div>
-        </div>
-      </div>
-
-      <!-- Header Action Row -->
-      <div class="table-header-row" style="margin-bottom: 1.25rem;">
         <div>
-          <div class="table-title" style="font-size: 1.1rem;">Clinical Specializations Directory</div>
-        </div>
-        <button class="btn-add-user" onclick="alert('Add Specialization dialog triggered')">
-          + Add Specialization
-        </button>
-      </div>
-
-      <!-- Navigation Tabs -->
-      <div class="admin-tabs">
-        <a href="departments.html" class="admin-tab">Departments</a>
-        <a href="specializations.html" class="admin-tab active">Specializations</a>
-      </div>
-
-      <!-- Quick Search & Filter Bar -->
-      <div class="search-filter-card">
-        <div class="search-filter-form">
-          <div class="filter-group" style="flex: 1;">
-            <span class="filter-label">SEARCH</span>
-            <input type="text" class="edit-form-control" placeholder="Search specializations by name or category..." style="width: 100%;" />
-          </div>
-          <button class="btn-search-blue" onclick="alert('Filtering specializations...')">Search</button>
+          <div class="sidebar-brand-name">MedCore</div>
+          <div class="sidebar-brand-sub">HMS Platform</div>
         </div>
       </div>
 
-      <!-- Specialization Cards Grid -->
-      <div class="admin-cards-grid">
+      <nav class="sidebar-nav">
+        <a href="dashboard.html" class="nav-item">
+          <i class="bi bi-grid-1x2"></i> Dashboard
+        </a>
+        <a href="doctors.html" class="nav-item">
+          <i class="bi bi-person-badge"></i> Doctor Profiles
+        </a>
+        <a href="departments.html" class="nav-item">
+          <i class="bi bi-hospital"></i> Departments
+        </a>
+        <a href="specializations.html" class="nav-item active">
+          <i class="bi bi-award"></i> Specializations
+        </a>
+        <span class="nav-item disabled">
+          <i class="bi bi-people"></i> User Management
+        </span>
+        <span class="nav-item disabled">
+          <i class="bi bi-receipt"></i> Invoices
+        </span>
+      </nav>
 
-        <!-- Cardiology -->
-        <div class="admin-dept-card">
-          <div class="admin-dept-header">
-            <h3 class="admin-dept-title">Cardiology</h3>
-            <i class="bi bi-three-dots-vertical" style="color: var(--text-muted); cursor: pointer;"></i>
-          </div>
-          <p class="admin-dept-desc">Prevention, diagnosis, and treatment of heart and vascular system conditions.</p>
-          <div class="admin-dept-footer">
-            <span class="role-badge doctor">12 Active Specialists</span>
-            <a href="#">View Roster &rarr;</a>
-          </div>
+      <div class="sidebar-user">
+        <div>
+          <div class="sidebar-user-name">Admin Console</div>
+          <div class="sidebar-user-role">UID: ADM-2022</div>
         </div>
-
-        <!-- Neurosurgery -->
-        <div class="admin-dept-card">
-          <div class="admin-dept-header">
-            <h3 class="admin-dept-title">Neurosurgery</h3>
-            <i class="bi bi-three-dots-vertical" style="color: var(--text-muted); cursor: pointer;"></i>
-          </div>
-          <p class="admin-dept-desc">Surgical intervention for pathological conditions of the brain and spine.</p>
-          <div class="admin-dept-footer">
-            <span class="role-badge doctor">5 Active Specialists</span>
-            <a href="#">View Roster &rarr;</a>
-          </div>
-        </div>
-
-        <!-- Orthopedic Surgery -->
-        <div class="admin-dept-card">
-          <div class="admin-dept-header">
-            <h3 class="admin-dept-title">Orthopedic Surgery</h3>
-            <i class="bi bi-three-dots-vertical" style="color: var(--text-muted); cursor: pointer;"></i>
-          </div>
-          <p class="admin-dept-desc">Surgical corrections for musculoskeletal system issues and sports injuries.</p>
-          <div class="admin-dept-footer">
-            <span class="role-badge doctor">8 Active Specialists</span>
-            <a href="#">View Roster &rarr;</a>
-          </div>
-        </div>
-
-        <!-- Pediatric Care -->
-        <div class="admin-dept-card">
-          <div class="admin-dept-header">
-            <h3 class="admin-dept-title">Pediatric Care</h3>
-            <i class="bi bi-three-dots-vertical" style="color: var(--text-muted); cursor: pointer;"></i>
-          </div>
-          <p class="admin-dept-desc">Primary health supervision and developmental assessment from infancy to adolescence.</p>
-          <div class="admin-dept-footer">
-            <span class="role-badge doctor">15 Active Specialists</span>
-            <a href="#">View Roster &rarr;</a>
-          </div>
-        </div>
-
-        <!-- Medical Oncology -->
-        <div class="admin-dept-card">
-          <div class="admin-dept-header">
-            <h3 class="admin-dept-title">Medical Oncology</h3>
-            <i class="bi bi-three-dots-vertical" style="color: var(--text-muted); cursor: pointer;"></i>
-          </div>
-          <p class="admin-dept-desc">Therapeutic management and non-surgical approaches to cancer treatment.</p>
-          <div class="admin-dept-footer">
-            <span class="role-badge doctor">7 Active Specialists</span>
-            <a href="#">View Roster &rarr;</a>
-          </div>
-        </div>
-
-        <!-- Emergency Medicine -->
-        <div class="admin-dept-card">
-          <div class="admin-dept-header">
-            <h3 class="admin-dept-title">Emergency Medicine</h3>
-            <i class="bi bi-three-dots-vertical" style="color: var(--text-muted); cursor: pointer;"></i>
-          </div>
-          <p class="admin-dept-desc">Immediate assessment and stabilization of patients in high-severity scenarios.</p>
-          <div class="admin-dept-footer">
-            <span class="role-badge doctor">22 Active Specialists</span>
-            <a href="#">View Roster &rarr;</a>
-          </div>
-        </div>
-
       </div>
+    </aside>
 
-    </main>
+    <!-- ══════════════════ MAIN CONTENT ══════════════════ -->
+    <div class="main-content">
+
+      <!-- Topbar -->
+      <header class="topbar">
+        <span class="topbar-title">Specializations Dashboard</span>
+        <div class="topbar-actions">
+          <span class="topbar-user-label">Sarah J. (Admin)</span>
+          <a href="../Assets/login.html" class="btn-logout" title="Log Out"><i class="bi bi-box-arrow-right"></i> Log
+            Out</a>
+        </div>
+      </header>
+
+      <!-- Page Body -->
+      <main class="page-body">
+
+        <!-- Dedicated Specialization Dashboard Stats Grid -->
+        <div class="admin-stats-grid">
+          <div class="admin-stat-card">
+            <div>
+              <div class="admin-stat-label">Total Specializations</div>
+              <div class="admin-stat-val">18</div>
+            </div>
+            <div class="admin-stat-icon">
+              <i class="bi bi-award"></i>
+            </div>
+          </div>
+
+          <div class="admin-stat-card">
+            <div>
+              <div class="admin-stat-label">Active Specialists</div>
+              <div class="admin-stat-val">69</div>
+            </div>
+            <div class="admin-stat-icon">
+              <i class="bi bi-person-badge"></i>
+            </div>
+          </div>
+
+          <div class="admin-stat-card">
+            <div>
+              <div class="admin-stat-label">Medical Disciplines</div>
+              <div class="admin-stat-val">12</div>
+            </div>
+            <div class="admin-stat-icon">
+              <i class="bi bi-journal-medical"></i>
+            </div>
+          </div>
+        </div>
+
+        <!-- Header Action Row -->
+        <div class="table-header-row" style="margin-bottom: 1.25rem;">
+          <div>
+            <div class="table-title" style="font-size: 1.1rem;">Clinical Specializations Directory</div>
+          </div>
+          <button class="btn-add-user" onclick="alert('Add Specialization dialog triggered')">
+            + Add Specialization
+          </button>
+        </div>
+
+        <!-- Navigation Tabs -->
+        <div class="admin-tabs">
+          <a href="departments.html" class="admin-tab">Departments</a>
+          <a href="specializations.html" class="admin-tab active">Specializations</a>
+        </div>
+
+        <!-- Quick Search & Filter Bar -->
+        <div class="search-filter-card">
+          <div class="search-filter-form">
+            <div class="filter-group" style="flex: 1;">
+              <span class="filter-label">SEARCH</span>
+              <input type="text" class="edit-form-control" placeholder="Search specializations by name or category..."
+                style="width: 100%;" />
+            </div>
+            <button class="btn-search-blue" onclick="alert('Filtering specializations...')">Search</button>
+          </div>
+        </div>
+
+        <!-- Specialization Cards Grid -->
+        <div class="admin-cards-grid">
+
+          <!-- Cardiology -->
+          <div class="admin-dept-card">
+            <div class="admin-dept-header">
+              <h3 class="admin-dept-title">Cardiology</h3>
+              <i class="bi bi-three-dots-vertical" style="color: var(--text-muted); cursor: pointer;"></i>
+            </div>
+            <p class="admin-dept-desc">Prevention, diagnosis, and treatment of heart and vascular system conditions.</p>
+            <div class="admin-dept-footer">
+              <span class="role-badge doctor">12 Active Specialists</span>
+              <a href="#">View Roster &rarr;</a>
+            </div>
+          </div>
+
+          <!-- Neurosurgery -->
+          <div class="admin-dept-card">
+            <div class="admin-dept-header">
+              <h3 class="admin-dept-title">Neurosurgery</h3>
+              <i class="bi bi-three-dots-vertical" style="color: var(--text-muted); cursor: pointer;"></i>
+            </div>
+            <p class="admin-dept-desc">Surgical intervention for pathological conditions of the brain and spine.</p>
+            <div class="admin-dept-footer">
+              <span class="role-badge doctor">5 Active Specialists</span>
+              <a href="#">View Roster &rarr;</a>
+            </div>
+          </div>
+
+          <!-- Orthopedic Surgery -->
+          <div class="admin-dept-card">
+            <div class="admin-dept-header">
+              <h3 class="admin-dept-title">Orthopedic Surgery</h3>
+              <i class="bi bi-three-dots-vertical" style="color: var(--text-muted); cursor: pointer;"></i>
+            </div>
+            <p class="admin-dept-desc">Surgical corrections for musculoskeletal system issues and sports injuries.</p>
+            <div class="admin-dept-footer">
+              <span class="role-badge doctor">8 Active Specialists</span>
+              <a href="#">View Roster &rarr;</a>
+            </div>
+          </div>
+
+          <!-- Pediatric Care -->
+          <div class="admin-dept-card">
+            <div class="admin-dept-header">
+              <h3 class="admin-dept-title">Pediatric Care</h3>
+              <i class="bi bi-three-dots-vertical" style="color: var(--text-muted); cursor: pointer;"></i>
+            </div>
+            <p class="admin-dept-desc">Primary health supervision and developmental assessment from infancy to
+              adolescence.</p>
+            <div class="admin-dept-footer">
+              <span class="role-badge doctor">15 Active Specialists</span>
+              <a href="#">View Roster &rarr;</a>
+            </div>
+          </div>
+
+          <!-- Medical Oncology -->
+          <div class="admin-dept-card">
+            <div class="admin-dept-header">
+              <h3 class="admin-dept-title">Medical Oncology</h3>
+              <i class="bi bi-three-dots-vertical" style="color: var(--text-muted); cursor: pointer;"></i>
+            </div>
+            <p class="admin-dept-desc">Therapeutic management and non-surgical approaches to cancer treatment.</p>
+            <div class="admin-dept-footer">
+              <span class="role-badge doctor">7 Active Specialists</span>
+              <a href="#">View Roster &rarr;</a>
+            </div>
+          </div>
+
+          <!-- Emergency Medicine -->
+          <div class="admin-dept-card">
+            <div class="admin-dept-header">
+              <h3 class="admin-dept-title">Emergency Medicine</h3>
+              <i class="bi bi-three-dots-vertical" style="color: var(--text-muted); cursor: pointer;"></i>
+            </div>
+            <p class="admin-dept-desc">Immediate assessment and stabilization of patients in high-severity scenarios.
+            </p>
+            <div class="admin-dept-footer">
+              <span class="role-badge doctor">22 Active Specialists</span>
+              <a href="#">View Roster &rarr;</a>
+            </div>
+          </div>
+
+        </div>
+
+      </main>
+    </div>
+
   </div>
-
-</div>
 </body>
+
 </html>
