@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Team_3_HMS.Models;
@@ -77,14 +77,6 @@ namespace Team_3_HMS.Controllers
 
             return NoContent();
         }
-
-        [HttpGet]
-        public async Task<IActionResult> GetAllMedications()
-        {
-            var medications = await _context.Medications.ToListAsync();
-            return Ok(medications);
-        }
-
         [HttpGet("{id}")]
         public async Task<IActionResult> GetMedication(int id)
         {

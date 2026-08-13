@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Team_3_HMS.Models;
@@ -39,7 +39,7 @@ namespace Team_3_HMS.Controllers
                 await _emailService.SendEmailAsync(
                     patient.user.email,
                     "Appointment Confirmation",
-                    $"Your appointment is confirmed for {appointment.AppointmentDateTime} in Room {appointment.RoomId}."
+                    OMR"Your appointment is confirmed for {appointment.AppointmentDateTime} in Room {appointment.RoomId}."
                 );
             }
 
@@ -168,7 +168,7 @@ namespace Team_3_HMS.Controllers
                                 await emailService.SendEmailAsync(
                                     appt.PatientProfile.user.email,
                                     "Appointment Reminder",
-                                    $"Reminder: your appointment is tomorrow at {appointmentDate}."
+                                    OMR"Reminder: your appointment is tomorrow at {appointmentDate}."
                                 );
                             }
                         }
