@@ -28,6 +28,18 @@ namespace Team_3_HMS
                 options.SuppressImplicitRequiredAttributeForNonNullableReferenceTypes = true;
             });
 
+            // Configure CORS policy to allow frontend cross-origin requests
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AllowFrontend", policy =>
+                {
+                    policy.SetIsOriginAllowed(_ => true)
+                          .AllowAnyHeader()
+                          .AllowAnyMethod()
+                          .AllowCredentials();
+                });
+            });
+
             // JWT Authentication & Authorization Setup
             string jwtKey = builder.Configuration["Jwt:Key"] ?? "ThisIsAVerySecretKeyForTeam3HospitalManagementSystem2026!";
 
@@ -102,6 +114,9 @@ namespace Team_3_HMS
             }
 
             app.UseHttpsRedirection();
+
+            // Enable CORS Middleware (MUST come before Authentication & Authorization)
+            app.UseCors("AllowFrontend");
 
             // Middleware Pipeline Order (Authentication MUST come before Authorization)
             app.UseAuthentication();

@@ -1,323 +1,329 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>My Billing & Invoices – MedCore Patient Portal</title>
-  <meta name="description" content="View patient billing history, active invoices, payment statuses, and invoice breakdowns." />
+  <meta name="description"
+    content="View patient billing history, active invoices, payment statuses, and invoice breakdowns." />
 
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
   <link href="css/patient.css" rel="stylesheet" />
 </head>
+
 <body>
-<div class="portal-wrapper">
+  <div class="portal-wrapper">
 
-  <!-- ══════════════════ SIDEBAR ══════════════════ -->
-  <aside class="sidebar">
+    <!-- ══════════════════ SIDEBAR ══════════════════ -->
+    <aside class="sidebar">
 
-    <!-- Brand -->
-    <div class="sidebar-brand">
-      <div class="sidebar-logo">
-        <i class="bi bi-hospital"></i>
-      </div>
-      <div>
-        <div class="sidebar-brand-name">MedCore</div>
-        <div class="sidebar-brand-sub">HMS Platform</div>
-      </div>
-    </div>
-
-    <!-- Navigation -->
-    <nav class="sidebar-nav">
-
-      <!-- Disabled (coming soon) -->
-      <span class="nav-item disabled">
-        <i class="bi bi-grid-1x2"></i> Dashboard
-      </span>
-
-      <!-- My Profile -->
-      <a href="profile.html" class="nav-item">
-        <i class="bi bi-person"></i> My Profile
-      </a>
-
-      <!-- Disabled -->
-      <span class="nav-item disabled">
-        <i class="bi bi-calendar-check"></i> Appointments
-      </span>
-      <span class="nav-item disabled">
-        <i class="bi bi-capsule"></i> Prescriptions
-      </span>
-
-      <!-- ACTIVE: My Invoices -->
-      <a href="invoices.html" class="nav-item active">
-        <i class="bi bi-receipt"></i> My Invoices
-      </a>
-
-      <div class="nav-divider"></div>
-
-      <span class="nav-item disabled">
-        <i class="bi bi-shield-lock"></i> Change Password
-      </span>
-      <span class="nav-item disabled">
-        <i class="bi bi-box-arrow-left"></i> Logout
-      </span>
-
-    </nav>
-
-    <!-- Bottom user info -->
-    <div class="sidebar-user">
-      <div class="sidebar-user-avatar">SJ</div>
-      <div>
-        <div class="sidebar-user-name">Sarah Jenkins</div>
-        <div class="sidebar-user-role">Patient · ID 2014</div>
-      </div>
-    </div>
-
-  </aside>
-
-  <!-- ══════════════════ MAIN CONTENT ══════════════════ -->
-  <div class="main-content">
-
-    <!-- Topbar -->
-    <header class="topbar">
-      <span class="topbar-title">My Billing &amp; Invoices</span>
-      <div class="topbar-actions">
-        <button class="topbar-icon-btn" title="Notifications">
-          <i class="bi bi-bell"></i>
-          <span class="notif-badge"></span>
-        </button>
-        <div class="topbar-avatar">SJ</div>
-        <span class="topbar-user-label">Sarah J.</span>
-      </div>
-    </header>
-
-    <!-- Page Body -->
-    <main class="page-body">
-
-      <!-- Top Summary Stat Cards -->
-      <div class="invoice-stats-grid">
-        <div class="inv-stat-card">
-          <div>
-            <div class="inv-stat-label">Total Billed Amount</div>
-            <div class="inv-stat-value">$1,115.00</div>
-          </div>
-          <div class="inv-stat-icon blue">
-            <i class="bi bi-credit-card-2-front"></i>
-          </div>
+      <!-- Brand -->
+      <div class="sidebar-brand">
+        <div class="sidebar-logo">
+          <i class="bi bi-hospital"></i>
         </div>
-
-        <div class="inv-stat-card">
-          <div>
-            <div class="inv-stat-label">Total Paid Balance</div>
-            <div class="inv-stat-value">$685.00</div>
-          </div>
-          <div class="inv-stat-icon green">
-            <i class="bi bi-shield-check"></i>
-          </div>
-        </div>
-
-        <div class="inv-stat-card">
-          <div>
-            <div class="inv-stat-label">Pending Balance due</div>
-            <div class="inv-stat-value">$430.00</div>
-          </div>
-          <div class="inv-stat-icon orange">
-            <i class="bi bi-exclamation-triangle"></i>
-          </div>
-        </div>
-      </div>
-
-      <!-- Main Columns: Invoices Table + Details Panel -->
-      <div class="invoices-cols">
-
-        <!-- Left Column: Table & Healthy Banner -->
         <div>
+          <div class="sidebar-brand-name">MedCore</div>
+          <div class="sidebar-brand-sub">HMS Platform</div>
+        </div>
+      </div>
 
-          <!-- Invoices Table Card -->
-          <div class="card" style="padding: 0; overflow: hidden;">
-            <div class="table-responsive">
-              <table class="inv-table">
-                <thead>
-                  <tr>
-                    <th>INVOICE ID</th>
-                    <th>ISSUED DATE</th>
-                    <th>PAYMENT METHOD</th>
-                    <th>TOTAL AMOUNT</th>
-                    <th>STATUS</th>
-                    <th>ACTIONS</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td class="inv-id">INV-9923</td>
-                    <td>Oct 24, 2025</td>
-                    <td>Stripe Online</td>
-                    <td class="inv-amount">$150.00</td>
-                    <td><span class="badge badge-success">Paid</span></td>
-                    <td><span class="action-link" onclick="selectInvoice('INV-9923', '$150.00', 'Paid', '#APT-2401', 'Dr. Sarah Smith', 'General Consultation', '150.00')">View Details</span></td>
-                  </tr>
-                  <tr class="selected-row">
-                    <td class="inv-id">INV-9812</td>
-                    <td>Oct 12, 2025</td>
-                    <td>Bank Wire Transfer</td>
-                    <td class="inv-amount">$320.00</td>
-                    <td><span class="badge badge-warn">Pending</span></td>
-                    <td><span class="action-link" onclick="selectInvoice('INV-9812', '$320.00', 'Pending', '#APT-2489', 'Dr. Alan Vance, MD', 'Hematology / Lab', '320.00')">View Details</span></td>
-                  </tr>
-                  <tr>
-                    <td class="inv-id">INV-9745</td>
-                    <td>Sep 28, 2025</td>
-                    <td>MasterCard Credit</td>
-                    <td class="inv-amount">$85.00</td>
-                    <td><span class="badge badge-success">Paid</span></td>
-                    <td><span class="action-link" onclick="selectInvoice('INV-9745', '$85.00', 'Paid', '#APT-2380', 'Dr. Mohamed Al-Rashidi', 'Cardiology', '85.00')">View Details</span></td>
-                  </tr>
-                  <tr>
-                    <td class="inv-id">INV-9612</td>
-                    <td>Sep 15, 2025</td>
-                    <td>Cash at Desk</td>
-                    <td class="inv-amount">$450.00</td>
-                    <td><span class="badge badge-success">Paid</span></td>
-                    <td><span class="action-link" onclick="selectInvoice('INV-9612', '$450.00', 'Paid', '#APT-2290', 'Dr. Fatima Al-Harthi', 'Radiology', '450.00')">View Details</span></td>
-                  </tr>
-                  <tr>
-                    <td class="inv-id">INV-9580</td>
-                    <td>Aug 30, 2025</td>
-                    <td>Visa Debit Card</td>
-                    <td class="inv-amount">$110.00</td>
-                    <td><span class="badge badge-warn">Pending</span></td>
-                    <td><span class="action-link" onclick="selectInvoice('INV-9580', '$110.00', 'Pending', '#APT-2210', 'Dr. Ahmed Al-Balushi', 'General Practice', '110.00')">View Details</span></td>
-                  </tr>
-                </tbody>
-              </table>
+      <!-- Navigation -->
+      <nav class="sidebar-nav">
+
+        <a href="dashboard.html" class="nav-item">
+          <i class="bi bi-grid-1x2"></i> Dashboard
+        </a>
+
+        <!-- My Profile -->
+        <a href="profile.html" class="nav-item">
+          <i class="bi bi-person"></i> My Profile
+        </a>
+
+        <a href="appointments.html" class="nav-item">
+          <i class="bi bi-calendar-check"></i> Appointments
+        </a>
+        <span class="nav-item disabled">
+          <i class="bi bi-capsule"></i> Prescriptions
+        </span>
+
+        <!-- ACTIVE: My Invoices -->
+        <a href="invoices.html" class="nav-item active">
+          <i class="bi bi-receipt"></i> My Invoices
+        </a>
+
+        <div class="nav-divider"></div>
+
+        <a href="../Assets/login.html" class="nav-item">
+          <i class="bi bi-box-arrow-left"></i> Logout
+        </a>
+
+      </nav>
+
+      <!-- Bottom user info -->
+      <div class="sidebar-user">
+        <div>
+          <div class="sidebar-user-name">Sarah Jenkins</div>
+          <div class="sidebar-user-role">Patient · ID 2014</div>
+        </div>
+      </div>
+
+    </aside>
+
+    <!-- ══════════════════ MAIN CONTENT ══════════════════ -->
+    <div class="main-content">
+
+      <!-- Topbar -->
+      <header class="topbar">
+        <span class="topbar-title">My Billing &amp; Invoices</span>
+        <div class="topbar-actions">
+          <span class="topbar-user-label">Sarah J.</span>
+          <a href="../Assets/login.html" class="btn-logout" title="Log Out"><i class="bi bi-box-arrow-right"></i> Log
+            Out</a>
+        </div>
+      </header>
+
+      <!-- Page Body -->
+      <main class="page-body">
+
+        <!-- Top Summary Stat Cards -->
+        <div class="invoice-stats-grid">
+          <div class="inv-stat-card">
+            <div>
+              <div class="inv-stat-label">Total Billed Amount</div>
+              <div class="inv-stat-value">$1,115.00</div>
+            </div>
+            <div class="inv-stat-icon blue">
+              <i class="bi bi-credit-card-2-front"></i>
             </div>
           </div>
 
-          <!-- Notice Card -->
-          <div class="notice-card">
-            <div class="notice-illustration">
-              <i class="bi bi-search"></i>
+          <div class="inv-stat-card">
+            <div>
+              <div class="inv-stat-label">Total Paid Balance</div>
+              <div class="inv-stat-value">$685.00</div>
             </div>
-            <div class="notice-title">No outstanding pending invoice warnings</div>
-            <p class="notice-desc">
-              Awesome! You do not have any overdue payments or pending medical claim disputes. All invoices are currently healthy and recorded.
-            </p>
+            <div class="inv-stat-icon green">
+              <i class="bi bi-shield-check"></i>
+            </div>
           </div>
 
+          <div class="inv-stat-card">
+            <div>
+              <div class="inv-stat-label">Pending Balance due</div>
+              <div class="inv-stat-value">$430.00</div>
+            </div>
+            <div class="inv-stat-icon orange">
+              <i class="bi bi-exclamation-triangle"></i>
+            </div>
+          </div>
         </div>
 
-        <!-- Right Column: Invoice Details Sidebar Panel -->
-        <div>
-          <div class="inv-details-card" id="details-card">
-            <div class="inv-details-header">
-              <div>
-                <div class="inv-details-title">Invoice Details</div>
-                <div class="inv-details-sub" id="detail-inv-id">ID: INV-9812</div>
+        <!-- Main Columns: Invoices Table + Details Panel -->
+        <div class="invoices-cols">
+
+          <!-- Left Column: Table & Healthy Banner -->
+          <div>
+
+            <!-- Invoices Table Card -->
+            <div class="card" style="padding: 0; overflow: hidden;">
+              <div class="table-responsive">
+                <table class="inv-table">
+                  <thead>
+                    <tr>
+                      <th>INVOICE ID</th>
+                      <th>ISSUED DATE</th>
+                      <th>PAYMENT METHOD</th>
+                      <th>TOTAL AMOUNT</th>
+                      <th>STATUS</th>
+                      <th>ACTIONS</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td class="inv-id">INV-9923</td>
+                      <td>Oct 24, 2025</td>
+                      <td>Stripe Online</td>
+                      <td class="inv-amount">$150.00</td>
+                      <td><span class="badge badge-success">Paid</span></td>
+                      <td><span class="action-link"
+                          onclick="selectInvoice('INV-9923', '$150.00', 'Paid', '#APT-2401', 'Dr. Sarah Smith', 'General Consultation', '150.00')">View
+                          Details</span></td>
+                    </tr>
+                    <tr class="selected-row">
+                      <td class="inv-id">INV-9812</td>
+                      <td>Oct 12, 2025</td>
+                      <td>Bank Wire Transfer</td>
+                      <td class="inv-amount">$320.00</td>
+                      <td><span class="badge badge-warn">Pending</span></td>
+                      <td><span class="action-link"
+                          onclick="selectInvoice('INV-9812', '$320.00', 'Pending', '#APT-2489', 'Dr. Alan Vance, MD', 'Hematology / Lab', '320.00')">View
+                          Details</span></td>
+                    </tr>
+                    <tr>
+                      <td class="inv-id">INV-9745</td>
+                      <td>Sep 28, 2025</td>
+                      <td>MasterCard Credit</td>
+                      <td class="inv-amount">$85.00</td>
+                      <td><span class="badge badge-success">Paid</span></td>
+                      <td><span class="action-link"
+                          onclick="selectInvoice('INV-9745', '$85.00', 'Paid', '#APT-2380', 'Dr. Mohamed Al-Rashidi', 'Cardiology', '85.00')">View
+                          Details</span></td>
+                    </tr>
+                    <tr>
+                      <td class="inv-id">INV-9612</td>
+                      <td>Sep 15, 2025</td>
+                      <td>Cash at Desk</td>
+                      <td class="inv-amount">$450.00</td>
+                      <td><span class="badge badge-success">Paid</span></td>
+                      <td><span class="action-link"
+                          onclick="selectInvoice('INV-9612', '$450.00', 'Paid', '#APT-2290', 'Dr. Fatima Al-Harthi', 'Radiology', '450.00')">View
+                          Details</span></td>
+                    </tr>
+                    <tr>
+                      <td class="inv-id">INV-9580</td>
+                      <td>Aug 30, 2025</td>
+                      <td>Visa Debit Card</td>
+                      <td class="inv-amount">$110.00</td>
+                      <td><span class="badge badge-warn">Pending</span></td>
+                      <td><span class="action-link"
+                          onclick="selectInvoice('INV-9580', '$110.00', 'Pending', '#APT-2210', 'Dr. Ahmed Al-Balushi', 'General Practice', '110.00')">View
+                          Details</span></td>
+                    </tr>
+                  </tbody>
+                </table>
               </div>
-              <button class="close-btn" title="Close details">
-                <i class="bi bi-x-circle"></i>
+            </div>
+
+            <!-- Notice Card -->
+            <div class="notice-card">
+              <div class="notice-illustration">
+                <i class="bi bi-search"></i>
+              </div>
+              <div class="notice-title">No outstanding pending invoice warnings</div>
+              <p class="notice-desc">
+                Awesome! You do not have any overdue payments or pending medical claim disputes. All invoices are
+                currently healthy and recorded.
+              </p>
+            </div>
+
+          </div>
+
+          <!-- Right Column: Invoice Details Sidebar Panel -->
+          <div>
+            <div class="inv-details-card" id="details-card">
+              <div class="inv-details-header">
+                <div>
+                  <div class="inv-details-title">Invoice Details</div>
+                  <div class="inv-details-sub" id="detail-inv-id">ID: INV-9812</div>
+                </div>
+                <button class="close-btn" title="Close details">
+                  <i class="bi bi-x-circle"></i>
+                </button>
+              </div>
+
+              <!-- Meta Box -->
+              <div class="inv-meta-box">
+                <div class="inv-meta-row">
+                  <span class="inv-meta-label">Appointment Ref</span>
+                  <span class="inv-meta-val" id="detail-apt-ref">#APT-2489</span>
+                </div>
+                <div class="inv-meta-row">
+                  <span class="inv-meta-label">Consultant</span>
+                  <span class="inv-meta-val" id="detail-doctor">Dr. Alan Vance, MD</span>
+                </div>
+                <div class="inv-meta-row">
+                  <span class="inv-meta-label">Department</span>
+                  <span class="inv-meta-val" id="detail-dept">Hematology / Lab</span>
+                </div>
+              </div>
+
+              <!-- Billable Services Section -->
+              <div class="section-subtitle">BILLABLE SERVICES</div>
+              <div class="services-list" id="detail-services">
+                <div class="service-item">
+                  <div>
+                    <div class="service-name">Complete Blood Count (CB...</div>
+                    <div class="service-qty">Qty: 1x</div>
+                  </div>
+                  <div class="service-price">$120.00</div>
+                </div>
+
+                <div class="service-item">
+                  <div>
+                    <div class="service-name">Clinical Lab Processing Fee</div>
+                    <div class="service-qty">Qty: 1x</div>
+                  </div>
+                  <div class="service-price">$50.00</div>
+                </div>
+
+                <div class="service-item">
+                  <div>
+                    <div class="service-name">Blood Thyroid Screening (...</div>
+                    <div class="service-qty">Qty: 1x</div>
+                  </div>
+                  <div class="service-price">$150.00</div>
+                </div>
+              </div>
+
+              <div class="calc-divider"></div>
+
+              <!-- Totals Breakdown -->
+              <div class="totals-breakdown">
+                <div class="total-row">
+                  <span>Subtotal</span>
+                  <span id="detail-subtotal">$320.00</span>
+                </div>
+                <div class="total-row discount">
+                  <span>Hospital Copay Discount (10%)</span>
+                  <span id="detail-discount">-$32.00</span>
+                </div>
+                <div class="total-row">
+                  <span>Due Taxes</span>
+                  <span>$0.00</span>
+                </div>
+                <div class="grand-total-row">
+                  <span>Total Due Balance</span>
+                  <span id="detail-total">$288.00</span>
+                </div>
+              </div>
+
+              <!-- Action Buttons -->
+              <button class="btn-stripe-pay" onclick="alert('Redirecting to Stripe Secure Gate...')">
+                Pay via Stripe Secure Gate
               </button>
+              <button class="btn-print-inv" onclick="window.print()">
+                Print Medical Invoice
+              </button>
+
             </div>
-
-            <!-- Meta Box -->
-            <div class="inv-meta-box">
-              <div class="inv-meta-row">
-                <span class="inv-meta-label">Appointment Ref</span>
-                <span class="inv-meta-val" id="detail-apt-ref">#APT-2489</span>
-              </div>
-              <div class="inv-meta-row">
-                <span class="inv-meta-label">Consultant</span>
-                <span class="inv-meta-val" id="detail-doctor">Dr. Alan Vance, MD</span>
-              </div>
-              <div class="inv-meta-row">
-                <span class="inv-meta-label">Department</span>
-                <span class="inv-meta-val" id="detail-dept">Hematology / Lab</span>
-              </div>
-            </div>
-
-            <!-- Billable Services Section -->
-            <div class="section-subtitle">BILLABLE SERVICES</div>
-            <div class="services-list" id="detail-services">
-              <div class="service-item">
-                <div>
-                  <div class="service-name">Complete Blood Count (CB...</div>
-                  <div class="service-qty">Qty: 1x</div>
-                </div>
-                <div class="service-price">$120.00</div>
-              </div>
-
-              <div class="service-item">
-                <div>
-                  <div class="service-name">Clinical Lab Processing Fee</div>
-                  <div class="service-qty">Qty: 1x</div>
-                </div>
-                <div class="service-price">$50.00</div>
-              </div>
-
-              <div class="service-item">
-                <div>
-                  <div class="service-name">Blood Thyroid Screening (...</div>
-                  <div class="service-qty">Qty: 1x</div>
-                </div>
-                <div class="service-price">$150.00</div>
-              </div>
-            </div>
-
-            <div class="calc-divider"></div>
-
-            <!-- Totals Breakdown -->
-            <div class="totals-breakdown">
-              <div class="total-row">
-                <span>Subtotal</span>
-                <span id="detail-subtotal">$320.00</span>
-              </div>
-              <div class="total-row discount">
-                <span>Hospital Copay Discount (10%)</span>
-                <span id="detail-discount">-$32.00</span>
-              </div>
-              <div class="total-row">
-                <span>Due Taxes</span>
-                <span>$0.00</span>
-              </div>
-              <div class="grand-total-row">
-                <span>Total Due Balance</span>
-                <span id="detail-total">$288.00</span>
-              </div>
-            </div>
-
-            <!-- Action Buttons -->
-            <button class="btn-stripe-pay" onclick="alert('Redirecting to Stripe Secure Gate...')">
-              Pay via Stripe Secure Gate
-            </button>
-            <button class="btn-print-inv" onclick="window.print()">
-              Print Medical Invoice
-            </button>
-
           </div>
-        </div>
 
-      </div><!-- /invoices-cols -->
+        </div><!-- /invoices-cols -->
 
-    </main>
-  </div>
+      </main>
+    </div>
 
-</div><!-- /portal-wrapper -->
+  </div><!-- /portal-wrapper -->
 
-<script>
-  function selectInvoice(id, total, status, aptRef, doctor, dept, subtotalVal) {
-    document.getElementById('detail-inv-id').innerText = 'ID: ' + id;
-    document.getElementById('detail-apt-ref').innerText = aptRef;
-    document.getElementById('detail-doctor').innerText = doctor;
-    document.getElementById('detail-dept').innerText = dept;
-    document.getElementById('detail-subtotal').innerText = total;
-    
-    const sub = parseFloat(subtotalVal);
-    const disc = (sub * 0.10).toFixed(2);
-    const finalTotal = (sub - disc).toFixed(2);
+  <script>
+    function selectInvoice(id, total, status, aptRef, doctor, dept, subtotalVal) {
+      document.getElementById('detail-inv-id').innerText = 'ID: ' + id;
+      document.getElementById('detail-apt-ref').innerText = aptRef;
+      document.getElementById('detail-doctor').innerText = doctor;
+      document.getElementById('detail-dept').innerText = dept;
+      document.getElementById('detail-subtotal').innerText = total;
 
-    document.getElementById('detail-discount').innerText = '-$' + disc;
-    document.getElementById('detail-total').innerText = '$' + finalTotal;
-  }
-</script>
+      const sub = parseFloat(subtotalVal);
+      const disc = (sub * 0.10).toFixed(2);
+      const finalTotal = (sub - disc).toFixed(2);
+
+      document.getElementById('detail-discount').innerText = '-$' + disc;
+      document.getElementById('detail-total').innerText = '$' + finalTotal;
+    }
+  </script>
 </body>
+
 </html>

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -10,239 +11,248 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
   <link href="css/admin.css" rel="stylesheet" />
 </head>
+
 <body>
-<div class="portal-wrapper">
+  <div class="portal-wrapper">
 
-  <!-- ══════════════════ SIDEBAR ══════════════════ -->
-  <aside class="sidebar">
+    <!-- ══════════════════ SIDEBAR ══════════════════ -->
+    <aside class="sidebar">
 
-    <!-- Brand -->
-    <div class="sidebar-brand">
-      <div class="sidebar-logo">
-        <i class="bi bi-hospital"></i>
+      <!-- Brand -->
+      <div class="sidebar-brand">
+        <div class="sidebar-logo">
+          <i class="bi bi-hospital"></i>
+        </div>
+        <div>
+          <div class="sidebar-brand-name">MedCore</div>
+          <div class="sidebar-brand-sub">HMS Platform</div>
+        </div>
       </div>
-      <div>
-        <div class="sidebar-brand-name">MedCore</div>
-        <div class="sidebar-brand-sub">HMS Platform</div>
+
+      <!-- Navigation -->
+      <nav class="sidebar-nav">
+        <a href="dashboard.html" class="nav-item active">
+          <i class="bi bi-grid-1x2"></i> Dashboard
+        </a>
+        <a href="doctors.html" class="nav-item">
+          <i class="bi bi-person-badge"></i> Doctor Profiles
+        </a>
+        <a href="departments.html" class="nav-item">
+          <i class="bi bi-hospital"></i> Departments
+        </a>
+        <a href="specializations.html" class="nav-item">
+          <i class="bi bi-award"></i> Specializations
+        </a>
+        <a href="room-management.html" class="nav-item">
+          <i class="bi bi-door-open"></i> Room Management
+        </a>
+        <span class="nav-item disabled">
+          <i class="bi bi-people"></i> User Management
+        </span>
+        <span class="nav-item disabled">
+          <i class="bi bi-receipt"></i> Invoices
+        </span>
+      </nav>
+
+      <!-- Bottom user info -->
+      <div class="sidebar-user">
+        <div>
+          <div class="sidebar-user-name">Admin Console</div>
+          <div class="sidebar-user-role">UID: ADM-2022</div>
+        </div>
+      </div>
+
+    </aside>
+
+    <!-- ══════════════════ MAIN CONTENT ══════════════════ -->
+    <div class="main-content">
+
+      <!-- Topbar -->
+      <header class="topbar">
+        <span class="topbar-title">Admin System &amp; User Management</span>
+        <div class="topbar-actions">
+          <span class="topbar-user-label">Sarah J. (Admin)</span>
+          <a href="../Assets/login.html" class="btn-logout" title="Log Out"><i class="bi bi-box-arrow-right"></i> Log
+            Out</a>
+        </div>
+      </header>
+
+      <!-- Page Body -->
+      <main class="page-body">
+
+        <!-- Access Denied Banner -->
+        <div class="access-denied-alert">
+          <i class="bi bi-lock"></i>
+          <span><strong>Access Denied:</strong> Admin privileges required. Certain actions (e.g., hard-deleting hospital
+            database records) are locked.</span>
+        </div>
+
+        <!-- Stats Grid -->
+        <div class="admin-stats-grid">
+          <div class="admin-stat-card">
+            <div>
+              <div class="admin-stat-label">Total Patients</div>
+              <div class="admin-stat-val">1,247</div>
+            </div>
+            <div class="admin-stat-icon">
+              <i class="bi bi-people"></i>
+            </div>
+          </div>
+
+          <div class="admin-stat-card">
+            <div>
+              <div class="admin-stat-label">Total Doctors</div>
+              <div class="admin-stat-val">86</div>
+            </div>
+            <div class="admin-stat-icon">
+              <i class="bi bi-person-badge"></i>
+            </div>
+          </div>
+
+          <div class="admin-stat-card">
+            <div>
+              <div class="admin-stat-label">Total Admins</div>
+              <div class="admin-stat-val">12</div>
+            </div>
+            <div class="admin-stat-icon">
+              <i class="bi bi-shield-check"></i>
+            </div>
+          </div>
+        </div>
+
+        <!-- Main Directory Section -->
+        <div class="card">
+          <div class="table-header-row">
+            <span class="table-title">User Directory</span>
+            <div class="table-actions-group">
+              <button class="btn-filter">All Roles</button>
+              <button class="btn-add-user">+ Add New User</button>
+            </div>
+          </div>
+
+          <div class="table-responsive">
+            <table class="user-table">
+              <thead>
+                <tr>
+                  <th>USER ID</th>
+                  <th>FULL NAME</th>
+                  <th>EMAIL ADDRESS</th>
+                  <th>ROLE BADGE</th>
+                  <th>PHONE</th>
+                  <th>ACTIONS</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="usr-id">USR-001</td>
+                  <td>Dr. Elizabeth Reed</td>
+                  <td>dr.eli@medcore.com</td>
+                  <td><span class="role-badge doctor">Doctor</span></td>
+                  <td>+1 (555) 219-2831</td>
+                  <td>
+                    <button class="btn-tbl-edit">Edit</button>
+                    <button class="btn-tbl-delete"
+                      onclick="openDeleteModal('USR-001', 'Dr. Elizabeth Reed')">Delete</button>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="usr-id">USR-002</td>
+                  <td>Dr. Alan Vance</td>
+                  <td>dr.alan@medcore.com</td>
+                  <td><span class="role-badge doctor">Doctor</span></td>
+                  <td>+1 (555) 342-9321</td>
+                  <td>
+                    <button class="btn-tbl-edit">Edit</button>
+                    <button class="btn-tbl-delete"
+                      onclick="openDeleteModal('USR-002', 'Dr. Alan Vance')">Delete</button>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="usr-id">USR-003</td>
+                  <td>Sarah Jenkins</td>
+                  <td>sarah.j@medcore.com</td>
+                  <td><span class="role-badge admin">Admin</span></td>
+                  <td>+1 (555) 998-2194</td>
+                  <td>
+                    <button class="btn-tbl-edit">Edit</button>
+                    <button class="btn-tbl-delete" onclick="openDeleteModal('USR-003', 'Sarah Jenkins')">Delete</button>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="usr-id">USR-004</td>
+                  <td>David Miller</td>
+                  <td>d.miller@medcore.com</td>
+                  <td><span class="role-badge patient">Patient</span></td>
+                  <td>+1 (555) 237-0042</td>
+                  <td>
+                    <button class="btn-tbl-edit">Edit</button>
+                    <button class="btn-tbl-delete" onclick="openDeleteModal('USR-004', 'David Miller')">Delete</button>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="usr-id">USR-005</td>
+                  <td>Alex Dunphy</td>
+                  <td>alex.d@medcore.com</td>
+                  <td><span class="role-badge doctor">Doctor</span></td>
+                  <td>+1 (555) 456-1122</td>
+                  <td>
+                    <button class="btn-tbl-edit">Edit</button>
+                    <button class="btn-tbl-delete" onclick="openDeleteModal('USR-005', 'Alex Dunphy')">Delete</button>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="usr-id">USR-006</td>
+                  <td>Thomas Shelby</td>
+                  <td>t.shelby@medcore.com</td>
+                  <td><span class="role-badge admin">Admin</span></td>
+                  <td>+1 (555) 768-3380</td>
+                  <td>
+                    <button class="btn-tbl-edit">Edit</button>
+                    <button class="btn-tbl-delete" onclick="openDeleteModal('USR-006', 'Thomas Shelby')">Delete</button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </main>
+    </div>
+
+    <!-- Delete User Modal Dialog -->
+    <div class="modal-backdrop" id="deleteModal">
+      <div class="modal-box">
+        <div class="modal-icon-wrap">
+          <i class="bi bi-exclamation-triangle-fill"></i>
+        </div>
+        <div class="modal-title">Are you sure you want to delete this user?</div>
+        <div class="modal-desc">
+          This action is permanent and cannot be undone. User login access to MedCore will be revoked, and their
+          credentials will be archived.
+        </div>
+        <div class="modal-actions">
+          <button class="btn-modal-cancel" onclick="closeDeleteModal()">Cancel</button>
+          <button class="btn-modal-delete" onclick="confirmDeleteUser()">Delete User</button>
+        </div>
       </div>
     </div>
 
-    <!-- Navigation -->
-    <nav class="sidebar-nav">
-      <a href="dashboard.html" class="nav-item active">
-        <i class="bi bi-grid-1x2"></i> Dashboard
-      </a>
-      <span class="nav-item disabled">
-        <i class="bi bi-people"></i> User Management
-      </span>
-      <a href="patient-profiles.html" class="nav-item">
-        <i class="bi bi-person-vcard"></i> Patient Profiles
-      </a>
-      <span class="nav-item disabled">
-        <i class="bi bi-receipt"></i> Invoices
-      </span>
-      <span class="nav-item disabled">
-        <i class="bi bi-gear"></i> Settings
-      </span>
-    </nav>
+  </div><!-- /portal-wrapper -->
 
-    <!-- Bottom user info -->
-    <div class="sidebar-user">
-      <div class="sidebar-user-avatar">AC</div>
-      <div>
-        <div class="sidebar-user-name">Admin Console</div>
-        <div class="sidebar-user-role">UID: ADM-2022</div>
-      </div>
-    </div>
+  <script>
+    function openDeleteModal(userId, userName) {
+      document.getElementById('deleteModal').style.display = 'flex';
+    }
 
-  </aside>
+    function closeDeleteModal() {
+      document.getElementById('deleteModal').style.display = 'none';
+    }
 
-  <!-- ══════════════════ MAIN CONTENT ══════════════════ -->
-  <div class="main-content">
-
-    <!-- Topbar -->
-    <header class="topbar">
-      <span class="topbar-title">Admin System &amp; User Management</span>
-      <div class="topbar-actions">
-        <button class="topbar-icon-btn" title="Notifications">
-          <i class="bi bi-bell"></i>
-        </button>
-        <div class="topbar-avatar">SJ</div>
-        <span class="topbar-user-label">Sarah J. (Admin)</span>
-      </div>
-    </header>
-
-    <!-- Page Body -->
-    <main class="page-body">
-
-      <!-- Access Denied Banner -->
-      <div class="access-denied-alert">
-        <i class="bi bi-lock"></i>
-        <span><strong>Access Denied:</strong> Admin privileges required. Certain actions (e.g., hard-deleting hospital database records) are locked.</span>
-      </div>
-
-      <!-- Stats Grid -->
-      <div class="admin-stats-grid">
-        <div class="admin-stat-card">
-          <div>
-            <div class="admin-stat-label">Total Patients</div>
-            <div class="admin-stat-val">1,247</div>
-          </div>
-          <div class="admin-stat-icon">
-            <i class="bi bi-people"></i>
-          </div>
-        </div>
-
-        <div class="admin-stat-card">
-          <div>
-            <div class="admin-stat-label">Total Doctors</div>
-            <div class="admin-stat-val">86</div>
-          </div>
-          <div class="admin-stat-icon">
-            <i class="bi bi-person-badge"></i>
-          </div>
-        </div>
-
-        <div class="admin-stat-card">
-          <div>
-            <div class="admin-stat-label">Total Admins</div>
-            <div class="admin-stat-val">12</div>
-          </div>
-          <div class="admin-stat-icon">
-            <i class="bi bi-shield-check"></i>
-          </div>
-        </div>
-      </div>
-
-      <!-- Main Directory Section -->
-      <div class="card">
-        <div class="table-header-row">
-          <span class="table-title">User Directory</span>
-          <div class="table-actions-group">
-            <button class="btn-filter">All Roles</button>
-            <button class="btn-add-user">+ Add New User</button>
-          </div>
-        </div>
-
-        <div class="table-responsive">
-          <table class="user-table">
-            <thead>
-              <tr>
-                <th>USER ID</th>
-                <th>FULL NAME</th>
-                <th>EMAIL ADDRESS</th>
-                <th>ROLE BADGE</th>
-                <th>PHONE</th>
-                <th>ACTIONS</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td class="usr-id">USR-001</td>
-                <td>Dr. Elizabeth Reed</td>
-                <td>dr.eli@medcore.com</td>
-                <td><span class="role-badge doctor">Doctor</span></td>
-                <td>+1 (555) 219-2831</td>
-                <td>
-                  <button class="btn-tbl-edit">Edit</button>
-                  <button class="btn-tbl-delete" onclick="openDeleteModal('USR-001', 'Dr. Elizabeth Reed')">Delete</button>
-                </td>
-              </tr>
-              <tr>
-                <td class="usr-id">USR-002</td>
-                <td>Dr. Alan Vance</td>
-                <td>dr.alan@medcore.com</td>
-                <td><span class="role-badge doctor">Doctor</span></td>
-                <td>+1 (555) 342-9321</td>
-                <td>
-                  <button class="btn-tbl-edit">Edit</button>
-                  <button class="btn-tbl-delete" onclick="openDeleteModal('USR-002', 'Dr. Alan Vance')">Delete</button>
-                </td>
-              </tr>
-              <tr>
-                <td class="usr-id">USR-003</td>
-                <td>Sarah Jenkins</td>
-                <td>sarah.j@medcore.com</td>
-                <td><span class="role-badge admin">Admin</span></td>
-                <td>+1 (555) 998-2194</td>
-                <td>
-                  <button class="btn-tbl-edit">Edit</button>
-                  <button class="btn-tbl-delete" onclick="openDeleteModal('USR-003', 'Sarah Jenkins')">Delete</button>
-                </td>
-              </tr>
-              <tr>
-                <td class="usr-id">USR-004</td>
-                <td>David Miller</td>
-                <td>d.miller@medcore.com</td>
-                <td><span class="role-badge patient">Patient</span></td>
-                <td>+1 (555) 237-0042</td>
-                <td>
-                  <button class="btn-tbl-edit">Edit</button>
-                  <button class="btn-tbl-delete" onclick="openDeleteModal('USR-004', 'David Miller')">Delete</button>
-                </td>
-              </tr>
-              <tr>
-                <td class="usr-id">USR-005</td>
-                <td>Alex Dunphy</td>
-                <td>alex.d@medcore.com</td>
-                <td><span class="role-badge doctor">Doctor</span></td>
-                <td>+1 (555) 456-1122</td>
-                <td>
-                  <button class="btn-tbl-edit">Edit</button>
-                  <button class="btn-tbl-delete" onclick="openDeleteModal('USR-005', 'Alex Dunphy')">Delete</button>
-                </td>
-              </tr>
-              <tr>
-                <td class="usr-id">USR-006</td>
-                <td>Thomas Shelby</td>
-                <td>t.shelby@medcore.com</td>
-                <td><span class="role-badge admin">Admin</span></td>
-                <td>+1 (555) 768-3380</td>
-                <td>
-                  <button class="btn-tbl-edit">Edit</button>
-                  <button class="btn-tbl-delete" onclick="openDeleteModal('USR-006', 'Thomas Shelby')">Delete</button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-    </main>
-  </div>
-
-  <!-- Delete User Modal Dialog -->
-  <div class="modal-backdrop" id="deleteModal">
-    <div class="modal-box">
-      <div class="modal-icon-wrap">
-        <i class="bi bi-exclamation-triangle-fill"></i>
-      </div>
-      <div class="modal-title">Are you sure you want to delete this user?</div>
-      <div class="modal-desc">
-        This action is permanent and cannot be undone. User login access to MedCore will be revoked, and their credentials will be archived.
-      </div>
-      <div class="modal-actions">
-        <button class="btn-modal-cancel" onclick="closeDeleteModal()">Cancel</button>
-        <button class="btn-modal-delete" onclick="confirmDeleteUser()">Delete User</button>
-      </div>
-    </div>
-  </div>
-
-</div><!-- /portal-wrapper -->
-
-<script>
-  function openDeleteModal(userId, userName) {
-    document.getElementById('deleteModal').style.display = 'flex';
-  }
-
-  function closeDeleteModal() {
-    document.getElementById('deleteModal').style.display = 'none';
-  }
-
-  function confirmDeleteUser() {
-    alert('User deletion processed.');
-    closeDeleteModal();
-  }
-</script>
+    function confirmDeleteUser() {
+      alert('User deletion processed.');
+      closeDeleteModal();
+    }
+  </script>
 </body>
+
 </html>

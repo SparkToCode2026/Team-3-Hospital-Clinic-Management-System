@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard – MedCore Patient Portal</title>
+  <meta name="description"
+    content="Patient Dashboard overview with appointments, prescriptions, health summary, and quick billing actions." />
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="css/patient.css" rel="stylesheet" />
+  <style>
+    .welcome-hero {
+      background: linear-gradient(135deg, #0b1f3a 0%, #1a6ff5 100%);
+      color: #ffffff;
+      border-radius: 12px;
+      padding: 1.75rem 2rem;
+      margin-bottom: 1.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1.25rem;
+      box-shadow: 0 10px 20px -5px rgba(26, 111, 245, 0.25);
+    }
+
+    .welcome-hero h1 {
+      font-size: 1.4rem;
+      font-weight: 700;
+      margin: 0 0 0.4rem 0;
+    }
+
+    .welcome-hero p {
+      font-size: 0.88rem;
+      color: rgba(255, 255, 255, 0.85);
+      margin: 0;
+    }
+
+    .hero-badges {
+      display: flex;
+      gap: 0.6rem;
+      margin-top: 0.85rem;
+      flex-wrap: wrap;
+    }
+
+    .hero-chip {
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(4px);
+      padding: 0.3rem 0.75rem;
+      border-radius: 20px;
+      font-size: 0.76rem;
+      font-weight: 500;
+      color: #ffffff;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .stats-4-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.25rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .dash-stat-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.15rem 1.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: transform 0.18s ease, box-shadow 0.18s ease;
+    }
+
+    .dash-stat-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 16px -4px rgba(0, 0, 0, 0.06);
+    }
+
+    .dash-stat-label {
+      font-size: 0.76rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      margin-bottom: 0.25rem;
+    }
+
+    .dash-stat-value {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .dash-stat-sub {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      margin-top: 0.2rem;
+    }
+
+    .dash-icon-box {
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      flex-shrink: 0;
+    }
+
+    .dash-icon-blue {
+      background: #e0f2fe;
+      color: #0284c7;
+    }
+
+    .dash-icon-green {
+      background: #dcfce7;
+      color: #16a34a;
+    }
+
+    .dash-icon-purple {
+      background: #f3e8ff;
+      color: #9333ea;
+    }
+
+    .dash-icon-orange {
+      background: #ffedd5;
+      color: #d97706;
+    }
+
+    .dash-cols {
+      display: grid;
+      grid-template-columns: 1fr 340px;
+      gap: 1.25rem;
+    }
+
+    .vitals-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.85rem;
+    }
+
+    .vital-box {
+      background: var(--bg-page);
+      border-radius: 8px;
+      padding: 0.85rem 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .vital-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      background: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      color: var(--brand-accent);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+    }
+
+    .vital-val {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .vital-lbl {
+      font-size: 0.72rem;
+      color: var(--text-secondary);
+    }
+
+    .action-btn-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.65rem;
+    }
+
+    .quick-action-link {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.8rem 1rem;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: #ffffff;
+      color: var(--text-primary);
+      font-weight: 600;
+      font-size: 0.85rem;
+      transition: all 0.18s ease;
+    }
+
+    .quick-action-link:hover {
+      background: #f8fafc;
+      border-color: var(--brand-accent);
+      color: var(--brand-accent);
+    }
+
+    @media (max-width: 1100px) {
+      .stats-4-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .dash-cols {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .stats-4-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="portal-wrapper">
+
+    <!-- ══════════════════ SIDEBAR ══════════════════ -->
+    <aside class="sidebar">
+
+      <!-- Brand -->
+      <div class="sidebar-brand">
+        <div class="sidebar-logo">
+          <i class="bi bi-hospital"></i>
+        </div>
+        <div>
+          <div class="sidebar-brand-name">MedCore</div>
+          <div class="sidebar-brand-sub">HMS Platform</div>
+        </div>
+      </div>
+
+      <!-- Navigation -->
+      <nav class="sidebar-nav">
+        <!-- ACTIVE: Dashboard -->
+        <a href="dashboard.html" class="nav-item active">
+          <i class="bi bi-grid-1x2"></i> Dashboard
+        </a>
+
+        <a href="profile.html" class="nav-item">
+          <i class="bi bi-person"></i> My Profile
+        </a>
+
+        <a href="appointments.html" class="nav-item">
+          <i class="bi bi-calendar-check"></i> Appointments
+        </a>
+
+        <span class="nav-item disabled">
+          <i class="bi bi-capsule"></i> Prescriptions
+        </span>
+
+        <a href="invoices.html" class="nav-item">
+          <i class="bi bi-receipt"></i> My Invoices
+        </a>
+
+        <div class="nav-divider"></div>
+
+        <a href="../Assets/login.html" class="nav-item">
+          <i class="bi bi-box-arrow-left"></i> Logout
+        </a>
+      </nav>
+
+      <!-- Bottom user info -->
+      <div class="sidebar-user">
+        <div>
+          <div class="sidebar-user-name">Sarah Jenkins</div>
+          <div class="sidebar-user-role">Patient · ID 2014</div>
+        </div>
+      </div>
+
+    </aside>
+
+    <!-- ══════════════════ MAIN CONTENT ══════════════════ -->
+    <div class="main-content">
+
+      <!-- Topbar -->
+      <header class="topbar">
+        <span class="topbar-title">Patient Overview</span>
+        <div class="topbar-actions">
+          <span class="topbar-user-label">Sarah J.</span>
+          <a href="../Assets/login.html" class="btn-logout" title="Log Out"><i class="bi bi-box-arrow-right"></i> Log
+            Out</a>
+        </div>
+      </header>
+
+      <!-- Page Body -->
+      <main class="page-body">
+
+        <!-- Welcome Hero Banner -->
+        <div class="welcome-hero">
+          <div>
+            <h1>Welcome back, Sarah Jenkins 👋</h1>
+            <p>Here is your current health summary and medical portal activities.</p>
+            <div class="hero-badges">
+              <span class="hero-chip"><i class="bi bi-person-badge"></i> Patient ID: 2014</span>
+              <span class="hero-chip"><i class="bi bi-droplet-fill"></i> Blood Group: O+</span>
+              <span class="hero-chip"><i class="bi bi-calendar-event"></i> Next Appt: Oct 25, 09:30 AM</span>
+            </div>
+          </div>
+          <div>
+            <a href="appointments.html" class="btn btn-primary"
+              style="background:#ffffff; color:var(--brand-dark); border:none;">
+              <i class="bi bi-plus-lg"></i> Book New Appointment
+            </a>
+          </div>
+        </div>
+
+        <!-- 4 Stat Cards -->
+        <div class="stats-4-grid">
+          <div class="dash-stat-card">
+            <div>
+              <div class="dash-stat-label">Upcoming Appts</div>
+              <div class="dash-stat-value">2</div>
+              <div class="dash-stat-sub">Next in 2 days</div>
+            </div>
+            <div class="dash-icon-box dash-icon-blue">
+              <i class="bi bi-calendar-check"></i>
+            </div>
+          </div>
+
+          <div class="dash-stat-card">
+            <div>
+              <div class="dash-stat-label">Active Prescriptions</div>
+              <div class="dash-stat-value">3</div>
+              <div class="dash-stat-sub">Updated last week</div>
+            </div>
+            <div class="dash-icon-box dash-icon-purple">
+              <i class="bi bi-capsule"></i>
+            </div>
+          </div>
+
+          <div class="dash-stat-card">
+            <div>
+              <div class="dash-stat-label">Pending Invoices</div>
+              <div class="dash-stat-value">$430.00</div>
+              <div class="dash-stat-sub">2 invoices due</div>
+            </div>
+            <div class="dash-icon-box dash-icon-orange">
+              <i class="bi bi-receipt"></i>
+            </div>
+          </div>
+
+          <div class="dash-stat-card">
+            <div>
+              <div class="dash-stat-label">Medical Visits</div>
+              <div class="dash-stat-value">14</div>
+              <div class="dash-stat-sub">Total consultations</div>
+            </div>
+            <div class="dash-icon-box dash-icon-green">
+              <i class="bi bi-folder2-open"></i>
+            </div>
+          </div>
+        </div>
+
+        <!-- Main Columns -->
+        <div class="dash-cols">
+
+          <!-- Left Column: Upcoming Appointments + Prescriptions -->
+          <div>
+
+            <!-- Upcoming Appointments Card -->
+            <div class="card">
+              <div class="card-header">
+                <span class="card-title"><i class="bi bi-calendar3"
+                    style="color:var(--brand-accent); margin-right:0.4rem;"></i> Upcoming Appointments</span>
+                <a href="appointments.html" style="font-size:0.8rem; font-weight:600; color:var(--brand-accent);">View
+                  All</a>
+              </div>
+
+              <div class="table-responsive">
+                <table class="inv-table">
+                  <thead>
+                    <tr>
+                      <th>APPT ID</th>
+                      <th>DATE &amp; TIME</th>
+                      <th>REASON</th>
+                      <th>LOCATION</th>
+                      <th>STATUS</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td class="inv-id">PT-9082</td>
+                      <td>Oct 25, 2025 · 09:30 AM</td>
+                      <td>Cardiology Consultation</td>
+                      <td>ICU-101</td>
+                      <td><span class="badge badge-success">Confirmed</span></td>
+                    </tr>
+                    <tr>
+                      <td class="inv-id">PT-1244</td>
+                      <td>Oct 25, 2025 · 10:15 AM</td>
+                      <td>General Checkup</td>
+                      <td>GEN-204</td>
+                      <td><span class="badge badge-warn">Pending</span></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- Active Prescriptions Card -->
+            <div class="card">
+              <div class="card-header">
+                <span class="card-title"><i class="bi bi-capsule-pill" style="color:#9333ea; margin-right:0.4rem;"></i>
+                  Active Prescriptions</span>
+                <span style="font-size:0.75rem; color:var(--text-muted);">Current Regimen</span>
+              </div>
+
+              <div style="display:flex; flex-direction:column; gap:0.75rem;">
+                <div
+                  style="display:flex; align-items:center; justify-content:space-between; padding:0.75rem 0.85rem; border:1px solid var(--border); border-radius:8px;">
+                  <div>
+                    <div style="font-size:0.88rem; font-weight:700; color:var(--text-primary);">Amoxicillin 500mg</div>
+                    <div style="font-size:0.75rem; color:var(--text-secondary);">1 Capsule · 3x Daily (After Meals)
+                    </div>
+                  </div>
+                  <span class="badge badge-success">Active</span>
+                </div>
+
+                <div
+                  style="display:flex; align-items:center; justify-content:space-between; padding:0.75rem 0.85rem; border:1px solid var(--border); border-radius:8px;">
+                  <div>
+                    <div style="font-size:0.88rem; font-weight:700; color:var(--text-primary);">Atorvastatin 20mg</div>
+                    <div style="font-size:0.75rem; color:var(--text-secondary);">1 Tablet · Once Daily at Bedtime</div>
+                  </div>
+                  <span class="badge badge-success">Active</span>
+                </div>
+
+                <div
+                  style="display:flex; align-items:center; justify-content:space-between; padding:0.75rem 0.85rem; border:1px solid var(--border); border-radius:8px;">
+                  <div>
+                    <div style="font-size:0.88rem; font-weight:700; color:var(--text-primary);">Multivitamin Supplement
+                    </div>
+                    <div style="font-size:0.75rem; color:var(--text-secondary);">1 Capsule · Morning</div>
+                  </div>
+                  <span class="badge badge-success">Active</span>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Right Column: Vitals + Quick Actions + Recent Invoices -->
+          <div>
+
+            <!-- Quick Navigation Actions -->
+            <div class="card">
+              <div class="card-header">
+                <span class="card-title">Quick Actions</span>
+              </div>
+
+              <div class="action-btn-list">
+                <a href="appointments.html" class="quick-action-link">
+                  <span><i class="bi bi-calendar-plus" style="margin-right:0.5rem; color:var(--brand-accent);"></i> Book
+                    Appointment</span>
+                  <i class="bi bi-chevron-right" style="font-size:0.8rem; color:var(--text-muted);"></i>
+                </a>
+
+                <a href="invoices.html" class="quick-action-link">
+                  <span><i class="bi bi-credit-card" style="margin-right:0.5rem; color:#0284c7;"></i> Pay Pending
+                    Invoices</span>
+                  <i class="bi bi-chevron-right" style="font-size:0.8rem; color:var(--text-muted);"></i>
+                </a>
+
+                <a href="profile.html" class="quick-action-link">
+                  <span><i class="bi bi-person-gear" style="margin-right:0.5rem; color:var(--green);"></i> Edit Profile
+                    Details</span>
+                  <i class="bi bi-chevron-right" style="font-size:0.8rem; color:var(--text-muted);"></i>
+                </a>
+              </div>
+            </div>
+
+          </div>
+
+        </div><!-- /dash-cols -->
+
+      </main>
+    </div>
+
+  </div><!-- /portal-wrapper -->
+</body>
+
+</html>
