@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Patient Prescriptions | HMS Clinical</title>
+  <meta name="description" content="Doctor portal for issuing, searching, updating, and managing patient prescriptions.">
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="prescriptions.css">
+</head>
+
+<body>
+  <div class="portal-wrapper">
+
+    <!-- ══════════════════════ SIDEBAR ══════════════════════ -->
+    <aside class="sidebar">
+      <div class="sidebar-brand">
+        <div class="sidebar-logo" style="background:transparent;padding:0;overflow:hidden;">
+          <img src="logo.svg" alt="HMS Logo" style="width:34px;height:34px;object-fit:cover;border-radius:9px;">
+        </div>
+        <div>
+          <div class="sidebar-brand-name">HMS Clinical</div>
+          <div class="sidebar-brand-sub">Doctor Portal</div>
+        </div>
+      </div>
+
+      <nav class="sidebar-nav">
+        <a href="dashboard.html" class="nav-item">
+          <i class="bi bi-grid-1x2-fill"></i> Dashboard
+        </a>
+        <a href="medical-records.html" class="nav-item">
+          <i class="bi bi-journal-medical"></i> Medical Records
+        </a>
+        <a href="prescriptions.html" class="nav-item active">
+          <i class="bi bi-capsule"></i> Prescriptions
+        </a>
+        <a href="medications.html" class="nav-item">
+          <i class="bi bi-capsule-pills"></i> Medications
+        </a>
+        <a href="lab-tests.html" class="nav-item">
+          <i class="bi bi-virus"></i> Lab Tests
+        </a>
+        <a href="appointments.html" class="nav-item">
+          <i class="bi bi-calendar-check"></i> Appointments
+        </a>
+        <a href="patients.html" class="nav-item">
+          <i class="bi bi-people"></i> Patients
+        </a>
+        <a href="doctor-profile.html" class="nav-item">
+          <i class="bi bi-person-gear"></i> Settings &amp; Profile
+        </a>
+      </nav>
+
+      <div class="sidebar-user">
+        <div>
+          <div class="sidebar-user-name">Dr. Sarah Chen</div>
+          <div class="sidebar-user-role">Chief Endocrinologist</div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- ══════════════════════ MAIN CONTENT ══════════════════════ -->
+    <div class="main-content">
+
+      <!-- Topbar -->
+      <header class="topbar">
+        <span class="topbar-title">Prescriptions Management</span>
+        <div class="topbar-actions">
+          <span class="topbar-user-label">Dr. Sarah Chen</span>
+          <a href="../Assets/login.html" class="btn-logout" title="Log Out"><i class="bi bi-box-arrow-right"></i> Log Out</a>
+        </div>
+      </header>
+
+      <!-- Page Body -->
+      <main class="page-body">
+
+        <!-- Alert Notification Toast -->
+        <div class="alert alert-success d-none" id="actionAlert" role="alert">
+          <i class="bi bi-check-circle-fill"></i>
+          <span id="alertMsg">Action completed successfully.</span>
+        </div>
+
+        <!-- Banner Header -->
+        <div class="doc-profile-banner">
+          <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
+            <div>
+              <div class="d-flex align-items-center gap-2 mb-2">
+                <span class="doc-profile-badge"><i class="bi bi-capsule me-1"></i>PrescriptionController</span>
+                <span class="doc-profile-badge"><i class="bi bi-envelope-at me-1"></i>IEmailService</span>
+              </div>
+              <h2 class="fw-bold mb-1" style="font-size:1.4rem;">Patient Prescriptions &amp; Rx Orders</h2>
+              <p class="mb-0" style="font-size:0.83rem;opacity:.85;">Issue clinical prescriptions, add dosage instructions, link medications, and notify patients.</p>
+            </div>
+            <div>
+              <button class="btn btn-light fw-semibold" style="font-size:0.85rem;" data-bs-toggle="modal" data-bs-target="#addModal">
+                <i class="bi bi-plus-circle me-1"></i>+ Issue New Prescription
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- KPI Stats Cards -->
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div>
+              <div class="stat-label">Total Prescriptions</div>
+              <div class="stat-value" id="countTotal">5</div>
+              <div class="stat-sub" style="color:var(--brand-accent);"><i class="bi bi-file-earmark-medical me-1"></i>CountPrescriptions()</div>
+            </div>
+            <div class="stat-icon"><i class="bi bi-capsule"></i></div>
+          </div>
+
+          <div class="stat-card">
+            <div>
+              <div class="stat-label">Issued Today</div>
+              <div class="stat-value">2</div>
+              <div class="stat-sub" style="color:var(--green);"><i class="bi bi-calendar-check me-1"></i>Active Consultations</div>
+            </div>
+            <div class="stat-icon green"><i class="bi bi-clock-history"></i></div>
+          </div>
+
+          <div class="stat-card">
+            <div>
+              <div class="stat-label">Prescribed Items</div>
+              <div class="stat-value">9</div>
+              <div class="stat-sub" style="color:var(--yellow);"><i class="bi bi-box-seam me-1"></i>Linked Medications</div>
+            </div>
+            <div class="stat-icon yellow"><i class="bi bi-capsule-pills"></i></div>
+          </div>
+
+          <div class="stat-card">
+            <div>
+              <div class="stat-label">Email Dispatches</div>
+              <div class="stat-value">5</div>
+              <div class="stat-sub" style="color:var(--green);"><i class="bi bi-send-check-fill me-1"></i>IEmailService Sent</div>
+            </div>
+            <div class="stat-icon"><i class="bi bi-envelope-check"></i></div>
+          </div>
+        </div>
+
+        <!-- Toolbar -->
+        <div class="table-toolbar">
+          <div class="toolbar-filters">
+            <input type="search" class="search-input" id="searchInput" placeholder="Search patient name or instruction..." onkeyup="filterTable()">
+            <input type="date" class="search-input" id="dateFilter" onchange="filterTable()" style="max-width:170px;">
+            <select class="filter-select" id="dateSort" onchange="sortTable()">
+              <option value="desc" selected>Issued: Newest First</option>
+              <option value="asc">Issued: Oldest First</option>
+            </select>
+          </div>
+          <button class="btn-primary" data-bs-toggle="modal" data-bs-target="#addModal">
+            <i class="bi bi-plus-lg"></i> Issue Rx
+          </button>
+        </div>
+
+        <!-- Table Wrap -->
+        <div class="table-wrap">
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Rx ID</th>
+                  <th>Patient Name</th>
+                  <th>Issued Date</th>
+                  <th>Instructions</th>
+                  <th>Prescribed Medications</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="tableBody">
+                <!-- Populated by prescriptions.js -->
+              </tbody>
+            </table>
+          </div>
+          <div class="table-pagination">
+            <p class="pagination-info" id="paginationInfo">Showing all prescriptions</p>
+          </div>
+        </div>
+
+      </main>
+    </div><!-- /main-content -->
+  </div><!-- /portal-wrapper -->
+
+  <!-- ══ OFFCANVAS: Details ══ -->
+  <div class="offcanvas offcanvas-end details-panel" tabindex="-1" id="detailsOffcanvas">
+    <div class="offcanvas-header border-bottom">
+      <div>
+        <small style="font-size:0.7rem;font-weight:700;text-transform:uppercase;color:var(--text-muted);">Prescription Details</small>
+        <h5 class="offcanvas-title mt-1" id="detRxId">#RX-701</h5>
+      </div>
+      <button type="button" class="modal-close-btn" data-bs-dismiss="offcanvas"><i class="bi bi-x-lg"></i></button>
+    </div>
+    <div class="offcanvas-body p-4">
+      <div class="details-section">
+        <span class="details-label">Patient Record</span>
+        <h6 id="detPatient">Michael Wilson</h6>
+      </div>
+      <div class="details-section">
+        <span class="details-label">Issued Date</span>
+        <p id="detDate">2026-08-12</p>
+      </div>
+      <div class="details-section">
+        <span class="details-label">Dosage &amp; Instructions</span>
+        <p id="detInstructions">Take Glucophage 500mg twice daily with meals.</p>
+      </div>
+      <div class="details-section">
+        <span class="details-label">Clinical Notes</span>
+        <p id="detNotes">Monitor blood glucose weekly.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ MODAL: Issue Prescription (POST /api/Prescription) ══ -->
+  <div class="modal fade" id="addModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content" style="border:none;border-radius:16px;box-shadow:0 20px 40px rgba(0,0,0,.12);">
+        <div class="p-4">
+          <div class="modal-header-bar mb-3">
+            <div class="modal-title">Issue New Prescription</div>
+            <button type="button" class="modal-close-btn" data-bs-dismiss="modal"><i class="bi bi-x-lg"></i></button>
+          </div>
+          <form onsubmit="handleAddPrescription(event)">
+            <div class="form-grid">
+              <div class="form-group">
+                <label class="form-label">Medical Record (FK: MedicalRecordId)</label>
+                <select class="form-control" id="newRecord" required>
+                  <option value="201" data-patient="Michael Wilson" selected>#REC-201 — Michael Wilson</option>
+                  <option value="202" data-patient="Lisa Andersen">#REC-202 — Lisa Andersen</option>
+                  <option value="203" data-patient="Emily Carter">#REC-203 — Emily Carter</option>
+                  <option value="204" data-patient="James Wilson">#REC-204 — James Wilson</option>
+                  <option value="205" data-patient="Sarah Jenkins">#REC-205 — Sarah Jenkins</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Issued Date</label>
+                <input type="date" class="form-control" id="newDate" required>
+              </div>
+              <div class="form-group span-2">
+                <label class="form-label">Dosage &amp; Instructions</label>
+                <textarea class="form-control" id="newInstructions" rows="2" placeholder="e.g. Take Glucophage 500mg twice daily with meals." required></textarea>
+              </div>
+              <div class="form-group span-2">
+                <label class="form-label">Clinical Notes</label>
+                <textarea class="form-control" id="newNotesAdd" rows="2" placeholder="e.g. Follow up in 1 month."></textarea>
+              </div>
+              <div class="form-group span-2">
+                <label class="form-label">Select Medications to Include</label>
+                <div class="medication-checkbox-container" id="medCheckboxes">
+                  <!-- Populated by JS -->
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer-bar mt-3">
+              <button type="button" class="btn-modal-cancel" data-bs-dismiss="modal">Cancel</button>
+              <button type="submit" class="btn-modal-confirm">Save Prescription</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ MODAL: Update Notes (PATCH /api/Prescription/{id}/notes) ══ -->
+  <div class="modal fade" id="notesModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content" style="border:none;border-radius:16px;box-shadow:0 20px 40px rgba(0,0,0,.12);">
+        <div class="p-4">
+          <div class="modal-header-bar mb-3">
+            <div class="modal-title">Update Prescription Notes</div>
+            <button type="button" class="modal-close-btn" data-bs-dismiss="modal"><i class="bi bi-x-lg"></i></button>
+          </div>
+          <form onsubmit="handleSaveNotes(event)">
+            <input type="hidden" id="notesRxId">
+            <div class="form-group mb-3">
+              <label class="form-label">Patient</label>
+              <input type="text" class="form-control" id="notesPatient" readonly>
+            </div>
+            <div class="form-group mb-3">
+              <label class="form-label">Clinical Notes</label>
+              <textarea class="form-control" id="newNotes" rows="3" required></textarea>
+            </div>
+            <div class="modal-footer-bar">
+              <button type="button" class="btn-modal-cancel" data-bs-dismiss="modal">Cancel</button>
+              <button type="submit" class="btn-modal-confirm">Update Notes</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ MODAL: Edit Prescription (PUT /api/Prescription/{id}) ══ -->
+  <div class="modal fade" id="editModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content" style="border:none;border-radius:16px;box-shadow:0 20px 40px rgba(0,0,0,.12);">
+        <div class="p-4">
+          <div class="modal-header-bar mb-3">
+            <div class="modal-title">Edit Prescription</div>
+            <button type="button" class="modal-close-btn" data-bs-dismiss="modal"><i class="bi bi-x-lg"></i></button>
+          </div>
+          <form onsubmit="handleSaveEdit(event)">
+            <input type="hidden" id="editRxId">
+            <div class="form-grid">
+              <div class="form-group">
+                <label class="form-label">Issued Date</label>
+                <input type="date" class="form-control" id="editDate" required>
+              </div>
+              <div class="form-group span-2">
+                <label class="form-label">Dosage &amp; Instructions</label>
+                <textarea class="form-control" id="editInstructions" rows="2" required></textarea>
+              </div>
+              <div class="form-group span-2">
+                <label class="form-label">Clinical Notes</label>
+                <textarea class="form-control" id="editNotes" rows="2"></textarea>
+              </div>
+            </div>
+            <div class="modal-footer-bar mt-3">
+              <button type="button" class="btn-modal-cancel" data-bs-dismiss="modal">Cancel</button>
+              <button type="submit" class="btn-modal-confirm">Save Changes</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="prescriptions.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,33 @@
+/* ═══════════════════════════════════════════════════════
+   MedCore HMS — Doctor Portal  |  prescriptions.css
+   ═══════════════════════════════════════════════════════ */
+
+.email-preview-box {
+  background: var(--bg-page);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.85rem;
+  font-size: 0.78rem;
+}
+
+.email-preview-title {
+  font-weight: 700;
+  font-size: 0.8rem;
+  color: var(--text-primary);
+  margin-bottom: 0.35rem;
+}
+
+.email-preview-body {
+  font-style: italic;
+  color: var(--text-primary);
+  margin-top: 0.35rem;
+}
+
+.medication-checkbox-container {
+  background: var(--bg-page);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.85rem;
+  max-height: 160px;
+  overflow-y: auto;
+}

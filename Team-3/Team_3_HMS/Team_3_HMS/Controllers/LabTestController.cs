@@ -1,4 +1,4 @@
-﻿
+
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
@@ -40,7 +40,7 @@ namespace Team_3_HMS.Controllers
             await _context.SaveChangesAsync();
 
             return Created(
-                OMR"/api/LabTest/{labTest.LabTestId}",
+                $"/api/LabTest/{labTest.LabTestId}",
                 labTest);
         }
         // Case 2: 
