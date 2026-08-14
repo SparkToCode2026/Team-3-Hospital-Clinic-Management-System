@@ -561,36 +561,83 @@
     <!-- ══ MODAL: Update Lab Result ══ -->
     <div class="modal fade" id="updateResultModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content" style="border:none;border-radius:16px;box-shadow:0 20px 40px rgba(0,0,0,.12);">
+            <div class="modal-content"
+                 style="border:none;border-radius:16px;box-shadow:0 20px 40px rgba(0,0,0,.12);">
+
                 <div class="p-4">
+
                     <div class="modal-header-bar">
                         <div>
-                            <small style="font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-muted);">
-                                Lab
-                                Test
+                            <small id="updateLabTestLabel"
+                                   style="font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-muted);">
+                                Lab Test
                             </small>
-                            <div class="modal-title mt-1">Update Lab Test Result</div>
+
+                            <div class="modal-title mt-1">
+                                Update Lab Test Result
+                            </div>
                         </div>
-                        <button type="button" class="modal-close-btn" data-bs-dismiss="modal"><i class="bi bi-x-lg"></i></button>
+
+                        <button type="button"
+                                class="modal-close-btn"
+                                data-bs-dismiss="modal">
+                            <i class="bi bi-x-lg"></i>
+                        </button>
                     </div>
+
+
+                    <!-- Store selected Lab Test ID -->
+                    <input type="hidden"
+                           id="updateLabTestId">
+
+
+                    <!-- Test Name -->
                     <div class="form-group mb-3">
-                        <label class="form-label">Test Name</label>
-                        <input type="text" class="form-control" value="HbA1c Test" readonly>
+                        <label class="form-label">
+                            Test Name
+                        </label>
+
+                        <input type="text"
+                               id="updateLabTestName"
+                               class="form-control"
+                               readonly>
                     </div>
+
+
+                    <!-- Result -->
                     <div class="form-group mb-3">
-                        <label class="form-label">Result</label>
-                        <textarea class="form-control" rows="3" placeholder="Enter lab test result">7.1%</textarea>
+                        <label class="form-label">
+                            Result
+                        </label>
+
+                        <textarea id="updateLabTestResult"
+                                  class="form-control"
+                                  rows="3"
+                                  placeholder="Enter lab test result"
+                                  required></textarea>
                     </div>
+
+
                     <div class="modal-footer-bar">
-                        <button type="button" class="btn-modal-cancel" data-bs-dismiss="modal">Cancel</button>
-                        <button type="button" class="btn-modal-confirm">Update Result</button>
+
+                        <button type="button"
+                                class="btn-modal-cancel"
+                                data-bs-dismiss="modal">
+                            Cancel
+                        </button>
+
+                        <button type="button"
+                                id="updateLabResultBtn"
+                                class="btn-modal-confirm">
+                            Update Result
+                        </button>
+
                     </div>
+
                 </div>
             </div>
         </div>
-    </div>
-
-    <!-- ══ MODAL: Delete Record ══ -->
+    </div><!-- ══ MODAL: Delete Record ══ -->
     <div class="modal fade" id="deleteRecordModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content" style="border:none;border-radius:16px;box-shadow:0 20px 40px rgba(0,0,0,.12);">
