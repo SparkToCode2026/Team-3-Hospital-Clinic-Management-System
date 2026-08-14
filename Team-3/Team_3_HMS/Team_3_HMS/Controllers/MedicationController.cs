@@ -7,6 +7,7 @@ using Team_3_HMS.Models;
 namespace Team_3_HMS.Controllers
 {
     [ApiController]
+    [Route("Medication")]
     [Route("api/[controller]")]
     [Authorize]
     public class MedicationController : ControllerBase

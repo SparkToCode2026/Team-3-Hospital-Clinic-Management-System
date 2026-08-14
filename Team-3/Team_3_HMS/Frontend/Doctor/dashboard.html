@@ -590,7 +590,12 @@
       const statComp = document.getElementById('statCompletedConsultations');
 
       try {
-        const appts = await apiFetch('/Appointment/GetAllAppointments');
+        let appts = [];
+        try {
+          appts = await apiFetch('/Appointment');
+        } catch (e1) {
+          appts = await apiFetch('/api/Appointment');
+        }
         const list = Array.isArray(appts) ? appts : [];
 
         if (statToday) statToday.textContent = list.length;

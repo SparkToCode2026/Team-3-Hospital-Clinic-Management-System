@@ -128,7 +128,7 @@
           <div class="table-header-row" style="flex-wrap:wrap; gap:0.75rem;">
             <span class="table-title">User Directory</span>
             <div class="table-actions-group" style="flex-wrap:wrap; gap:0.5rem; align-items:center;">
-              <input type="search" id="userSearchInput" placeholder="Search name, email, or ID..." style="padding:0.45rem 0.85rem; border-radius:6px; border:1px solid #cbd5e1; font-size:0.83rem; min-width:200px;" onkeyup="filterUsers()" />
+              <input type="search" id="userSearchInput" placeholder="Search name, email, or ID..." style="padding:0.45rem 0.85rem; border-radius:6px; border:1px solid #cbd5e1; font-size:0.83rem; min-width:200px;" oninput="filterUsers()" onkeyup="filterUsers()" onsearch="filterUsers()" />
               <select id="roleFilterSelect" style="padding:0.45rem 0.85rem; border-radius:6px; border:1px solid #cbd5e1; font-size:0.83rem; background:#fff;" onchange="filterUsers()">
                 <option value="all" selected>All Roles</option>
                 <option value="Doctor">Doctors</option>

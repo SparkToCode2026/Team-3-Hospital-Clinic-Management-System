@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Team_3_HMS.Models;
@@ -6,6 +6,7 @@ using Team_3_HMS.Models;
 namespace Team_3_HMS.Controllers
 {
     [ApiController]
+    [Route("Appointment")]
     [Route("api/[controller]")]
     [Authorize]
     public class AppointmentController : ControllerBase
@@ -92,6 +93,8 @@ namespace Team_3_HMS.Controllers
         {
             var appointments = await _context.Appointments
                 .Include(a => a.room)
+                .Include(a => a.PatientProfile)
+                    .ThenInclude(p => p.user)
                 .ToListAsync();
             return Ok(appointments);
         }

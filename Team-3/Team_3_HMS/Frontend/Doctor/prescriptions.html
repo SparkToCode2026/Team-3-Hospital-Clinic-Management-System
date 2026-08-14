@@ -98,7 +98,7 @@
         <!-- Toolbar -->
         <div class="table-toolbar">
           <div class="toolbar-filters">
-            <input type="search" class="search-input" id="searchRxInput" placeholder="Search RX ID, record #, or instructions..." onkeyup="filterPrescriptions()">
+            <input type="search" class="search-input" id="searchRxInput" placeholder="Search RX ID, record #, or instructions..." oninput="filterPrescriptions()" onkeyup="filterPrescriptions()" onsearch="filterPrescriptions()">
           </div>
           <button class="btn-ghost" onclick="loadPrescriptions()"><i class="bi bi-arrow-clockwise me-1"></i>Refresh</button>
         </div>

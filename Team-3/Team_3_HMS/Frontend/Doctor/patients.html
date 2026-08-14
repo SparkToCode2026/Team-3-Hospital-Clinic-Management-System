@@ -85,7 +85,7 @@
         <!-- Toolbar -->
         <div class="table-toolbar">
           <div class="toolbar-filters">
-            <input type="search" class="search-input" id="searchInput" placeholder="Search patient name or ID..." onkeyup="filterPatientsTable()">
+            <input type="search" class="search-input" id="searchInput" placeholder="Search patient name or ID..." oninput="filterPatientsTable()" onkeyup="filterPatientsTable()" onsearch="filterPatientsTable()">
             <select class="filter-select" id="bloodFilter" onchange="filterPatientsTable()">
               <option value="all" selected>All Blood Groups</option>
               <option value="O Positive">O Positive (O+)</option>

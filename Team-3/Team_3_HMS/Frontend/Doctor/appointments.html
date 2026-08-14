@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Patient Appointments | HMS Clinical</title>
+  <title>Patient Appointments | MedCore Doctor Portal</title>
   <meta name="description" content="Doctor portal for viewing and managing patient appointments.">
 
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -19,9 +19,7 @@
     <!-- ══════════════════════ SIDEBAR ══════════════════════ -->
     <aside class="sidebar">
       <div class="sidebar-brand">
-        <div class="sidebar-logo" style="background:transparent;padding:0;overflow:hidden;">
-          <img src="logo.svg" alt="HMS Logo" style="width:34px;height:34px;object-fit:cover;border-radius:9px;">
-        </div>
+        <div class="sidebar-logo"><i class="bi bi-hospital"></i></div>
         <div>
           <div class="sidebar-brand-name">HMS Clinical</div>
           <div class="sidebar-brand-sub">Doctor Portal</div>
@@ -30,29 +28,43 @@
 
       <nav class="sidebar-nav">
         <a href="dashboard.html" class="nav-item">
-          <i class="bi bi-grid-1x2-fill"></i> Dashboard
+          <i class="bi bi-grid-1x2-fill"></i>
+          Dashboard
         </a>
         <a href="medical-records.html" class="nav-item">
-          <i class="bi bi-journal-medical"></i> Medical Records
+          <i class="bi bi-journal-medical"></i>
+          Medical Records
+        </a>
+        <a href="prescriptions.html" class="nav-item">
+          <i class="bi bi-prescription2"></i>
+          Prescriptions
+        </a>
+        <a href="medications.html" class="nav-item">
+          <i class="bi bi-capsule"></i>
+          Medications
         </a>
         <a href="lab-tests.html" class="nav-item">
-          <i class="bi bi-virus"></i> Lab Tests
+          <i class="bi bi-eyedropper"></i>
+          Lab Tests
         </a>
         <a href="appointments.html" class="nav-item active">
-          <i class="bi bi-calendar-check"></i> Appointments
+          <i class="bi bi-calendar-check"></i>
+          Appointments
         </a>
         <a href="patients.html" class="nav-item">
-          <i class="bi bi-people"></i> Patients
+          <i class="bi bi-people"></i>
+          Patients
         </a>
         <a href="doctor-profile.html" class="nav-item">
-          <i class="bi bi-person-gear"></i> Settings &amp; Profile
+          <i class="bi bi-person-gear"></i>
+          Settings &amp; Profile
         </a>
       </nav>
 
       <div class="sidebar-user">
         <div>
-          <div class="sidebar-user-name">Dr. Sarah Chen</div>
-          <div class="sidebar-user-role">Chief Endocrinologist</div>
+          <div class="sidebar-user-name">Doctor Console</div>
+          <div class="sidebar-user-role">Attending Physician</div>
         </div>
       </div>
     </aside>
@@ -64,9 +76,8 @@
       <header class="topbar">
         <span class="topbar-title">Patient Appointments</span>
         <div class="topbar-actions">
-          <span class="topbar-user-label">Dr. Sarah Chen</span>
-          <a href="../Assets/login.html" class="btn-logout" title="Log Out"><i class="bi bi-box-arrow-right"></i> Log
-            Out</a>
+          <span class="topbar-user-label">Doctor Console</span>
+          <a href="../Assets/login.html" class="btn-logout" title="Log Out"><i class="bi bi-box-arrow-right"></i> Log Out</a>
         </div>
       </header>
 
@@ -85,15 +96,13 @@
             <div>
               <div class="d-flex align-items-center gap-2 mb-2">
                 <span class="doc-profile-badge"><i class="bi bi-calendar-week me-1"></i>Doctor Schedule</span>
-                <span class="doc-profile-badge"><i class="bi bi-building me-1"></i>Suite 304</span>
+                <span class="doc-profile-badge"><i class="bi bi-building me-1"></i>Clinical Suites</span>
               </div>
               <h2 class="fw-bold mb-1" style="font-size:1.4rem;">Patient Appointments</h2>
-              <p class="mb-0" style="font-size:0.83rem;opacity:.85;">View scheduled consultations, update visit
-                statuses, or book new patient appointments.</p>
+              <p class="mb-0" style="font-size:0.83rem;opacity:.85;">View scheduled consultations, update visit statuses, or book new patient appointments directly into EHR.</p>
             </div>
             <div>
-              <button class="btn btn-light fw-semibold" style="font-size:0.85rem;" data-bs-toggle="modal"
-                data-bs-target="#createApptModal">
+              <button class="btn btn-light fw-semibold" style="font-size:0.85rem;" onclick="openScheduleModal()">
                 <i class="bi bi-calendar-plus me-1"></i>+ Schedule Appointment
               </button>
             </div>
@@ -105,9 +114,8 @@
           <div class="stat-card" style="cursor:pointer;" onclick="filterByStatus('all')">
             <div>
               <div class="stat-label">Total Appointments</div>
-              <div class="stat-value" id="countTotal">7</div>
-              <div class="stat-sub" style="color:var(--brand-accent);"><i class="bi bi-list-task me-1"></i>All Records
-              </div>
+              <div class="stat-value" id="countTotal">0</div>
+              <div class="stat-sub" style="color:var(--brand-accent);"><i class="bi bi-list-task me-1"></i>All Records</div>
             </div>
             <div class="stat-icon"><i class="bi bi-calendar3"></i></div>
           </div>
@@ -115,9 +123,8 @@
           <div class="stat-card" style="cursor:pointer;" onclick="filterByStatus('Confirmed')">
             <div>
               <div class="stat-label">Confirmed Visits</div>
-              <div class="stat-value" id="countConfirmed">2</div>
-              <div class="stat-sub" style="color:var(--green);"><i class="bi bi-check-circle-fill me-1"></i>Ready for
-                Doctor</div>
+              <div class="stat-value" id="countConfirmed">0</div>
+              <div class="stat-sub" style="color:var(--green);"><i class="bi bi-check-circle-fill me-1"></i>Ready for Doctor</div>
             </div>
             <div class="stat-icon green"><i class="bi bi-calendar-check-fill"></i></div>
           </div>
@@ -125,9 +132,8 @@
           <div class="stat-card" style="cursor:pointer;" onclick="filterByStatus('Pending')">
             <div>
               <div class="stat-label">Pending Requests</div>
-              <div class="stat-value" id="countPending">2</div>
-              <div class="stat-sub" style="color:var(--yellow);"><i class="bi bi-clock-history me-1"></i>Awaiting
-                Approval</div>
+              <div class="stat-value" id="countPending">0</div>
+              <div class="stat-sub" style="color:var(--yellow);"><i class="bi bi-clock-history me-1"></i>Awaiting Approval</div>
             </div>
             <div class="stat-icon yellow"><i class="bi bi-hourglass-split"></i></div>
           </div>
@@ -135,7 +141,7 @@
           <div class="stat-card" style="cursor:pointer;" onclick="filterByStatus('Completed')">
             <div>
               <div class="stat-label">Completed</div>
-              <div class="stat-value" id="countCompleted">2</div>
+              <div class="stat-value" id="countCompleted">0</div>
               <div class="stat-sub"><i class="bi bi-check2-all me-1"></i>Finished Visits</div>
             </div>
             <div class="stat-icon"><i class="bi bi-check2-circle"></i></div>
@@ -145,8 +151,8 @@
         <!-- Toolbar: Search and Filter -->
         <div class="table-toolbar">
           <div class="toolbar-filters">
-            <input type="search" class="search-input" id="searchInput" placeholder="Search patient name..."
-              onkeyup="filterTable()">
+            <input type="search" class="search-input" id="searchInput" placeholder="Search patient, reason, ID..."
+              oninput="filterTable()" onkeyup="filterTable()" onsearch="filterTable()">
             <select class="filter-select" id="statusFilter" onchange="filterTable()">
               <option value="all" selected>All Statuses</option>
               <option value="Confirmed">Confirmed</option>
@@ -155,7 +161,7 @@
               <option value="Cancelled">Cancelled</option>
             </select>
           </div>
-          <button class="btn-primary" data-bs-toggle="modal" data-bs-target="#createApptModal">
+          <button class="btn-primary" onclick="openScheduleModal()">
             <i class="bi bi-plus-lg"></i> New Appointment
           </button>
         </div>
@@ -176,7 +182,11 @@
                 </tr>
               </thead>
               <tbody id="tableBody">
-                <!-- Rows populated by JavaScript for easy beginner editing -->
+                <tr>
+                  <td colspan="7" style="text-align:center; padding:2rem; color:#64748b;">
+                    <i class="bi bi-hourglass-split me-1"></i> Loading appointments from database...
+                  </td>
+                </tr>
               </tbody>
             </table>
           </div>
@@ -193,28 +203,27 @@
   <div class="offcanvas offcanvas-end details-panel" tabindex="-1" id="detailsOffcanvas">
     <div class="offcanvas-header border-bottom">
       <div>
-        <small style="font-size:0.7rem;font-weight:700;text-transform:uppercase;color:var(--text-muted);">Appointment
-          Details</small>
-        <h5 class="offcanvas-title mt-1" id="detApptId">#APT-1001</h5>
+        <small style="font-size:0.7rem;font-weight:700;text-transform:uppercase;color:var(--text-muted);">Appointment Details</small>
+        <h5 class="offcanvas-title mt-1" id="detApptId">#APT-0001</h5>
       </div>
       <button type="button" class="modal-close-btn" data-bs-dismiss="offcanvas"><i class="bi bi-x-lg"></i></button>
     </div>
     <div class="offcanvas-body p-4">
       <div class="details-section">
         <span class="details-label">Patient Name</span>
-        <h6 id="detPatient">Michael Wilson</h6>
+        <h6 id="detPatient">Patient</h6>
       </div>
       <div class="details-section">
         <span class="details-label">Date &amp; Time</span>
-        <p id="detDateTime">2026-08-12 at 09:00 AM</p>
+        <p id="detDateTime">--</p>
       </div>
       <div class="details-section">
         <span class="details-label">Room / Location</span>
-        <p id="detRoom">Room 304</p>
+        <p id="detRoom">--</p>
       </div>
       <div class="details-section">
         <span class="details-label">Reason for Visit</span>
-        <p id="detReason">Type 2 Diabetes Follow-Up</p>
+        <p id="detReason">--</p>
       </div>
       <div class="details-section">
         <span class="details-label">Current Status</span>
@@ -239,24 +248,24 @@
           </div>
           <form onsubmit="handleScheduleAppt(event)">
             <div class="form-group mb-3">
-              <label class="form-label">Patient Name</label>
-              <input type="text" class="form-control" id="newPatientName" placeholder="e.g. Sarah Jenkins" required>
+              <label class="form-label">Select Patient</label>
+              <select class="form-control" id="newPatientSelect" required>
+                <option value="">Loading patients...</option>
+              </select>
             </div>
             <div class="form-group mb-3">
               <label class="form-label">Date &amp; Time</label>
               <input type="datetime-local" class="form-control" id="newDateTime" required>
             </div>
             <div class="form-group mb-3">
-              <label class="form-label">Room Number</label>
-              <select class="form-control" id="newRoom" required>
-                <option value="Room 304">Room 304</option>
-                <option value="Room 102">Room 102</option>
-                <option value="Room 105">Room 105</option>
+              <label class="form-label">Assign Room</label>
+              <select class="form-control" id="newRoomSelect" required>
+                <option value="">Loading rooms...</option>
               </select>
             </div>
             <div class="form-group mb-3">
               <label class="form-label">Reason for Visit</label>
-              <input type="text" class="form-control" id="newReason" placeholder="e.g. Routine Consultation" required>
+              <input type="text" class="form-control" id="newReason" placeholder="e.g. Routine Consultation, Follow-up" required>
             </div>
             <div class="form-group mb-3">
               <label class="form-label">Status</label>
@@ -287,7 +296,7 @@
           <form onsubmit="handleSaveStatus(event)">
             <input type="hidden" id="statusApptId">
             <div class="form-group mb-3">
-              <label class="form-label">Patient</label>
+              <label class="form-label">Appointment Reference</label>
               <input type="text" class="form-control" id="statusPatientName" readonly>
             </div>
             <div class="form-group mb-3">
@@ -310,75 +319,190 @@
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="../Assets/api.js"></script>
   <script>
-    // Simple List of Appointments (Easy for Beginners to Edit or Connect to C# API)
-    let appointments = [
-      { id: 1001, patient: "Michael Wilson", date: "2026-08-12", time: "09:00 AM", room: "Room 304", reason: "Type 2 Diabetes Follow-Up", status: "Confirmed" },
-      { id: 1002, patient: "Lisa Andersen", date: "2026-08-12", time: "10:30 AM", room: "Room 304", reason: "Thyroid Hormone Evaluation", status: "Confirmed" },
-      { id: 1003, patient: "Emily Carter", date: "2026-08-12", time: "01:15 PM", room: "Room 304", reason: "Initial Endocrine Consultation", status: "Pending" },
-      { id: 1004, patient: "James Wilson", date: "2026-08-12", time: "03:00 PM", room: "Room 304", reason: "Hypertension Follow-Up", status: "Pending" },
-      { id: 1005, patient: "Sarah Jenkins", date: "2026-08-11", time: "11:00 AM", room: "Room 102", reason: "Osteoporosis Bone Density", status: "Completed" },
-      { id: 1006, patient: "Robert Taylor", date: "2026-08-10", time: "02:30 PM", room: "Room 105", reason: "Gestational Diabetes Test", status: "Completed" },
-      { id: 1007, patient: "David Miller", date: "2026-08-09", time: "04:00 PM", room: "Room 304", reason: "Pituitary Gland Follow-Up", status: "Cancelled" }
-    ];
-
+    let rawAppointments = [];
+    let patientProfilesList = [];
+    let roomsList = [];
     let selectedApptId = null;
 
-    // Render Table Rows
-    function renderTable() {
-      const tbody = document.getElementById('tableBody');
-      tbody.innerHTML = '';
+    async function initDoctorAppointments() {
+      const user = getAuthUser();
+      if (!user || !user.userId) {
+        window.location.href = '../Assets/login.html';
+        return;
+      }
 
-      appointments.forEach(appt => {
-        let badgeClass = 'badge-neutral';
-        if (appt.status === 'Confirmed') badgeClass = 'badge-success';
-        else if (appt.status === 'Pending') badgeClass = 'badge-warn';
-        else if (appt.status === 'Cancelled') badgeClass = 'badge-danger';
+      if (user.fullname) {
+        document.querySelectorAll('.sidebar-user-name, .topbar-user-label').forEach(el => el.textContent = user.fullname);
+      }
+      const sidebarRole = document.querySelector('.sidebar-user-role');
+      if (sidebarRole) sidebarRole.textContent = `Physician · ID ${user.userId}`;
 
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-        <td><strong>#APT-${appt.id}</strong></td>
-        <td><strong>${appt.patient}</strong></td>
-        <td>${appt.date} <small class="text-muted ms-1">${appt.time}</small></td>
-        <td><span class="badge-dept">${appt.room}</span></td>
-        <td>${appt.reason}</td>
-        <td><span class="badge ${badgeClass}">${appt.status}</span></td>
-        <td>
-          <button class="btn-ghost me-1" onclick="viewDetails(${appt.id})">View</button>
-          <button class="btn-ghost me-1" onclick="openStatusModal(${appt.id})">Status</button>
-          <button class="btn-danger-ghost" onclick="cancelAppointment(${appt.id})">Cancel</button>
-        </td>
-      `;
-        tbody.appendChild(tr);
-      });
-
-      updateCounts();
+      await Promise.all([
+        loadAppointmentsData(),
+        loadDropdownOptions()
+      ]);
     }
 
-    // Filter Table by Search or Status
+    async function loadAppointmentsData() {
+      const tbody = document.getElementById('tableBody');
+      if (tbody) tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; padding:2rem; color:#64748b;"><i class="bi bi-hourglass-split me-1"></i> Loading appointments from database...</td></tr>';
+
+      try {
+        let res = [];
+        try {
+          res = await apiFetch('/Appointment');
+        } catch (e1) {
+          res = await apiFetch('/api/Appointment');
+        }
+
+        rawAppointments = Array.isArray(res) ? res : [];
+        updateCounts();
+        renderTable(rawAppointments);
+      } catch (err) {
+        console.error('Error fetching appointments:', err);
+        if (tbody) {
+          tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; padding:2rem; color:#ef4444;"><i class="bi bi-exclamation-triangle me-1"></i> Failed to load appointments from database.</td></tr>';
+        }
+      }
+    }
+
+    async function loadDropdownOptions() {
+      // 1. Patient Profiles
+      try {
+        let pts = [];
+        try {
+          pts = await apiFetch('/PatientProfile/all');
+        } catch (e1) {
+          pts = await apiFetch('/api/PatientProfile/all');
+        }
+        patientProfilesList = Array.isArray(pts) ? pts : [];
+        const ptSelect = document.getElementById('newPatientSelect');
+        if (ptSelect) {
+          if (patientProfilesList.length === 0) {
+            ptSelect.innerHTML = '<option value="1">Patient Profile #1 (Default)</option>';
+          } else {
+            ptSelect.innerHTML = patientProfilesList.map(p => {
+              const pid = p.patientProfileID || p.PatientProfileID || p.id;
+              const name = p.user?.fullname || p.user?.Fullname || ('Patient #' + pid);
+              return `<option value="${pid}">#PAT-${String(pid).padStart(3, '0')} - ${escapeHtml(name)}</option>`;
+            }).join('');
+          }
+        }
+      } catch (err) {
+        console.error('Error loading patient options:', err);
+      }
+
+      // 2. Rooms
+      try {
+        let rms = [];
+        try {
+          rms = await apiFetch('/Room');
+        } catch (e1) {
+          rms = await apiFetch('/api/Room');
+        }
+        roomsList = Array.isArray(rms) ? rms : [];
+        const rmSelect = document.getElementById('newRoomSelect');
+        if (rmSelect) {
+          if (roomsList.length === 0) {
+            rmSelect.innerHTML = '<option value="1">Room 101 (General)</option>';
+          } else {
+            rmSelect.innerHTML = roomsList.map(r => {
+              const rid = r.roomId || r.RoomId;
+              const rNum = r.roomNumber || r.RoomNumber || ('Room #' + rid);
+              const rType = r.type || r.Type || 'Ward';
+              const isAvail = r.isAvailable || r.IsAvailable;
+              return `<option value="${rid}">${escapeHtml(rNum)} (${escapeHtml(rType)})${isAvail ? ' - Available' : ' - In Use'}</option>`;
+            }).join('');
+          }
+        }
+      } catch (err) {
+        console.error('Error loading room options:', err);
+      }
+    }
+
+    function formatDateTimeDisplay(dtStr) {
+      if (!dtStr) return { date: 'N/A', time: '' };
+      try {
+        const d = new Date(dtStr.replace(' ', 'T'));
+        if (!isNaN(d.getTime())) {
+          return {
+            date: d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
+            time: d.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })
+          };
+        }
+      } catch (e) {}
+      return { date: dtStr, time: '' };
+    }
+
+    function renderTable(list) {
+      const tbody = document.getElementById('tableBody');
+      if (!tbody) return;
+
+      if (!list || list.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; padding:2.5rem; color:#64748b;"><i class="bi bi-inbox me-1"></i> No scheduled appointments found in database.</td></tr>';
+        document.getElementById('paginationInfo').textContent = 'Showing 0 appointments';
+        return;
+      }
+
+      tbody.innerHTML = list.map((appt, idx) => {
+        const id = appt.appointmentId || appt.id || (idx + 1);
+        const ptProfile = appt.patientProfile || appt.PatientProfile;
+        const ptName = ptProfile?.user?.fullname || ptProfile?.user?.Fullname || ('Patient Profile #' + (appt.patientProfileID || appt.PatientProfileID || '1'));
+        
+        const dt = formatDateTimeDisplay(appt.appointmentDateTime);
+        const roomName = appt.room?.roomNumber || (appt.roomId ? `Room #${appt.roomId}` : 'OPD Room');
+        const reason = appt.reasonForVisit || 'General Clinical Consultation';
+        const rawStatus = (appt.status || 'Confirmed').trim();
+        const statusLower = rawStatus.toLowerCase();
+
+        let badgeClass = 'badge-neutral';
+        if (statusLower === 'confirmed') badgeClass = 'badge-success';
+        else if (statusLower === 'pending') badgeClass = 'badge-warn';
+        else if (statusLower === 'cancelled') badgeClass = 'badge-danger';
+        else if (statusLower === 'completed') badgeClass = 'badge-success';
+
+        return `
+          <tr>
+            <td><strong style="color:var(--brand-accent);">#APT-${String(id).padStart(4, '0')}</strong></td>
+            <td><strong>${escapeHtml(ptName)}</strong></td>
+            <td>${escapeHtml(dt.date)} <small class="text-muted ms-1">${escapeHtml(dt.time)}</small></td>
+            <td><span class="badge-dept">${escapeHtml(roomName)}</span></td>
+            <td>${escapeHtml(reason)}</td>
+            <td><span class="badge ${badgeClass}">${escapeHtml(rawStatus)}</span></td>
+            <td>
+              <button class="btn-ghost me-1" onclick="viewDetails(${id})">View</button>
+              <button class="btn-ghost me-1" onclick="openStatusModal(${id}, '${escapeHtml(ptName)}', '${escapeHtml(rawStatus)}')">Status</button>
+              <button class="btn-danger-ghost" onclick="cancelAppointment(${id}, '${escapeHtml(ptName)}')">Cancel</button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+
+      document.getElementById('paginationInfo').textContent = `Showing ${list.length} of ${rawAppointments.length} appointments`;
+    }
+
     function filterTable() {
-      const query = document.getElementById('searchInput').value.toLowerCase();
+      const q = (document.getElementById('searchInput').value || '').toLowerCase().trim();
       const statusVal = document.getElementById('statusFilter').value;
 
-      const rows = document.querySelectorAll('#tableBody tr');
-      let visibleCount = 0;
+      const filtered = rawAppointments.filter(a => {
+        const id = String(a.appointmentId || a.id || '');
+        const formattedId = `#apt-${id.padStart(4, '0')}`;
+        const ptProfile = a.patientProfile || a.PatientProfile;
+        const ptName = (ptProfile?.user?.fullname || ptProfile?.user?.Fullname || '').toLowerCase();
+        const reason = (a.reasonForVisit || '').toLowerCase();
+        const roomName = (a.room?.roomNumber || '').toLowerCase();
+        const st = (a.status || '').toLowerCase();
 
-      rows.forEach((row, index) => {
-        const appt = appointments[index];
-        if (!appt) return;
+        const matchesQ = !q || id.includes(q) || formattedId.includes(q) || ptName.includes(q) || reason.includes(q) || roomName.includes(q);
+        const matchesStatus = statusVal === 'all' || st === statusVal.toLowerCase();
 
-        const matchesSearch = appt.patient.toLowerCase().includes(query) || appt.reason.toLowerCase().includes(query);
-        const matchesStatus = statusVal === 'all' || appt.status === statusVal;
-
-        if (matchesSearch && matchesStatus) {
-          row.style.display = '';
-          visibleCount++;
-        } else {
-          row.style.display = 'none';
-        }
+        return matchesQ && matchesStatus;
       });
 
-      document.getElementById('paginationInfo').textContent = `Showing ${visibleCount} of ${appointments.length} appointments`;
+      renderTable(filtered);
     }
 
     function filterByStatus(st) {
@@ -386,116 +510,152 @@
       filterTable();
     }
 
-    // Update KPI Counter Cards
     function updateCounts() {
-      document.getElementById('countTotal').textContent = appointments.length;
-      document.getElementById('countConfirmed').textContent = appointments.filter(a => a.status === 'Confirmed').length;
-      document.getElementById('countPending').textContent = appointments.filter(a => a.status === 'Pending').length;
-      document.getElementById('countCompleted').textContent = appointments.filter(a => a.status === 'Completed').length;
+      const total = rawAppointments.length;
+      const confirmed = rawAppointments.filter(a => (a.status || '').toLowerCase() === 'confirmed').length;
+      const pending = rawAppointments.filter(a => (a.status || '').toLowerCase() === 'pending').length;
+      const completed = rawAppointments.filter(a => (a.status || '').toLowerCase() === 'completed').length;
+
+      document.getElementById('countTotal').textContent = total;
+      document.getElementById('countConfirmed').textContent = confirmed;
+      document.getElementById('countPending').textContent = pending;
+      document.getElementById('countCompleted').textContent = completed;
     }
 
-    // View Appointment Details
     function viewDetails(id) {
-      const appt = appointments.find(a => a.id === id);
+      const appt = rawAppointments.find(a => (a.appointmentId || a.id) === id);
       if (!appt) return;
 
       selectedApptId = id;
-      document.getElementById('detApptId').textContent = `#APT-${appt.id}`;
-      document.getElementById('detPatient').textContent = appt.patient;
-      document.getElementById('detDateTime').textContent = `${appt.date} at ${appt.time}`;
-      document.getElementById('detRoom').textContent = appt.room;
-      document.getElementById('detReason').textContent = appt.reason;
+      const ptProfile = appt.patientProfile || appt.PatientProfile;
+      const ptName = ptProfile?.user?.fullname || ptProfile?.user?.Fullname || ('Patient Profile #' + (appt.patientProfileID || '1'));
+      const dt = formatDateTimeDisplay(appt.appointmentDateTime);
+      const roomName = appt.room?.roomNumber || (appt.roomId ? `Room #${appt.roomId}` : 'OPD Room');
+      const reason = appt.reasonForVisit || 'General Clinical Consultation';
+      const status = appt.status || 'Confirmed';
+
+      document.getElementById('detApptId').textContent = `#APT-${String(id).padStart(4, '0')}`;
+      document.getElementById('detPatient').textContent = ptName;
+      document.getElementById('detDateTime').textContent = `${dt.date} ${dt.time ? 'at ' + dt.time : ''}`;
+      document.getElementById('detRoom').textContent = roomName;
+      document.getElementById('detReason').textContent = reason;
 
       let badgeClass = 'badge-neutral';
-      if (appt.status === 'Confirmed') badgeClass = 'badge-success';
-      else if (appt.status === 'Pending') badgeClass = 'badge-warn';
-      else if (appt.status === 'Cancelled') badgeClass = 'badge-danger';
-      document.getElementById('detStatus').innerHTML = `<span class="badge ${badgeClass}">${appt.status}</span>`;
+      if (status.toLowerCase() === 'confirmed') badgeClass = 'badge-success';
+      else if (status.toLowerCase() === 'pending') badgeClass = 'badge-warn';
+      else if (status.toLowerCase() === 'cancelled') badgeClass = 'badge-danger';
+      else if (status.toLowerCase() === 'completed') badgeClass = 'badge-success';
+
+      document.getElementById('detStatus').innerHTML = `<span class="badge ${badgeClass}">${status}</span>`;
 
       new bootstrap.Offcanvas(document.getElementById('detailsOffcanvas')).show();
     }
 
-    // Change Status Modal Functions
-    function openStatusModal(id) {
-      const appt = appointments.find(a => a.id === id);
-      if (!appt) return;
-
+    function openStatusModal(id, ptName, currentStatus) {
       selectedApptId = id;
       document.getElementById('statusApptId').value = id;
-      document.getElementById('statusPatientName').value = `#APT-${id} - ${appt.patient}`;
-      document.getElementById('statusSelect').value = appt.status;
+      document.getElementById('statusPatientName').value = `#APT-${String(id).padStart(4, '0')} · ${ptName}`;
+      document.getElementById('statusSelect').value = currentStatus || 'Confirmed';
 
       new bootstrap.Modal(document.getElementById('updateStatusModal')).show();
     }
 
     function openStatusModalFromDetails() {
-      if (selectedApptId) openStatusModal(selectedApptId);
+      if (selectedApptId) {
+        const appt = rawAppointments.find(a => (a.appointmentId || a.id) === selectedApptId);
+        if (appt) {
+          const ptProfile = appt.patientProfile || appt.PatientProfile;
+          const ptName = ptProfile?.user?.fullname || ptProfile?.user?.Fullname || 'Patient';
+          openStatusModal(selectedApptId, ptName, appt.status);
+        }
+      }
     }
 
-    function handleSaveStatus(e) {
+    async function handleSaveStatus(e) {
       e.preventDefault();
       const id = parseInt(document.getElementById('statusApptId').value);
       const newStatus = document.getElementById('statusSelect').value;
 
-      const appt = appointments.find(a => a.id === id);
-      if (appt) {
-        appt.status = newStatus;
-        renderTable();
-        showAlert(`Updated appointment status to "${newStatus}".`);
-      }
+      try {
+        await apiFetch(`/Appointment/${id}/status`, {
+          method: 'PATCH',
+          body: JSON.stringify(newStatus)
+        });
 
-      bootstrap.Modal.getInstance(document.getElementById('updateStatusModal')).hide();
+        showAlert(`Updated appointment #APT-${String(id).padStart(4, '0')} status to "${newStatus}".`);
+        bootstrap.Modal.getInstance(document.getElementById('updateStatusModal')).hide();
+        await loadAppointmentsData();
+      } catch (err) {
+        alert('Failed to update status: ' + err.message);
+      }
     }
 
-    // Schedule New Appointment
-    function handleScheduleAppt(e) {
+    function openScheduleModal() {
+      document.getElementById('newDateTime').value = new Date().toISOString().slice(0, 16);
+      document.getElementById('newReason').value = '';
+      document.getElementById('newStatus').value = 'Confirmed';
+      new bootstrap.Modal(document.getElementById('createApptModal')).show();
+    }
+
+    async function handleScheduleAppt(e) {
       e.preventDefault();
-      const name = document.getElementById('newPatientName').value.trim();
+      const ptId = parseInt(document.getElementById('newPatientSelect').value) || 1;
       const dtVal = document.getElementById('newDateTime').value;
-      const room = document.getElementById('newRoom').value;
+      const roomId = parseInt(document.getElementById('newRoomSelect').value) || 1;
       const reason = document.getElementById('newReason').value.trim();
       const status = document.getElementById('newStatus').value;
 
-      const dtObj = new Date(dtVal);
-      const dateStr = dtObj.toISOString().split('T')[0];
-      const timeStr = dtObj.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-      const newId = 1000 + appointments.length + 1;
+      try {
+        await apiFetch('/Appointment', {
+          method: 'POST',
+          body: JSON.stringify({
+            patientProfileID: ptId,
+            appointmentDateTime: dtVal,
+            roomId: roomId,
+            reasonForVisit: reason,
+            status: status
+          })
+        });
 
-      appointments.unshift({
-        id: newId,
-        patient: name,
-        date: dateStr,
-        time: timeStr,
-        room: room,
-        reason: reason,
-        status: status
-      });
-
-      renderTable();
-      showAlert(`Scheduled new appointment #APT-${newId} for ${name}.`);
-      bootstrap.Modal.getInstance(document.getElementById('createApptModal')).hide();
-    }
-
-    // Cancel Appointment
-    function cancelAppointment(id) {
-      const appt = appointments.find(a => a.id === id);
-      if (appt && confirm(`Are you sure you want to cancel appointment #APT-${id} for ${appt.patient}?`)) {
-        appt.status = 'Cancelled';
-        renderTable();
-        showAlert(`Cancelled appointment #APT-${id}.`);
+        showAlert(`New appointment booked successfully in EHR schedule!`);
+        bootstrap.Modal.getInstance(document.getElementById('createApptModal')).hide();
+        await loadAppointmentsData();
+      } catch (err) {
+        alert('Failed to schedule appointment: ' + err.message);
       }
     }
 
-    // Alert Toast Notification Helper
+    async function cancelAppointment(id, ptName) {
+      if (!confirm(`Are you sure you want to cancel appointment #APT-${String(id).padStart(4, '0')} for ${ptName}?`)) return;
+
+      try {
+        await apiFetch(`/Appointment/${id}/status`, {
+          method: 'PATCH',
+          body: JSON.stringify('Cancelled')
+        });
+
+        showAlert(`Cancelled appointment #APT-${String(id).padStart(4, '0')}.`);
+        await loadAppointmentsData();
+      } catch (err) {
+        alert('Failed to cancel appointment: ' + err.message);
+      }
+    }
+
     function showAlert(msg) {
       const alertBox = document.getElementById('actionAlert');
       document.getElementById('alertMsg').textContent = msg;
       alertBox.classList.remove('d-none');
-      setTimeout(() => alertBox.classList.add('d-none'), 3500);
+      setTimeout(() => alertBox.classList.add('d-none'), 4000);
     }
 
-    // Initial Table Load
-    renderTable();
+    function escapeHtml(text) {
+      if (!text) return '';
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    document.addEventListener('DOMContentLoaded', initDoctorAppointments);
   </script>
 </body>
 

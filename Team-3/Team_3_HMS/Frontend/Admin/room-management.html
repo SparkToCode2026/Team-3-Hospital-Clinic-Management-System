@@ -90,12 +90,9 @@
         <a href="room-management.html" class="nav-item active">
           <i class="bi bi-door-open"></i> Room Management
         </a>
-        <span class="nav-item disabled">
-          <i class="bi bi-people"></i> User Management
-        </span>
-        <span class="nav-item disabled">
+        <a href="invoices.html" class="nav-item">
           <i class="bi bi-receipt"></i> Invoices
-        </span>
+        </a>
       </nav>
 
       <div class="sidebar-user">
@@ -113,68 +110,56 @@
       <header class="topbar">
         <span class="topbar-title">Room Management Dashboard</span>
         <div class="topbar-actions">
-          <span class="topbar-user-label">Sarah J. (Admin)</span>
-          <a href="../Assets/login.html" class="btn-logout" title="Log Out"><i class="bi bi-box-arrow-right"></i> Log
-            Out</a>
+          <span class="topbar-user-label">Admin Console (Admin)</span>
+          <a href="../Assets/login.html" class="btn-logout" title="Log Out"><i class="bi bi-box-arrow-right"></i> Log Out</a>
         </div>
       </header>
 
       <!-- Page Body -->
       <main class="page-body">
 
-        <!-- Success Alert Banner -->
-        <div class="toast success-toast" id="room-alert" style="display: none;">
+        <!-- Toast Notifications -->
+        <div class="toast success-toast" id="toastSuccess" style="display: none;">
           <i class="bi bi-check-circle-fill"></i>
-          <span>Room status updated successfully in real-time inventory.</span>
+          <span id="toastSuccessMsg">Room action completed successfully.</span>
+        </div>
+        <div class="toast error-toast" id="toastError" style="display: none;">
+          <i class="bi bi-exclamation-circle-fill"></i>
+          <span id="toastErrorMsg">An error occurred.</span>
         </div>
 
-        <!-- Dedicated Room Management Stats Grid -->
+        <!-- Room Management Stats Grid -->
         <div class="admin-stats-grid">
           <div class="admin-stat-card">
             <div>
-              <div class="admin-stat-label">ICU Rooms</div>
-              <div class="admin-stat-val">12 / 15</div>
-              <div style="font-size: 0.75rem; color: var(--red); font-weight: 600; margin-top: 0.2rem;">80% Occupied
-              </div>
+              <div class="admin-stat-label">Total Hospital Rooms</div>
+              <div class="admin-stat-val" id="stat-total-rooms">0</div>
+              <div style="font-size: 0.75rem; color: var(--brand-accent); font-weight: 600; margin-top: 0.2rem;" id="stat-total-sub">Registered units</div>
+            </div>
+            <div class="admin-stat-icon">
+              <i class="bi bi-door-open"></i>
+            </div>
+          </div>
+
+          <div class="admin-stat-card">
+            <div>
+              <div class="admin-stat-label">Available Rooms</div>
+              <div class="admin-stat-val" id="stat-avail-rooms" style="color:var(--green);">0</div>
+              <div style="font-size: 0.75rem; color: var(--green); font-weight: 600; margin-top: 0.2rem;">Ready for admission</div>
+            </div>
+            <div class="admin-stat-icon" style="background: #dcfce7; color: #16a34a;">
+              <i class="bi bi-check2-circle"></i>
+            </div>
+          </div>
+
+          <div class="admin-stat-card">
+            <div>
+              <div class="admin-stat-label">Occupied / In Use</div>
+              <div class="admin-stat-val" id="stat-occ-rooms" style="color:var(--red);">0</div>
+              <div style="font-size: 0.75rem; color: var(--red); font-weight: 600; margin-top: 0.2rem;" id="stat-occ-pct">0% Occupied</div>
             </div>
             <div class="admin-stat-icon" style="background: #fef2f2; color: #dc2626;">
               <i class="bi bi-heart-pulse"></i>
-            </div>
-          </div>
-
-          <div class="admin-stat-card">
-            <div>
-              <div class="admin-stat-label">General Ward</div>
-              <div class="admin-stat-val">85 / 120</div>
-              <div style="font-size: 0.75rem; color: var(--brand-accent); font-weight: 600; margin-top: 0.2rem;">70%
-                Occupied</div>
-            </div>
-            <div class="admin-stat-icon">
-              <i class="bi bi-hospital"></i>
-            </div>
-          </div>
-
-          <div class="admin-stat-card">
-            <div>
-              <div class="admin-stat-label">Private Suites</div>
-              <div class="admin-stat-val">34 / 40</div>
-              <div style="font-size: 0.75rem; color: var(--green); font-weight: 600; margin-top: 0.2rem;">85% Occupied
-              </div>
-            </div>
-            <div class="admin-stat-icon" style="background: #dcfce7; color: #16a34a;">
-              <i class="bi bi-building"></i>
-            </div>
-          </div>
-
-          <div class="admin-stat-card" style="grid-column: span 3;">
-            <div>
-              <div class="admin-stat-label">Operating Theatres</div>
-              <div class="admin-stat-val">6 / 8</div>
-              <div style="font-size: 0.75rem; color: #d97706; font-weight: 600; margin-top: 0.2rem;">75% Occupied
-                (Surgery Active)</div>
-            </div>
-            <div class="admin-stat-icon" style="background: #fffbeb; color: #d97706;">
-              <i class="bi bi-scissors"></i>
             </div>
           </div>
         </div>
@@ -185,7 +170,7 @@
             <div class="table-title" style="font-size: 1.1rem;">Hospital Occupancy &amp; Ward Directory</div>
           </div>
           <button class="btn-add-user" onclick="openAddRoomModal()">
-            + Add New Room
+            <i class="bi bi-plus-lg me-1"></i> Add New Room
           </button>
         </div>
 
@@ -194,20 +179,28 @@
           <div class="search-filter-form">
             <div class="filter-group" style="flex: 1;">
               <span class="filter-label">SEARCH ROOM</span>
-              <input type="text" class="edit-form-control" placeholder="Search by room number, type, or ward..."
-                style="width: 100%;" />
+              <input type="search" id="roomSearchInput" class="edit-form-control" placeholder="Search by room number or type..."
+                style="width: 100%;" oninput="filterRooms()" onkeyup="filterRooms()" onsearch="filterRooms()" />
             </div>
             <div class="filter-group">
-              <span class="filter-label">TYPE</span>
-              <select class="filter-select">
-                <option selected>All Types</option>
-                <option>ICU</option>
-                <option>General Ward</option>
-                <option>Private Suite</option>
-                <option>Operating Theatre</option>
+              <span class="filter-label">ROOM TYPE</span>
+              <select class="filter-select" id="roomTypeFilter" onchange="filterRooms()">
+                <option value="all" selected>All Types</option>
+                <option value="ICU">ICU</option>
+                <option value="General Ward">General Ward</option>
+                <option value="Private Suite">Private Suite</option>
+                <option value="Operating Theatre">Operating Theatre</option>
+                <option value="OPD">OPD</option>
               </select>
             </div>
-            <button class="btn-search-blue" onclick="triggerRoomAlert()">Filter</button>
+            <div class="filter-group">
+              <span class="filter-label">STATUS</span>
+              <select class="filter-select" id="roomStatusFilter" onchange="filterRooms()">
+                <option value="all" selected>All Statuses</option>
+                <option value="available">Available</option>
+                <option value="occupied">Occupied</option>
+              </select>
+            </div>
           </div>
         </div>
 
@@ -224,124 +217,19 @@
                   <th>ACTIONS</th>
                 </tr>
               </thead>
-              <tbody>
-                <!-- Room 1 -->
+              <tbody id="roomsTableBody">
                 <tr>
-                  <td class="usr-id">ICU-101</td>
-                  <td>ICU</td>
-                  <td>
-                    <label class="switch-toggle">
-                      <input type="checkbox" checked onchange="triggerRoomAlert()" />
-                      <span class="slider-toggle"></span>
-                    </label>
-                  </td>
-                  <td><span class="role-badge" style="background: #fef2f2; color: #dc2626;">Occupied</span></td>
-                  <td>
-                    <button class="btn-tbl-edit" onclick="openEditRoomModal('ICU-101', 'ICU')">Edit</button>
-                    <button class="btn-tbl-delete" onclick="openDeleteRoomModal('ICU-101')">Delete</button>
-                  </td>
-                </tr>
-
-                <!-- Room 2 -->
-                <tr>
-                  <td class="usr-id">GEN-204</td>
-                  <td>General Ward</td>
-                  <td>
-                    <label class="switch-toggle">
-                      <input type="checkbox" checked onchange="triggerRoomAlert()" />
-                      <span class="slider-toggle"></span>
-                    </label>
-                  </td>
-                  <td><span class="role-badge doctor">Available</span></td>
-                  <td>
-                    <button class="btn-tbl-edit" onclick="openEditRoomModal('GEN-204', 'General Ward')">Edit</button>
-                    <button class="btn-tbl-delete" onclick="openDeleteRoomModal('GEN-204')">Delete</button>
-                  </td>
-                </tr>
-
-                <!-- Room 3 -->
-                <tr>
-                  <td class="usr-id">PRI-302</td>
-                  <td>Private Suite</td>
-                  <td>
-                    <label class="switch-toggle">
-                      <input type="checkbox" onchange="triggerRoomAlert()" />
-                      <span class="slider-toggle"></span>
-                    </label>
-                  </td>
-                  <td><span class="role-badge" style="background: #fef2f2; color: #dc2626;">Occupied</span></td>
-                  <td>
-                    <button class="btn-tbl-edit" onclick="openEditRoomModal('PRI-302', 'Private Suite')">Edit</button>
-                    <button class="btn-tbl-delete" onclick="openDeleteRoomModal('PRI-302')">Delete</button>
-                  </td>
-                </tr>
-
-                <!-- Room 4 -->
-                <tr>
-                  <td class="usr-id">OT-002</td>
-                  <td>Operating Theatre</td>
-                  <td>
-                    <label class="switch-toggle">
-                      <input type="checkbox" onchange="triggerRoomAlert()" />
-                      <span class="slider-toggle"></span>
-                    </label>
-                  </td>
-                  <td><span class="role-badge admin">In Surgery</span></td>
-                  <td>
-                    <button class="btn-tbl-edit"
-                      onclick="openEditRoomModal('OT-002', 'Operating Theatre')">Edit</button>
-                    <button class="btn-tbl-delete" onclick="openDeleteRoomModal('OT-002')">Delete</button>
-                  </td>
-                </tr>
-
-                <!-- Room 5 -->
-                <tr>
-                  <td class="usr-id">ICU-105</td>
-                  <td>ICU</td>
-                  <td>
-                    <label class="switch-toggle">
-                      <input type="checkbox" checked onchange="triggerRoomAlert()" />
-                      <span class="slider-toggle"></span>
-                    </label>
-                  </td>
-                  <td><span class="role-badge doctor">Available</span></td>
-                  <td>
-                    <button class="btn-tbl-edit" onclick="openEditRoomModal('ICU-105', 'ICU')">Edit</button>
-                    <button class="btn-tbl-delete" onclick="openDeleteRoomModal('ICU-105')">Delete</button>
-                  </td>
-                </tr>
-
-                <!-- Room 6 -->
-                <tr>
-                  <td class="usr-id">GEN-215</td>
-                  <td>General Ward</td>
-                  <td>
-                    <label class="switch-toggle">
-                      <input type="checkbox" checked onchange="triggerRoomAlert()" />
-                      <span class="slider-toggle"></span>
-                    </label>
-                  </td>
-                  <td><span class="role-badge doctor">Available</span></td>
-                  <td>
-                    <button class="btn-tbl-edit" onclick="openEditRoomModal('GEN-215', 'General Ward')">Edit</button>
-                    <button class="btn-tbl-delete" onclick="openDeleteRoomModal('GEN-215')">Delete</button>
+                  <td colspan="5" style="text-align:center; padding:2rem; color:#64748b;">
+                    <i class="bi bi-hourglass-split me-1"></i> Loading rooms from database...
                   </td>
                 </tr>
               </tbody>
             </table>
           </div>
 
-          <!-- Pagination -->
-          <div
-            style="padding: 0.85rem 1.25rem; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border);">
-            <span style="font-size: 0.8rem; color: var(--text-secondary);">Showing 1 to 6 of 183 Hospital Rooms</span>
-            <div style="display: flex; gap: 0.35rem;">
-              <button class="btn-filter">Previous</button>
-              <button class="btn-add-user" style="padding: 0.35rem 0.75rem;">1</button>
-              <button class="btn-filter">2</button>
-              <button class="btn-filter">3</button>
-              <button class="btn-filter">Next</button>
-            </div>
+          <!-- Table Footer Info -->
+          <div style="padding: 0.85rem 1.25rem; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border);">
+            <span style="font-size: 0.8rem; color: var(--text-secondary);" id="roomCountLabel">Showing all hospital rooms</span>
           </div>
         </div>
 
@@ -351,51 +239,213 @@
   </div>
 
   <!-- ══════════════════ ADD ROOM MODAL DIALOG ══════════════════ -->
-  <div class="modal-backdrop" id="addRoomModal" style="display: none;">
-    <div
-      style="background: #ffffff; border-radius: 16px; width: 100%; max-width: 480px; padding: 1.75rem; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1);">
-      <div
-        style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 0.75rem; border-bottom: 1px solid var(--border); margin-bottom: 1rem;">
+  <div class="modal-backdrop" id="addRoomModal" style="display: none; position:fixed; inset:0; background:rgba(15,23,42,0.5); z-index:1000; align-items:center; justify-content:center;">
+    <div style="background: #ffffff; border-radius: 16px; width: 90%; max-width: 480px; padding: 1.75rem; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1);">
+      <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 0.75rem; border-bottom: 1px solid var(--border); margin-bottom: 1rem;">
         <h3 style="font-size: 1.15rem; font-weight: 700; color: var(--text-primary); margin: 0;">Add New Room</h3>
-        <button onclick="closeAddRoomModal()"
-          style="background: transparent; border: none; font-size: 1.2rem; cursor: pointer; color: var(--text-secondary);">&times;</button>
+        <button onclick="closeAddRoomModal()" style="background: transparent; border: none; font-size: 1.2rem; cursor: pointer; color: var(--text-secondary);">&times;</button>
       </div>
 
       <div style="display: flex; flex-direction: column; gap: 0.85rem;">
         <div class="edit-form-group">
           <label class="edit-form-label">ROOM NUMBER</label>
-          <input type="text" id="newRoomNum" class="edit-form-control" placeholder="e.g. ICU-106" />
+          <input type="text" id="newRoomNum" class="edit-form-control" placeholder="e.g. Room 101, ICU-1" />
         </div>
 
         <div class="edit-form-group">
           <label class="edit-form-label">ROOM TYPE</label>
           <select id="newRoomType" class="filter-select" style="width: 100%;">
-            <option>ICU</option>
-            <option>General Ward</option>
-            <option>Private Suite</option>
-            <option>Operating Theatre</option>
+            <option value="General Ward">General Ward</option>
+            <option value="ICU">ICU</option>
+            <option value="Private Suite">Private Suite</option>
+            <option value="Operating Theatre">Operating Theatre</option>
+            <option value="OPD">OPD</option>
           </select>
         </div>
 
         <div class="edit-form-group">
           <label class="edit-form-label">INITIAL AVAILABILITY</label>
-          <label class="switch-toggle">
+          <label class="switch-toggle" style="margin-top:0.25rem;">
             <input type="checkbox" checked id="newRoomAvailable" />
             <span class="slider-toggle"></span>
           </label>
         </div>
       </div>
 
-      <div
-        style="display: flex; justify-content: flex-end; gap: 0.75rem; margin-top: 1.25rem; padding-top: 0.75rem; border-top: 1px solid var(--border);">
+      <div style="display: flex; justify-content: flex-end; gap: 0.75rem; margin-top: 1.25rem; padding-top: 0.75rem; border-top: 1px solid var(--border);">
         <button class="btn-modal-cancel" onclick="closeAddRoomModal()">Cancel</button>
         <button class="btn-search-blue" onclick="saveNewRoom()">Add Room</button>
       </div>
     </div>
   </div>
 
+  <!-- ══════════════════ EDIT ROOM MODAL DIALOG ══════════════════ -->
+  <div class="modal-backdrop" id="editRoomModal" style="display: none; position:fixed; inset:0; background:rgba(15,23,42,0.5); z-index:1000; align-items:center; justify-content:center;">
+    <div style="background: #ffffff; border-radius: 16px; width: 90%; max-width: 480px; padding: 1.75rem; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1);">
+      <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 0.75rem; border-bottom: 1px solid var(--border); margin-bottom: 1rem;">
+        <h3 style="font-size: 1.15rem; font-weight: 700; color: var(--text-primary); margin: 0;">Edit Room Details</h3>
+        <button onclick="closeEditRoomModal()" style="background: transparent; border: none; font-size: 1.2rem; cursor: pointer; color: var(--text-secondary);">&times;</button>
+      </div>
+
+      <input type="hidden" id="editRoomId" />
+      <div style="display: flex; flex-direction: column; gap: 0.85rem;">
+        <div class="edit-form-group">
+          <label class="edit-form-label">ROOM NUMBER</label>
+          <input type="text" id="editRoomNum" class="edit-form-control" />
+        </div>
+
+        <div class="edit-form-group">
+          <label class="edit-form-label">ROOM TYPE</label>
+          <select id="editRoomType" class="filter-select" style="width: 100%;">
+            <option value="General Ward">General Ward</option>
+            <option value="ICU">ICU</option>
+            <option value="Private Suite">Private Suite</option>
+            <option value="Operating Theatre">Operating Theatre</option>
+            <option value="OPD">OPD</option>
+          </select>
+        </div>
+
+        <div class="edit-form-group">
+          <label class="edit-form-label">AVAILABILITY</label>
+          <label class="switch-toggle" style="margin-top:0.25rem;">
+            <input type="checkbox" id="editRoomAvailable" />
+            <span class="slider-toggle"></span>
+          </label>
+        </div>
+      </div>
+
+      <div style="display: flex; justify-content: flex-end; gap: 0.75rem; margin-top: 1.25rem; padding-top: 0.75rem; border-top: 1px solid var(--border);">
+        <button class="btn-modal-cancel" onclick="closeEditRoomModal()">Cancel</button>
+        <button class="btn-search-blue" onclick="saveEditRoom()">Save Changes</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="../Assets/api.js"></script>
   <script>
+    let allRooms = [];
+
+    async function loadRooms() {
+      const tbody = document.getElementById('roomsTableBody');
+      if (tbody) tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding:2rem; color:#64748b;"><i class="bi bi-hourglass-split me-1"></i> Loading rooms from database...</td></tr>';
+
+      try {
+        let res = [];
+        try {
+          res = await apiFetch('/Room');
+        } catch (e1) {
+          res = await apiFetch('/api/Room');
+        }
+
+        allRooms = Array.isArray(res) ? res : [];
+        updateRoomStats(allRooms);
+        renderRoomsTable(allRooms);
+      } catch (err) {
+        console.error('Error fetching rooms:', err);
+        showToast('Failed to load rooms from database: ' + err.message, true);
+      }
+    }
+
+    function updateRoomStats(list) {
+      const total = list.length;
+      const avail = list.filter(r => r.isAvailable || r.IsAvailable).length;
+      const occ = total - avail;
+      const occPct = total > 0 ? Math.round((occ / total) * 100) : 0;
+
+      document.getElementById('stat-total-rooms').textContent = total;
+      document.getElementById('stat-avail-rooms').textContent = avail;
+      document.getElementById('stat-occ-rooms').textContent = occ;
+      document.getElementById('stat-occ-pct').textContent = `${occPct}% Occupied`;
+    }
+
+    function renderRoomsTable(list) {
+      const tbody = document.getElementById('roomsTableBody');
+      if (!tbody) return;
+
+      if (!list || list.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding:2.5rem; color:#64748b;"><i class="bi bi-inbox me-1"></i> No hospital rooms found.</td></tr>';
+        document.getElementById('roomCountLabel').textContent = 'Showing 0 rooms';
+        return;
+      }
+
+      tbody.innerHTML = list.map((r, idx) => {
+        const id = r.roomId || r.RoomId || (idx + 1);
+        const roomNum = r.roomNumber || r.RoomNumber || ('Room #' + id);
+        const type = r.type || r.Type || 'General Ward';
+        const isAvail = r.isAvailable || r.IsAvailable;
+        const statusBadge = isAvail
+          ? '<span class="role-badge doctor">Available</span>'
+          : '<span class="role-badge" style="background:#fef2f2; color:#dc2626;">Occupied</span>';
+
+        return `
+          <tr>
+            <td class="usr-id" style="font-weight:700; color:var(--brand-accent);">${escapeHtml(roomNum)}</td>
+            <td><strong>${escapeHtml(type)}</strong></td>
+            <td>
+              <label class="switch-toggle">
+                <input type="checkbox" ${isAvail ? 'checked' : ''} onchange="toggleRoomAvailability(${id}, this.checked)" />
+                <span class="slider-toggle"></span>
+              </label>
+            </td>
+            <td>${statusBadge}</td>
+            <td>
+              <button class="btn-tbl-edit" onclick="openEditRoomModal(${id}, '${escapeHtml(roomNum)}', '${escapeHtml(type)}', ${isAvail})">Edit</button>
+              <button class="btn-tbl-delete" onclick="deleteRoom(${id}, '${escapeHtml(roomNum)}')">Delete</button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+
+      document.getElementById('roomCountLabel').textContent = `Showing ${list.length} of ${allRooms.length} Hospital Rooms`;
+    }
+
+    function filterRooms() {
+      const q = (document.getElementById('roomSearchInput').value || '').toLowerCase().trim();
+      const typeFilter = document.getElementById('roomTypeFilter').value;
+      const statusFilter = document.getElementById('roomStatusFilter').value;
+
+      const filtered = allRooms.filter(r => {
+        const roomNum = (r.roomNumber || r.RoomNumber || '').toLowerCase();
+        const type = (r.type || r.Type || '').toLowerCase();
+        const isAvail = r.isAvailable || r.IsAvailable;
+
+        const matchesQ = !q || roomNum.includes(q) || type.includes(q);
+        const matchesType = typeFilter === 'all' || type.includes(typeFilter.toLowerCase());
+        const matchesStatus = statusFilter === 'all' ||
+                              (statusFilter === 'available' && isAvail) ||
+                              (statusFilter === 'occupied' && !isAvail);
+
+        return matchesQ && matchesType && matchesStatus;
+      });
+
+      renderRoomsTable(filtered);
+    }
+
+    async function toggleRoomAvailability(id, isAvailable) {
+      try {
+        await apiFetch(`/Room/${id}/availability`, {
+          method: 'PATCH',
+          body: JSON.stringify(isAvailable)
+        });
+
+        const r = allRooms.find(item => (item.roomId || item.RoomId) === id);
+        if (r) {
+          r.isAvailable = isAvailable;
+          r.IsAvailable = isAvailable;
+        }
+        updateRoomStats(allRooms);
+        filterRooms();
+        showToast(`Room availability updated to ${isAvailable ? 'Available' : 'Occupied'}.`);
+      } catch (err) {
+        showToast('Failed to update availability: ' + err.message, true);
+        await loadRooms();
+      }
+    }
+
     function openAddRoomModal() {
+      document.getElementById('newRoomNum').value = '';
+      document.getElementById('newRoomType').value = 'General Ward';
+      document.getElementById('newRoomAvailable').checked = true;
       document.getElementById('addRoomModal').style.display = 'flex';
     }
 
@@ -403,26 +453,125 @@
       document.getElementById('addRoomModal').style.display = 'none';
     }
 
-    function saveNewRoom() {
-      closeAddRoomModal();
-      triggerRoomAlert();
-    }
+    async function saveNewRoom() {
+      const roomNum = document.getElementById('newRoomNum').value.trim();
+      const type = document.getElementById('newRoomType').value;
+      const isAvail = document.getElementById('newRoomAvailable').checked;
 
-    function openEditRoomModal(roomNum, roomType) {
-      alert('Editing room details for ' + roomNum);
-    }
+      if (!roomNum) {
+        alert('Please enter a room number.');
+        return;
+      }
 
-    function openDeleteRoomModal(roomNum) {
-      if (confirm('Are you sure you want to delete room ' + roomNum + '?')) {
-        triggerRoomAlert();
+      try {
+        await apiFetch('/Room', {
+          method: 'POST',
+          body: JSON.stringify({
+            roomNumber: roomNum,
+            type: type,
+            isAvailable: isAvail
+          })
+        });
+
+        showToast(`Room "${roomNum}" created successfully.`);
+        closeAddRoomModal();
+        await loadRooms();
+      } catch (err) {
+        showToast('Failed to add room: ' + err.message, true);
       }
     }
 
-    function triggerRoomAlert() {
-      const alertBox = document.getElementById('room-alert');
-      alertBox.style.display = 'flex';
-      setTimeout(() => { alertBox.style.display = 'none'; }, 4000);
+    function openEditRoomModal(id, roomNum, type, isAvail) {
+      document.getElementById('editRoomId').value = id;
+      document.getElementById('editRoomNum').value = roomNum;
+      document.getElementById('editRoomType').value = type;
+      document.getElementById('editRoomAvailable').checked = isAvail;
+      document.getElementById('editRoomModal').style.display = 'flex';
     }
+
+    function closeEditRoomModal() {
+      document.getElementById('editRoomModal').style.display = 'none';
+    }
+
+    async function saveEditRoom() {
+      const id = parseInt(document.getElementById('editRoomId').value);
+      const roomNum = document.getElementById('editRoomNum').value.trim();
+      const type = document.getElementById('editRoomType').value;
+      const isAvail = document.getElementById('editRoomAvailable').checked;
+
+      if (!roomNum) {
+        alert('Please enter a room number.');
+        return;
+      }
+
+      try {
+        await apiFetch(`/Room/${id}`, {
+          method: 'PUT',
+          body: JSON.stringify({
+            roomId: id,
+            roomNumber: roomNum,
+            type: type,
+            isAvailable: isAvail
+          })
+        });
+
+        showToast(`Room "${roomNum}" updated successfully.`);
+        closeEditRoomModal();
+        await loadRooms();
+      } catch (err) {
+        showToast('Failed to update room: ' + err.message, true);
+      }
+    }
+
+    async function deleteRoom(id, roomNum) {
+      if (!confirm(`Are you sure you want to permanently delete room "${roomNum}"?`)) return;
+
+      try {
+        await apiFetch(`/Room/${id}`, {
+          method: 'DELETE'
+        });
+
+        showToast(`Room "${roomNum}" removed successfully.`);
+        await loadRooms();
+      } catch (err) {
+        showToast('Failed to remove room: ' + err.message, true);
+      }
+    }
+
+    function showToast(msg, isError = false) {
+      const successToast = document.getElementById('toastSuccess');
+      const errorToast = document.getElementById('toastError');
+
+      if (isError) {
+        document.getElementById('toastErrorMsg').textContent = msg;
+        errorToast.style.display = 'flex';
+        setTimeout(() => { errorToast.style.display = 'none'; }, 4000);
+      } else {
+        document.getElementById('toastSuccessMsg').textContent = msg;
+        successToast.style.display = 'flex';
+        setTimeout(() => { successToast.style.display = 'none'; }, 4000);
+      }
+    }
+
+    function escapeHtml(text) {
+      if (!text) return '';
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const user = getAuthUser();
+      if (user && user.fullname) {
+        document.querySelectorAll('.sidebar-user-name').forEach(el => el.textContent = user.fullname);
+        document.querySelectorAll('.topbar-user-label').forEach(el => el.textContent = `${user.fullname} (Admin)`);
+      }
+      if (user && user.userId) {
+        const sidebarRole = document.querySelector('.sidebar-user-role');
+        if (sidebarRole) sidebarRole.textContent = `UID: ADM-${String(user.userId).padStart(3, '0')}`;
+      }
+      loadRooms();
+    });
   </script>
 </body>
 

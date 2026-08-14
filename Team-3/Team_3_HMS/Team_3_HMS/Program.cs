@@ -144,26 +144,40 @@ namespace Team_3_HMS
 
         public async Task SendEmailAsync(string toEmail, string subject, string body)
         {
-            var message = new MimeKit.MimeMessage();
-            message.From.Add(new MimeKit.MailboxAddress(
-                _config["EmailSettings:SenderName"],
-                _config["EmailSettings:SenderEmail"]));
-            message.To.Add(MimeKit.MailboxAddress.Parse(toEmail));
-            message.Subject = subject;
-            message.Body = new MimeKit.TextPart("plain") { Text = body };
+            var senderEmail = _config["EmailSettings:SenderEmail"];
+            var password = _config["EmailSettings:Password"];
 
-            using var client = new MailKit.Net.Smtp.SmtpClient();
-            await client.ConnectAsync(
-                _config["EmailSettings:SmtpServer"],
-                int.Parse(_config["EmailSettings:Port"]),
-                MailKit.Security.SecureSocketOptions.StartTls);
+            if (string.IsNullOrWhiteSpace(senderEmail) || senderEmail == "test@gmail.com" || password == "password")
+            {
+                Console.WriteLine($"[EmailService] Simulated Email to <{toEmail}> | Subject: {subject} | Body: {body}");
+                return;
+            }
 
-            await client.AuthenticateAsync(
-                _config["EmailSettings:SenderEmail"],
-                _config["EmailSettings:Password"]);
+            try
+            {
+                var message = new MimeKit.MimeMessage();
+                message.From.Add(new MimeKit.MailboxAddress(
+                    _config["EmailSettings:SenderName"] ?? "HMS Clinic",
+                    senderEmail));
+                message.To.Add(MimeKit.MailboxAddress.Parse(toEmail));
+                message.Subject = subject;
+                message.Body = new MimeKit.TextPart("plain") { Text = body };
 
-            await client.SendAsync(message);
-            await client.DisconnectAsync(true);
+                using var client = new MailKit.Net.Smtp.SmtpClient();
+                await client.ConnectAsync(
+                    _config["EmailSettings:SmtpServer"] ?? "smtp.gmail.com",
+                    int.Parse(_config["EmailSettings:Port"] ?? "587"),
+                    MailKit.Security.SecureSocketOptions.StartTls);
+
+                await client.AuthenticateAsync(senderEmail, password);
+                await client.SendAsync(message);
+                await client.DisconnectAsync(true);
+                Console.WriteLine($"[EmailService] Successfully sent email to <{toEmail}>.");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"[EmailService Warning] Failed to send email via SMTP: {ex.Message}");
+            }
         }
     }
 }

@@ -98,7 +98,7 @@
         <!-- Toolbar -->
         <div class="table-toolbar">
           <div class="toolbar-filters">
-            <input type="search" class="search-input" id="searchMedInput" placeholder="Search medication or generic name..." onkeyup="filterMedications()">
+            <input type="search" class="search-input" id="searchMedInput" placeholder="Search medication or generic name..." oninput="filterMedications()" onkeyup="filterMedications()" onsearch="filterMedications()">
             <select class="filter-select" id="dosageFilter" onchange="filterMedications()">
               <option value="all" selected>All Dosage Forms</option>
               <option value="Tablet">Tablet</option>

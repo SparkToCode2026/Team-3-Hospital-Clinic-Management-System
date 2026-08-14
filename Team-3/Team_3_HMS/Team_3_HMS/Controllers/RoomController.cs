@@ -1,10 +1,11 @@
-﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Team_3_HMS.Models;
 
 namespace Team_3_HMS.Controllers
 {
+    [Route("Room")]
     [Route("api/[controller]")]
     [ApiController]
     public class RoomController : ControllerBase
@@ -34,6 +35,7 @@ namespace Team_3_HMS.Controllers
 
             room.RoomNumber = updated.RoomNumber;
             room.Type = updated.Type;
+            room.IsAvailable = updated.IsAvailable;
 
             await _context.SaveChangesAsync();
             return NoContent();

@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
@@ -7,6 +7,7 @@ using Team_3_HMS.Models;
 
 namespace Team_3_HMS.Controllers
 {
+    [Route("MedicalRecord")]
     [Route("api/[controller]")]
     [ApiController]
     public class MedicalRecordController : ControllerBase

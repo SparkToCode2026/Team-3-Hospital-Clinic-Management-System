@@ -87,26 +87,20 @@
           <i class="bi bi-calendar-check"></i> Appointments
         </a>
 
-        <span class="nav-item disabled">
+        <a href="prescriptions.html" class="nav-item">
           <i class="bi bi-capsule"></i> Prescriptions
-        </span>
+        </a>
 
         <a href="invoices.html" class="nav-item">
           <i class="bi bi-receipt"></i> My Invoices
-        </a>
-
-        <div class="nav-divider"></div>
-
-        <a href="../Assets/login.html" class="nav-item">
-          <i class="bi bi-box-arrow-left"></i> Logout
         </a>
       </nav>
 
       <!-- Bottom user info -->
       <div class="sidebar-user">
         <div>
-          <div class="sidebar-user-name">Sarah Jenkins</div>
-          <div class="sidebar-user-role">Patient · ID 2014</div>
+          <div class="sidebar-user-name">Patient Account</div>
+          <div class="sidebar-user-role">UID: PAT-001</div>
         </div>
       </div>
 
@@ -119,9 +113,8 @@
       <header class="topbar">
         <span class="topbar-title">My Appointments</span>
         <div class="topbar-actions">
-          <span class="topbar-user-label">Sarah J.</span>
-          <a href="../Assets/login.html" class="btn-logout" title="Log Out"><i class="bi bi-box-arrow-right"></i> Log
-            Out</a>
+          <span class="topbar-user-label">Patient Account</span>
+          <a href="../Assets/login.html" class="btn-logout" title="Log Out"><i class="bi bi-box-arrow-right"></i> Log Out</a>
         </div>
       </header>
 
@@ -131,17 +124,15 @@
         <!-- Success Alert Banner -->
         <div class="alert alert-success" id="appt-alert" style="display: none;">
           <i class="bi bi-check-circle-fill"></i>
-          <span>Appointment action updated successfully in hospital schedule.</span>
+          <span id="apptAlertMsg">Appointment action updated successfully in hospital schedule.</span>
         </div>
 
         <!-- Action & Header Bar -->
         <div class="card" style="margin-bottom: 1.25rem; padding: 1.25rem 1.5rem;">
           <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem;">
             <div>
-              <h2 style="font-size: 1.15rem; font-weight: 700; color: var(--text-primary); margin: 0;">Scheduled
-                Consultations</h2>
-              <p style="font-size: 0.82rem; color: var(--text-secondary); margin: 0.25rem 0 0;">Coordinate diagnostic,
-                clinical, and elective encounters with your physicians.</p>
+              <h2 style="font-size: 1.15rem; font-weight: 700; color: var(--text-primary); margin: 0;">Scheduled Consultations</h2>
+              <p style="font-size: 0.82rem; color: var(--text-secondary); margin: 0.25rem 0 0;">Coordinate diagnostic, clinical, and elective encounters with your physicians.</p>
             </div>
             <button class="btn btn-primary" onclick="openBookModal()">
               <i class="bi bi-plus-lg"></i> Book Appointment
@@ -149,94 +140,49 @@
           </div>
         </div>
 
-        <!-- Filter Pills -->
-        <div class="filter-pills-row">
-          <button class="pill-btn active" onclick="filterAppointments('all')">
-            All <span class="pill-count-badge">142</span>
-          </button>
-          <button class="pill-btn" onclick="filterAppointments('pending')">
-            Pending <span class="pill-count-badge">18</span>
-          </button>
-          <button class="pill-btn" onclick="filterAppointments('confirmed')">
-            Confirmed <span class="pill-count-badge">114</span>
-          </button>
-          <button class="pill-btn" onclick="filterAppointments('cancelled')">
-            Cancelled <span class="pill-count-badge">10</span>
-          </button>
+        <!-- Filter Pills & Search -->
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.75rem; margin-bottom:1.25rem;">
+          <div class="filter-pills-row" style="margin-bottom:0;">
+            <button class="pill-btn active" id="pill-all" onclick="filterAppointmentsByStatus('all')">
+              All <span class="pill-count-badge" id="count-pill-all">0</span>
+            </button>
+            <button class="pill-btn" id="pill-pending" onclick="filterAppointmentsByStatus('pending')">
+              Pending <span class="pill-count-badge" id="count-pill-pending">0</span>
+            </button>
+            <button class="pill-btn" id="pill-confirmed" onclick="filterAppointmentsByStatus('confirmed')">
+              Confirmed <span class="pill-count-badge" id="count-pill-confirmed">0</span>
+            </button>
+            <button class="pill-btn" id="pill-completed" onclick="filterAppointmentsByStatus('completed')">
+              Completed <span class="pill-count-badge" id="count-pill-completed">0</span>
+            </button>
+            <button class="pill-btn" id="pill-cancelled" onclick="filterAppointmentsByStatus('cancelled')">
+              Cancelled <span class="pill-count-badge" id="count-pill-cancelled">0</span>
+            </button>
+          </div>
+
+          <div>
+            <input type="search" id="patientApptSearch" class="form-control" placeholder="Search reason or ID..." style="width:240px; padding:0.4rem 0.8rem; font-size:0.85rem;" oninput="applyApptFilters()" onkeyup="applyApptFilters()" onsearch="applyApptFilters()" />
+          </div>
         </div>
 
         <!-- Appointments Directory Table Card -->
         <div class="card" style="padding: 0; overflow: hidden;">
           <div class="table-responsive">
-            <table class="user-table" style="width: 100%; border-collapse: collapse;">
+            <table class="inv-table" style="width: 100%; border-collapse: collapse;">
               <thead>
-                <tr
-                  style="border-bottom: 1px solid var(--border); text-align: left; font-size: 0.72rem; text-transform: uppercase; color: var(--text-secondary);">
-                  <th style="padding: 0.85rem 1rem;">APPOINTMENT ID</th>
-                  <th style="padding: 0.85rem 1rem;">DATE &amp; TIME</th>
-                  <th style="padding: 0.85rem 1rem;">REASON</th>
-                  <th style="padding: 0.85rem 1rem;">ROOM LOCATION</th>
-                  <th style="padding: 0.85rem 1rem;">STATUS</th>
-                  <th style="padding: 0.85rem 1rem;">ACTIONS</th>
+                <tr>
+                  <th>APPOINTMENT ID</th>
+                  <th>DATE &amp; TIME</th>
+                  <th>REASON</th>
+                  <th>ROOM LOCATION</th>
+                  <th>STATUS</th>
+                  <th style="text-align:center;">ACTIONS</th>
                 </tr>
               </thead>
-              <tbody>
-                <!-- Appt 1 -->
-                <tr style="border-bottom: 1px solid var(--border);">
-                  <td style="padding: 0.9rem 1rem; font-weight: 700;">PT-9082</td>
-                  <td style="padding: 0.9rem 1rem;">Oct 25, 2025 · 09:30 AM</td>
-                  <td style="padding: 0.9rem 1rem;">Cardiology Consultation</td>
-                  <td style="padding: 0.9rem 1rem;">ICU-101</td>
-                  <td style="padding: 0.9rem 1rem;"><span class="badge badge-success">Confirmed</span></td>
-                  <td style="padding: 0.9rem 1rem;">
-                    <button class="btn btn-secondary" style="padding: 0.3rem 0.6rem; font-size: 0.78rem;"
-                      onclick="triggerApptAlert()">View</button>
-                    <button class="btn btn-secondary" style="padding: 0.3rem 0.6rem; font-size: 0.78rem;"
-                      onclick="triggerApptAlert()">Cancel</button>
-                  </td>
-                </tr>
-
-                <!-- Appt 2 -->
-                <tr style="border-bottom: 1px solid var(--border);">
-                  <td style="padding: 0.9rem 1rem; font-weight: 700;">PT-1244</td>
-                  <td style="padding: 0.9rem 1rem;">Oct 25, 2025 · 10:15 AM</td>
-                  <td style="padding: 0.9rem 1rem;">General Checkup</td>
-                  <td style="padding: 0.9rem 1rem;">GEN-204</td>
-                  <td style="padding: 0.9rem 1rem;"><span class="badge badge-warn">Pending</span></td>
-                  <td style="padding: 0.9rem 1rem;">
-                    <button class="btn btn-secondary" style="padding: 0.3rem 0.6rem; font-size: 0.78rem;"
-                      onclick="triggerApptAlert()">View</button>
-                    <button class="btn btn-secondary" style="padding: 0.3rem 0.6rem; font-size: 0.78rem;"
-                      onclick="triggerApptAlert()">Cancel</button>
-                  </td>
-                </tr>
-
-                <!-- Appt 3 -->
-                <tr style="border-bottom: 1px solid var(--border);">
-                  <td style="padding: 0.9rem 1rem; font-weight: 700;">PT-8831</td>
-                  <td style="padding: 0.9rem 1rem;">Oct 25, 2025 · 11:00 AM</td>
-                  <td style="padding: 0.9rem 1rem;">Orthopedic Surgery Review</td>
-                  <td style="padding: 0.9rem 1rem;">OT-002</td>
-                  <td style="padding: 0.9rem 1rem;"><span class="badge"
-                      style="background: #fef2f2; color: #dc2626;">Cancelled</span></td>
-                  <td style="padding: 0.9rem 1rem;">
-                    <button class="btn btn-secondary" style="padding: 0.3rem 0.6rem; font-size: 0.78rem;"
-                      onclick="triggerApptAlert()">View</button>
-                  </td>
-                </tr>
-
-                <!-- Appt 4 -->
-                <tr style="border-bottom: 1px solid var(--border);">
-                  <td style="padding: 0.9rem 1rem; font-weight: 700;">PT-5421</td>
-                  <td style="padding: 0.9rem 1rem;">Oct 25, 2025 · 11:30 AM</td>
-                  <td style="padding: 0.9rem 1rem;">Neurology Review</td>
-                  <td style="padding: 0.9rem 1rem;">PRI-302</td>
-                  <td style="padding: 0.9rem 1rem;"><span class="badge badge-success">Confirmed</span></td>
-                  <td style="padding: 0.9rem 1rem;">
-                    <button class="btn btn-secondary" style="padding: 0.3rem 0.6rem; font-size: 0.78rem;"
-                      onclick="triggerApptAlert()">View</button>
-                    <button class="btn btn-secondary" style="padding: 0.3rem 0.6rem; font-size: 0.78rem;"
-                      onclick="triggerApptAlert()">Cancel</button>
+              <tbody id="patientApptTbody">
+                <tr>
+                  <td colspan="6" style="text-align:center; padding:2rem; color:#64748b;">
+                    <i class="bi bi-hourglass-split me-1"></i> Loading appointments from database...
                   </td>
                 </tr>
               </tbody>
@@ -251,13 +197,12 @@
 
   <!-- ══════════════════ BOOK APPOINTMENT MODAL ══════════════════ -->
   <div id="bookModal"
-    style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(15,23,42,0.45); z-index: 1000; align-items: center; justify-content: center;">
+    style="display: none; position: fixed; inset: 0; background: rgba(15,23,42,0.5); z-index: 1000; align-items: center; justify-content: center; backdrop-filter: blur(2px);">
     <div
-      style="background: #ffffff; border-radius: 16px; width: 100%; max-width: 480px; padding: 1.75rem; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1);">
+      style="background: #ffffff; border-radius: 16px; width: 90%; max-width: 480px; padding: 1.75rem; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1);">
       <div
         style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 0.75rem; border-bottom: 1px solid var(--border); margin-bottom: 1rem;">
-        <h3 style="font-size: 1.15rem; font-weight: 700; color: var(--text-primary); margin: 0;">Book New Appointment
-        </h3>
+        <h3 style="font-size: 1.15rem; font-weight: 700; color: var(--text-primary); margin: 0;">Book New Appointment</h3>
         <button onclick="closeBookModal()"
           style="background: transparent; border: none; font-size: 1.2rem; cursor: pointer; color: var(--text-secondary);">&times;</button>
       </div>
@@ -265,21 +210,18 @@
       <div style="display: flex; flex-direction: column; gap: 0.85rem;">
         <div class="form-group">
           <label class="form-label">Consultation Reason</label>
-          <input type="text" class="form-control" placeholder="e.g. Cardiology Consultation" />
+          <input type="text" id="bookReason" class="form-control" placeholder="e.g. Cardiology Consultation, General Checkup" required />
         </div>
 
         <div class="form-group">
           <label class="form-label">Preferred Date &amp; Time</label>
-          <input type="datetime-local" class="form-control" />
+          <input type="datetime-local" id="bookDateTime" class="form-control" required />
         </div>
 
         <div class="form-group">
-          <label class="form-label">Preferred Department</label>
-          <select class="form-control">
-            <option>Cardiology</option>
-            <option>Neurology</option>
-            <option>Orthopedics</option>
-            <option>Pediatrics</option>
+          <label class="form-label">Preferred Consultation Room</label>
+          <select id="bookRoomSelect" class="form-control">
+            <option value="">Loading clinic rooms...</option>
           </select>
         </div>
       </div>
@@ -287,13 +229,266 @@
       <div
         style="display: flex; justify-content: flex-end; gap: 0.75rem; margin-top: 1.25rem; padding-top: 0.75rem; border-top: 1px solid var(--border);">
         <button class="btn btn-secondary" onclick="closeBookModal()">Cancel</button>
-        <button class="btn btn-primary" onclick="confirmBook()">Confirm Booking</button>
+        <button class="btn btn-primary" onclick="confirmBookAppointment()">Confirm Booking</button>
       </div>
     </div>
   </div>
 
+  <!-- ══════════════════ APPOINTMENT DETAILS MODAL ══════════════════ -->
+  <div id="detailsModal"
+    style="display: none; position: fixed; inset: 0; background: rgba(15,23,42,0.5); z-index: 1000; align-items: center; justify-content: center; backdrop-filter: blur(2px);">
+    <div
+      style="background: #ffffff; border-radius: 16px; width: 90%; max-width: 480px; padding: 1.75rem; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1);">
+      <div
+        style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 0.75rem; border-bottom: 1px solid var(--border); margin-bottom: 1rem;">
+        <h3 style="font-size: 1.15rem; font-weight: 700; color: var(--text-primary); margin: 0;" id="modalApptTitle">Appointment Details</h3>
+        <button onclick="closeDetailsModal()"
+          style="background: transparent; border: none; font-size: 1.2rem; cursor: pointer; color: var(--text-secondary);">&times;</button>
+      </div>
+
+      <div style="display:flex; flex-direction:column; gap:0.75rem; font-size:0.88rem;">
+        <div style="background:#f8fafc; padding:0.75rem 1rem; border-radius:8px; border:1px solid var(--border); display:grid; grid-template-columns:1fr 1fr; gap:0.5rem;">
+          <div>
+            <div style="font-size:0.72rem; color:var(--text-secondary); text-transform:uppercase; font-weight:600;">ID</div>
+            <div style="font-weight:700; color:var(--brand-accent);" id="detModalId">--</div>
+          </div>
+          <div>
+            <div style="font-size:0.72rem; color:var(--text-secondary); text-transform:uppercase; font-weight:600;">Status</div>
+            <div id="detModalStatus">--</div>
+          </div>
+        </div>
+
+        <div>
+          <div style="font-size:0.72rem; color:var(--text-secondary); text-transform:uppercase; font-weight:600;">Date &amp; Time</div>
+          <div style="font-weight:600; color:var(--text-primary);" id="detModalDateTime">--</div>
+        </div>
+
+        <div>
+          <div style="font-size:0.72rem; color:var(--text-secondary); text-transform:uppercase; font-weight:600;">Room Location</div>
+          <div style="font-weight:600; color:var(--text-primary);" id="detModalRoom">--</div>
+        </div>
+
+        <div>
+          <div style="font-size:0.72rem; color:var(--text-secondary); text-transform:uppercase; font-weight:600;">Consultation Reason</div>
+          <div style="background:#f1f4f9; padding:0.65rem 0.85rem; border-radius:8px; color:var(--text-primary);" id="detModalReason">--</div>
+        </div>
+      </div>
+
+      <div style="display:flex; justify-content:flex-end; gap:0.5rem; margin-top:1.25rem; padding-top:0.75rem; border-top:1px solid var(--border);">
+        <button class="btn btn-secondary" onclick="closeDetailsModal()">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="../Assets/api.js"></script>
   <script>
+    let myAppointmentsList = [];
+    let currentFilterStatus = 'all';
+    let patientProfileId = null;
+
+    async function initPatientAppointments() {
+      const user = getAuthUser();
+      if (!user || !user.userId) {
+        window.location.href = '../Assets/login.html';
+        return;
+      }
+
+      if (user.fullname) {
+        document.querySelectorAll('.sidebar-user-name, .topbar-user-label').forEach(el => el.textContent = user.fullname);
+      }
+      const sidebarRole = document.querySelector('.sidebar-user-role');
+      if (sidebarRole) sidebarRole.textContent = `UID: PAT-${String(user.userId).padStart(3, '0')}`;
+
+      // Get profile ID
+      try {
+        let p = null;
+        try {
+          p = await apiFetch(`/PatientProfile/user/${user.userId}`);
+        } catch (e1) {
+          p = await apiFetch(`/api/PatientProfile/user/${user.userId}`);
+        }
+        if (p) patientProfileId = p.patientProfileID || p.PatientProfileID || p.id;
+      } catch (e) {
+        console.log('Profile fetch note:', e.message);
+      }
+
+      await Promise.all([
+        loadPatientApptsData(),
+        loadAvailableRoomsDropdown()
+      ]);
+    }
+
+    async function loadPatientApptsData() {
+      const tbody = document.getElementById('patientApptTbody');
+      if (tbody) tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding:2rem; color:#64748b;"><i class="bi bi-hourglass-split me-1"></i> Loading appointments from database...</td></tr>';
+
+      try {
+        let res = [];
+        try {
+          res = await apiFetch('/Appointment');
+        } catch (e1) {
+          res = await apiFetch('/api/Appointment');
+        }
+
+        myAppointmentsList = Array.isArray(res) ? res : [];
+        updatePillCounts();
+        applyApptFilters();
+      } catch (err) {
+        console.error('Error fetching appointments:', err);
+        if (tbody) {
+          tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding:2rem; color:#ef4444;"><i class="bi bi-exclamation-triangle me-1"></i> Failed to load appointments.</td></tr>';
+        }
+      }
+    }
+
+    async function loadAvailableRoomsDropdown() {
+      const select = document.getElementById('bookRoomSelect');
+      if (!select) return;
+
+      try {
+        let rms = [];
+        try {
+          rms = await apiFetch('/Room');
+        } catch (e1) {
+          rms = await apiFetch('/api/Room');
+        }
+
+        const roomList = Array.isArray(rms) ? rms : [];
+        if (roomList.length === 0) {
+          select.innerHTML = '<option value="1">Room 101 (OPD Room)</option>';
+        } else {
+          select.innerHTML = roomList.map(r => {
+            const id = r.roomId || r.RoomId;
+            const num = r.roomNumber || r.RoomNumber || ('Room #' + id);
+            const type = r.type || r.Type || 'Consultation';
+            return `<option value="${id}">${escapeHtml(num)} (${escapeHtml(type)})</option>`;
+          }).join('');
+        }
+      } catch (err) {
+        console.error('Error loading rooms dropdown:', err);
+        select.innerHTML = '<option value="1">Room 101 (Default)</option>';
+      }
+    }
+
+    function formatDateTimeDisplay(dtStr) {
+      if (!dtStr) return 'N/A';
+      try {
+        const d = new Date(dtStr.replace(' ', 'T'));
+        if (!isNaN(d.getTime())) {
+          return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) + ' · ' +
+                 d.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+        }
+      } catch (e) {}
+      return dtStr;
+    }
+
+    function updatePillCounts() {
+      const total = myAppointmentsList.length;
+      const pending = myAppointmentsList.filter(a => (a.status || '').toLowerCase() === 'pending').length;
+      const confirmed = myAppointmentsList.filter(a => (a.status || '').toLowerCase() === 'confirmed').length;
+      const completed = myAppointmentsList.filter(a => (a.status || '').toLowerCase() === 'completed').length;
+      const cancelled = myAppointmentsList.filter(a => (a.status || '').toLowerCase() === 'cancelled').length;
+
+      document.getElementById('count-pill-all').textContent = total;
+      document.getElementById('count-pill-pending').textContent = pending;
+      document.getElementById('count-pill-confirmed').textContent = confirmed;
+      document.getElementById('count-pill-completed').textContent = completed;
+      document.getElementById('count-pill-cancelled').textContent = cancelled;
+    }
+
+    function filterAppointmentsByStatus(status) {
+      currentFilterStatus = status;
+      document.querySelectorAll('.pill-btn').forEach(p => p.classList.remove('active'));
+      const activeBtn = document.getElementById(`pill-${status}`);
+      if (activeBtn) activeBtn.classList.add('active');
+      applyApptFilters();
+    }
+
+    function applyApptFilters() {
+      const q = (document.getElementById('patientApptSearch').value || '').toLowerCase().trim();
+
+      const filtered = myAppointmentsList.filter(a => {
+        const id = String(a.appointmentId || a.id || '');
+        const formattedId = `#apt-${id.padStart(4, '0')}`;
+        const reason = (a.reasonForVisit || '').toLowerCase();
+        const room = (a.room?.roomNumber || '').toLowerCase();
+        const st = (a.status || '').toLowerCase();
+
+        const matchesQ = !q || id.includes(q) || formattedId.includes(q) || reason.includes(q) || room.includes(q);
+        const matchesStatus = currentFilterStatus === 'all' || st === currentFilterStatus;
+
+        return matchesQ && matchesStatus;
+      });
+
+      renderPatientApptsTable(filtered);
+    }
+
+    function renderPatientApptsTable(list) {
+      const tbody = document.getElementById('patientApptTbody');
+      if (!tbody) return;
+
+      if (!list || list.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding:2.5rem; color:#64748b;"><i class="bi bi-inbox me-1"></i> No scheduled appointments match your filter.</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = list.map(a => {
+        const id = a.appointmentId || a.id || 1;
+        const dt = formatDateTimeDisplay(a.appointmentDateTime);
+        const reason = a.reasonForVisit || 'General Clinical Consultation';
+        const roomName = a.room?.roomNumber ? `Room ${a.room.roomNumber}` : (a.roomId ? `Room #${a.roomId}` : 'OPD Room');
+        const rawStatus = (a.status || 'Confirmed').trim();
+        const statusLower = rawStatus.toLowerCase();
+
+        let badgeStyle = 'background:#dcfce7; color:#16a34a; border:1px solid #86efac;';
+        if (statusLower === 'cancelled') {
+          badgeStyle = 'background:#fef2f2; color:#dc2626; border:1px solid #fca5a5;';
+        } else if (statusLower === 'pending') {
+          badgeStyle = 'background:#fffbeb; color:#d97706; border:1px solid #fcd34d;';
+        }
+
+        const canCancel = statusLower !== 'cancelled' && statusLower !== 'completed';
+
+        return `
+          <tr>
+            <td class="inv-id" style="color:var(--brand-accent); font-weight:700;">#APT-${String(id).padStart(4, '0')}</td>
+            <td>${escapeHtml(dt)}</td>
+            <td><strong>${escapeHtml(reason)}</strong></td>
+            <td>${escapeHtml(roomName)}</td>
+            <td><span class="badge" style="${badgeStyle}">${escapeHtml(rawStatus)}</span></td>
+            <td style="text-align:center;">
+              <button class="btn btn-secondary" style="padding:0.25rem 0.6rem; font-size:0.78rem;" onclick="viewPatientApptDetails(${id})">View</button>
+              ${canCancel ? `<button class="btn btn-secondary" style="padding:0.25rem 0.6rem; font-size:0.78rem; color:#dc2626; border-color:#fca5a5;" onclick="cancelMyAppointment(${id})">Cancel</button>` : ''}
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function viewPatientApptDetails(id) {
+      const appt = myAppointmentsList.find(a => (a.appointmentId || a.id) === id);
+      if (!appt) return;
+
+      const dt = formatDateTimeDisplay(appt.appointmentDateTime);
+      const roomName = appt.room?.roomNumber ? `Room ${appt.room.roomNumber}` : (appt.roomId ? `Room #${appt.roomId}` : 'OPD Room');
+      const rawStatus = (appt.status || 'Confirmed').trim();
+
+      document.getElementById('detModalId').textContent = `#APT-${String(id).padStart(4, '0')}`;
+      document.getElementById('detModalStatus').textContent = rawStatus;
+      document.getElementById('detModalDateTime').textContent = dt;
+      document.getElementById('detModalRoom').textContent = roomName;
+      document.getElementById('detModalReason').textContent = appt.reasonForVisit || 'General Clinical Consultation';
+
+      document.getElementById('detailsModal').style.display = 'flex';
+    }
+
+    function closeDetailsModal() {
+      document.getElementById('detailsModal').style.display = 'none';
+    }
+
     function openBookModal() {
+      document.getElementById('bookReason').value = '';
+      document.getElementById('bookDateTime').value = new Date().toISOString().slice(0, 16);
       document.getElementById('bookModal').style.display = 'flex';
     }
 
@@ -301,23 +496,67 @@
       document.getElementById('bookModal').style.display = 'none';
     }
 
-    function confirmBook() {
-      closeBookModal();
-      triggerApptAlert();
+    async function confirmBookAppointment() {
+      const reason = document.getElementById('bookReason').value.trim();
+      const dtVal = document.getElementById('bookDateTime').value;
+      const roomId = parseInt(document.getElementById('bookRoomSelect').value) || 1;
+
+      if (!reason || !dtVal) {
+        alert('Please fill in both consultation reason and preferred date/time.');
+        return;
+      }
+
+      try {
+        await apiFetch('/Appointment', {
+          method: 'POST',
+          body: JSON.stringify({
+            patientProfileID: patientProfileId || 1,
+            appointmentDateTime: dtVal,
+            roomId: roomId,
+            reasonForVisit: reason,
+            status: 'Confirmed'
+          })
+        });
+
+        closeBookModal();
+        triggerApptAlert('Your appointment has been successfully scheduled!');
+        await loadPatientApptsData();
+      } catch (err) {
+        alert('Failed to book appointment: ' + err.message);
+      }
     }
 
-    function triggerApptAlert() {
+    async function cancelMyAppointment(id) {
+      if (!confirm(`Are you sure you want to cancel appointment #APT-${String(id).padStart(4, '0')}?`)) return;
+
+      try {
+        await apiFetch(`/Appointment/${id}/status`, {
+          method: 'PATCH',
+          body: JSON.stringify('Cancelled')
+        });
+
+        triggerApptAlert(`Appointment #APT-${String(id).padStart(4, '0')} has been cancelled.`);
+        await loadPatientApptsData();
+      } catch (err) {
+        alert('Failed to cancel appointment: ' + err.message);
+      }
+    }
+
+    function triggerApptAlert(msg) {
       const alertBox = document.getElementById('appt-alert');
+      if (msg) document.getElementById('apptAlertMsg').textContent = msg;
       alertBox.style.display = 'flex';
       setTimeout(() => { alertBox.style.display = 'none'; }, 4000);
     }
 
-    function filterAppointments(status) {
-      const pills = document.querySelectorAll('.pill-btn');
-      pills.forEach(p => p.classList.remove('active'));
-      event.currentTarget.classList.add('active');
-      triggerApptAlert();
+    function escapeHtml(text) {
+      if (!text) return '';
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
     }
+
+    document.addEventListener('DOMContentLoaded', initPatientAppointments);
   </script>
 </body>
 

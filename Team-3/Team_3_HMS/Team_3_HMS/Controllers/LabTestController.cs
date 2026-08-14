@@ -1,4 +1,4 @@
-﻿
+
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
@@ -7,6 +7,7 @@ using Team_3_HMS.Models;
 
 namespace Team_3_HMS.Controllers
 {
+    [Route("LabTest")]
     [Route("api/[controller]")]
     [ApiController]
     public class LabTestController : ControllerBase
