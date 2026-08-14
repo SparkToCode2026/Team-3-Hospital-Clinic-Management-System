@@ -28,15 +28,17 @@
       <nav class="sidebar-nav">
         <a href="dashboard.html" class="nav-item"><i class="bi bi-grid-1x2-fill"></i> Dashboard</a>
         <a href="medical-records.html" class="nav-item"><i class="bi bi-journal-medical"></i> Medical Records</a>
-        <a href="lab-tests.html" class="nav-item"><i class="bi bi-virus"></i> Lab Tests</a>
+        <a href="prescriptions.html" class="nav-item"><i class="bi bi-prescription2"></i> Prescriptions</a>
+        <a href="medications.html" class="nav-item"><i class="bi bi-capsule"></i> Medications</a>
+        <a href="lab-tests.html" class="nav-item"><i class="bi bi-eyedropper"></i> Lab Tests</a>
         <a href="appointments.html" class="nav-item"><i class="bi bi-calendar-check"></i> Appointments</a>
         <a href="patients.html" class="nav-item active"><i class="bi bi-people"></i> Patients</a>
         <a href="doctor-profile.html" class="nav-item"><i class="bi bi-person-gear"></i> Settings &amp; Profile</a>
       </nav>
       <div class="sidebar-user">
         <div>
-          <div class="sidebar-user-name">Dr. Sarah Chen</div>
-          <div class="sidebar-user-role">Chief Endocrinologist</div>
+          <div class="sidebar-user-name">Doctor Console</div>
+          <div class="sidebar-user-role">Attending Physician</div>
         </div>
       </div>
     </aside>
@@ -46,9 +48,8 @@
       <header class="topbar">
         <span class="topbar-title">Patient Directory</span>
         <div class="topbar-actions">
-          <span class="topbar-user-label">Dr. Sarah Chen</span>
-          <a href="../Assets/login.html" class="btn-logout" title="Log Out"><i class="bi bi-box-arrow-right"></i> Log
-            Out</a>
+          <span class="topbar-user-label">Doctor Console</span>
+          <a href="../Assets/login.html" class="btn-logout" title="Log Out"><i class="bi bi-box-arrow-right"></i> Log Out</a>
         </div>
       </header>
 
@@ -66,16 +67,16 @@
           <div class="stat-card">
             <div>
               <div class="stat-label">Total Patients</div>
-              <div class="stat-value">2,418</div>
-              <div class="stat-sub" style="color:var(--green);"><i class="bi bi-arrow-up-right me-1"></i>+5.4%</div>
+              <div class="stat-value" id="statTotal">0</div>
+              <div class="stat-sub" style="color:var(--green);"><i class="bi bi-arrow-up-right me-1"></i>Live EHR Directory</div>
             </div>
             <div class="stat-icon green"><i class="bi bi-people-fill"></i></div>
           </div>
           <div class="stat-card">
             <div>
               <div class="stat-label">Transfusion Requests</div>
-              <div class="stat-value">14</div>
-              <div class="stat-sub" style="color:var(--red);"><i class="bi bi-exclamation-circle me-1"></i>Urgent</div>
+              <div class="stat-value" id="statTransfusion">0</div>
+              <div class="stat-sub" style="color:var(--red);"><i class="bi bi-exclamation-circle me-1"></i>Universal Donors</div>
             </div>
             <div class="stat-icon red"><i class="bi bi-droplet-fill"></i></div>
           </div>
@@ -84,26 +85,26 @@
         <!-- Toolbar -->
         <div class="table-toolbar">
           <div class="toolbar-filters">
-            <input type="search" class="search-input" placeholder="Search patient name or ID...">
-            <select class="filter-select">
-              <option selected>All Blood Groups</option>
-              <option>O Positive (O+)</option>
-              <option>O Negative (O−)</option>
-              <option>A Positive (A+)</option>
-              <option>A Negative (A−)</option>
-              <option>B Positive (B+)</option>
-              <option>B Negative (B−)</option>
-              <option>AB Positive (AB+)</option>
-              <option>AB Negative (AB−)</option>
+            <input type="search" class="search-input" id="searchInput" placeholder="Search patient name or ID..." onkeyup="filterPatientsTable()">
+            <select class="filter-select" id="bloodFilter" onchange="filterPatientsTable()">
+              <option value="all" selected>All Blood Groups</option>
+              <option value="O Positive">O Positive (O+)</option>
+              <option value="O Negative">O Negative (O−)</option>
+              <option value="A Positive">A Positive (A+)</option>
+              <option value="A Negative">A Negative (A−)</option>
+              <option value="B Positive">B Positive (B+)</option>
+              <option value="B Negative">B Negative (B−)</option>
+              <option value="AB Positive">AB Positive (AB+)</option>
+              <option value="AB Negative">AB Negative (AB−)</option>
             </select>
-            <select class="filter-select">
-              <option selected>All Genders</option>
-              <option>Male</option>
-              <option>Female</option>
-              <option>Other</option>
+            <select class="filter-select" id="genderFilter" onchange="filterPatientsTable()">
+              <option value="all" selected>All Genders</option>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+              <option value="Other">Other</option>
             </select>
           </div>
-          <button class="btn-primary" onclick="alert('Filtering patient records...')">Search Directory</button>
+          <button class="btn-primary" onclick="filterPatientsTable()"><i class="bi bi-search me-1"></i>Search Directory</button>
         </div>
 
         <!-- Table -->
@@ -123,75 +124,13 @@
               </thead>
               <tbody>
                 <tr>
-                  <td><strong>#PAT-1082</strong></td>
-                  <td>
-                    <div class="d-flex align-items-center gap-2">
-                      <div class="avatar-circle">MW</div><strong>Michael Wilson</strong>
-                    </div>
-                  </td>
-                  <td>Male</td>
-                  <td><span class="badge badge-danger">O Negative (O−)</span></td>
-                  <td>1990-03-18</td>
-                  <td>+1 (555) 870-9388</td>
-                  <td><button class="btn-ghost" data-bs-toggle="offcanvas"
-                      data-bs-target="#patientDetailsOffcanvas">View Profile</button></td>
-                </tr>
-                <tr>
-                  <td><strong>#PAT-1083</strong></td>
-                  <td>
-                    <div class="d-flex align-items-center gap-2">
-                      <div class="avatar-circle">LA</div><strong>Lisa Andersen</strong>
-                    </div>
-                  </td>
-                  <td>Female</td>
-                  <td><span class="badge badge-blue">O Positive (O+)</span></td>
-                  <td>1988-04-12</td>
-                  <td>+1 (555) 901-2138</td>
-                  <td><button class="btn-ghost" data-bs-toggle="offcanvas"
-                      data-bs-target="#patientDetailsOffcanvas">View Profile</button></td>
-                </tr>
-                <tr>
-                  <td><strong>#PAT-1084</strong></td>
-                  <td>
-                    <div class="d-flex align-items-center gap-2">
-                      <div class="avatar-circle">EC</div><strong>Emily Carter</strong>
-                    </div>
-                  </td>
-                  <td>Female</td>
-                  <td><span class="badge badge-success">A Positive (A+)</span></td>
-                  <td>1994-07-22</td>
-                  <td>+1 (555) 342-1190</td>
-                  <td><button class="btn-ghost" data-bs-toggle="offcanvas"
-                      data-bs-target="#patientDetailsOffcanvas">View Profile</button></td>
-                </tr>
-                <tr>
-                  <td><strong>#PAT-1085</strong></td>
-                  <td>
-                    <div class="d-flex align-items-center gap-2">
-                      <div class="avatar-circle">JW</div><strong>James Wilson</strong>
-                    </div>
-                  </td>
-                  <td>Male</td>
-                  <td><span class="badge badge-warn">B Positive (B+)</span></td>
-                  <td>1982-11-05</td>
-                  <td>+1 (555) 781-4402</td>
-                  <td><button class="btn-ghost" data-bs-toggle="offcanvas"
-                      data-bs-target="#patientDetailsOffcanvas">View Profile</button></td>
+                  <td colspan="7" class="text-center p-4 text-muted">Loading patient profiles from database...</td>
                 </tr>
               </tbody>
             </table>
           </div>
           <div class="table-pagination">
-            <p class="pagination-info">Showing 1 to 4 of 2,418 patients</p>
-            <nav>
-              <ul class="pagination pagination-sm mb-0">
-                <li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
-                <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                <li class="page-item"><a class="page-link" href="#">2</a></li>
-                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                <li class="page-item"><a class="page-link" href="#">Next</a></li>
-              </ul>
-            </nav>
+            <p class="pagination-info" id="paginationInfo">Showing 0 patients</p>
           </div>
         </div>
 
@@ -203,39 +142,174 @@
   <div class="offcanvas offcanvas-end details-panel" tabindex="-1" id="patientDetailsOffcanvas">
     <div class="offcanvas-header border-bottom">
       <div>
-        <small
-          style="font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-muted);">Clinical
-          Profile</small>
-        <h5 class="offcanvas-title mt-1">Michael Wilson (#PAT-1082)</h5>
+        <small style="font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-muted);">Clinical Profile</small>
+        <h5 class="offcanvas-title mt-1" id="detTitle">Patient Profile</h5>
       </div>
       <button type="button" class="modal-close-btn" data-bs-dismiss="offcanvas"><i class="bi bi-x-lg"></i></button>
     </div>
     <div class="offcanvas-body p-4">
       <div class="details-section">
         <span class="details-label">Full Name &amp; Demographics</span>
-        <h6>Michael Wilson</h6>
-        <p>Gender: Male &bull; DOB: 1990-03-18 (Age 36)</p>
+        <h6 id="detName">N/A</h6>
+        <p id="detDemo">Gender: N/A • DOB: N/A</p>
       </div>
       <div class="details-section">
         <span class="details-label">Blood Group</span>
-        <h6>O Negative (O−) <span class="badge badge-danger ms-2">Universal Donor</span></h6>
+        <h6 id="detBlood">N/A</h6>
       </div>
       <div class="details-section">
-        <span class="details-label">Emergency Contact</span>
-        <p><strong>Contact:</strong> +1 (555) 870-9388 (Spouse – Sarah Wilson)</p>
+        <span class="details-label">Emergency Contact &amp; Address</span>
+        <p id="detContact">Contact: N/A</p>
       </div>
       <div class="details-section">
         <span class="details-label">Medical History Overview</span>
-        <p>No known drug allergies. Mild hypertension and routine annual blood screenings on record.</p>
+        <p id="detHistory">EHR clinical history profile linked.</p>
       </div>
       <div class="details-section" style="border:none;">
-        <a href="medical-records.html" class="btn-primary" style="display:block;text-align:center;">View Medical
-          Records</a>
+        <a href="medical-records.html" class="btn-primary" style="display:block;text-align:center;">View Medical Records</a>
       </div>
     </div>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="../Assets/api.js"></script>
+
+  <script>
+    let patientsList = [];
+
+    function initDoctorProfile() {
+      const user = getAuthUser();
+      if (!user || !user.userId) {
+        window.location.href = '../Assets/login.html';
+        return;
+      }
+      const name = user.fullname || 'Doctor';
+      document.querySelectorAll('.sidebar-user-name, .topbar-user-label').forEach(el => el.textContent = name);
+      const roleEl = document.querySelector('.sidebar-user-role');
+      if (roleEl) roleEl.textContent = `Doctor · ID ${user.userId}`;
+    }
+
+    async function loadPatientsDirectory() {
+      const tbody = document.querySelector('.data-table tbody');
+      if (tbody) tbody.innerHTML = '<tr><td colspan="7" class="text-center p-4 text-muted">Loading patient profiles from database...</td></tr>';
+
+      try {
+        const res = await apiFetch('/PatientProfile/all');
+        patientsList = Array.isArray(res) ? res : [];
+      } catch (err) {
+        console.error('Error fetching patients:', err);
+        patientsList = [];
+      }
+
+      renderPatientsTable(patientsList);
+    }
+
+    function renderPatientsTable(list) {
+      const tbody = document.querySelector('.data-table tbody');
+      if (!tbody) return;
+      tbody.innerHTML = '';
+
+      if (!list || list.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="7" class="text-center p-4 text-muted">No patient profiles recorded in database.</td></tr>';
+        updateStats(list);
+        return;
+      }
+
+      list.forEach(p => {
+        const id = p.patientProfileID || p.PatientProfileID || p.id;
+        const name = p.user?.fullname || p.User?.Fullname || `Patient #${id}`;
+        const gender = p.gender || p.Gender || 'N/A';
+        const blood = p.bloodGroup || p.BloodGroup || 'N/A';
+        const dob = p.dateOfBirth ? (p.dateOfBirth.includes('T') ? p.dateOfBirth.split('T')[0] : p.dateOfBirth) : 'N/A';
+        const contact = p.emergencyContact || p.EmergencyContact || p.user?.phone || 'N/A';
+
+        const initials = name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
+
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td><strong>#PAT-${String(id).padStart(4, '0')}</strong></td>
+          <td>
+            <div class="d-flex align-items-center gap-2">
+              <div class="avatar-circle">${initials}</div><strong>${name}</strong>
+            </div>
+          </td>
+          <td>${gender}</td>
+          <td><span class="badge badge-blue">${blood}</span></td>
+          <td>${dob}</td>
+          <td>${contact}</td>
+          <td><button class="btn-ghost" onclick="viewPatientProfile(${id})">View Profile</button></td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+      updateStats(list);
+    }
+
+    function updateStats(list) {
+      const statTotal = document.getElementById('statTotal');
+      if (statTotal) statTotal.textContent = list.length;
+
+      const statTransfusion = document.getElementById('statTransfusion');
+      if (statTransfusion) {
+        const donors = list.filter(p => (p.bloodGroup || p.BloodGroup || '').toLowerCase().includes('negative') || (p.bloodGroup || p.BloodGroup || '').includes('-')).length;
+        statTransfusion.textContent = donors;
+      }
+
+      const infoEl = document.getElementById('paginationInfo');
+      if (infoEl) infoEl.textContent = `Showing ${list.length} patient profiles`;
+    }
+
+    function filterPatientsTable() {
+      const q = (document.getElementById('searchInput').value || '').toLowerCase().trim();
+      const bloodVal = document.getElementById('bloodFilter').value;
+      const genderVal = document.getElementById('genderFilter').value;
+
+      const filtered = patientsList.filter(p => {
+        const id = (p.patientProfileID || p.PatientProfileID || p.id || '').toString();
+        const name = (p.user?.fullname || p.User?.Fullname || '').toLowerCase();
+        const blood = p.bloodGroup || p.BloodGroup || '';
+        const gender = p.gender || p.Gender || '';
+
+        const matchesQuery = !q || name.includes(q) || id.includes(q);
+        const matchesBlood = bloodVal === 'all' 
+          || blood.toLowerCase().includes(bloodVal.toLowerCase()) 
+          || bloodVal.toLowerCase().includes(blood.toLowerCase())
+          || (bloodVal.includes('O Positive') && (blood.includes('O+') || blood.includes('O Positive')))
+          || (bloodVal.includes('O Negative') && (blood.includes('O-') || blood.includes('O Negative')))
+          || (bloodVal.includes('A Positive') && (blood.includes('A+') || blood.includes('A Positive')))
+          || (bloodVal.includes('A Negative') && (blood.includes('A-') || blood.includes('A Negative')))
+          || (bloodVal.includes('B Positive') && (blood.includes('B+') || blood.includes('B Positive')))
+          || (bloodVal.includes('B Negative') && (blood.includes('B-') || blood.includes('B Negative')))
+          || (bloodVal.includes('AB Positive') && (blood.includes('AB+') || blood.includes('AB Positive')))
+          || (bloodVal.includes('AB Negative') && (blood.includes('AB-') || blood.includes('AB Negative')));
+
+        const matchesGender = genderVal === 'all' || gender.toLowerCase() === genderVal.toLowerCase();
+
+        return matchesQuery && matchesBlood && matchesGender;
+      });
+
+      renderPatientsTable(filtered);
+    }
+
+    function viewPatientProfile(id) {
+      const p = patientsList.find(x => (x.patientProfileID || x.PatientProfileID || x.id) === id);
+      if (!p) return;
+
+      const name = p.user?.fullname || p.User?.Fullname || `Patient #${id}`;
+      document.getElementById('detTitle').textContent = `${name} (#PAT-${String(id).padStart(4, '0')})`;
+      document.getElementById('detName').textContent = name;
+      document.getElementById('detDemo').textContent = `Gender: ${p.gender || 'N/A'} • DOB: ${p.dateOfBirth ? (p.dateOfBirth.includes('T') ? p.dateOfBirth.split('T')[0] : p.dateOfBirth) : 'N/A'}`;
+      document.getElementById('detBlood').textContent = p.bloodGroup || 'N/A';
+      document.getElementById('detContact').innerHTML = `<strong>Contact:</strong> ${p.emergencyContact || 'N/A'}<br><strong>Address:</strong> ${p.address || 'N/A'}`;
+
+      new bootstrap.Offcanvas(document.getElementById('patientDetailsOffcanvas')).show();
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      initDoctorProfile();
+      loadPatientsDirectory();
+    });
+  </script>
 </body>
 
 </html>

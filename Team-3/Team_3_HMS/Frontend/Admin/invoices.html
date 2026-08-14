@@ -1,0 +1,928 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Billing & Invoices Management – MedCore Admin Portal</title>
+  <meta name="description" content="Create, view, update, and manage billing invoices across all hospital appointments and patients." />
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  
+  <link href="css/admin.css" rel="stylesheet" />
+
+  <style>
+    .badge-paid {
+      background-color: var(--green-bg);
+      color: var(--green);
+      border: 1px solid var(--green-border);
+      padding: 0.22rem 0.65rem;
+      border-radius: 20px;
+      font-weight: 600;
+      font-size: 0.72rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+
+    .badge-pending {
+      background-color: var(--yellow-bg);
+      color: var(--yellow);
+      border: 1px solid var(--yellow-border);
+      padding: 0.22rem 0.65rem;
+      border-radius: 20px;
+      font-weight: 600;
+      font-size: 0.72rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+
+    .inv-modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(15, 23, 42, 0.5);
+      backdrop-filter: blur(3px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 2000;
+    }
+
+    .inv-modal-content {
+      background: #ffffff;
+      border-radius: 16px;
+      width: 100%;
+      max-width: 520px;
+      padding: 1.75rem;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+      animation: modalSlideUp 0.2s ease-out;
+    }
+
+    @keyframes modalSlideUp {
+      from {
+        opacity: 0;
+        transform: translateY(12px) scale(0.98);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    .inv-modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-bottom: 0.85rem;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 1.25rem;
+    }
+
+    .inv-modal-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin: 0;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .inv-modal-close {
+      background: transparent;
+      border: none;
+      font-size: 1.3rem;
+      color: var(--text-muted);
+      cursor: pointer;
+      line-height: 1;
+      padding: 0;
+    }
+
+    .inv-modal-close:hover {
+      color: var(--text-primary);
+    }
+
+    .edit-form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+      margin-bottom: 1rem;
+    }
+
+    .edit-form-label {
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-secondary);
+    }
+
+    .edit-form-control {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.6rem 0.85rem;
+      font-size: 0.88rem;
+      color: var(--text-primary);
+      background: #ffffff;
+      font-family: 'Inter', sans-serif;
+      transition: border-color 0.18s, box-shadow 0.18s;
+      width: 100%;
+    }
+
+    .edit-form-control:focus {
+      outline: none;
+      border-color: var(--brand-accent);
+      box-shadow: 0 0 0 3px rgba(26, 111, 245, 0.1);
+    }
+
+    .modal-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 0.75rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      margin-top: 1.25rem;
+    }
+
+    .btn-modal-cancel {
+      padding: 0.55rem 1.1rem;
+      background: var(--bg-page);
+      border: 1px solid var(--border);
+      color: var(--text-primary);
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 0.85rem;
+      cursor: pointer;
+      font-family: 'Inter', sans-serif;
+      transition: background 0.18s;
+    }
+
+    .btn-modal-cancel:hover {
+      background: #e5e9f0;
+    }
+
+    .btn-modal-submit {
+      padding: 0.55rem 1.2rem;
+      background: var(--brand-accent);
+      color: #ffffff;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 0.85rem;
+      cursor: pointer;
+      font-family: 'Inter', sans-serif;
+      transition: background 0.18s;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .btn-modal-submit:hover {
+      background: var(--brand-hover);
+    }
+
+    .danger-box {
+      background: #ffffff;
+      border-radius: 16px;
+      width: 100%;
+      max-width: 440px;
+      padding: 1.75rem;
+      text-align: center;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+    }
+
+    .danger-icon {
+      width: 54px;
+      height: 54px;
+      background: #fee2e2;
+      color: var(--red);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1rem;
+      font-size: 1.5rem;
+    }
+
+    .payment-method-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: var(--text-primary);
+    }
+
+    .pill-count {
+      background: var(--bg-page);
+      border: 1px solid var(--border);
+      padding: 0.2rem 0.6rem;
+      border-radius: 12px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+    }
+  </style>
+</head>
+
+<body>
+  <div class="portal-wrapper">
+
+    <!-- ══════════════════ SIDEBAR ══════════════════ -->
+    <aside class="sidebar">
+
+      <!-- Brand -->
+      <div class="sidebar-brand">
+        <div class="sidebar-logo">
+          <i class="bi bi-hospital"></i>
+        </div>
+        <div>
+          <div class="sidebar-brand-name">MedCore</div>
+          <div class="sidebar-brand-sub">HMS Platform</div>
+        </div>
+      </div>
+
+      <!-- Navigation -->
+      <nav class="sidebar-nav">
+        <a href="dashboard.html" class="nav-item">
+          <i class="bi bi-grid-1x2"></i> Dashboard
+        </a>
+        <a href="doctors.html" class="nav-item">
+          <i class="bi bi-person-badge"></i> Doctor Profiles
+        </a>
+        <a href="departments.html" class="nav-item">
+          <i class="bi bi-hospital"></i> Departments
+        </a>
+        <a href="specializations.html" class="nav-item">
+          <i class="bi bi-award"></i> Specializations
+        </a>
+        <a href="room-management.html" class="nav-item">
+          <i class="bi bi-door-open"></i> Room Management
+        </a>
+        <a href="invoices.html" class="nav-item active">
+          <i class="bi bi-receipt"></i> Invoices
+        </a>
+      </nav>
+
+      <!-- Bottom user info -->
+      <div class="sidebar-user">
+        <div>
+          <div class="sidebar-user-name">Admin Console</div>
+          <div class="sidebar-user-role">UID: ADM-2022</div>
+        </div>
+      </div>
+
+    </aside>
+
+    <!-- ══════════════════ MAIN CONTENT ══════════════════ -->
+    <div class="main-content">
+
+      <!-- Topbar -->
+      <header class="topbar">
+        <span class="topbar-title">Billing &amp; Invoices Management</span>
+        <div class="topbar-actions">
+          <span class="topbar-user-label">Admin Console (Admin)</span>
+          <a href="../Assets/login.html" class="btn-logout" title="Log Out"><i class="bi bi-box-arrow-right"></i> Log Out</a>
+        </div>
+      </header>
+
+      <!-- Page Body -->
+      <main class="page-body">
+
+        <!-- Alert Notification Toast -->
+        <div class="alert alert-success" id="actionAlert" style="display: none;">
+          <i class="bi bi-check-circle-fill"></i>
+          <span id="alertMsg">Action completed successfully.</span>
+        </div>
+
+        <!-- Executive Stat Cards (4 Columns) -->
+        <div class="admin-stats-grid">
+          
+          <div class="admin-stat-card">
+            <div>
+              <div class="admin-stat-lbl">Total Billed</div>
+              <div class="admin-stat-val" id="statTotalBilled">OMR 0.00</div>
+            </div>
+            <div class="admin-stat-icon blue">
+              <i class="bi bi-wallet2"></i>
+            </div>
+          </div>
+
+          <div class="admin-stat-card">
+            <div>
+              <div class="admin-stat-lbl">Paid Balance</div>
+              <div class="admin-stat-val" style="color: var(--green);" id="statPaidBalance">OMR 0.00</div>
+            </div>
+            <div class="admin-stat-icon green">
+              <i class="bi bi-check-circle-fill"></i>
+            </div>
+          </div>
+
+          <div class="admin-stat-card">
+            <div>
+              <div class="admin-stat-lbl">Pending Balance</div>
+              <div class="admin-stat-val" style="color: var(--yellow);" id="statPendingBalance">OMR 0.00</div>
+            </div>
+            <div class="admin-stat-icon yellow">
+              <i class="bi bi-exclamation-triangle-fill"></i>
+            </div>
+          </div>
+
+          <div class="admin-stat-card">
+            <div>
+              <div class="admin-stat-lbl">Total Invoices</div>
+              <div class="admin-stat-val" id="statTotalCount">0</div>
+            </div>
+            <div class="admin-stat-icon purple">
+              <i class="bi bi-receipt"></i>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Action Toolbar / Filters Card -->
+        <div class="search-filter-card">
+          <div class="table-header-row" style="margin-bottom: 0; flex-wrap: wrap; gap: 1rem;">
+            <div class="table-actions-group" style="flex-wrap: wrap; flex: 1;">
+              <div style="position: relative; min-width: 260px;">
+                <i class="bi bi-search" style="position: absolute; left: 0.75rem; top: 50%; transform: translateY(-50%); color: var(--text-muted); font-size: 0.85rem;"></i>
+                <input type="search" id="searchInput" class="edit-form-control" placeholder="Search by Invoice ID, Appt, Method..." style="padding-left: 2.2rem; width: 100%;" oninput="filterInvoices()" onkeyup="filterInvoices()" onsearch="filterInvoices()">
+              </div>
+
+              <select id="statusFilter" class="filter-select" style="min-width: 150px;" onchange="filterInvoices()">
+                <option value="all" selected>All Statuses</option>
+                <option value="Paid">Paid</option>
+                <option value="Pending">Pending</option>
+              </select>
+
+              <select id="methodFilter" class="filter-select" style="min-width: 150px;" onchange="filterInvoices()">
+                <option value="all" selected>All Payment Methods</option>
+                <option value="Cash">Cash</option>
+                <option value="Card">Card</option>
+              </select>
+            </div>
+
+            <button class="btn-add-user" onclick="openCreateModal()" style="display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.55rem 1rem;">
+              <i class="bi bi-plus-lg"></i> Create New Invoice
+            </button>
+          </div>
+        </div>
+
+        <!-- Invoices Table Card -->
+        <div class="card" style="padding: 0; overflow: hidden; margin-top: 1.25rem;">
+          <div class="table-header-row" style="padding: 1.25rem 1.5rem; margin-bottom: 0; border-bottom: 1px solid var(--border);">
+            <div class="table-title">System Invoices Directory</div>
+            <div class="pill-count" id="paginationInfo">Showing 0 invoices</div>
+          </div>
+          
+          <div class="table-responsive">
+            <table class="user-table">
+              <thead>
+                <tr>
+                  <th>INVOICE ID</th>
+                  <th>APPOINTMENT ID</th>
+                  <th>ISSUED DATE</th>
+                  <th>PAYMENT METHOD</th>
+                  <th>TOTAL AMOUNT (OMR)</th>
+                  <th>PAYMENT STATUS</th>
+                  <th style="text-align: right;">ACTIONS</th>
+                </tr>
+              </thead>
+              <tbody id="tableBody">
+                <tr>
+                  <td colspan="7" style="text-align:center; padding: 2.5rem; color: var(--text-muted);">
+                    <i class="bi bi-hourglass-split me-1"></i> Loading invoices from hospital database...
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </main>
+    </div>
+
+  </div><!-- /portal-wrapper -->
+
+  <!-- ── Create Invoice Modal ── -->
+  <div class="inv-modal-overlay" id="createModal">
+    <div class="inv-modal-content">
+      <form onsubmit="handleCreateInvoice(event)">
+        <div class="inv-modal-header">
+          <h4 class="inv-modal-title"><i class="bi bi-receipt-cutoff" style="color: var(--brand-accent);"></i> Create New Invoice</h4>
+          <button type="button" class="inv-modal-close" onclick="closeCreateModal()">&times;</button>
+        </div>
+        
+        <div>
+          <div class="edit-form-group">
+            <label class="edit-form-label" for="newApptId">Linked Appointment ID</label>
+            <div style="display: flex; gap: 0.5rem;">
+              <select id="newApptSelect" class="filter-select" style="flex: 1;" onchange="onApptSelectChange(this)">
+                <option value="">Select an appointment...</option>
+              </select>
+              <input type="number" id="newApptId" class="edit-form-control" placeholder="ID #" style="width: 90px;" required />
+            </div>
+            <small style="font-size: 0.72rem; color: var(--text-muted); margin-top: 0.2rem;">Choose from booked consultations or type an ID.</small>
+          </div>
+
+          <div class="edit-form-group">
+            <label class="edit-form-label" for="newAmount">Total Bill Amount (OMR)</label>
+            <div style="position: relative;">
+              <span style="position: absolute; left: 0.85rem; top: 50%; transform: translateY(-50%); font-weight: 700; color: var(--text-secondary); font-size: 0.75rem;">OMR</span>
+              <input type="number" step="0.001" min="0" id="newAmount" class="edit-form-control" placeholder="50.000" style="padding-left: 3.2rem;" required />
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.85rem;">
+            <div class="edit-form-group">
+              <label class="edit-form-label" for="newMethod">Payment Method</label>
+              <select id="newMethod" class="filter-select" required>
+                <option value="Cash">Cash</option>
+                <option value="Card" selected>Credit / Debit Card</option>
+              </select>
+            </div>
+
+            <div class="edit-form-group">
+              <label class="edit-form-label" for="newStatus">Payment Status</label>
+              <select id="newStatus" class="filter-select" required>
+                <option value="Pending" selected>Pending</option>
+                <option value="Paid">Paid</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="edit-form-group">
+            <label class="edit-form-label" for="newDate">Issued Date</label>
+            <input type="date" id="newDate" class="edit-form-control" required />
+          </div>
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="btn-modal-cancel" onclick="closeCreateModal()">Cancel</button>
+          <button type="submit" class="btn-modal-submit">
+            <i class="bi bi-plus-circle"></i> Create Invoice
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ── Edit Invoice Modal ── -->
+  <div class="inv-modal-overlay" id="editModal">
+    <div class="inv-modal-content">
+      <form onsubmit="handleSaveEdit(event)">
+        <div class="inv-modal-header">
+          <h4 class="inv-modal-title"><i class="bi bi-pencil-square" style="color: var(--brand-accent);"></i> Edit Invoice Details</h4>
+          <button type="button" class="inv-modal-close" onclick="closeEditModal()">&times;</button>
+        </div>
+        
+        <div>
+          <input type="hidden" id="editInvId" />
+
+          <div class="edit-form-group">
+            <label class="edit-form-label" for="editApptId">Appointment ID</label>
+            <input type="number" id="editApptId" class="edit-form-control" required />
+          </div>
+
+          <div class="edit-form-group">
+            <label class="edit-form-label" for="editAmount">Total Bill Amount (OMR)</label>
+            <div style="position: relative;">
+              <span style="position: absolute; left: 0.85rem; top: 50%; transform: translateY(-50%); font-weight: 700; color: var(--text-secondary); font-size: 0.75rem;">OMR</span>
+              <input type="number" step="0.001" min="0" id="editAmount" class="edit-form-control" style="padding-left: 3.2rem;" required />
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.85rem;">
+            <div class="edit-form-group">
+              <label class="edit-form-label" for="editMethod">Payment Method</label>
+              <select id="editMethod" class="filter-select" required>
+                <option value="Cash">Cash</option>
+                <option value="Card">Card</option>
+              </select>
+            </div>
+
+            <div class="edit-form-group">
+              <label class="edit-form-label" for="editStatus">Payment Status</label>
+              <select id="editStatus" class="filter-select" required>
+                <option value="Pending">Pending</option>
+                <option value="Paid">Paid</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="edit-form-group">
+            <label class="edit-form-label" for="editDate">Issued Date</label>
+            <input type="date" id="editDate" class="edit-form-control" required />
+          </div>
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="btn-modal-cancel" onclick="closeEditModal()">Cancel</button>
+          <button type="submit" class="btn-modal-submit">
+            <i class="bi bi-floppy"></i> Save Changes
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ── Delete Confirmation Modal ── -->
+  <div class="inv-modal-overlay" id="deleteModal">
+    <div class="danger-box">
+      <div class="danger-icon">
+        <i class="bi bi-trash3-fill"></i>
+      </div>
+      <h3 style="font-size: 1.15rem; font-weight: 700; color: var(--text-primary); margin: 0 0 0.4rem;">Delete Invoice</h3>
+      <p style="font-size: 0.83rem; color: var(--text-secondary); line-height: 1.5; margin-bottom: 1.5rem;" id="deleteModalMsg">
+        Are you sure you want to delete this invoice? This transaction will be permanently removed from the hospital billing records.
+      </p>
+
+      <div style="display: flex; gap: 0.75rem;">
+        <button type="button" class="btn-modal-cancel" style="flex: 1;" onclick="closeDeleteModal()">Cancel</button>
+        <button type="button" id="confirmDeleteBtn" class="btn-tbl-delete" style="flex: 1; padding: 0.65rem; font-size: 0.85rem;">
+          Yes, Delete
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Central API Client Helper -->
+  <script src="../Assets/api.js"></script>
+
+  <script>
+    let invoices = [];
+    let appointmentsList = [];
+    let deleteTargetId = null;
+
+    async function loadInvoices() {
+      const tbody = document.getElementById('tableBody');
+      if (tbody) {
+        tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; padding: 2.5rem; color: var(--text-muted);"><i class="bi bi-hourglass-split me-1"></i> Loading invoices from hospital database...</td></tr>';
+      }
+
+      try {
+        let res;
+        try {
+          res = await apiFetch('/Invoice/all');
+        } catch (e1) {
+          res = await apiFetch('/Invoice');
+        }
+        invoices = Array.isArray(res) ? res : [];
+      } catch (err) {
+        console.error('Invoice fetch error:', err.message);
+        invoices = [];
+        if (tbody) {
+          tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; padding: 2.5rem; color: var(--red);"><i class="bi bi-exclamation-triangle-fill me-1"></i> Failed to load invoices: ${err.message}</td></tr>`;
+        }
+      }
+
+      renderTable(invoices);
+      updateCounts(invoices);
+    }
+
+    async function loadAppointments() {
+      try {
+        const res = await apiFetch('/Appointment');
+        appointmentsList = Array.isArray(res) ? res : [];
+        populateApptSelect(appointmentsList);
+      } catch (err) {
+        console.log('Appointments load note:', err.message);
+      }
+    }
+
+    function populateApptSelect(list) {
+      const select = document.getElementById('newApptSelect');
+      if (!select) return;
+      select.innerHTML = '<option value="">Select an appointment...</option>';
+
+      list.forEach(a => {
+        const id = a.appointmentId || a.id || 1;
+        const dt = a.appointmentDateTime ? a.appointmentDateTime.split('T')[0] : '';
+        const reason = a.reasonForVisit || 'Medical Consultation';
+        const opt = document.createElement('option');
+        opt.value = id;
+        opt.textContent = `#APT-${String(id).padStart(4, '0')} · ${reason} (${dt})`;
+        select.appendChild(opt);
+      });
+    }
+
+    function onApptSelectChange(select) {
+      if (select.value) {
+        document.getElementById('newApptId').value = select.value;
+      }
+    }
+
+    function renderTable(list) {
+      const tbody = document.getElementById('tableBody');
+      if (!tbody) return;
+      tbody.innerHTML = '';
+
+      if (list.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="7" style="text-align:center; padding: 3rem 1.5rem; color: var(--text-secondary);">
+              <div style="width: 50px; height: 50px; background: var(--bg-page); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 0.75rem; font-size: 1.4rem; color: var(--text-muted);">
+                <i class="bi bi-receipt"></i>
+              </div>
+              <div style="font-weight: 700; color: var(--text-primary); margin-bottom: 0.25rem;">No Invoices Found</div>
+              <div style="font-size: 0.8rem; color: var(--text-muted); max-width: 320px; margin: 0 auto 1rem;">
+                There are no medical billing invoices currently matching your filter criteria.
+              </div>
+              <button class="btn-add-user" onclick="openCreateModal()" style="font-size: 0.8rem; padding: 0.4rem 0.9rem;">
+                <i class="bi bi-plus-lg me-1"></i> Create First Invoice
+              </button>
+            </td>
+          </tr>
+        `;
+        const info = document.getElementById('paginationInfo');
+        if (info) info.textContent = 'Showing 0 invoices';
+        return;
+      }
+
+      list.forEach(inv => {
+        const id = inv.invoiceID || inv.InvoiceID || inv.id;
+        const apptId = inv.appointmentID || inv.AppointmentID || 'N/A';
+        const rawDate = inv.issuedDate || inv.IssuedDate;
+        const dt = rawDate ? (rawDate.includes('T') ? rawDate.split('T')[0] : rawDate) : 'N/A';
+        const method = inv.paymentmethod || inv.Paymentmethod || 'Card';
+        const amt = parseFloat(inv.totalAmount || inv.TotalAmount || 0).toFixed(2);
+        const status = inv.paymentStatus || inv.PaymentStatus || 'Pending';
+        const isPaid = status.toLowerCase() === 'paid';
+        const methodIcon = method.toLowerCase().includes('cash') ? 'bi-cash-stack' : 'bi-credit-card-2-front';
+
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td><strong style="color: var(--brand-accent);">#INV-${String(id).padStart(4, '0')}</strong></td>
+          <td><span style="font-weight: 600; color: var(--text-primary);">#APT-${String(apptId).padStart(4, '0')}</span></td>
+          <td><span style="color: var(--text-secondary);"><i class="bi bi-calendar3 me-1" style="color: var(--text-muted);"></i> ${dt}</span></td>
+          <td>
+            <span class="payment-method-badge">
+              <i class="bi ${methodIcon}" style="color: var(--text-secondary);"></i> ${method}
+            </span>
+          </td>
+          <td><strong style="font-size: 0.92rem; color: var(--text-primary);">OMR ${amt}</strong></td>
+          <td>
+            <span class="${isPaid ? 'badge-paid' : 'badge-pending'}">
+              <i class="bi ${isPaid ? 'bi-check-circle-fill' : 'bi-clock-fill'}"></i> ${status}
+            </span>
+          </td>
+          <td style="text-align: right; white-space: nowrap;">
+            <button class="btn-tbl-edit" onclick="openEditModal(${id})" title="Edit Invoice">
+              <i class="bi bi-pencil me-1"></i>Edit
+            </button>
+            <button class="btn-tbl-delete" onclick="promptDelete(${id}, 'OMR ${amt}')" title="Delete Invoice">
+              <i class="bi bi-trash me-1"></i>Delete
+            </button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+      const info = document.getElementById('paginationInfo');
+      if (info) info.textContent = `Showing ${list.length} invoice(s) from database`;
+    }
+
+    function updateCounts(list) {
+      const totalBilled = list.reduce((sum, i) => sum + parseFloat(i.totalAmount || i.TotalAmount || 0), 0);
+      const paidList = list.filter(i => (i.paymentStatus || i.PaymentStatus || '').toLowerCase() === 'paid');
+      const pendingList = list.filter(i => (i.paymentStatus || i.PaymentStatus || '').toLowerCase() === 'pending');
+
+      const paidVal = paidList.reduce((sum, i) => sum + parseFloat(i.totalAmount || i.TotalAmount || 0), 0);
+      const pendingVal = pendingList.reduce((sum, i) => sum + parseFloat(i.totalAmount || i.TotalAmount || 0), 0);
+
+      document.getElementById('statTotalBilled').textContent = `OMR ${totalBilled.toFixed(2)}`;
+      document.getElementById('statPaidBalance').textContent = `OMR ${paidVal.toFixed(2)}`;
+      document.getElementById('statPendingBalance').textContent = `OMR ${pendingVal.toFixed(2)}`;
+      document.getElementById('statTotalCount').textContent = list.length;
+    }
+
+    function filterInvoices() {
+      const query = (document.getElementById('searchInput').value || '').toLowerCase().trim();
+      const normQuery = query
+        .replace(/^#inv-0*/, '')
+        .replace(/^#inv-/, '')
+        .replace(/^inv-0*/, '')
+        .replace(/^inv-/, '')
+        .replace(/^#apt-0*/, '')
+        .replace(/^#apt-/, '')
+        .replace(/^apt-0*/, '')
+        .replace(/^apt-/, '')
+        .replace(/^#0*/, '')
+        .replace(/^#/, '');
+
+      const statusVal = document.getElementById('statusFilter').value;
+      const methodVal = document.getElementById('methodFilter').value;
+
+      const filtered = invoices.filter(i => {
+        const id = (i.invoiceID || i.InvoiceID || '').toString();
+        const apptId = (i.appointmentID || i.AppointmentID || '').toString();
+        const method = (i.paymentmethod || i.Paymentmethod || '').toLowerCase();
+        const status = (i.paymentStatus || i.PaymentStatus || 'Pending').toLowerCase();
+        const date = (i.issuedDate || i.IssuedDate || '').toLowerCase();
+        const amount = parseFloat(i.totalAmount || i.TotalAmount || 0).toFixed(2);
+
+        const matchesQuery = !query || 
+          id === query || 
+          id === normQuery || 
+          `#inv-${id.padStart(4, '0')}`.toLowerCase().includes(query) || 
+          `inv-${id}`.toLowerCase().includes(query) || 
+          apptId === query || 
+          apptId === normQuery || 
+          `#apt-${apptId.padStart(4, '0')}`.toLowerCase().includes(query) || 
+          `apt-${apptId}`.toLowerCase().includes(query) || 
+          method.includes(query) || 
+          status.includes(query) || 
+          amount.includes(query) || 
+          date.includes(query);
+
+        const matchesStatus = statusVal === 'all' || status === statusVal.toLowerCase();
+        const matchesMethod = methodVal === 'all' || method.includes(methodVal.toLowerCase());
+
+        return matchesQuery && matchesStatus && matchesMethod;
+      });
+
+      renderTable(filtered);
+    }
+
+    function openCreateModal() {
+      document.getElementById('newDate').value = new Date().toISOString().split('T')[0];
+      document.getElementById('newAmount').value = '';
+      document.getElementById('newApptId').value = '';
+      document.getElementById('newApptSelect').value = '';
+      document.getElementById("createModal").style.display = "flex";
+    }
+
+    function closeCreateModal() { 
+      document.getElementById("createModal").style.display = "none"; 
+    }
+
+    function closeEditModal() { 
+      document.getElementById("editModal").style.display = "none"; 
+    }
+
+    function promptDelete(id, amountText) {
+      deleteTargetId = id;
+      document.getElementById('deleteModalMsg').textContent = `Are you sure you want to delete invoice #INV-${String(id).padStart(4, '0')} (${amountText})? This cannot be undone.`;
+      document.getElementById('confirmDeleteBtn').onclick = () => executeDelete(id);
+      document.getElementById("deleteModal").style.display = "flex";
+    }
+
+    function closeDeleteModal() { 
+      document.getElementById("deleteModal").style.display = "none"; 
+      deleteTargetId = null;
+    }
+
+    async function handleCreateInvoice(e) {
+      e.preventDefault();
+      const apptId = parseInt(document.getElementById('newApptId').value);
+      const amount = parseFloat(document.getElementById('newAmount').value);
+      const method = document.getElementById('newMethod').value;
+      const status = document.getElementById('newStatus').value;
+      const date = document.getElementById('newDate').value;
+
+      if (isNaN(apptId) || isNaN(amount)) {
+        showAlert('Please fill in a valid Appointment ID and Total Amount.', true);
+        return;
+      }
+
+      try {
+        await apiFetch('/Invoice/create', {
+          method: 'POST',
+          body: JSON.stringify({
+            AppointmentID: apptId,
+            TotalAmount: amount,
+            Paymentmethod: method,
+            PaymentStatus: status,
+            IssuedDate: date
+          })
+        });
+        showAlert('New billing invoice created successfully in database.');
+        closeCreateModal();
+        await loadInvoices();
+      } catch (err) {
+        showAlert('Create error: ' + err.message, true);
+      }
+    }
+
+    function openEditModal(id) {
+      const inv = invoices.find(x => (x.invoiceID || x.InvoiceID || x.id) === id);
+      if (!inv) return;
+
+      const rawMethod = (inv.paymentmethod || inv.Paymentmethod || '').toLowerCase();
+      const rawStatus = (inv.paymentStatus || inv.PaymentStatus || 'Pending').toLowerCase();
+      const rawDate = inv.issuedDate || inv.IssuedDate || '';
+
+      document.getElementById('editInvId').value = id;
+      document.getElementById('editApptId').value = inv.appointmentID || inv.AppointmentID || '';
+      document.getElementById('editAmount').value = parseFloat(inv.totalAmount || inv.TotalAmount || 0).toFixed(2);
+      document.getElementById('editMethod').value = rawMethod.includes('cash') ? 'Cash' : 'Card';
+      document.getElementById('editStatus').value = rawStatus.includes('paid') ? 'Paid' : 'Pending';
+      document.getElementById('editDate').value = rawDate.includes('T') ? rawDate.split('T')[0] : rawDate;
+
+      document.getElementById("editModal").style.display = "flex";
+    }
+
+    async function handleSaveEdit(e) {
+      e.preventDefault();
+      const id = parseInt(document.getElementById('editInvId').value);
+      const apptId = parseInt(document.getElementById('editApptId').value);
+      const amount = parseFloat(document.getElementById('editAmount').value);
+      const method = document.getElementById('editMethod').value;
+      const status = document.getElementById('editStatus').value;
+      const date = document.getElementById('editDate').value;
+
+      try {
+        await apiFetch(`/Invoice/update/${id}`, {
+          method: 'PUT',
+          body: JSON.stringify({
+            InvoiceID: id,
+            AppointmentID: apptId,
+            TotalAmount: amount,
+            Paymentmethod: method,
+            PaymentStatus: status,
+            IssuedDate: date
+          })
+        });
+        showAlert(`Invoice #INV-${String(id).padStart(4, '0')} updated successfully in database.`);
+        closeEditModal();
+        await loadInvoices();
+      } catch (err) {
+        showAlert('Edit error: ' + err.message, true);
+      }
+    }
+
+    async function executeDelete(id) {
+      try {
+        await apiFetch(`/Invoice/delete/${id}`, { method: 'DELETE' });
+        showAlert(`Invoice #INV-${String(id).padStart(4, '0')} deleted successfully from database.`);
+        closeDeleteModal();
+        await loadInvoices();
+      } catch (err) {
+        showAlert('Delete error: ' + err.message, true);
+      }
+    }
+
+    function showAlert(msg, isError = false) {
+      const alertBox = document.getElementById('actionAlert');
+      if (!alertBox) return;
+      
+      const icon = alertBox.querySelector('i');
+      const text = document.getElementById('alertMsg');
+      
+      text.textContent = msg;
+      
+      if (isError) {
+        alertBox.className = 'alert alert-error';
+        if (icon) icon.className = 'bi bi-x-circle-fill';
+      } else {
+        alertBox.className = 'alert alert-success';
+        if (icon) icon.className = 'bi bi-check-circle-fill';
+      }
+      
+      alertBox.style.display = 'flex';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      setTimeout(() => {
+        alertBox.style.display = 'none';
+      }, 4000);
+    }
+
+    function initAdminProfile() {
+      const authUser = getAuthUser();
+      if (!authUser || !authUser.fullname) {
+        return;
+      }
+      const name = authUser.fullname || 'Administrator';
+      const role = authUser.role || 'Admin';
+      const id = authUser.userId || 1;
+
+      const topbarLabel = document.querySelector('.topbar-user-label');
+      if (topbarLabel) topbarLabel.textContent = `${name} (${role})`;
+
+      const sidebarName = document.querySelector('.sidebar-user-name');
+      if (sidebarName) sidebarName.textContent = name;
+
+      const sidebarRole = document.querySelector('.sidebar-user-role');
+      if (sidebarRole) sidebarRole.textContent = `UID: ADM-${String(id).padStart(3, '0')}`;
+    }
+
+    // Close modals on clicking backdrop
+    window.addEventListener('click', (e) => {
+      if (e.target.classList.contains('inv-modal-overlay')) {
+        e.target.style.display = 'none';
+      }
+    });
+
+    document.addEventListener('DOMContentLoaded', () => {
+      initAdminProfile();
+      loadInvoices();
+      loadAppointments();
+    });
+  </script>
+</body>
+
+</html>

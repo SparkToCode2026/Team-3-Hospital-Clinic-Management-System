@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Team_3_HMS.Models;
@@ -7,6 +7,7 @@ namespace Team_3_HMS.Controllers
 {
     [ApiController]
     [Route("Specialization")]
+    [Route("api/[controller]")]
     public class SpecializationController : ControllerBase
     {
         private ProjectContext context;
@@ -31,17 +32,25 @@ namespace Team_3_HMS.Controllers
         // PUT to Update all Specialization details
         [Authorize(Roles = "Admin")]
         [HttpPut("UpdateSpecialization")]
-        public IActionResult UpdateSpecialization(int id, Specialization updatedSpecialization)
+        [HttpPut("UpdateSpecialization/{id}")]
+        public IActionResult UpdateSpecialization([FromQuery] int? id, [FromRoute] int? routeId, [FromBody] Specialization updatedSpecialization)
         {
-            Specialization specialization = context.Specializations
-            .FirstOrDefault(s => s.SpecializationId == id);
+            int targetId = id ?? routeId ?? updatedSpecialization.SpecializationId;
+            Specialization? specialization = context.Specializations
+                .FirstOrDefault(s => s.SpecializationId == targetId);
+
             if (specialization == null)
             {
                 return NotFound("Specialization not found");
             }
+
             specialization.Name = updatedSpecialization.Name;
             specialization.Description = updatedSpecialization.Description;
-            specialization.DoctorProfileId = updatedSpecialization.DoctorProfileId;
+            if (updatedSpecialization.DoctorProfileId > 0)
+            {
+                specialization.DoctorProfileId = updatedSpecialization.DoctorProfileId;
+            }
+
             context.SaveChanges();
             return Ok(new
             {
@@ -49,38 +58,48 @@ namespace Team_3_HMS.Controllers
                 updatedSpecialization = specialization
             });
         }
+
         // PATCH Update one field (Description)
         [Authorize(Roles = "Admin")]
         [HttpPatch("UpdateSpecializationDescription")]
-        public IActionResult UpdateSpecializationDescription(int id, string newDescription)
+        [HttpPatch("UpdateSpecializationDescription/{id}")]
+        public IActionResult UpdateSpecializationDescription([FromQuery] int? id, [FromRoute] int? routeId, [FromQuery] string? newDescription, [FromBody] Specialization? body)
         {
-            // To Find Specialization by ID
-            Specialization specialization = context.Specializations
-            .FirstOrDefault(s => s.SpecializationId == id);
+            int targetId = id ?? routeId ?? body?.SpecializationId ?? 0;
+            string desc = newDescription ?? body?.Description ?? "";
+
+            Specialization? specialization = context.Specializations
+                .FirstOrDefault(s => s.SpecializationId == targetId);
+
             if (specialization == null)
             {
                 return NotFound("Specialization not found");
             }
-            specialization.Description = newDescription;
+
+            specialization.Description = desc;
             context.SaveChanges();
             return Ok(new
             {
                 message = "Specialization description updated successfully",
                 updatedSpecialization = specialization
             });
-
         }
+
         // DELETE to Remove Specialization
         [Authorize(Roles = "Admin")]
         [HttpDelete("RemoveSpecialization")]
-        public IActionResult RemoveSpecialization(int id)
+        [HttpDelete("RemoveSpecialization/{id}")]
+        public IActionResult RemoveSpecialization([FromQuery] int? id, [FromRoute] int? routeId)
         {
-            Specialization specialization = context.Specializations
-            .FirstOrDefault(s => s.SpecializationId == id);
+            int targetId = id ?? routeId ?? 0;
+            Specialization? specialization = context.Specializations
+                .FirstOrDefault(s => s.SpecializationId == targetId);
+
             if (specialization == null)
             {
                 return NotFound("Specialization not found");
             }
+
             var deletedSpecialization = specialization;
             context.Specializations.Remove(specialization);
             context.SaveChanges();
@@ -90,25 +109,35 @@ namespace Team_3_HMS.Controllers
                 deletedSpecialization = deletedSpecialization
             });
         }
+
         // GET  all Specializations (data)
         [HttpGet("GetAllSpecializations")]
         public IActionResult GetAllSpecializations()
         {
             List<Specialization> specializations = context.Specializations
-            .Include(s => s.doctors)
-            .ToList();
+                .Include(s => s.doctors)
+                    .ThenInclude(d => d.userid)
+                .ToList();
             return Ok(specializations);
         }
+
         // GET to Find Specialization by Id
         [HttpGet("GetSpecialization")]
-        public IActionResult GetSpecialization(int id)
+        [HttpGet("GetSpecialization/{id}")]
+        [HttpGet("{id}")]
+        public IActionResult GetSpecialization([FromQuery] int? id, [FromRoute] int? routeId)
         {
-            Specialization specialization = context.Specializations
-            .FirstOrDefault(s => s.SpecializationId == id);
+            int targetId = id ?? routeId ?? 0;
+            Specialization? specialization = context.Specializations
+                .Include(s => s.doctors)
+                    .ThenInclude(d => d.userid)
+                .FirstOrDefault(s => s.SpecializationId == targetId);
+
             if (specialization == null)
             {
                 return NotFound("Specialization not found");
             }
+
             return Ok(specialization);
         }
         // GET Filter Specializations by name

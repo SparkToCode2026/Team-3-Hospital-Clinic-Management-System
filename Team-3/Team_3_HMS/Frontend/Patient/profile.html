@@ -46,9 +46,9 @@
         <a href="appointments.html" class="nav-item">
           <i class="bi bi-calendar-check"></i> Appointments
         </a>
-        <span class="nav-item disabled">
+        <a href="prescriptions.html" class="nav-item">
           <i class="bi bi-capsule"></i> Prescriptions
-        </span>
+        </a>
         <a href="invoices.html" class="nav-item">
           <i class="bi bi-receipt"></i> My Invoices
         </a>
@@ -64,8 +64,8 @@
       <!-- Bottom user info -->
       <div class="sidebar-user">
         <div>
-          <div class="sidebar-user-name">Sarah Jenkins</div>
-          <div class="sidebar-user-role">Patient · ID 2014</div>
+          <div class="sidebar-user-name">Patient Account</div>
+          <div class="sidebar-user-role">UID: PAT-001</div>
         </div>
       </div>
 
@@ -78,9 +78,8 @@
       <header class="topbar">
         <span class="topbar-title">My Profile Settings</span>
         <div class="topbar-actions">
-          <span class="topbar-user-label">Sarah J.</span>
-          <a href="../Assets/login.html" class="btn-logout" title="Log Out"><i class="bi bi-box-arrow-right"></i> Log
-            Out</a>
+          <span class="topbar-user-label">Patient Account</span>
+          <a href="../Assets/login.html" class="btn-logout" title="Log Out"><i class="bi bi-box-arrow-right"></i> Log Out</a>
         </div>
       </header>
 
@@ -107,15 +106,15 @@
               <div class="form-grid">
                 <div class="form-group">
                   <label class="form-label" for="full-name">Full Name</label>
-                  <input type="text" id="full-name" class="form-control" value="Sarah Jenkins" />
+                  <input type="text" id="full-name" class="form-control" placeholder="Your full name" />
                 </div>
                 <div class="form-group">
                   <label class="form-label" for="email-address">Email Address</label>
-                  <input type="email" id="email-address" class="form-control" value="sarah.jenkins@medcore.com" />
+                  <input type="email" id="email-address" class="form-control" placeholder="your.email@example.com" readonly />
                 </div>
                 <div class="form-group">
                   <label class="form-label" for="phone-number">Phone Number</label>
-                  <input type="tel" id="phone-number" class="form-control" value="+1 (555) 342-8921" />
+                  <input type="tel" id="phone-number" class="form-control" placeholder="e.g. 99999999" />
                 </div>
                 <div class="form-group">
                   <label class="form-label" for="account-type">Account Type</label>
@@ -123,12 +122,12 @@
                 </div>
               </div>
 
-              <p class="form-hint">
-                <i class="bi bi-clock"></i> Last updated: 14 mins ago
+              <p class="form-hint" id="accountLastUpdated">
+                <i class="bi bi-shield-check"></i> Verified hospital user account
               </p>
 
               <div style="margin-top:1.1rem; display:flex; justify-content:flex-end;">
-                <button class="btn btn-primary" onclick="saveContact()">
+                <button class="btn btn-primary" onclick="saveCoreAccount()">
                   <i class="bi bi-floppy"></i> Save Core Account Changes
                 </button>
               </div>
@@ -138,52 +137,52 @@
             <div class="card">
               <div class="card-header">
                 <span class="card-title">Patient Medical File</span>
+                <span id="ehrBadge" style="font-size:0.75rem; font-weight:700; color:var(--brand-accent); background:#e0f2fe; padding:0.2rem 0.6rem; border-radius:12px;">EHR Linked</span>
               </div>
 
               <div class="form-grid">
                 <div class="form-group">
                   <label class="form-label" for="dob">Date of Birth</label>
-                  <input type="date" id="dob" class="form-control" value="1991-08-24" />
+                  <input type="date" id="dob" class="form-control" />
                 </div>
                 <div class="form-group">
                   <label class="form-label" for="gender">Gender</label>
                   <select id="gender" class="form-control">
-                    <option>Female</option>
-                    <option>Male</option>
-                    <option>Other / Prefer not to say</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                    <option value="Other">Other / Prefer not to say</option>
                   </select>
                 </div>
                 <div class="form-group">
                   <label class="form-label" for="blood-group">Blood Group</label>
                   <select id="blood-group" class="form-control">
-                    <option>A Positive (A+)</option>
-                    <option>A Negative (A−)</option>
-                    <option>B Positive (B+)</option>
-                    <option>B Negative (B−)</option>
-                    <option selected>O Positive (O+)</option>
-                    <option>O Negative (O−)</option>
-                    <option>AB Positive (AB+)</option>
-                    <option>AB Negative (AB−)</option>
+                    <option value="A Positive (A+)">A Positive (A+)</option>
+                    <option value="A Negative (A−)">A Negative (A−)</option>
+                    <option value="B Positive (B+)">B Positive (B+)</option>
+                    <option value="B Negative (B−)">B Negative (B−)</option>
+                    <option value="O Positive (O+)" selected>O Positive (O+)</option>
+                    <option value="O Negative (O−)">O Negative (O−)</option>
+                    <option value="AB Positive (AB+)">AB Positive (AB+)</option>
+                    <option value="AB Negative (AB−)">AB Negative (AB−)</option>
                   </select>
                 </div>
                 <div class="form-group">
                   <label class="form-label" for="emergency-phone">Emergency Contact Phone</label>
-                  <input type="tel" id="emergency-phone" class="form-control" value="+1 (555) 998-2194" />
+                  <input type="tel" id="emergency-phone" class="form-control" placeholder="e.g. 99999999" />
                 </div>
                 <div class="form-group span-2">
                   <label class="form-label" for="address">Residential Address</label>
-                  <input type="text" id="address" class="form-control"
-                    value="742 Evergreen Terrace, Springfield, OR 97477" />
+                  <input type="text" id="address" class="form-control" placeholder="Enter residential address (e.g. Muscat)" />
                 </div>
               </div>
 
               <p class="form-hint">
-                <i class="bi bi-database-lock"></i> Directly linked to Electronic Health Record (EHR)
+                <i class="bi bi-database-lock"></i> Directly linked to Electronic Health Record (EHR) database
               </p>
 
               <div style="margin-top:1.1rem; display:flex; justify-content:flex-end;">
-                <button class="btn btn-primary" onclick="saveContact()">
-                  <i class="bi bi-floppy"></i> Update Health Details
+                <button class="btn btn-primary" id="btnSaveMedFile" onclick="saveOrUpdateMedicalFile()">
+                  <i class="bi bi-floppy me-1"></i> Update Health Details
                 </button>
               </div>
             </div>
@@ -203,8 +202,7 @@
               <div style="display:flex; flex-direction:column; gap:0.9rem;">
                 <div class="form-group">
                   <label class="form-label" for="current-password">Current Password</label>
-                  <input type="password" id="current-password" class="form-control"
-                    placeholder="Enter current password" />
+                  <input type="password" id="current-password" class="form-control" placeholder="Enter current password" />
                 </div>
                 <div class="form-group">
                   <label class="form-label" for="new-password">New Password</label>
@@ -212,18 +210,16 @@
                 </div>
                 <div class="form-group">
                   <label class="form-label" for="confirm-password">Confirm Password</label>
-                  <input type="password" id="confirm-password" class="form-control"
-                    placeholder="Re-enter new password" />
+                  <input type="password" id="confirm-password" class="form-control" placeholder="Re-enter new password" />
                 </div>
               </div>
 
               <div id="pw-error" class="alert alert-error" style="display:none; margin-top:0.9rem;">
                 <i class="bi bi-x-circle-fill"></i>
-                <span>Passwords do not match. Please try again.</span>
+                <span id="pw-error-msg">Passwords do not match. Please try again.</span>
               </div>
 
-              <button class="btn btn-secondary" style="width:100%; margin-top:1rem; justify-content:center;"
-                onclick="changePassword()">
+              <button class="btn btn-secondary" style="width:100%; margin-top:1rem; justify-content:center;" onclick="changePassword()">
                 <i class="bi bi-key"></i> Change Password
               </button>
             </div>
@@ -232,51 +228,11 @@
             <div class="card">
               <div class="card-header">
                 <span class="card-title">Recent Invoices</span>
-                <span style="font-size:0.78rem; font-weight:600; color:var(--brand-accent); cursor:default;">View
-                  All</span>
+                <a href="invoices.html" style="font-size:0.78rem; font-weight:600; color:var(--brand-accent); text-decoration:none;">View All</a>
               </div>
 
-              <div style="display:flex; flex-direction:column; gap:0.65rem;">
-
-                <div
-                  style="display:flex; align-items:center; justify-content:space-between; padding:0.65rem 0.75rem; border:1px solid var(--border); border-radius:8px;">
-                  <div>
-                    <div style="font-size:0.85rem; font-weight:600; color:var(--text-primary);">INV-9923</div>
-                    <div style="font-size:0.75rem; color:var(--text-secondary);">Oct 24, 2025</div>
-                  </div>
-                  <div
-                    style="text-align:right; display:flex; flex-direction:column; align-items:flex-end; gap:0.25rem;">
-                    <div style="font-size:0.88rem; font-weight:700;">$150.00</div>
-                    <span class="badge badge-success">Paid</span>
-                  </div>
-                </div>
-
-                <div
-                  style="display:flex; align-items:center; justify-content:space-between; padding:0.65rem 0.75rem; border:1px solid var(--border); border-radius:8px;">
-                  <div>
-                    <div style="font-size:0.85rem; font-weight:600; color:var(--text-primary);">INV-9812</div>
-                    <div style="font-size:0.75rem; color:var(--text-secondary);">Oct 12, 2025</div>
-                  </div>
-                  <div
-                    style="text-align:right; display:flex; flex-direction:column; align-items:flex-end; gap:0.25rem;">
-                    <div style="font-size:0.88rem; font-weight:700;">$320.00</div>
-                    <span class="badge badge-warn">Pending</span>
-                  </div>
-                </div>
-
-                <div
-                  style="display:flex; align-items:center; justify-content:space-between; padding:0.65rem 0.75rem; border:1px solid var(--border); border-radius:8px;">
-                  <div>
-                    <div style="font-size:0.85rem; font-weight:600; color:var(--text-primary);">INV-9745</div>
-                    <div style="font-size:0.75rem; color:var(--text-secondary);">Sep 28, 2025</div>
-                  </div>
-                  <div
-                    style="text-align:right; display:flex; flex-direction:column; align-items:flex-end; gap:0.25rem;">
-                    <div style="font-size:0.88rem; font-weight:700;">$85.00</div>
-                    <span class="badge badge-success">Paid</span>
-                  </div>
-                </div>
-
+              <div id="recent-invoices-list" style="display:flex; flex-direction:column; gap:0.65rem;">
+                <div style="padding:0.5rem; color:#64748b; font-size:0.82rem; text-align:center;">Loading recent invoices...</div>
               </div>
             </div>
 
@@ -287,33 +243,255 @@
 
   </div><!-- /portal-wrapper -->
 
+  <script src="../Assets/api.js"></script>
   <script>
-    function saveContact() {
-      const banner = document.getElementById('save-alert');
-      banner.style.display = 'flex';
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-      setTimeout(() => { banner.style.display = 'none'; }, 5000);
-    }
+    let existingPatientProfileId = null;
 
-    function changePassword() {
-      const np = document.getElementById('new-password').value;
-      const cp = document.getElementById('confirm-password').value;
-      const err = document.getElementById('pw-error');
-
-      err.style.display = 'none';
-      if (!np) return;
-
-      if (np !== cp) {
-        err.style.display = 'flex';
+    async function loadMyPatientProfile() {
+      const user = getAuthUser();
+      if (!user || !user.userId) {
+        window.location.href = '../Assets/login.html';
         return;
       }
 
-      // Passwords match — show success banner
-      saveContact();
-      document.getElementById('current-password').value = '';
-      document.getElementById('new-password').value = '';
-      document.getElementById('confirm-password').value = '';
+      const fullname = user.fullname || 'Patient';
+      document.getElementById('full-name').value = fullname;
+      document.querySelectorAll('.sidebar-user-name, .topbar-user-label').forEach(el => el.textContent = fullname);
+
+      const sidebarRole = document.querySelector('.sidebar-user-role');
+      if (sidebarRole) sidebarRole.textContent = `UID: PAT-${String(user.userId).padStart(3, '0')}`;
+
+      // 1. Fetch User object details (email, phone)
+      try {
+        const u = await apiFetch(`/User/find/${user.userId}`);
+        if (u) {
+          if (u.email) document.getElementById('email-address').value = u.email;
+          if (u.phone || u.Phone) document.getElementById('phone-number').value = u.phone || u.Phone;
+          if (u.fullname || u.Fullname) {
+            document.getElementById('full-name').value = u.fullname || u.Fullname;
+            document.querySelectorAll('.sidebar-user-name, .topbar-user-label').forEach(el => el.textContent = u.fullname || u.Fullname);
+          }
+        }
+      } catch (e) {
+        console.log('User find error:', e.message);
+      }
+
+      // 2. Fetch Patient EHR Profile (DOB, Gender, Blood Group, Address)
+      try {
+        let p = null;
+        try {
+          p = await apiFetch(`/PatientProfile/user/${user.userId}`);
+        } catch (e1) {
+          p = await apiFetch(`/api/PatientProfile/user/${user.userId}`);
+        }
+
+        const btnSave = document.getElementById('btnSaveMedFile');
+        if (p && (p.patientProfileID || p.PatientProfileID || p.id)) {
+          existingPatientProfileId = p.patientProfileID || p.PatientProfileID || p.id;
+          
+          if (p.dateOfBirth) {
+            const rawDob = p.dateOfBirth;
+            document.getElementById('dob').value = rawDob.includes('T') ? rawDob.split('T')[0] : rawDob;
+          }
+          if (p.gender) document.getElementById('gender').value = p.gender;
+          if (p.bloodGroup) document.getElementById('blood-group').value = p.bloodGroup;
+          if (p.emergencyContact) document.getElementById('emergency-phone').value = p.emergencyContact;
+          if (p.address) document.getElementById('address').value = p.address;
+
+          if (btnSave) {
+            btnSave.innerHTML = '<i class="bi bi-floppy me-1"></i> Update Health Details';
+          }
+        } else {
+          existingPatientProfileId = null;
+          if (btnSave) {
+            btnSave.innerHTML = '<i class="bi bi-plus-circle me-1"></i> Add Patient Info to DB';
+          }
+        }
+      } catch (err) {
+        console.error('Error fetching patient profile:', err);
+      }
+
+      // 3. Fetch Recent Invoices Widget
+      await loadRecentInvoices();
     }
+
+    async function loadRecentInvoices() {
+      const container = document.getElementById('recent-invoices-list');
+      if (!container) return;
+
+      try {
+        let invs = [];
+        try {
+          invs = await apiFetch('/Invoice');
+        } catch (e1) {
+          invs = await apiFetch('/api/Invoice');
+        }
+
+        const invList = Array.isArray(invs) ? invs : [];
+        if (invList.length === 0) {
+          container.innerHTML = '<div style="padding:0.75rem; text-align:center; color:#64748b; font-size:0.82rem;">No recent invoices recorded in database.</div>';
+          return;
+        }
+
+        container.innerHTML = invList.slice(0, 4).map(i => {
+          const id = i.invoiceID || i.InvoiceID || i.id || 1;
+          const dt = i.issuedDate ? (i.issuedDate.includes('T') ? i.issuedDate.split('T')[0] : i.issuedDate) : 'N/A';
+          const amt = parseFloat(i.totalAmount || i.TotalAmount || 0).toFixed(2);
+          const status = (i.paymentStatus || i.PaymentStatus || 'Pending').toLowerCase();
+          const isPaid = status === 'paid';
+          const badgeStyle = isPaid ? 'background:#dcfce7; color:#16a34a; border:1px solid #86efac;' : 'background:#fffbeb; color:#d97706; border:1px solid #fcd34d;';
+
+          return `
+            <div style="display:flex; align-items:center; justify-content:space-between; padding:0.65rem 0.75rem; border:1px solid var(--border); border-radius:8px;">
+              <div>
+                <div style="font-size:0.85rem; font-weight:700; color:var(--brand-accent);">#INV-${String(id).padStart(4, '0')}</div>
+                <div style="font-size:0.75rem; color:var(--text-secondary);"><i class="bi bi-calendar3 me-1"></i>${dt}</div>
+              </div>
+              <div style="text-align:right; display:flex; flex-direction:column; align-items:flex-end; gap:0.25rem;">
+                <div style="font-size:0.88rem; font-weight:700;">OMR ${amt}</div>
+                <span class="badge" style="${badgeStyle}; font-size:0.7rem; padding:0.15rem 0.5rem;">${i.paymentStatus || 'Pending'}</span>
+              </div>
+            </div>
+          `;
+        }).join('');
+      } catch (err) {
+        console.error('Error fetching recent invoices widget:', err);
+        container.innerHTML = '<div style="padding:0.75rem; text-align:center; color:#64748b; font-size:0.82rem;">No recent invoices available.</div>';
+      }
+    }
+
+    async function saveCoreAccount() {
+      const user = getAuthUser();
+      if (!user || !user.userId) return;
+
+      const fullname = document.getElementById('full-name').value.trim();
+      const phone = document.getElementById('phone-number').value.trim();
+
+      try {
+        await apiFetch(`/User/update/${user.userId}`, {
+          method: 'PUT',
+          body: JSON.stringify({
+            Fullname: fullname,
+            Phone: phone
+          })
+        });
+
+        // Sync local user session
+        user.fullname = fullname;
+        localStorage.setItem('user', JSON.stringify(user));
+        sessionStorage.setItem('user', JSON.stringify(user));
+
+        document.querySelectorAll('.sidebar-user-name, .topbar-user-label').forEach(el => el.textContent = fullname);
+        showSuccessBanner('Core account contact details updated successfully in database!');
+      } catch (err) {
+        alert('Save account error: ' + err.message);
+      }
+    }
+
+    async function saveOrUpdateMedicalFile() {
+      const user = getAuthUser();
+      if (!user || !user.userId) return;
+
+      const dob = document.getElementById('dob').value;
+      const gender = document.getElementById('gender').value;
+      const blood = document.getElementById('blood-group').value;
+      const emContact = document.getElementById('emergency-phone').value.trim();
+      const address = document.getElementById('address').value.trim();
+
+      try {
+        if (existingPatientProfileId) {
+          try {
+            await apiFetch('/PatientProfile/update-my-profile', {
+              method: 'PUT',
+              body: JSON.stringify({
+                DateOfBirth: dob || '1990-01-01',
+                gender: gender,
+                BloodGroup: blood,
+                emergencyContact: emContact,
+                Address: address
+              })
+            });
+          } catch (e1) {
+            await apiFetch(`/PatientProfile/update/${existingPatientProfileId}`, {
+              method: 'PUT',
+              body: JSON.stringify({
+                DateOfBirth: dob || '1990-01-01',
+                gender: gender,
+                BloodGroup: blood,
+                emergencyContact: emContact,
+                Address: address
+              })
+            });
+          }
+          showSuccessBanner('Patient Medical File updated successfully in EHR database!');
+        } else {
+          await apiFetch('/PatientProfile/create', {
+            method: 'POST',
+            body: JSON.stringify({
+              userID: user.userId,
+              DateOfBirth: dob || '1990-01-01',
+              gender: gender,
+              BloodGroup: blood,
+              emergencyContact: emContact,
+              Address: address
+            })
+          });
+          showSuccessBanner('New Patient Medical File created successfully in EHR database!');
+          await loadMyPatientProfile();
+        }
+      } catch (err) {
+        alert('Save medical file error: ' + err.message);
+      }
+    }
+
+    async function changePassword() {
+      const user = getAuthUser();
+      if (!user || !user.userId) return;
+
+      const currPw = document.getElementById('current-password').value;
+      const newPw = document.getElementById('new-password').value;
+      const confPw = document.getElementById('confirm-password').value;
+      const errBox = document.getElementById('pw-error');
+      const errText = document.getElementById('pw-error-msg');
+
+      errBox.style.display = 'none';
+
+      if (!currPw || !newPw || !confPw) {
+        errText.textContent = 'Please fill in all password fields.';
+        errBox.style.display = 'flex';
+        return;
+      }
+
+      if (newPw !== confPw) {
+        errText.textContent = 'New password and confirm password do not match.';
+        errBox.style.display = 'flex';
+        return;
+      }
+
+      try {
+        const endpoint = `/User/change-password/${user.userId}?oldPassword=${encodeURIComponent(currPw)}&newPassword=${encodeURIComponent(newPw)}`;
+        await apiFetch(endpoint, { method: 'PUT' });
+
+        showSuccessBanner('Password changed successfully! Next time sign in with your new password.');
+        document.getElementById('current-password').value = '';
+        document.getElementById('new-password').value = '';
+        document.getElementById('confirm-password').value = '';
+      } catch (err) {
+        errText.textContent = err.message || 'Current password is incorrect.';
+        errBox.style.display = 'flex';
+      }
+    }
+
+    function showSuccessBanner(msg) {
+      const banner = document.getElementById('save-alert');
+      if (!banner) return;
+      banner.querySelector('span').textContent = msg;
+      banner.style.display = 'flex';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      setTimeout(() => { banner.style.display = 'none'; }, 4500);
+    }
+
+    document.addEventListener('DOMContentLoaded', loadMyPatientProfile);
   </script>
 </body>
 

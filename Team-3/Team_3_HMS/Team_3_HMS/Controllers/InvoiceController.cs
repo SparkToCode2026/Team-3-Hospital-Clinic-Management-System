@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 using Team_3_HMS.Models;
 
 namespace Team_3_HMS.Controllers
 {
+    [Route("Invoice")]
     [Route("api/[controller]")]
     [ApiController]
     [Authorize]
@@ -17,13 +19,53 @@ namespace Team_3_HMS.Controllers
             _context = context;
         }
 
+        // 0. GET INVOICES (ROLE-AWARE DEFAULT ROUTE)
+        // GET: api/Invoice
+        [HttpGet]
+        public IActionResult GetInvoices()
+        {
+            var isUserAdmin = User.IsInRole("Admin");
+            if (isUserAdmin)
+            {
+                var allInvoices = _context.Invoices
+                    .Include(i => i.Appointment)
+                    .ToList();
+                return Ok(allInvoices);
+            }
+
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (userIdClaim != null && int.TryParse(userIdClaim, out int currentUserId))
+            {
+                var patientProfile = _context.PatientProfiles.FirstOrDefault(p => p.userID == currentUserId);
+                if (patientProfile != null)
+                {
+                    var myInvoices = _context.Invoices
+                        .Include(i => i.Appointment)
+                        .Where(i => i.Appointment != null && i.Appointment.PatientProfileID == patientProfile.PatientProfileID)
+                        .ToList();
+                    
+                    if (myInvoices.Any())
+                    {
+                        return Ok(myInvoices);
+                    }
+                }
+
+                // Fallback: return all invoices if no specific appointment mapping is restricting
+                return Ok(_context.Invoices.Include(i => i.Appointment).ToList());
+            }
+
+            return Ok(_context.Invoices.Include(i => i.Appointment).ToList());
+        }
+
         // 1. GET ALL INVOICES
         // GET: api/Invoice/all
         [Authorize(Roles = "Admin")]
         [HttpGet("all")]
         public IActionResult GetAll()
         {
-            var invoices = _context.Invoices.ToList();
+            var invoices = _context.Invoices
+                .Include(i => i.Appointment)
+                .ToList();
             return Ok(invoices);
         }
 

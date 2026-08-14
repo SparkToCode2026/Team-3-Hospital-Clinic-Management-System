@@ -1,0 +1,19 @@
+/* Prescriptions Page Custom Styles */
+
+.rx-tag {
+  background: #f0fdf4;
+  color: #166534;
+  border: 1px solid #bbf7d0;
+  font-weight: 700;
+  padding: 0.2rem 0.55rem;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  display: inline-block;
+}
+
+.rx-instructions {
+  max-width: 280px;
+  font-size: 0.83rem;
+  color: var(--text-secondary, #475569);
+  line-height: 1.4;
+}

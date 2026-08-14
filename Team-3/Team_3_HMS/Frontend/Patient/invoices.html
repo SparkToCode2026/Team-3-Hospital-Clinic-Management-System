@@ -37,7 +37,6 @@
           <i class="bi bi-grid-1x2"></i> Dashboard
         </a>
 
-        <!-- My Profile -->
         <a href="profile.html" class="nav-item">
           <i class="bi bi-person"></i> My Profile
         </a>
@@ -45,9 +44,9 @@
         <a href="appointments.html" class="nav-item">
           <i class="bi bi-calendar-check"></i> Appointments
         </a>
-        <span class="nav-item disabled">
+        <a href="prescriptions.html" class="nav-item">
           <i class="bi bi-capsule"></i> Prescriptions
-        </span>
+        </a>
 
         <!-- ACTIVE: My Invoices -->
         <a href="invoices.html" class="nav-item active">
@@ -65,8 +64,8 @@
       <!-- Bottom user info -->
       <div class="sidebar-user">
         <div>
-          <div class="sidebar-user-name">Sarah Jenkins</div>
-          <div class="sidebar-user-role">Patient · ID 2014</div>
+          <div class="sidebar-user-name">Patient Account</div>
+          <div class="sidebar-user-role">UID: PAT-001</div>
         </div>
       </div>
 
@@ -79,9 +78,8 @@
       <header class="topbar">
         <span class="topbar-title">My Billing &amp; Invoices</span>
         <div class="topbar-actions">
-          <span class="topbar-user-label">Sarah J.</span>
-          <a href="../Assets/login.html" class="btn-logout" title="Log Out"><i class="bi bi-box-arrow-right"></i> Log
-            Out</a>
+          <span class="topbar-user-label">Patient Account</span>
+          <a href="../Assets/login.html" class="btn-logout" title="Log Out"><i class="bi bi-box-arrow-right"></i> Log Out</a>
         </div>
       </header>
 
@@ -93,17 +91,17 @@
           <div class="inv-stat-card">
             <div>
               <div class="inv-stat-label">Total Billed Amount</div>
-              <div class="inv-stat-value">$1,115.00</div>
+              <div class="inv-stat-value" id="stat-billed">OMR 0.00</div>
             </div>
             <div class="inv-stat-icon blue">
-              <i class="bi bi-credit-card-2-front"></i>
+              <i class="bi bi-wallet2"></i>
             </div>
           </div>
 
           <div class="inv-stat-card">
             <div>
               <div class="inv-stat-label">Total Paid Balance</div>
-              <div class="inv-stat-value">$685.00</div>
+              <div class="inv-stat-value" id="stat-paid">OMR 0.00</div>
             </div>
             <div class="inv-stat-icon green">
               <i class="bi bi-shield-check"></i>
@@ -113,7 +111,7 @@
           <div class="inv-stat-card">
             <div>
               <div class="inv-stat-label">Pending Balance due</div>
-              <div class="inv-stat-value">$430.00</div>
+              <div class="inv-stat-value" id="stat-pending">OMR 0.00</div>
             </div>
             <div class="inv-stat-icon orange">
               <i class="bi bi-exclamation-triangle"></i>
@@ -136,61 +134,16 @@
                       <th>INVOICE ID</th>
                       <th>ISSUED DATE</th>
                       <th>PAYMENT METHOD</th>
-                      <th>TOTAL AMOUNT</th>
+                      <th>TOTAL AMOUNT (OMR)</th>
                       <th>STATUS</th>
                       <th>ACTIONS</th>
                     </tr>
                   </thead>
-                  <tbody>
+                  <tbody id="invoicesTableBody">
                     <tr>
-                      <td class="inv-id">INV-9923</td>
-                      <td>Oct 24, 2025</td>
-                      <td>Stripe Online</td>
-                      <td class="inv-amount">$150.00</td>
-                      <td><span class="badge badge-success">Paid</span></td>
-                      <td><span class="action-link"
-                          onclick="selectInvoice('INV-9923', '$150.00', 'Paid', '#APT-2401', 'Dr. Sarah Smith', 'General Consultation', '150.00')">View
-                          Details</span></td>
-                    </tr>
-                    <tr class="selected-row">
-                      <td class="inv-id">INV-9812</td>
-                      <td>Oct 12, 2025</td>
-                      <td>Bank Wire Transfer</td>
-                      <td class="inv-amount">$320.00</td>
-                      <td><span class="badge badge-warn">Pending</span></td>
-                      <td><span class="action-link"
-                          onclick="selectInvoice('INV-9812', '$320.00', 'Pending', '#APT-2489', 'Dr. Alan Vance, MD', 'Hematology / Lab', '320.00')">View
-                          Details</span></td>
-                    </tr>
-                    <tr>
-                      <td class="inv-id">INV-9745</td>
-                      <td>Sep 28, 2025</td>
-                      <td>MasterCard Credit</td>
-                      <td class="inv-amount">$85.00</td>
-                      <td><span class="badge badge-success">Paid</span></td>
-                      <td><span class="action-link"
-                          onclick="selectInvoice('INV-9745', '$85.00', 'Paid', '#APT-2380', 'Dr. Mohamed Al-Rashidi', 'Cardiology', '85.00')">View
-                          Details</span></td>
-                    </tr>
-                    <tr>
-                      <td class="inv-id">INV-9612</td>
-                      <td>Sep 15, 2025</td>
-                      <td>Cash at Desk</td>
-                      <td class="inv-amount">$450.00</td>
-                      <td><span class="badge badge-success">Paid</span></td>
-                      <td><span class="action-link"
-                          onclick="selectInvoice('INV-9612', '$450.00', 'Paid', '#APT-2290', 'Dr. Fatima Al-Harthi', 'Radiology', '450.00')">View
-                          Details</span></td>
-                    </tr>
-                    <tr>
-                      <td class="inv-id">INV-9580</td>
-                      <td>Aug 30, 2025</td>
-                      <td>Visa Debit Card</td>
-                      <td class="inv-amount">$110.00</td>
-                      <td><span class="badge badge-warn">Pending</span></td>
-                      <td><span class="action-link"
-                          onclick="selectInvoice('INV-9580', '$110.00', 'Pending', '#APT-2210', 'Dr. Ahmed Al-Balushi', 'General Practice', '110.00')">View
-                          Details</span></td>
+                      <td colspan="6" style="text-align:center; padding:1.5rem; color:#64748b;">
+                        <i class="bi bi-hourglass-split me-1"></i> Loading invoices from database...
+                      </td>
                     </tr>
                   </tbody>
                 </table>
@@ -198,14 +151,13 @@
             </div>
 
             <!-- Notice Card -->
-            <div class="notice-card">
+            <div class="notice-card" id="noticeCard">
               <div class="notice-illustration">
                 <i class="bi bi-search"></i>
               </div>
-              <div class="notice-title">No outstanding pending invoice warnings</div>
-              <p class="notice-desc">
-                Awesome! You do not have any overdue payments or pending medical claim disputes. All invoices are
-                currently healthy and recorded.
+              <div class="notice-title" id="noticeTitle">No outstanding pending invoice warnings</div>
+              <p class="notice-desc" id="noticeDesc">
+                Awesome! You do not have any overdue payments or pending medical claim disputes. All invoices are currently healthy and recorded.
               </p>
             </div>
 
@@ -217,9 +169,9 @@
               <div class="inv-details-header">
                 <div>
                   <div class="inv-details-title">Invoice Details</div>
-                  <div class="inv-details-sub" id="detail-inv-id">ID: INV-9812</div>
+                  <div class="inv-details-sub" id="detail-inv-id">ID: N/A</div>
                 </div>
-                <button class="close-btn" title="Close details">
+                <button class="close-btn" title="Close details" onclick="clearSelectedInvoice()">
                   <i class="bi bi-x-circle"></i>
                 </button>
               </div>
@@ -228,44 +180,22 @@
               <div class="inv-meta-box">
                 <div class="inv-meta-row">
                   <span class="inv-meta-label">Appointment Ref</span>
-                  <span class="inv-meta-val" id="detail-apt-ref">#APT-2489</span>
+                  <span class="inv-meta-val" id="detail-apt-ref">N/A</span>
                 </div>
                 <div class="inv-meta-row">
                   <span class="inv-meta-label">Consultant</span>
-                  <span class="inv-meta-val" id="detail-doctor">Dr. Alan Vance, MD</span>
+                  <span class="inv-meta-val" id="detail-doctor">Attending Physician</span>
                 </div>
                 <div class="inv-meta-row">
                   <span class="inv-meta-label">Department</span>
-                  <span class="inv-meta-val" id="detail-dept">Hematology / Lab</span>
+                  <span class="inv-meta-val" id="detail-dept">Outpatient Care</span>
                 </div>
               </div>
 
               <!-- Billable Services Section -->
               <div class="section-subtitle">BILLABLE SERVICES</div>
               <div class="services-list" id="detail-services">
-                <div class="service-item">
-                  <div>
-                    <div class="service-name">Complete Blood Count (CB...</div>
-                    <div class="service-qty">Qty: 1x</div>
-                  </div>
-                  <div class="service-price">$120.00</div>
-                </div>
-
-                <div class="service-item">
-                  <div>
-                    <div class="service-name">Clinical Lab Processing Fee</div>
-                    <div class="service-qty">Qty: 1x</div>
-                  </div>
-                  <div class="service-price">$50.00</div>
-                </div>
-
-                <div class="service-item">
-                  <div>
-                    <div class="service-name">Blood Thyroid Screening (...</div>
-                    <div class="service-qty">Qty: 1x</div>
-                  </div>
-                  <div class="service-price">$150.00</div>
-                </div>
+                <div style="color:#64748b; font-size:0.83rem; text-align:center; padding:1.5rem;">No invoice selected</div>
               </div>
 
               <div class="calc-divider"></div>
@@ -274,28 +204,28 @@
               <div class="totals-breakdown">
                 <div class="total-row">
                   <span>Subtotal</span>
-                  <span id="detail-subtotal">$320.00</span>
+                  <span id="detail-subtotal">OMR 0.00</span>
                 </div>
                 <div class="total-row discount">
                   <span>Hospital Copay Discount (10%)</span>
-                  <span id="detail-discount">-$32.00</span>
+                  <span id="detail-discount">-OMR 0.00</span>
                 </div>
                 <div class="total-row">
                   <span>Due Taxes</span>
-                  <span>$0.00</span>
+                  <span>OMR 0.00</span>
                 </div>
                 <div class="grand-total-row">
                   <span>Total Due Balance</span>
-                  <span id="detail-total">$288.00</span>
+                  <span id="detail-total">OMR 0.00</span>
                 </div>
               </div>
 
               <!-- Action Buttons -->
-              <button class="btn-stripe-pay" onclick="alert('Redirecting to Stripe Secure Gate...')">
-                Pay via Stripe Secure Gate
+              <button class="btn-stripe-pay" id="btnPayCard" onclick="payCurrentInvoice()">
+                <i class="bi bi-credit-card me-1"></i> Pay via Card
               </button>
               <button class="btn-print-inv" onclick="window.print()">
-                Print Medical Invoice
+                <i class="bi bi-printer me-1"></i> Print Medical Invoice
               </button>
 
             </div>
@@ -308,21 +238,219 @@
 
   </div><!-- /portal-wrapper -->
 
+  <script src="../Assets/api.js"></script>
   <script>
-    function selectInvoice(id, total, status, aptRef, doctor, dept, subtotalVal) {
-      document.getElementById('detail-inv-id').innerText = 'ID: ' + id;
-      document.getElementById('detail-apt-ref').innerText = aptRef;
-      document.getElementById('detail-doctor').innerText = doctor;
-      document.getElementById('detail-dept').innerText = dept;
-      document.getElementById('detail-subtotal').innerText = total;
+    let myInvoices = [];
+    let selectedInvoiceObj = null;
 
-      const sub = parseFloat(subtotalVal);
-      const disc = (sub * 0.10).toFixed(2);
-      const finalTotal = (sub - disc).toFixed(2);
+    async function loadPatientInvoices() {
+      const tbody = document.getElementById('invoicesTableBody');
+      if (tbody) tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding:1.5rem; color:#64748b;"><i class="bi bi-hourglass-split me-1"></i> Loading invoices from database...</td></tr>';
 
-      document.getElementById('detail-discount').innerText = '-$' + disc;
-      document.getElementById('detail-total').innerText = '$' + finalTotal;
+      try {
+        let res = [];
+        try {
+          res = await apiFetch('/Invoice');
+        } catch (e1) {
+          res = await apiFetch('/api/Invoice');
+        }
+        myInvoices = Array.isArray(res) ? res : [];
+      } catch (err) {
+        console.error('Error fetching patient invoices:', err);
+        myInvoices = [];
+      }
+
+      renderPatientInvoices(myInvoices);
+      updatePatientInvoiceStats(myInvoices);
     }
+
+    function renderPatientInvoices(list) {
+      const tbody = document.getElementById('invoicesTableBody');
+      if (!tbody) return;
+      tbody.innerHTML = '';
+
+      if (!list || list.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding:2rem; color:#64748b;"><i class="bi bi-inbox me-1"></i> No billing invoices found.</td></tr>';
+        clearSelectedInvoice();
+        return;
+      }
+
+      list.forEach((inv, idx) => {
+        const id = inv.invoiceID || inv.InvoiceID || inv.id || (idx + 1);
+        const apptId = inv.appointmentID || inv.AppointmentID || (inv.appointment?.appointmentId || 'N/A');
+        const date = inv.issuedDate ? (inv.issuedDate.includes('T') ? inv.issuedDate.split('T')[0] : inv.issuedDate) : 'N/A';
+        const method = inv.paymentmethod || inv.Paymentmethod || 'Card';
+        const amount = parseFloat(inv.totalAmount || inv.TotalAmount || 0).toFixed(2);
+        const rawStatus = inv.paymentStatus || inv.PaymentStatus || 'Pending';
+        const isPaid = rawStatus.toLowerCase() === 'paid';
+        const badgeStyle = isPaid ? 'background:#dcfce7; color:#16a34a; border:1px solid #86efac;' : 'background:#fffbeb; color:#d97706; border:1px solid #fcd34d;';
+
+        const tr = document.createElement('tr');
+        if (idx === 0) tr.className = 'selected-row';
+        tr.innerHTML = `
+          <td class="inv-id" style="color:var(--brand-accent); font-weight:700;">#INV-${String(id).padStart(4, '0')}</td>
+          <td><i class="bi bi-calendar3 me-1" style="color:#64748b;"></i>${escapeHtml(date)}</td>
+          <td><span style="font-weight:500;">${escapeHtml(method)}</span></td>
+          <td class="inv-amount">OMR ${amount}</td>
+          <td><span class="badge" style="${badgeStyle}">${escapeHtml(rawStatus)}</span></td>
+          <td>
+            <button class="btn btn-secondary" style="padding:0.25rem 0.65rem; font-size:0.78rem;" onclick="selectInvoiceByIndex(${idx})">
+              <i class="bi bi-receipt me-1"></i> Details
+            </button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+      if (list.length > 0) {
+        selectInvoiceByIndex(0);
+      }
+    }
+
+    function updatePatientInvoiceStats(list) {
+      const totalBilled = list.reduce((s, i) => s + parseFloat(i.totalAmount || i.TotalAmount || 0), 0);
+      const paidBalance = list.filter(i => (i.paymentStatus || i.PaymentStatus || '').toLowerCase() === 'paid')
+                              .reduce((s, i) => s + parseFloat(i.totalAmount || i.TotalAmount || 0), 0);
+      const pendingBalance = totalBilled - paidBalance;
+
+      document.getElementById('stat-billed').textContent = `OMR ${totalBilled.toFixed(2)}`;
+      document.getElementById('stat-paid').textContent = `OMR ${paidBalance.toFixed(2)}`;
+      document.getElementById('stat-pending').textContent = `OMR ${pendingBalance.toFixed(2)}`;
+
+      const noticeTitle = document.getElementById('noticeTitle');
+      const noticeDesc = document.getElementById('noticeDesc');
+      if (pendingBalance > 0) {
+        noticeTitle.textContent = `Pending balance of OMR ${pendingBalance.toFixed(2)} detected`;
+        noticeDesc.textContent = 'You have outstanding invoices awaiting payment. You can pay securely online via Card using the action panel.';
+      } else {
+        noticeTitle.textContent = 'No outstanding pending invoice warnings';
+        noticeDesc.textContent = 'Awesome! You do not have any overdue payments. All medical invoices are settled and up to date.';
+      }
+    }
+
+    function selectInvoiceByIndex(idx) {
+      const inv = myInvoices[idx];
+      if (!inv) return;
+
+      selectedInvoiceObj = inv;
+
+      const rows = document.querySelectorAll('#invoicesTableBody tr');
+      rows.forEach((r, i) => {
+        if (i === idx) r.classList.add('selected-row');
+        else r.classList.remove('selected-row');
+      });
+
+      const id = inv.invoiceID || inv.InvoiceID || inv.id;
+      const apptId = inv.appointmentID || inv.AppointmentID || (inv.appointment?.appointmentId || 'N/A');
+      const amount = parseFloat(inv.totalAmount || inv.TotalAmount || 0);
+      const status = inv.paymentStatus || inv.PaymentStatus || 'Pending';
+      const isPaid = status.toLowerCase() === 'paid';
+
+      document.getElementById('detail-inv-id').innerText = `ID: #INV-${String(id).padStart(4, '0')}`;
+      document.getElementById('detail-apt-ref').innerText = `#APT-${String(apptId).padStart(4, '0')}`;
+      document.getElementById('detail-doctor').innerText = 'Attending Physician';
+      document.getElementById('detail-dept').innerText = 'Clinical Consultation';
+
+      const disc = (amount * 0.10);
+      const finalTotal = isPaid ? 0.00 : (amount - disc);
+
+      document.getElementById('detail-subtotal').innerText = `OMR ${amount.toFixed(2)}`;
+      document.getElementById('detail-discount').innerText = `-OMR ${disc.toFixed(2)}`;
+      document.getElementById('detail-total').innerText = `OMR ${finalTotal.toFixed(2)}`;
+
+      const servicesEl = document.getElementById('detail-services');
+      if (servicesEl) {
+        servicesEl.innerHTML = `
+          <div class="service-item">
+            <div>
+              <div class="service-name">Medical Care & Clinical Consultation</div>
+              <div class="service-qty">Appointment Ref: #APT-${String(apptId).padStart(4, '0')}</div>
+            </div>
+            <div class="service-price">OMR ${amount.toFixed(2)}</div>
+          </div>
+        `;
+      }
+
+      const btnPay = document.getElementById('btnPayCard');
+      if (btnPay) {
+        if (isPaid) {
+          btnPay.innerHTML = '<i class="bi bi-check2-circle me-1"></i> Paid in Full';
+          btnPay.style.background = '#16a34a';
+          btnPay.disabled = true;
+          btnPay.style.cursor = 'default';
+        } else {
+          btnPay.innerHTML = `<i class="bi bi-credit-card me-1"></i> Pay OMR ${finalTotal.toFixed(2)} via Card`;
+          btnPay.style.background = '#0284c7';
+          btnPay.disabled = false;
+          btnPay.style.cursor = 'pointer';
+        }
+      }
+    }
+
+    function clearSelectedInvoice() {
+      selectedInvoiceObj = null;
+      document.getElementById('detail-inv-id').innerText = 'ID: N/A';
+      document.getElementById('detail-apt-ref').innerText = 'N/A';
+      document.getElementById('detail-doctor').innerText = 'N/A';
+      document.getElementById('detail-dept').innerText = 'N/A';
+      document.getElementById('detail-services').innerHTML = '<div style="color:#64748b; font-size:0.83rem; text-align:center; padding:1.5rem;">No invoice selected</div>';
+      document.getElementById('detail-subtotal').innerText = 'OMR 0.00';
+      document.getElementById('detail-discount').innerText = '-OMR 0.00';
+      document.getElementById('detail-total').innerText = 'OMR 0.00';
+      const btnPay = document.getElementById('btnPayCard');
+      if (btnPay) {
+        btnPay.innerHTML = '<i class="bi bi-credit-card me-1"></i> Pay via Card';
+        btnPay.style.background = '#0284c7';
+        btnPay.disabled = true;
+      }
+    }
+
+    async function payCurrentInvoice() {
+      if (!selectedInvoiceObj) return;
+
+      const id = selectedInvoiceObj.invoiceID || selectedInvoiceObj.InvoiceID || selectedInvoiceObj.id;
+      const apptId = selectedInvoiceObj.appointmentID || selectedInvoiceObj.AppointmentID;
+      const totalAmt = selectedInvoiceObj.totalAmount || selectedInvoiceObj.TotalAmount;
+      const issued = selectedInvoiceObj.issuedDate;
+
+      try {
+        await apiFetch(`/api/Invoice/update/${id}`, {
+          method: 'PUT',
+          body: JSON.stringify({
+            invoiceID: id,
+            appointmentID: apptId,
+            issuedDate: issued,
+            paymentmethod: 'Card',
+            totalAmount: totalAmt,
+            paymentStatus: 'Paid'
+          })
+        });
+
+        alert(`Payment for Invoice #INV-${String(id).padStart(4, '0')} has been successfully processed!`);
+        await loadPatientInvoices();
+      } catch (err) {
+        alert('Payment processing failed: ' + err.message);
+      }
+    }
+
+    function escapeHtml(text) {
+      if (!text) return '';
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const user = getAuthUser();
+      if (user && user.fullname) {
+        document.querySelectorAll('.sidebar-user-name, .topbar-user-label').forEach(el => el.textContent = user.fullname);
+      }
+      if (user && user.userId) {
+        const sidebarRole = document.querySelector('.sidebar-user-role');
+        if (sidebarRole) sidebarRole.textContent = `UID: PAT-${String(user.userId).padStart(3, '0')}`;
+      }
+      loadPatientInvoices();
+    });
   </script>
 </body>
 

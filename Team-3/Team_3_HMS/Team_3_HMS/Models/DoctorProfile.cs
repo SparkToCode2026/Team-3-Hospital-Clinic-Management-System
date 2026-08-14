@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 
@@ -18,12 +18,11 @@ namespace Team_3_HMS.Models
         [Required]
         public double ConsultationFee { get; set; }
 
-        //has relationship 1:1 with user
         [ForeignKey("userid")]
         [Required]
         public int userID { get; set; }
 
-        [JsonIgnore]
+        [JsonPropertyName("user")]
         public user? userid { get; set; }
 
 

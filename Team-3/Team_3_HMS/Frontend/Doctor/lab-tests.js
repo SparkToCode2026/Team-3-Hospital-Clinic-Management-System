@@ -3,11 +3,32 @@ let selectedLabTestId = null;
 let allLabTests = [];
 
 
-// Page Load
-
+function initDoctorProfile() {
+    try {
+        const raw = localStorage.getItem('user') || sessionStorage.getItem('user');
+        let user = raw ? JSON.parse(raw) : {};
+        if (!user.fullname) {
+            const token = localStorage.getItem('token') || sessionStorage.getItem('token') || '';
+            if (token && token.includes('.')) {
+                const payload = JSON.parse(atob(token.split('.')[1]));
+                user.fullname = payload['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name'] || payload.unique_name || payload.name || '';
+                user.userId = payload['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier'] || payload.nameid || '';
+                user.role = payload['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'] || payload.role || 'Doctor';
+            }
+        }
+        if (user && user.fullname) {
+            document.querySelectorAll('.sidebar-user-name, .topbar-user-label').forEach(el => el.textContent = user.fullname);
+        }
+        if (user && user.userId) {
+            const roleEl = document.querySelector('.sidebar-user-role');
+            if (roleEl) roleEl.textContent = `Doctor · ID ${user.userId}`;
+        }
+    } catch (e) {}
+}
 
 document.addEventListener("DOMContentLoaded", async function () {
 
+    initDoctorProfile();
     setupSearch();
     setupCategoryFilter();
     setupCreateForm();

@@ -1,223 +1,152 @@
-const API_BASE_URL = "https://localhost:7286/api";
+/* ═══════════════════════════════════════════════════════
+   Doctor Portal API Client Helper (Frontend/Doctor/api.js)
+   ═══════════════════════════════════════════════════════ */
 
-const MEDICAL_RECORD_API = `${API_BASE_URL}/MedicalRecord`;
-const LAB_TEST_API = `${API_BASE_URL}/LabTest`;
+let detectedBaseUrl = "http://localhost:5251/api";
 
-async function handleResponse(response) {
-    if (!response.ok) {
-        const message = await response.text();
-        throw new Error(message || "Something went wrong.");
-    }
-
-    
-    if (response.status === 204) {
-        return null;
-    }
-
-    return await response.json();
+function getAuthToken() {
+    return localStorage.getItem('token') || sessionStorage.getItem('token') || '';
 }
 
+async function requestApi(endpoint, options = {}) {
+    const token = getAuthToken();
+    const headers = {
+        'Content-Type': 'application/json',
+        ...(token ? { 'Authorization': `Bearer ${token}` } : {}),
+        ...(options.headers || {})
+    };
 
+    const cleanEndpoint = endpoint.startsWith('/') ? endpoint : `/${endpoint}`;
+    const urlsToTry = [
+        detectedBaseUrl + cleanEndpoint,
+        `http://localhost:5251/api${cleanEndpoint}`,
+        `http://localhost:5000/api${cleanEndpoint}`,
+        `https://localhost:7286/api${cleanEndpoint}`
+    ];
+    const uniqueUrls = [...new Set(urlsToTry)];
 
+    let lastErr = null;
+    for (const url of uniqueUrls) {
+        try {
+            const response = await fetch(url, {
+                ...options,
+                headers,
+                credentials: 'include'
+            });
+
+            if (response.status === 204) {
+                return null;
+            }
+
+            if (!response.ok) {
+                const message = await response.text();
+                throw new Error(message || `HTTP ${response.status}`);
+            }
+
+            if (url.includes('/api')) {
+                detectedBaseUrl = url.substring(0, url.indexOf('/api') + 4);
+            }
+
+            const contentType = response.headers.get('content-type');
+            if (contentType && contentType.includes('application/json')) {
+                return await response.json();
+            }
+            return null;
+        } catch (err) {
+            lastErr = err;
+            if (err.message && (err.message.startsWith('HTTP 4') || err.message.startsWith('HTTP 5') || err.message.includes('not found') || err.message.includes('Forbidden'))) {
+                throw err;
+            }
+        }
+    }
+
+    throw lastErr || new Error('Unable to connect to backend server.');
+}
+
+/* ── Medical Record APIs ── */
 async function getMedicalRecords() {
-    const response = await fetch(MEDICAL_RECORD_API, {
-        credentials: "include"
-    });
-
-    return await handleResponse(response);
+    return await requestApi('/MedicalRecord');
 }
 
 async function getMedicalRecordById(id) {
-    const response = await fetch(
-        `${MEDICAL_RECORD_API}/${id}`,
-        {
-            credentials: "include"
-        }
-    );
-
-    return await handleResponse(response);
+    return await requestApi(`/MedicalRecord/${id}`);
 }
 
 async function filterMedicalRecords(diagnosis) {
-    const response = await fetch(
-        `${MEDICAL_RECORD_API}/filter?diagnosis=${encodeURIComponent(diagnosis)}`,
-        {
-            credentials: "include"
-        }
-    );
-
-    return await handleResponse(response);
+    return await requestApi(`/MedicalRecord/filter?diagnosis=${encodeURIComponent(diagnosis)}`);
 }
 
 async function getMedicalRecordSummary() {
-    const response = await fetch(
-        `${MEDICAL_RECORD_API}/summary`,
-        {
-            credentials: "include"
-        }
-    );
-
-    return await handleResponse(response);
+    return await requestApi('/MedicalRecord/summary');
 }
 
 async function createMedicalRecord(record) {
-    const response = await fetch(MEDICAL_RECORD_API, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        credentials: "include",
+    return await requestApi('/MedicalRecord', {
+        method: 'POST',
         body: JSON.stringify(record)
     });
-
-    return await handleResponse(response);
 }
 
 async function updateMedicalRecord(id, record) {
-    const response = await fetch(
-        `${MEDICAL_RECORD_API}/${id}`,
-        {
-            method: "PUT",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            credentials: "include",
-            body: JSON.stringify(record)
-        }
-    );
-
-    return await handleResponse(response);
+    return await requestApi(`/MedicalRecord/${id}`, {
+        method: 'PUT',
+        body: JSON.stringify(record)
+    });
 }
 
 async function updateDiagnosis(id, diagnosis, treatmentPlan) {
-    const response = await fetch(
-        `${MEDICAL_RECORD_API}/${id}/diagnosis`,
-        {
-            method: "PATCH",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            credentials: "include",
-            body: JSON.stringify({
-                diagnosis,
-                treatmentPlan
-            })
-        }
-    );
-
-    return await handleResponse(response);
+    return await requestApi(`/MedicalRecord/${id}/diagnosis`, {
+        method: 'PATCH',
+        body: JSON.stringify({ diagnosis, treatmentPlan })
+    });
 }
 
 async function deleteMedicalRecord(id) {
-    const response = await fetch(
-        `${MEDICAL_RECORD_API}/${id}`,
-        {
-            method: "DELETE",
-            credentials: "include"
-        }
-    );
-
-    return await handleResponse(response);
+    return await requestApi(`/MedicalRecord/${id}`, {
+        method: 'DELETE'
+    });
 }
 
-
-
+/* ── Lab Test APIs ── */
 async function getLabTests() {
-    const response = await fetch(LAB_TEST_API, {
-        credentials: "include"
-    });
-
-    return await handleResponse(response);
+    return await requestApi('/LabTest');
 }
 
 async function getLabTestById(id) {
-    const response = await fetch(
-        `${LAB_TEST_API}/${id}`,
-        {
-            credentials: "include"
-        }
-    );
-
-    return await handleResponse(response);
+    return await requestApi(`/LabTest/${id}`);
 }
 
 async function filterLabTests(category) {
-    const response = await fetch(
-        `${LAB_TEST_API}/filter?category=${encodeURIComponent(category)}`,
-        {
-            credentials: "include"
-        }
-    );
-
-    return await handleResponse(response);
+    return await requestApi(`/LabTest/filter?category=${encodeURIComponent(category)}`);
 }
 
 async function getLabTestSummary() {
-    const response = await fetch(
-        `${LAB_TEST_API}/summary`,
-        {
-            credentials: "include"
-        }
-    );
-
-    return await handleResponse(response);
+    return await requestApi('/LabTest/summary');
 }
 
 async function createLabTest(labTest) {
-    const response = await fetch(LAB_TEST_API, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        credentials: "include",
+    return await requestApi('/LabTest', {
+        method: 'POST',
         body: JSON.stringify(labTest)
     });
-
-    return await handleResponse(response);
 }
 
 async function updateLabTest(id, labTest) {
-    const response = await fetch(
-        `${LAB_TEST_API}/${id}`,
-        {
-            method: "PUT",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            credentials: "include",
-            body: JSON.stringify(labTest)
-        }
-    );
-
-    return await handleResponse(response);
+    return await requestApi(`/LabTest/${id}`, {
+        method: 'PUT',
+        body: JSON.stringify(labTest)
+    });
 }
 
 async function updateLabTestResult(id, result) {
-    const response = await fetch(
-        `${LAB_TEST_API}/${id}/result`,
-        {
-            method: "PATCH",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            credentials: "include",
-            body: JSON.stringify({
-                result
-            })
-        }
-    );
-
-    return await handleResponse(response);
+    return await requestApi(`/LabTest/${id}/result`, {
+        method: 'PATCH',
+        body: JSON.stringify({ result })
+    });
 }
 
 async function deleteLabTest(id) {
-    const response = await fetch(
-        `${LAB_TEST_API}/${id}`,
-        {
-            method: "DELETE",
-            credentials: "include"
-        }
-    );
-
-    return await handleResponse(response);
+    return await requestApi(`/LabTest/${id}`, {
+        method: 'DELETE'
+    });
 }

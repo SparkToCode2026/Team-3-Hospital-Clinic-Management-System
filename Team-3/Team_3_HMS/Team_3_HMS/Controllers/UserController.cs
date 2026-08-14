@@ -10,6 +10,7 @@ using Team_3_HMS.Models;
 namespace Team_3_HMS.Controllers
 {
     [ApiController]
+    [Route("User")]
     [Route("api/[controller]")]
     public class UserController : ControllerBase
     {
@@ -26,8 +27,9 @@ namespace Team_3_HMS.Controllers
         [HttpPost("register")]
         public IActionResult Register([FromBody] user newUser)
         {
-            // Prevent public registration for Admin accounts
-            if (newUser.role != null && newUser.role.Equals("Admin", StringComparison.OrdinalIgnoreCase))
+            // Prevent public registration for Admin accounts unless caller is authenticated Admin
+            bool isAdminCaller = User.IsInRole("Admin");
+            if (!isAdminCaller && newUser.role != null && newUser.role.Equals("Admin", StringComparison.OrdinalIgnoreCase))
             {
                 return BadRequest("Admin accounts cannot be registered publicly.");
             }
@@ -101,9 +103,16 @@ namespace Team_3_HMS.Controllers
         }
 
        
+        public class UpdateUserDto
+        {
+            public string? Fullname { get; set; }
+            public string? Phone { get; set; }
+            public string? Email { get; set; }
+        }
+
         [Authorize]
         [HttpPut("update/{id}")]
-        public IActionResult UpdateUser(int id, [FromBody] user updatedData)
+        public IActionResult UpdateUser(int id, [FromBody] UpdateUserDto updatedData)
         {
             var user = _context.Users.Find(id);
             if (user == null)
@@ -111,20 +120,37 @@ namespace Team_3_HMS.Controllers
                 return NotFound("User not found.");
             }
 
-            user.Fullname = updatedData.Fullname;
-            user.Phone = updatedData.Phone;
+            if (!string.IsNullOrWhiteSpace(updatedData.Fullname))
+                user.Fullname = updatedData.Fullname;
+            if (!string.IsNullOrWhiteSpace(updatedData.Phone))
+                user.Phone = updatedData.Phone;
+            if (!string.IsNullOrWhiteSpace(updatedData.Email))
+                user.email = updatedData.Email;
 
             _context.SaveChanges();
             return Ok(new { message = "User details updated successfully." });
         }
 
        
+        public class ChangePasswordDto
+        {
+            public string? OldPassword { get; set; }
+            public string? NewPassword { get; set; }
+        }
+
         // 4. PUT: Change user password
-       
         [Authorize]
         [HttpPut("change-password/{id}")]
-        public IActionResult ChangePassword(int id, string oldPassword, string newPassword)
+        public IActionResult ChangePassword(int id, [FromQuery] string? oldPassword = null, [FromQuery] string? newPassword = null)
         {
+            string oldPwd = oldPassword ?? string.Empty;
+            string newPwd = newPassword ?? string.Empty;
+
+            if (string.IsNullOrWhiteSpace(oldPwd) || string.IsNullOrWhiteSpace(newPwd))
+            {
+                return BadRequest("Current password and new password are required.");
+            }
+
             var user = _context.Users.Find(id);
             if (user == null)
             {
@@ -134,11 +160,11 @@ namespace Team_3_HMS.Controllers
             bool isOldPasswordValid = false;
             if (!string.IsNullOrEmpty(user.PasswordHash) && user.PasswordHash.StartsWith("$2"))
             {
-                isOldPasswordValid = BCrypt.Net.BCrypt.Verify(oldPassword, user.PasswordHash);
+                isOldPasswordValid = BCrypt.Net.BCrypt.Verify(oldPwd, user.PasswordHash);
             }
             else
             {
-                isOldPasswordValid = (user.PasswordHash == oldPassword);
+                isOldPasswordValid = (user.PasswordHash == oldPwd);
             }
 
             if (!isOldPasswordValid)
@@ -146,7 +172,7 @@ namespace Team_3_HMS.Controllers
                 return BadRequest("Incorrect current password.");
             }
 
-            user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(newPassword);
+            user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(newPwd);
             _context.SaveChanges();
 
             return Ok(new { message = "Password updated successfully." });

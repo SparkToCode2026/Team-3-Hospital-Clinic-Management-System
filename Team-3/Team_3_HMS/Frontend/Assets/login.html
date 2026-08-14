@@ -127,6 +127,14 @@
           </div>
 
           <div class="mb-3">
+            <label class="form-label" for="reg-role">Account Role</label>
+            <select id="reg-role" class="form-select" required>
+              <option value="Patient" selected>Patient</option>
+              <option value="Doctor">Doctor</option>
+            </select>
+          </div>
+
+          <div class="mb-3">
             <label class="form-label" for="reg-password">Password</label>
             <input type="password" id="reg-password" class="form-control" placeholder="Create a strong password"
               autocomplete="new-password" required />
@@ -147,8 +155,9 @@
 
   </div>
 
-  <!-- Bootstrap JS -->
+  <!-- Bootstrap JS & API Helper -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="api.js"></script>
 
   <script>
     /* ── Tab Switching ───────────────────────────── */
@@ -172,32 +181,73 @@
       });
     }
 
-    /* ── Sign In (UI-only placeholder) ──────────── */
-    document.getElementById('signin-form').addEventListener('submit', function (e) {
+    /* ── Sign In Handler ─────────────────────────── */
+    document.getElementById('signin-form').addEventListener('submit', async function (e) {
       e.preventDefault();
       hideAlerts();
 
       const email = document.getElementById('signin-email').value.trim();
       const password = document.getElementById('signin-password').value;
+      const btn = document.getElementById('btn-signin');
 
       if (!email || !password) {
         document.getElementById('alert-error').style.display = 'flex';
         return;
       }
 
-      // TODO: Replace with real API call → POST /api/User/login
-      // fetch('/api/User/login?email=...&password=...', { method:'POST', credentials:'include' })
-      console.log('Sign in submitted (UI demo):', email);
+      btn.disabled = true;
+      btn.textContent = 'Authenticating...';
+
+      try {
+        const loginUrl = `/User/login?email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`;
+        const res = await apiFetch(loginUrl, { method: 'POST' });
+
+        if (res && res.token) {
+          localStorage.setItem('token', res.token);
+          sessionStorage.setItem('token', res.token);
+          const userData = {
+            userId: res.userId,
+            role: res.role || 'Patient',
+            fullname: res.fullname || email
+          };
+          localStorage.setItem('user', JSON.stringify(userData));
+          sessionStorage.setItem('user', JSON.stringify(userData));
+
+          const userRole = (res.role || '').toLowerCase();
+          if (userRole === 'admin') {
+            window.location.href = '../Admin/dashboard.html';
+          } else if (userRole === 'doctor') {
+            window.location.href = '../Doctor/dashboard.html';
+          } else {
+            window.location.href = '../Patient/dashboard.html';
+          }
+        } else {
+          throw new Error(res?.message || 'Invalid response from server');
+        }
+      } catch (err) {
+        console.error('Login error:', err.message);
+        const errBox = document.getElementById('alert-error');
+        if (errBox) {
+          errBox.querySelector('span').textContent = err.message || 'Invalid email or password. Please try again.';
+          errBox.style.display = 'flex';
+        }
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Sign in to Platform';
+      }
     });
 
-    /* ── Register (UI-only placeholder) ─────────── */
-    document.getElementById('register-form').addEventListener('submit', function (e) {
+    /* ── Register Handler ────────────────────────── */
+    document.getElementById('register-form').addEventListener('submit', async function (e) {
       e.preventDefault();
       hideAlerts();
 
       const name = document.getElementById('reg-name').value.trim();
       const email = document.getElementById('reg-email').value.trim();
+      const phone = document.getElementById('reg-phone').value.trim();
+      const role = document.getElementById('reg-role').value;
       const password = document.getElementById('reg-password').value;
+      const btn = document.getElementById('btn-register');
 
       if (!name || !email || !password) {
         document.getElementById('reg-error-msg').textContent = 'Please fill in all required fields.';
@@ -205,9 +255,36 @@
         return;
       }
 
-      // TODO: Replace with real API call → POST /api/User/register
-      // fetch('/api/User/register', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({...}) })
-      console.log('Register submitted (UI demo):', name, email);
+      btn.disabled = true;
+      btn.textContent = 'Creating Account...';
+
+      try {
+        await apiFetch('/User/register', {
+          method: 'POST',
+          body: JSON.stringify({
+            Fullname: name,
+            email: email,
+            Phone: phone,
+            PasswordHash: password,
+            role: role
+          })
+        });
+
+        alert('Account created successfully! Please sign in with your credentials.');
+        switchTab('signin');
+        document.getElementById('signin-email').value = email;
+        document.getElementById('signin-password').value = password;
+      } catch (err) {
+        console.error('Registration error:', err.message);
+        const errBox = document.getElementById('reg-alert-error');
+        if (errBox) {
+          document.getElementById('reg-error-msg').textContent = err.message || 'Failed to register account.';
+          errBox.style.display = 'flex';
+        }
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Create Account';
+      }
     });
   </script>
 

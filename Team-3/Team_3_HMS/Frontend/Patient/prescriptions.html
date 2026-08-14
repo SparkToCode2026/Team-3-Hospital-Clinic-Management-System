@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Prescriptions – MedCore Patient Portal</title>
+  <meta name="description" content="View and manage your active and past prescriptions from your care team." />
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="css/patient.css" rel="stylesheet" />
+</head>
+
+<body>
+  <div class="portal-wrapper">
+
+    <!-- ══════════════════ SIDEBAR ══════════════════ -->
+    <aside class="sidebar">
+
+      <!-- Brand -->
+      <div class="sidebar-brand">
+        <div class="sidebar-logo">
+          <i class="bi bi-hospital"></i>
+        </div>
+        <div>
+          <div class="sidebar-brand-name">MedCore</div>
+          <div class="sidebar-brand-sub">HMS Platform</div>
+        </div>
+      </div>
+
+      <!-- Navigation -->
+      <nav class="sidebar-nav">
+        <a href="dashboard.html" class="nav-item">
+          <i class="bi bi-grid-1x2"></i> Dashboard
+        </a>
+        <a href="profile.html" class="nav-item">
+          <i class="bi bi-person"></i> My Profile
+        </a>
+        <a href="appointments.html" class="nav-item">
+          <i class="bi bi-calendar-check"></i> Appointments
+        </a>
+        <!-- ACTIVE: Prescriptions -->
+        <a href="prescriptions.html" class="nav-item active">
+          <i class="bi bi-capsule"></i> Prescriptions
+        </a>
+        <a href="invoices.html" class="nav-item">
+          <i class="bi bi-receipt"></i> My Invoices
+        </a>
+
+        <div class="nav-divider"></div>
+
+        <a href="../Assets/login.html" class="nav-item">
+          <i class="bi bi-box-arrow-left"></i> Logout
+        </a>
+      </nav>
+
+      <!-- Bottom user info -->
+      <div class="sidebar-user">
+        <div>
+          <div class="sidebar-user-name">Patient Account</div>
+          <div class="sidebar-user-role">UID: PAT-001</div>
+        </div>
+      </div>
+
+    </aside>
+
+    <!-- ══════════════════ MAIN CONTENT ══════════════════ -->
+    <div class="main-content">
+
+      <!-- Topbar -->
+      <header class="topbar">
+        <span class="topbar-title">My Prescriptions</span>
+        <div class="topbar-actions">
+          <span class="topbar-user-label">Patient Account</span>
+          <a href="../Assets/login.html" class="btn-logout" title="Log Out"><i class="bi bi-box-arrow-right"></i> Log Out</a>
+        </div>
+      </header>
+
+      <!-- Page Body -->
+      <main class="page-body">
+
+        <!-- Header / Banner -->
+        <div class="welcome-hero">
+          <div>
+            <h1>Prescriptions &amp; Medication Regimen 💊</h1>
+            <p>Access your active prescriptions, dosage instructions, and doctor notes issued directly by your medical providers.</p>
+          </div>
+          <div>
+            <span class="hero-chip"><i class="bi bi-shield-check"></i> Verified Rx Records</span>
+          </div>
+        </div>
+
+        <!-- Stat Cards -->
+        <div class="stats-4-grid" style="grid-template-columns: repeat(3, 1fr); margin-bottom: 1.25rem;">
+          <div class="dash-stat-card">
+            <div>
+              <div class="dash-stat-label">Total Prescriptions</div>
+              <div class="dash-stat-value" id="stat-rx-total">0</div>
+              <div class="dash-stat-sub">Lifetime medical orders</div>
+            </div>
+            <div class="dash-icon-box dash-icon-purple">
+              <i class="bi bi-capsule"></i>
+            </div>
+          </div>
+
+          <div class="dash-stat-card">
+            <div>
+              <div class="dash-stat-label">Active Regimens</div>
+              <div class="dash-stat-value" id="stat-rx-active">0</div>
+              <div class="dash-stat-sub">Currently active courses</div>
+            </div>
+            <div class="dash-icon-box dash-icon-green">
+              <i class="bi bi-check2-circle"></i>
+            </div>
+          </div>
+
+          <div class="dash-stat-card">
+            <div>
+              <div class="dash-stat-label">Latest Issued Date</div>
+              <div class="dash-stat-value" id="stat-rx-latest" style="font-size:1.15rem; margin-top:0.25rem;">--</div>
+              <div class="dash-stat-sub">Most recent order</div>
+            </div>
+            <div class="dash-icon-box dash-icon-blue">
+              <i class="bi bi-calendar-event"></i>
+            </div>
+          </div>
+        </div>
+
+        <!-- Prescriptions Card -->
+        <div class="card">
+          <div class="card-header" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem;">
+            <span class="card-title"><i class="bi bi-capsule-pill" style="color:var(--brand-accent); margin-right:0.5rem;"></i> Active &amp; Historical Prescriptions</span>
+            
+            <div style="display:flex; gap:0.5rem; align-items:center;">
+              <input type="search" id="search-rx" class="form-control" placeholder="Search medication or instructions..." style="padding:0.45rem 0.85rem; font-size:0.85rem; width:280px;" oninput="filterPrescriptions()" onkeyup="filterPrescriptions()" onsearch="filterPrescriptions()" />
+            </div>
+          </div>
+
+          <div class="table-responsive" style="margin-top:0.75rem;">
+            <table class="inv-table" id="rx-table">
+              <thead>
+                <tr>
+                  <th>RX ID</th>
+                  <th>ISSUED DATE</th>
+                  <th>MEDICATION DETAILS</th>
+                  <th>INSTRUCTIONS &amp; DOSAGE</th>
+                  <th>STATUS</th>
+                  <th style="text-align:center;">ACTIONS</th>
+                </tr>
+              </thead>
+              <tbody id="rxTableBody">
+                <tr>
+                  <td colspan="6" style="text-align:center; padding:2rem; color:#64748b;">
+                    <i class="bi bi-hourglass-split me-1"></i> Loading prescriptions from database...
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </main>
+    </div>
+
+  </div><!-- /portal-wrapper -->
+
+  <!-- ══════════════════ VIEW PRESCRIPTION SLIP MODAL ══════════════════ -->
+  <div id="rxDetailsModal" style="display:none; position:fixed; inset:0; background:rgba(11,31,58,0.5); z-index:1000; align-items:center; justify-content:center; backdrop-filter:blur(3px);">
+    <div style="background:#ffffff; border-radius:14px; width:90%; max-width:540px; border:1px solid var(--border); box-shadow:0 12px 36px rgba(0,0,0,0.18); overflow:hidden;">
+      <div style="padding:1.25rem 1.5rem; background:linear-gradient(135deg, #0b1f3a 0%, #1a6ff5 100%); color:#ffffff; display:flex; align-items:center; justify-content:space-between;">
+        <div style="display:flex; align-items:center; gap:0.6rem;">
+          <i class="bi bi-receipt" style="font-size:1.25rem;"></i>
+          <div>
+            <h3 style="margin:0; font-size:1.05rem; font-weight:700; color:#fff;" id="modalRxTitle">Prescription Details</h3>
+            <span style="font-size:0.75rem; color:rgba(255,255,255,0.8);" id="modalRxSubtitle">Official MedCore HMS Regimen</span>
+          </div>
+        </div>
+        <button onclick="closeRxModal()" style="background:transparent; border:none; color:#ffffff; font-size:1.2rem; cursor:pointer; padding:0.2rem;">&times;</button>
+      </div>
+
+      <div style="padding:1.5rem; display:flex; flex-direction:column; gap:1rem;">
+        <div style="background:#f8fafc; border:1px solid var(--border); border-radius:8px; padding:0.85rem 1rem; display:grid; grid-template-columns:1fr 1fr; gap:0.75rem;">
+          <div>
+            <div style="font-size:0.72rem; color:var(--text-secondary); text-transform:uppercase; font-weight:600;">Prescription ID</div>
+            <div style="font-size:0.92rem; font-weight:700; color:var(--brand-accent);" id="modalRxId">--</div>
+          </div>
+          <div>
+            <div style="font-size:0.72rem; color:var(--text-secondary); text-transform:uppercase; font-weight:600;">Issued Date</div>
+            <div style="font-size:0.92rem; font-weight:600; color:var(--text-primary);" id="modalRxDate">--</div>
+          </div>
+        </div>
+
+        <div>
+          <div style="font-size:0.75rem; font-weight:700; color:var(--text-secondary); text-transform:uppercase; margin-bottom:0.35rem;">Medication</div>
+          <div style="font-size:1.05rem; font-weight:700; color:var(--text-primary);" id="modalRxMedName">--</div>
+        </div>
+
+        <div>
+          <div style="font-size:0.75rem; font-weight:700; color:var(--text-secondary); text-transform:uppercase; margin-bottom:0.35rem;">Instructions &amp; Regimen</div>
+          <div style="background:#f1f4f9; padding:0.75rem 1rem; border-radius:8px; font-size:0.88rem; color:var(--text-primary); line-height:1.45;" id="modalRxInstructions">--</div>
+        </div>
+
+        <div>
+          <div style="font-size:0.75rem; font-weight:700; color:var(--text-secondary); text-transform:uppercase; margin-bottom:0.35rem;">Physician Notes</div>
+          <div style="font-size:0.85rem; color:var(--text-secondary); font-style:italic;" id="modalRxNotes">None specified</div>
+        </div>
+      </div>
+
+      <div style="padding:1rem 1.5rem; background:#f8fafc; border-top:1px solid var(--border); display:flex; justify-content:flex-end; gap:0.6rem;">
+        <button class="btn btn-secondary" onclick="window.print()" style="font-size:0.82rem;">
+          <i class="bi bi-printer me-1"></i> Print Slip
+        </button>
+        <button class="btn btn-primary" onclick="closeRxModal()" style="font-size:0.82rem;">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script src="../Assets/api.js"></script>
+  <script>
+    let allPrescriptions = [];
+
+    async function initPatientPrescriptions() {
+      const user = getAuthUser();
+      if (!user || !user.userId) {
+        window.location.href = '../Assets/login.html';
+        return;
+      }
+
+      const name = user.fullname || 'Patient';
+      document.querySelectorAll('.sidebar-user-name, .topbar-user-label').forEach(el => el.textContent = name);
+      const roleEl = document.querySelector('.sidebar-user-role');
+      if (roleEl) roleEl.textContent = `UID: PAT-${String(user.userId).padStart(3, '0')}`;
+
+      try {
+        let data = [];
+        try {
+          data = await apiFetch('/Prescription');
+        } catch (e1) {
+          data = await apiFetch('/api/Prescription');
+        }
+
+        allPrescriptions = Array.isArray(data) ? data : [];
+        updatePrescriptionStats(allPrescriptions);
+        renderPrescriptions(allPrescriptions);
+      } catch (err) {
+        console.error('Error fetching prescriptions:', err);
+        const tbody = document.getElementById('rxTableBody');
+        if (tbody) {
+          tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding:2rem; color:#ef4444;"><i class="bi bi-exclamation-triangle me-1"></i> Failed to load prescriptions from database.</td></tr>';
+        }
+      }
+    }
+
+    function updatePrescriptionStats(list) {
+      const totalEl = document.getElementById('stat-rx-total');
+      const activeEl = document.getElementById('stat-rx-active');
+      const latestEl = document.getElementById('stat-rx-latest');
+
+      if (totalEl) totalEl.textContent = list.length;
+      if (activeEl) activeEl.textContent = list.length;
+
+      if (latestEl) {
+        if (list.length > 0 && list[0].issuedDate) {
+          const raw = list[0].issuedDate;
+          latestEl.textContent = raw.includes('T') ? raw.split('T')[0] : raw;
+        } else {
+          latestEl.textContent = '--';
+        }
+      }
+    }
+
+    function renderPrescriptions(list) {
+      const tbody = document.getElementById('rxTableBody');
+      if (!tbody) return;
+
+      if (!list || list.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding:2.5rem; color:#64748b;"><i class="bi bi-inbox me-1"></i> No prescription records found in database.</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = list.map((r, idx) => {
+        const id = r.prescriptionID || r.PrescriptionID || r.prescriptionId || r.id || (idx + 1);
+        const dt = r.issuedDate ? (r.issuedDate.includes('T') ? r.issuedDate.split('T')[0] : r.issuedDate) : 'N/A';
+        const medName = r.medicationName || r.MedicationName || ('Prescription Order #' + id);
+        const dosage = r.dosage || r.Dosage || 'As Prescribed';
+        const freq = r.frequency || r.Frequency || '';
+        const instructions = r.instructions || r.Instructions || r.notes || r.Notes || 'Take as directed by doctor.';
+        
+        return `
+          <tr>
+            <td class="inv-id" style="color:var(--brand-accent); font-weight:700;">#RX-${String(id).padStart(4, '0')}</td>
+            <td><i class="bi bi-calendar3" style="margin-right:0.35rem; color:#64748b;"></i> ${escapeHtml(dt)}</td>
+            <td>
+              <strong style="color:var(--text-primary); font-size:0.9rem;">${escapeHtml(medName)}</strong>
+              <div style="font-size:0.78rem; color:#64748b;">${escapeHtml(dosage)} ${freq ? '· ' + escapeHtml(freq) : ''}</div>
+            </td>
+            <td style="max-width:280px; font-size:0.85rem; color:var(--text-secondary);">${escapeHtml(instructions)}</td>
+            <td><span class="badge badge-success">Active</span></td>
+            <td style="text-align:center;">
+              <button class="btn btn-secondary" onclick="viewRxSlip(${idx})" style="padding:0.3rem 0.65rem; font-size:0.78rem;" title="View Details">
+                <i class="bi bi-eye"></i> Details
+              </button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function filterPrescriptions() {
+      const q = (document.getElementById('search-rx').value || '').toLowerCase().trim();
+      if (!q) {
+        renderPrescriptions(allPrescriptions);
+        return;
+      }
+
+      const filtered = allPrescriptions.filter((r, idx) => {
+        const id = String(r.prescriptionID || r.PrescriptionID || r.prescriptionId || r.id || (idx + 1));
+        const formattedId = `#rx-${id.padStart(4, '0')}`;
+        const med = (r.medicationName || r.MedicationName || '').toLowerCase();
+        const inst = (r.instructions || r.Instructions || '').toLowerCase();
+        const notes = (r.notes || r.Notes || '').toLowerCase();
+        const dt = (r.issuedDate || '').toLowerCase();
+
+        return id.includes(q) ||
+               formattedId.includes(q) ||
+               med.includes(q) ||
+               inst.includes(q) ||
+               notes.includes(q) ||
+               dt.includes(q);
+      });
+
+      renderPrescriptions(filtered);
+    }
+
+    function viewRxSlip(index) {
+      const r = allPrescriptions[index];
+      if (!r) return;
+
+      const id = r.prescriptionID || r.PrescriptionID || r.prescriptionId || r.id || (index + 1);
+      const dt = r.issuedDate ? (r.issuedDate.includes('T') ? r.issuedDate.split('T')[0] : r.issuedDate) : 'N/A';
+      const medName = r.medicationName || r.MedicationName || ('Prescription Order #' + id);
+      const instructions = r.instructions || r.Instructions || 'Take as directed by doctor.';
+      const notes = r.notes || r.Notes || 'No additional notes provided.';
+
+      document.getElementById('modalRxId').textContent = `#RX-${String(id).padStart(4, '0')}`;
+      document.getElementById('modalRxDate').textContent = dt;
+      document.getElementById('modalRxMedName').textContent = medName;
+      document.getElementById('modalRxInstructions').textContent = instructions;
+      document.getElementById('modalRxNotes').textContent = notes;
+
+      const modal = document.getElementById('rxDetailsModal');
+      if (modal) modal.style.display = 'flex';
+    }
+
+    function closeRxModal() {
+      const modal = document.getElementById('rxDetailsModal');
+      if (modal) modal.style.display = 'none';
+    }
+
+    function escapeHtml(text) {
+      if (!text) return '';
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    document.addEventListener('DOMContentLoaded', initPatientPrescriptions);
+  </script>
+</body>
+
+</html>

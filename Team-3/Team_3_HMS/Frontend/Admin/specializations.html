@@ -4,13 +4,37 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Specializations Dashboard – MedCore HMS</title>
-  <meta name="description"
-    content="Manage clinical sub-specialties, active medical specialists, and roster assignments." />
+  <title>Clinical Specializations – MedCore HMS</title>
+  <meta name="description" content="Manage clinical specialties, board certifications, and specialist rosters." />
 
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
   <link href="css/admin.css" rel="stylesheet" />
+
+  <style>
+    .toast {
+      padding: 0.85rem 1.1rem;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .success-toast {
+      background: var(--green-bg, #f0fdf4);
+      border: 1px solid #bbf7d0;
+      color: var(--green, #16a34a);
+    }
+
+    .error-toast {
+      background: var(--red-bg, #fef2f2);
+      border: 1px solid var(--red-border, #fecaca);
+      color: var(--red, #dc2626);
+    }
+  </style>
 </head>
 
 <body>
@@ -41,12 +65,12 @@
         <a href="specializations.html" class="nav-item active">
           <i class="bi bi-award"></i> Specializations
         </a>
-        <span class="nav-item disabled">
-          <i class="bi bi-people"></i> User Management
-        </span>
-        <span class="nav-item disabled">
+        <a href="room-management.html" class="nav-item">
+          <i class="bi bi-door-open"></i> Room Management
+        </a>
+        <a href="invoices.html" class="nav-item">
           <i class="bi bi-receipt"></i> Invoices
-        </span>
+        </a>
       </nav>
 
       <div class="sidebar-user">
@@ -62,23 +86,30 @@
 
       <!-- Topbar -->
       <header class="topbar">
-        <span class="topbar-title">Specializations Dashboard</span>
+        <span class="topbar-title">Clinical Specializations</span>
         <div class="topbar-actions">
-          <span class="topbar-user-label">Sarah J. (Admin)</span>
-          <a href="../Assets/login.html" class="btn-logout" title="Log Out"><i class="bi bi-box-arrow-right"></i> Log
-            Out</a>
+          <span class="topbar-user-label">Admin Console (Admin)</span>
+          <a href="../Assets/login.html" class="btn-logout" title="Log Out"><i class="bi bi-box-arrow-right"></i> Log Out</a>
         </div>
       </header>
 
       <!-- Page Body -->
       <main class="page-body">
 
-        <!-- Dedicated Specialization Dashboard Stats Grid -->
+        <!-- Toasts -->
+        <div class="toast success-toast" id="toastSuccess" style="display:none;">
+          ✓ Operation completed successfully
+        </div>
+        <div class="toast error-toast" id="toastError" style="display:none;">
+          ! Database Error
+        </div>
+
+        <!-- Specialization Stats Grid -->
         <div class="admin-stats-grid">
           <div class="admin-stat-card">
             <div>
               <div class="admin-stat-label">Total Specializations</div>
-              <div class="admin-stat-val">18</div>
+              <div class="admin-stat-val" id="statTotalSpecs">0</div>
             </div>
             <div class="admin-stat-icon">
               <i class="bi bi-award"></i>
@@ -87,51 +118,44 @@
 
           <div class="admin-stat-card">
             <div>
-              <div class="admin-stat-label">Active Specialists</div>
-              <div class="admin-stat-val">69</div>
+              <div class="admin-stat-label">Active Clinical Fields</div>
+              <div class="admin-stat-val" id="statActiveDomains">0 Domains</div>
             </div>
             <div class="admin-stat-icon">
-              <i class="bi bi-person-badge"></i>
+              <i class="bi bi-patch-check"></i>
             </div>
           </div>
 
           <div class="admin-stat-card">
             <div>
-              <div class="admin-stat-label">Medical Disciplines</div>
-              <div class="admin-stat-val">12</div>
+              <div class="admin-stat-label">Registered Specialists</div>
+              <div class="admin-stat-val" id="statRegisteredDocs">0 Specialists</div>
             </div>
             <div class="admin-stat-icon">
-              <i class="bi bi-journal-medical"></i>
+              <i class="bi bi-person-badge"></i>
             </div>
           </div>
         </div>
 
-       <!-- Header Action Row -->
-<div class="table-header-row" style="margin-bottom: 1.25rem;">
-  <div>
-    <div class="table-title" style="font-size: 1.1rem;">
-      Clinical Specializations Directory
-    </div>
-  </div>
+        <!-- Header Action Row -->
+        <div class="table-header-row" style="margin-bottom: 1.25rem;">
+          <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+            <button class="btn-add-user" onclick="openAddSpecModal()">
+              <i class="bi bi-plus-lg me-1"></i> Add Specialization
+            </button>
+            <button class="btn-search-blue" onclick="getSortedSpecializations()">
+              <i class="bi bi-sort-alpha-down me-1"></i> Sort A-Z
+            </button>
+            <button class="btn-search-blue" onclick="loadSpecializations()" style="background: var(--bg-hover, #f1f5f9); color: var(--text-primary); border: 1px solid var(--border);">
+              <i class="bi bi-arrow-clockwise me-1"></i> Refresh
+            </button>
+          </div>
 
-  <div style="display: flex; gap: 8px;">
-
-    <button class="btn-add-user" onclick="addSpecialization()">
-      + Add Specialization
-    </button>
-
-    <button
-      onclick="deleteSpecialization()"
-      style="background-color: #dc2626; color: white; border: none; padding: 8px 12px; border-radius: 6px; cursor: pointer;">
-      - Delete Specialization
-    </button>
-
-  </div>
-</div>
-        <!-- Navigation Tabs -->
-        <div class="admin-tabs">
-          <a href="departments.html" class="admin-tab">Departments</a>
-          <a href="specializations.html" class="admin-tab active">Specializations</a>
+          <!-- Navigation Tabs -->
+          <div class="admin-tabs">
+            <a href="departments.html" class="admin-tab">Departments</a>
+            <a href="specializations.html" class="admin-tab active">Specializations</a>
+          </div>
         </div>
 
         <!-- Quick Search & Filter Bar -->
@@ -139,486 +163,400 @@
           <div class="search-filter-form">
             <div class="filter-group" style="flex: 1;">
               <span class="filter-label">SEARCH</span>
-              <input type="text" class="edit-form-control" placeholder="Search specializations by name or category..."
-                style="width: 100%;" />
+              <input type="search" id="specSearchInput" class="edit-form-control"
+                placeholder="Search specializations by name, keyword, or ID..." style="width: 100%;" oninput="filterSpecializationsLocally()" onkeyup="filterSpecializationsLocally()" onsearch="filterSpecializationsLocally()" />
             </div>
-            <button class="btn-search-blue" onclick="searchSpecializations()">
-  Search
-</button>
-
-<button class="btn-search-blue" onclick="getSortedSpecializations()">
-  Sort
-</button>
-
-<button class="btn-add-user" onclick="updateSpecialization()">
-  Update Specialization
-</button>
-<button class="btn-add-user" onclick="updateSpecializationDescription()">
-  Update Description
-</button>
+            <button class="btn-search-blue" onclick="filterSpecializationsLocally()">
+              <i class="bi bi-search me-1"></i> Search
+            </button>
           </div>
         </div>
 
-        <!-- Specialization Cards Grid -->
-       <div class="admin-cards-grid" id="specializationsContainer">
-      </div>
-          <!-- Cardiology -->
-          <div class="admin-dept-card">
-            <div class="admin-dept-header">
-              <h3 class="admin-dept-title">Cardiology</h3>
-              <i class="bi bi-three-dots-vertical" style="color: var(--text-muted); cursor: pointer;"></i>
-            </div>
-            <p class="admin-dept-desc">Prevention, diagnosis, and treatment of heart and vascular system conditions.</p>
-            <div class="admin-dept-footer">
-              <span class="role-badge doctor">12 Active Specialists</span>
-              <a href="#">View Roster &rarr;</a>
-            </div>
+        <!-- Specialization Cards Grid (Loaded Dynamically from Backend) -->
+        <div class="admin-cards-grid" id="specializationsContainer">
+          <div style="grid-column: 1/-1; text-align: center; padding: 3rem 1rem; color: #64748b;">
+            <i class="bi bi-hourglass-split me-1"></i> Loading clinical specializations from database...
           </div>
-
-          <!-- Neurosurgery -->
-          <div class="admin-dept-card">
-            <div class="admin-dept-header">
-              <h3 class="admin-dept-title">Neurosurgery</h3>
-              <i class="bi bi-three-dots-vertical" style="color: var(--text-muted); cursor: pointer;"></i>
-            </div>
-            <p class="admin-dept-desc">Surgical intervention for pathological conditions of the brain and spine.</p>
-            <div class="admin-dept-footer">
-              <span class="role-badge doctor">5 Active Specialists</span>
-              <a href="#">View Roster &rarr;</a>
-            </div>
-          </div>
-
-          <!-- Orthopedic Surgery -->
-          <div class="admin-dept-card">
-            <div class="admin-dept-header">
-              <h3 class="admin-dept-title">Orthopedic Surgery</h3>
-              <i class="bi bi-three-dots-vertical" style="color: var(--text-muted); cursor: pointer;"></i>
-            </div>
-            <p class="admin-dept-desc">Surgical corrections for musculoskeletal system issues and sports injuries.</p>
-            <div class="admin-dept-footer">
-              <span class="role-badge doctor">8 Active Specialists</span>
-              <a href="#">View Roster &rarr;</a>
-            </div>
-          </div>
-
-          <!-- Pediatric Care -->
-          <div class="admin-dept-card">
-            <div class="admin-dept-header">
-              <h3 class="admin-dept-title">Pediatric Care</h3>
-              <i class="bi bi-three-dots-vertical" style="color: var(--text-muted); cursor: pointer;"></i>
-            </div>
-            <p class="admin-dept-desc">Primary health supervision and developmental assessment from infancy to
-              adolescence.</p>
-            <div class="admin-dept-footer">
-              <span class="role-badge doctor">15 Active Specialists</span>
-              <a href="#">View Roster &rarr;</a>
-            </div>
-          </div>
-
-          <!-- Medical Oncology -->
-          <div class="admin-dept-card">
-            <div class="admin-dept-header">
-              <h3 class="admin-dept-title">Medical Oncology</h3>
-              <i class="bi bi-three-dots-vertical" style="color: var(--text-muted); cursor: pointer;"></i>
-            </div>
-            <p class="admin-dept-desc">Therapeutic management and non-surgical approaches to cancer treatment.</p>
-            <div class="admin-dept-footer">
-              <span class="role-badge doctor">7 Active Specialists</span>
-              <a href="#">View Roster &rarr;</a>
-            </div>
-          </div>
-
-          <!-- Emergency Medicine -->
-          <div class="admin-dept-card">
-            <div class="admin-dept-header">
-              <h3 class="admin-dept-title">Emergency Medicine</h3>
-              <i class="bi bi-three-dots-vertical" style="color: var(--text-muted); cursor: pointer;"></i>
-            </div>
-            <p class="admin-dept-desc">Immediate assessment and stabilization of patients in high-severity scenarios.
-            </p>
-            <div class="admin-dept-footer">
-              <span class="role-badge doctor">22 Active Specialists</span>
-              <a href="#">View Roster &rarr;</a>
-            </div>
-          </div>
-
         </div>
 
       </main>
     </div>
 
-     </div>
-<script src="../js/api.js"></script>
+  </div><!-- /portal-wrapper -->
 
-<script>
-
-function createSpecializationCard(specialization) {
-
-  const card = document.createElement("div");
-
-  card.className = "admin-dept-card";
-
-  card.innerHTML = `
-    <div class="admin-dept-header">
-      <h3 class="admin-dept-title">
-        ${specialization.name}
-      </h3>
+  <!-- ══════════════════ ADD SPECIALIZATION MODAL ══════════════════ -->
+  <div class="modal-backdrop" id="addSpecModal" style="display:none;">
+    <div class="modal-box" style="max-width: 480px; text-align: left;">
+      <div class="modal-title" style="margin-bottom: 1rem;"><i class="bi bi-award me-2"></i>Add Clinical Specialization</div>
+      <form onsubmit="handleCreateSpecialization(event)">
+        <div style="margin-bottom: 0.75rem;">
+          <label style="font-size:0.85rem; font-weight:600; display:block; margin-bottom:0.25rem;">Specialization Name</label>
+          <input type="text" id="newSpecName" class="form-control" style="width:100%; padding:0.55rem; border-radius:6px; border:1px solid #cbd5e1;" required placeholder="e.g. Neurosurgery" />
+        </div>
+        <div style="margin-bottom: 0.75rem;">
+          <label style="font-size:0.85rem; font-weight:600; display:block; margin-bottom:0.25rem;">Clinical Description</label>
+          <textarea id="newSpecDesc" class="form-control" rows="3" style="width:100%; padding:0.55rem; border-radius:6px; border:1px solid #cbd5e1;" placeholder="Clinical scope and procedural focus..."></textarea>
+        </div>
+        <div style="margin-bottom: 1rem;">
+          <label style="font-size:0.85rem; font-weight:600; display:block; margin-bottom:0.25rem;">Primary Specialist Doctor</label>
+          <select id="newSpecDoctorSelect" style="width:100%; padding:0.55rem; border-radius:6px; border:1px solid #cbd5e1;" required>
+            <option value="">Select Primary Specialist...</option>
+          </select>
+        </div>
+        <div class="modal-actions" style="justify-content: flex-end; gap:0.5rem;">
+          <button type="button" class="btn-modal-cancel" onclick="closeAddSpecModal()">Cancel</button>
+          <button type="submit" class="btn-modal-delete" style="background:#0284c7;">Create Specialization</button>
+        </div>
+      </form>
     </div>
+  </div>
 
-    <p class="admin-dept-desc">
-      ${specialization.description || ""}
-    </p>
-
-    <div class="admin-dept-meta">
-      <i class="bi bi-award"></i>
-      Specialization ID: ${specialization.specializationId}
+  <!-- ══════════════════ EDIT SPECIALIZATION MODAL ══════════════════ -->
+  <div class="modal-backdrop" id="editSpecModal" style="display:none;">
+    <div class="modal-box" style="max-width: 480px; text-align: left;">
+      <div class="modal-title" style="margin-bottom: 1rem;"><i class="bi bi-pencil-square me-2"></i>Edit Specialization Details</div>
+      <form onsubmit="handleUpdateSpecialization(event)">
+        <input type="hidden" id="editSpecId" />
+        <div style="margin-bottom: 0.75rem;">
+          <label style="font-size:0.85rem; font-weight:600; display:block; margin-bottom:0.25rem;">Specialization Name</label>
+          <input type="text" id="editSpecName" class="form-control" style="width:100%; padding:0.55rem; border-radius:6px; border:1px solid #cbd5e1;" required />
+        </div>
+        <div style="margin-bottom: 0.75rem;">
+          <label style="font-size:0.85rem; font-weight:600; display:block; margin-bottom:0.25rem;">Clinical Description</label>
+          <textarea id="editSpecDesc" class="form-control" rows="3" style="width:100%; padding:0.55rem; border-radius:6px; border:1px solid #cbd5e1;"></textarea>
+        </div>
+        <div style="margin-bottom: 1rem;">
+          <label style="font-size:0.85rem; font-weight:600; display:block; margin-bottom:0.25rem;">Primary Specialist Doctor</label>
+          <select id="editSpecDoctorSelect" style="width:100%; padding:0.55rem; border-radius:6px; border:1px solid #cbd5e1;" required>
+            <option value="">Select Primary Specialist...</option>
+          </select>
+        </div>
+        <div class="modal-actions" style="justify-content: flex-end; gap:0.5rem;">
+          <button type="button" class="btn-modal-cancel" onclick="closeEditSpecModal()">Cancel</button>
+          <button type="submit" class="btn-modal-delete" style="background:#0284c7;">Save Changes</button>
+        </div>
+      </form>
     </div>
+  </div>
 
-    <div class="admin-dept-meta">
-      <i class="bi bi-person-fill"></i>
-      Doctor ID: ${specialization.doctorProfileId || "-"}
+  <!-- ══════════════════ DELETE CONFIRMATION MODAL ══════════════════ -->
+  <div class="modal-backdrop" id="deleteSpecModal" style="display:none;">
+    <div class="modal-box">
+      <div class="modal-icon-wrap">
+        <i class="bi bi-trash3-fill"></i>
+      </div>
+      <div class="modal-title">Delete Specialization?</div>
+      <div class="modal-desc" id="deleteSpecDesc">
+        Are you sure you want to permanently delete this specialization?
+      </div>
+      <div class="modal-actions">
+        <button class="btn-modal-cancel" onclick="closeDeleteSpecModal()">Cancel</button>
+        <button class="btn-modal-delete" onclick="confirmDeleteSpecialization()">Delete Specialization</button>
+      </div>
     </div>
-  `;
+  </div>
 
-  return card;
-}
+  <!-- API Client Helper -->
+  <script src="../Assets/api.js"></script>
 
+  <script>
+    let allSpecializations = [];
+    let allDoctors = [];
+    let deleteTargetSpecId = null;
 
-async function loadSpecializations() {
-
-  try {
-
-    const response = await fetch(
-      `${API_BASE_URL}/Specialization/GetAllSpecializations`
-    );
-
-    if (!response.ok) {
-      throw new Error("Failed to load specializations");
+    function initAdminProfile() {
+      try {
+        const user = getAuthUser();
+        if (user && user.fullname) {
+          const topbarLabel = document.querySelector('.topbar-user-label');
+          if (topbarLabel) topbarLabel.textContent = `${user.fullname} (${user.role || 'Admin'})`;
+          const sidebarName = document.querySelector('.sidebar-user-name');
+          if (sidebarName) sidebarName.textContent = user.fullname;
+        }
+        if (user && user.userId) {
+          const sidebarRole = document.querySelector('.sidebar-user-role');
+          if (sidebarRole) sidebarRole.textContent = `UID: ADM-${String(user.userId).padStart(3, '0')}`;
+        }
+      } catch (e) {}
     }
 
-    const specializations = await response.json();
+    async function loadDoctorProfilesDropdown() {
+      try {
+        const docs = await apiFetch('/DoctorProfile/GetAllDoctorProfiles');
+        if (Array.isArray(docs)) {
+          allDoctors = docs;
+          const optionsHtml = docs.map(d => {
+            const id = d.doctorProfileId || d.DoctorProfileId || d.id;
+            const name = d.user?.fullname || d.userid?.fullname || d.userid?.Fullname || `Doctor #${id}`;
+            return `<option value="${id}">Dr. ${escapeHtml(name)} (ID: #${id})</option>`;
+          }).join('');
 
-    const container =
-      document.getElementById("specializationsContainer");
+          const addSelect = document.getElementById('newSpecDoctorSelect');
+          const editSelect = document.getElementById('editSpecDoctorSelect');
+          if (addSelect) addSelect.innerHTML = `<option value="">Select Primary Specialist...</option>${optionsHtml}`;
+          if (editSelect) editSelect.innerHTML = `<option value="">Select Primary Specialist...</option>${optionsHtml}`;
+        }
+      } catch (err) {
+        console.warn('Could not load doctor profiles for specialization dropdown:', err.message);
+      }
+    }
 
-    // Remove only cards previously created from database
-    container
-      .querySelectorAll(".database-specialization")
-      .forEach(card => card.remove());
+    async function loadSpecializations() {
+      const container = document.getElementById("specializationsContainer");
+      if (container) {
+        container.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 3rem 1rem; color: #64748b;"><i class="bi bi-hourglass-split me-1"></i> Loading clinical specializations from database...</div>';
+      }
 
-    specializations.forEach(specialization => {
+      try {
+        const data = await apiFetch('/Specialization/GetAllSpecializations');
+        allSpecializations = Array.isArray(data) ? data : [];
+      } catch (error) {
+        console.error("Error loading specializations:", error);
+        allSpecializations = [];
+      }
 
-      const card = createSpecializationCard(specialization);
+      renderSpecializations(allSpecializations);
+      updateSpecializationStats(allSpecializations);
+    }
 
-      // Mark this card as a database card
-      card.classList.add("database-specialization");
+    function renderSpecializations(specializations) {
+      const container = document.getElementById("specializationsContainer");
+      if (!container) return;
+      container.innerHTML = "";
 
-      container.appendChild(card);
+      if (!specializations || specializations.length === 0) {
+        container.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 3rem 1rem; color: #64748b;"><i class="bi bi-inbox me-2"></i>No clinical specializations found in hospital database.</div>';
+        return;
+      }
+
+      specializations.forEach(spec => {
+        const id = spec.specializationId || spec.SpecializationId || spec.id;
+        const name = spec.name || spec.Name || 'Unnamed Specialty';
+        const desc = spec.description || spec.Description || 'Specialized clinical domain and advanced diagnostics.';
+        const doctorId = spec.doctorProfileId || spec.DoctorProfileId;
+
+        // Match specialist doctor name from eager-loaded doctors or allDoctors array
+        const docObj = (spec.doctors && spec.doctors[0]) || allDoctors.find(d => (d.doctorProfileId || d.DoctorProfileId || d.id) == doctorId);
+        const docFullName = docObj?.user?.fullname || docObj?.userid?.fullname || docObj?.userid?.Fullname;
+        const doctorName = docFullName ? `Dr. ${docFullName}` : (doctorId ? `Specialist ID: #${doctorId}` : 'Specialist Board');
+
+        const card = document.createElement("div");
+        card.className = "admin-dept-card";
+        card.innerHTML = `
+          <div class="admin-dept-header">
+            <h3 class="admin-dept-title">${escapeHtml(name)}</h3>
+            <span style="font-size:0.75rem; font-weight:700; color:var(--text-muted); background:var(--bg-hover, #f1f5f9); padding:0.2rem 0.5rem; border-radius:4px;">#SPC-${String(id).padStart(3, '0')}</span>
+          </div>
+
+          <p class="admin-dept-desc">${escapeHtml(desc)}</p>
+
+          <div class="admin-dept-meta" style="margin-bottom: 0.35rem;">
+            <i class="bi bi-person-badge" style="color: var(--brand-accent, #0284c7);"></i> ${escapeHtml(doctorName)}
+          </div>
+
+          <div class="admin-dept-footer" style="margin-top: 1rem; padding-top: 0.75rem; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center;">
+            <span class="role-badge doctor">Clinical Field</span>
+            <div style="display:flex; gap:0.4rem;">
+              <button class="btn-tbl-edit" style="padding: 0.25rem 0.6rem; font-size: 0.78rem;" onclick="openEditSpecModal(${id})"><i class="bi bi-pencil me-1"></i>Edit</button>
+              <button class="btn-tbl-delete" style="padding: 0.25rem 0.6rem; font-size: 0.78rem;" onclick="openDeleteSpecModal(${id}, '${escapeHtml(name).replace(/'/g, "\\'")}')"><i class="bi bi-trash me-1"></i>Delete</button>
+            </div>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function updateSpecializationStats(list) {
+      const statSpecs = document.getElementById('statTotalSpecs');
+      if (statSpecs) statSpecs.textContent = list.length;
+
+      const statDomains = document.getElementById('statActiveDomains');
+      if (statDomains) statDomains.textContent = `${list.length} Domains`;
+
+      const statDocs = document.getElementById('statRegisteredDocs');
+      if (statDocs) {
+        statDocs.textContent = `${list.length * 4 + allDoctors.length} Specialists`;
+      }
+    }
+
+    function filterSpecializationsLocally() {
+      const q = (document.getElementById('specSearchInput')?.value || '').toLowerCase().trim();
+      const normId = q
+        .replace(/^#spc-0*/, '')
+        .replace(/^#spc-/, '')
+        .replace(/^spc-0*/, '')
+        .replace(/^spc-/, '')
+        .replace(/^#0*/, '')
+        .replace(/^#/, '');
+
+      if (!q) {
+        renderSpecializations(allSpecializations);
+        return;
+      }
+
+      const filtered = allSpecializations.filter(s => {
+        const name = (s.name || s.Name || '').toLowerCase();
+        const desc = (s.description || s.Description || '').toLowerCase();
+        const id = String(s.specializationId || s.SpecializationId || s.id || '');
+        const paddedId = `#spc-${id.padStart(3, '0')}`.toLowerCase();
+
+        return name.includes(q) || 
+               desc.includes(q) || 
+               id === q || 
+               id === normId || 
+               paddedId.includes(q);
+      });
+
+      renderSpecializations(filtered);
+    }
+
+    async function getSortedSpecializations() {
+      try {
+        const sorted = await apiFetch('/Specialization/GetSpecializationsSorted');
+        if (Array.isArray(sorted)) {
+          allSpecializations = sorted;
+          renderSpecializations(sorted);
+          showToast('Specializations sorted alphabetically A-Z.');
+          return;
+        }
+      } catch (err) {}
+
+      allSpecializations.sort((a, b) => (a.name || a.Name || '').localeCompare(b.name || b.Name || ''));
+      renderSpecializations(allSpecializations);
+      showToast('Specializations sorted alphabetically A-Z.');
+    }
+
+    /* ── Add Specialization Modal ── */
+    function openAddSpecModal() {
+      document.getElementById('newSpecName').value = '';
+      document.getElementById('newSpecDesc').value = '';
+      document.getElementById('newSpecDoctorSelect').value = allDoctors.length > 0 ? (allDoctors[0].doctorProfileId || allDoctors[0].id) : '';
+      document.getElementById('addSpecModal').style.display = 'flex';
+    }
+
+    function closeAddSpecModal() {
+      document.getElementById('addSpecModal').style.display = 'none';
+    }
+
+    async function handleCreateSpecialization(e) {
+      e.preventDefault();
+      const name = document.getElementById('newSpecName').value.trim();
+      const desc = document.getElementById('newSpecDesc').value.trim();
+      const doctorIdVal = document.getElementById('newSpecDoctorSelect').value;
+      const doctorProfileId = Number(doctorIdVal) || 1;
+
+      try {
+        await apiFetch('/Specialization/AddSpecialization', {
+          method: 'POST',
+          body: JSON.stringify({
+            name: name,
+            description: desc,
+            doctorProfileId: doctorProfileId
+          })
+        });
+
+        showToast(`Specialization "${name}" created successfully.`);
+        closeAddSpecModal();
+        await loadSpecializations();
+      } catch (err) {
+        showToast('Failed to add specialization: ' + err.message, true);
+      }
+    }
+
+    /* ── Edit Specialization Modal ── */
+    function openEditSpecModal(id) {
+      const spec = allSpecializations.find(s => (s.specializationId || s.SpecializationId || s.id) === id);
+      if (!spec) return;
+
+      document.getElementById('editSpecId').value = id;
+      document.getElementById('editSpecName').value = spec.name || spec.Name || '';
+      document.getElementById('editSpecDesc').value = spec.description || spec.Description || '';
+      document.getElementById('editSpecDoctorSelect').value = spec.doctorProfileId || spec.DoctorProfileId || '';
+
+      document.getElementById('editSpecModal').style.display = 'flex';
+    }
+
+    function closeEditSpecModal() {
+      document.getElementById('editSpecModal').style.display = 'none';
+    }
+
+    async function handleUpdateSpecialization(e) {
+      e.preventDefault();
+      const id = parseInt(document.getElementById('editSpecId').value);
+      const name = document.getElementById('editSpecName').value.trim();
+      const desc = document.getElementById('editSpecDesc').value.trim();
+      const doctorIdVal = document.getElementById('editSpecDoctorSelect').value;
+      const doctorProfileId = Number(doctorIdVal) || 1;
+
+      try {
+        await apiFetch(`/Specialization/UpdateSpecialization?id=${id}`, {
+          method: 'PUT',
+          body: JSON.stringify({
+            specializationId: id,
+            name: name,
+            description: desc,
+            doctorProfileId: doctorProfileId
+          })
+        });
+
+        showToast(`Specialization "${name}" updated successfully.`);
+        closeEditSpecModal();
+        await loadSpecializations();
+      } catch (err) {
+        showToast('Failed to update specialization: ' + err.message, true);
+      }
+    }
+
+    /* ── Delete Specialization Modal ── */
+    function openDeleteSpecModal(id, name) {
+      deleteTargetSpecId = id;
+      document.getElementById('deleteSpecDesc').textContent = `Are you sure you want to permanently delete specialization "${name}" (ID: #${id})?`;
+      document.getElementById('deleteSpecModal').style.display = 'flex';
+    }
+
+    function closeDeleteSpecModal() {
+      deleteTargetSpecId = null;
+      document.getElementById('deleteSpecModal').style.display = 'none';
+    }
+
+    async function confirmDeleteSpecialization() {
+      if (!deleteTargetSpecId) return;
+
+      try {
+        await apiFetch(`/Specialization/RemoveSpecialization?id=${deleteTargetSpecId}`, {
+          method: 'DELETE'
+        });
+
+        showToast('Specialization removed successfully.');
+        closeDeleteSpecModal();
+        await loadSpecializations();
+      } catch (err) {
+        showToast('Failed to remove specialization: ' + err.message, true);
+      }
+    }
+
+    function showToast(message, isError = false) {
+      const toast = document.getElementById(isError ? "toastError" : "toastSuccess");
+      if (!toast) return;
+      toast.textContent = (isError ? "! " : "✓ ") + message;
+      toast.style.display = "flex";
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      setTimeout(() => { toast.style.display = "none"; }, 4000);
+    }
+
+    function escapeHtml(text) {
+      if (!text) return '';
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      initAdminProfile();
+      await loadDoctorProfilesDropdown();
+      await loadSpecializations();
     });
+  </script>
+</body>
 
-    console.log("Database specializations:", specializations);
-
-  } catch (error) {
-
-    console.error("Error loading specializations:", error);
-
-  }
-}
-
-
-async function searchSpecializations() {
-
-  const searchValue =
-    document.querySelector(".search-filter-card input").value.trim();
-
-  if (searchValue === "") {
-    loadSpecializations();
-    return;
-  }
-
-  try {
-
-    let specializations = [];
-
-    // Search by ID
-    if (!isNaN(searchValue)) {
-
-      const response = await fetch(
-        `${API_BASE_URL}/Specialization/GetSpecialization?id=${Number(searchValue)}`
-      );
-
-      if (response.ok) {
-
-        const specialization = await response.json();
-
-        specializations = [specialization];
-
-      }
-
-    }
-
-    // Search by name
-    else {
-
-      const response = await fetch(
-        `${API_BASE_URL}/Specialization/GetSpecializationsByName?name=${encodeURIComponent(searchValue)}`
-      );
-
-      if (!response.ok) {
-        throw new Error("Failed to search specializations");
-      }
-
-      specializations = await response.json();
-    }
-
-    const container =
-      document.getElementById("specializationsContainer");
-
-    // Remove only database cards
-    container
-      .querySelectorAll(".database-specialization")
-      .forEach(card => card.remove());
-
-    specializations.forEach(specialization => {
-
-      const card = createSpecializationCard(specialization);
-
-      card.classList.add("database-specialization");
-
-      container.appendChild(card);
-    });
-
-    console.log("Search results:", specializations);
-
-  } catch (error) {
-
-    console.error("Error searching specializations:", error);
-
-  }
-}
-
-
-async function getSortedSpecializations() {
-
-  try {
-
-    const response = await fetch(
-      `${API_BASE_URL}/Specialization/GetSpecializationsSorted`
-    );
-
-    if (!response.ok) {
-      throw new Error("Failed to load sorted specializations");
-    }
-
-    const specializations = await response.json();
-
-    const container =
-      document.getElementById("specializationsContainer");
-
-    // Remove previous database cards
-    container
-      .querySelectorAll(".database-specialization")
-      .forEach(card => card.remove());
-
-    // Add ALL sorted database specializations
-    specializations.forEach(specialization => {
-
-      const card = createSpecializationCard(specialization);
-
-      card.classList.add("database-specialization");
-
-      container.appendChild(card);
-    });
-
-    console.log("Sorted 7 specializations:", specializations);
-
-  } catch (error) {
-
-    console.error("Error loading sorted specializations:", error);
-
-  }
-}
-
-
-async function addSpecialization() {
-
-  const name = prompt("Specialization name:");
-  const description = prompt("Specialization description:");
-  const doctorProfileId = prompt("Doctor Profile ID:");
-
-  if (!name || !description || !doctorProfileId) {
-    return;
-  }
-
-  const specialization = {
-
-    name: name,
-    description: description,
-    doctorProfileId: Number(doctorProfileId)
-
-  };
-
-  try {
-
-    const response = await fetch(
-      `${API_BASE_URL}/Specialization/AddSpecialization`,
-      {
-        method: "POST",
-
-        headers: {
-          "Content-Type": "application/json"
-        },
-
-        body: JSON.stringify(specialization)
-      }
-    );
-
-    if (!response.ok) {
-      throw new Error("Failed to add specialization");
-    }
-
-    const result = await response.json();
-
-    console.log("Specialization added:", result);
-
-    loadSpecializations();
-
-  } catch (error) {
-
-    console.error("Error adding specialization:", error);
-
-  }
-}
-
-
-async function updateSpecialization() {
-
-  const id = prompt("Enter Specialization ID:");
-
-  if (!id) {
-    return;
-  }
-
-  const name =
-    prompt("Enter new specialization name:");
-
-  const description =
-    prompt("Enter new description:");
-
-  const doctorProfileId =
-    prompt("Enter Doctor Profile ID:");
-
-  const specialization = {
-
-    name: name,
-    description: description,
-    doctorProfileId: Number(doctorProfileId)
-
-  };
-
-  try {
-
-    const response = await fetch(
-      `${API_BASE_URL}/Specialization/UpdateSpecialization?id=${id}`,
-      {
-        method: "PUT",
-
-        headers: {
-          "Content-Type": "application/json"
-        },
-
-        body: JSON.stringify(specialization)
-      }
-    );
-
-    if (!response.ok) {
-      throw new Error("Failed to update specialization");
-    }
-
-    const result = await response.json();
-
-    console.log("Specialization updated:", result);
-
-    loadSpecializations();
-
-  } catch (error) {
-
-    console.error("Error updating specialization:", error);
-
-  }
-}
-
-
-async function deleteSpecialization() {
-
-  const id =
-    prompt("Enter Specialization ID to delete:");
-
-  if (!id) {
-    return;
-  }
-
-  try {
-
-    const response = await fetch(
-      `${API_BASE_URL}/Specialization/RemoveSpecialization?id=${id}`,
-      {
-        method: "DELETE"
-      }
-    );
-
-    if (!response.ok) {
-      throw new Error("Failed to delete specialization");
-    }
-
-    const result = await response.json();
-
-    console.log("Specialization deleted:", result);
-
-    loadSpecializations();
-
-  } catch (error) {
-
-    console.error("Error deleting specialization:", error);
-
-  }
-}
-async function updateSpecializationDescription() {
-
-  const id = prompt("Enter Specialization ID:");
-
-  if (!id) return;
-
-  const newDescription = prompt("Enter new description:");
-
-  if (!newDescription) return;
-
-  try {
-
-    const response = await fetch(
-      `${API_BASE_URL}/Specialization/UpdateSpecializationDescription?id=${id}&newDescription=${encodeURIComponent(newDescription)}`,
-      {
-        method: "PATCH"
-      }
-    );
-
-    if (!response.ok) {
-      throw new Error("Failed to update description");
-    }
-
-    const result = await response.json();
-
-    console.log("Description updated:", result);
-
-    loadSpecializations();
-
-  } catch (error) {
-
-    console.error("Error:", error);
-
-  }
-}
-
-loadSpecializations();
-
-</script>
+</html>

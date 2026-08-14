@@ -46,12 +46,9 @@
         <a href="room-management.html" class="nav-item">
           <i class="bi bi-door-open"></i> Room Management
         </a>
-        <span class="nav-item disabled">
-          <i class="bi bi-people"></i> User Management
-        </span>
-        <span class="nav-item disabled">
+        <a href="invoices.html" class="nav-item">
           <i class="bi bi-receipt"></i> Invoices
-        </span>
+        </a>
       </nav>
 
       <!-- Bottom user info -->
@@ -71,7 +68,7 @@
       <header class="topbar">
         <span class="topbar-title">Admin System &amp; User Management</span>
         <div class="topbar-actions">
-          <span class="topbar-user-label">Sarah J. (Admin)</span>
+          <span class="topbar-user-label">Admin Console (Admin)</span>
           <a href="../Assets/login.html" class="btn-logout" title="Log Out"><i class="bi bi-box-arrow-right"></i> Log
             Out</a>
         </div>
@@ -80,8 +77,8 @@
       <!-- Page Body -->
       <main class="page-body">
 
-        <!-- Access Denied Banner -->
-        <div class="access-denied-alert">
+        <!-- Access Denied Banner (Only shown if user is not Admin) -->
+        <div class="access-denied-alert" id="accessDeniedBanner" style="display: none;">
           <i class="bi bi-lock"></i>
           <span><strong>Access Denied:</strong> Admin privileges required. Certain actions (e.g., hard-deleting hospital
             database records) are locked.</span>
@@ -120,13 +117,25 @@
           </div>
         </div>
 
+        <!-- Action Alert Notification -->
+        <div id="adminAlert" style="display:none; padding: 0.85rem 1.1rem; border-radius: 8px; font-size: 0.88rem; margin-bottom: 1.25rem; align-items: center; gap: 0.6rem;">
+          <i id="adminAlertIcon" class="bi bi-check-circle-fill"></i>
+          <span id="adminAlertMsg">Action completed successfully.</span>
+        </div>
+
         <!-- Main Directory Section -->
         <div class="card">
-          <div class="table-header-row">
+          <div class="table-header-row" style="flex-wrap:wrap; gap:0.75rem;">
             <span class="table-title">User Directory</span>
-            <div class="table-actions-group">
-              <button class="btn-filter">All Roles</button>
-              <button class="btn-add-user">+ Add New User</button>
+            <div class="table-actions-group" style="flex-wrap:wrap; gap:0.5rem; align-items:center;">
+              <input type="search" id="userSearchInput" placeholder="Search name, email, or ID..." style="padding:0.45rem 0.85rem; border-radius:6px; border:1px solid #cbd5e1; font-size:0.83rem; min-width:200px;" onkeyup="filterUsers()" />
+              <select id="roleFilterSelect" style="padding:0.45rem 0.85rem; border-radius:6px; border:1px solid #cbd5e1; font-size:0.83rem; background:#fff;" onchange="filterUsers()">
+                <option value="all" selected>All Roles</option>
+                <option value="Doctor">Doctors</option>
+                <option value="Patient">Patients</option>
+                <option value="Admin">Admins</option>
+              </select>
+              <button class="btn-add-user" onclick="openAddUserModal()">+ Add New User</button>
             </div>
           </div>
 
@@ -144,71 +153,8 @@
               </thead>
               <tbody>
                 <tr>
-                  <td class="usr-id">USR-001</td>
-                  <td>Dr. Elizabeth Reed</td>
-                  <td>dr.eli@medcore.com</td>
-                  <td><span class="role-badge doctor">Doctor</span></td>
-                  <td>+1 (555) 219-2831</td>
-                  <td>
-                    <button class="btn-tbl-edit">Edit</button>
-                    <button class="btn-tbl-delete"
-                      onclick="openDeleteModal('USR-001', 'Dr. Elizabeth Reed')">Delete</button>
-                  </td>
-                </tr>
-                <tr>
-                  <td class="usr-id">USR-002</td>
-                  <td>Dr. Alan Vance</td>
-                  <td>dr.alan@medcore.com</td>
-                  <td><span class="role-badge doctor">Doctor</span></td>
-                  <td>+1 (555) 342-9321</td>
-                  <td>
-                    <button class="btn-tbl-edit">Edit</button>
-                    <button class="btn-tbl-delete"
-                      onclick="openDeleteModal('USR-002', 'Dr. Alan Vance')">Delete</button>
-                  </td>
-                </tr>
-                <tr>
-                  <td class="usr-id">USR-003</td>
-                  <td>Sarah Jenkins</td>
-                  <td>sarah.j@medcore.com</td>
-                  <td><span class="role-badge admin">Admin</span></td>
-                  <td>+1 (555) 998-2194</td>
-                  <td>
-                    <button class="btn-tbl-edit">Edit</button>
-                    <button class="btn-tbl-delete" onclick="openDeleteModal('USR-003', 'Sarah Jenkins')">Delete</button>
-                  </td>
-                </tr>
-                <tr>
-                  <td class="usr-id">USR-004</td>
-                  <td>David Miller</td>
-                  <td>d.miller@medcore.com</td>
-                  <td><span class="role-badge patient">Patient</span></td>
-                  <td>+1 (555) 237-0042</td>
-                  <td>
-                    <button class="btn-tbl-edit">Edit</button>
-                    <button class="btn-tbl-delete" onclick="openDeleteModal('USR-004', 'David Miller')">Delete</button>
-                  </td>
-                </tr>
-                <tr>
-                  <td class="usr-id">USR-005</td>
-                  <td>Alex Dunphy</td>
-                  <td>alex.d@medcore.com</td>
-                  <td><span class="role-badge doctor">Doctor</span></td>
-                  <td>+1 (555) 456-1122</td>
-                  <td>
-                    <button class="btn-tbl-edit">Edit</button>
-                    <button class="btn-tbl-delete" onclick="openDeleteModal('USR-005', 'Alex Dunphy')">Delete</button>
-                  </td>
-                </tr>
-                <tr>
-                  <td class="usr-id">USR-006</td>
-                  <td>Thomas Shelby</td>
-                  <td>t.shelby@medcore.com</td>
-                  <td><span class="role-badge admin">Admin</span></td>
-                  <td>+1 (555) 768-3380</td>
-                  <td>
-                    <button class="btn-tbl-edit">Edit</button>
-                    <button class="btn-tbl-delete" onclick="openDeleteModal('USR-006', 'Thomas Shelby')">Delete</button>
+                  <td colspan="6" style="text-align:center; padding: 2rem; color: #64748b;">
+                    <i class="bi bi-hourglass-split me-1"></i>Loading system users from database...
                   </td>
                 </tr>
               </tbody>
@@ -220,7 +166,7 @@
     </div>
 
     <!-- Delete User Modal Dialog -->
-    <div class="modal-backdrop" id="deleteModal">
+    <div class="modal-backdrop" id="deleteModal" style="display:none;">
       <div class="modal-box">
         <div class="modal-icon-wrap">
           <i class="bi bi-exclamation-triangle-fill"></i>
@@ -239,19 +185,325 @@
 
   </div><!-- /portal-wrapper -->
 
+  <!-- API Client Helper & Scripts -->
+  <script src="../Assets/api.js"></script>
+
+  <!-- Add User Modal Dialog -->
+  <div class="modal-backdrop" id="addUserModal" style="display:none;">
+    <div class="modal-box" style="max-width: 480px; text-align: left;">
+      <div class="modal-title" style="margin-bottom: 1rem;"><i class="bi bi-person-plus me-2"></i>Add New System User</div>
+      <form id="addUserForm" onsubmit="handleCreateUser(event)">
+        <div style="margin-bottom: 0.75rem;">
+          <label style="font-size:0.85rem; font-weight:600; display:block; margin-bottom:0.25rem;">Full Name</label>
+          <input type="text" id="newFullname" class="form-control" style="width:100%; padding:0.5rem; border-radius:6px; border:1px solid #cbd5e1;" required placeholder="Dr. Sarah Connor" />
+        </div>
+        <div style="margin-bottom: 0.75rem;">
+          <label style="font-size:0.85rem; font-weight:600; display:block; margin-bottom:0.25rem;">Email Address</label>
+          <input type="email" id="newEmail" class="form-control" style="width:100%; padding:0.5rem; border-radius:6px; border:1px solid #cbd5e1;" required placeholder="sarah.c@medcore.com" />
+        </div>
+        <div style="margin-bottom: 0.75rem;">
+          <label style="font-size:0.85rem; font-weight:600; display:block; margin-bottom:0.25rem;">Role</label>
+          <select id="newRole" style="width:100%; padding:0.5rem; border-radius:6px; border:1px solid #cbd5e1;" required>
+            <option value="Doctor">Doctor</option>
+            <option value="Patient" selected>Patient</option>
+            <option value="Admin">Admin</option>
+          </select>
+        </div>
+        <div style="margin-bottom: 0.75rem;">
+          <label style="font-size:0.85rem; font-weight:600; display:block; margin-bottom:0.25rem;">Phone Number</label>
+          <input type="tel" id="newPhone" style="width:100%; padding:0.5rem; border-radius:6px; border:1px solid #cbd5e1;" placeholder="+968 9123 4567" />
+        </div>
+        <div style="margin-bottom: 1rem;">
+          <label style="font-size:0.85rem; font-weight:600; display:block; margin-bottom:0.25rem;">Password</label>
+          <input type="password" id="newPassword" style="width:100%; padding:0.5rem; border-radius:6px; border:1px solid #cbd5e1;" required placeholder="Initial password" />
+        </div>
+        <div class="modal-actions" style="justify-content: flex-end; gap:0.5rem;">
+          <button type="button" class="btn-modal-cancel" onclick="closeAddUserModal()">Cancel</button>
+          <button type="submit" class="btn-modal-delete" style="background:#2563eb;">Create User</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Edit User Modal Dialog -->
+  <div class="modal-backdrop" id="editUserModal" style="display:none;">
+    <div class="modal-box" style="max-width: 480px; text-align: left;">
+      <div class="modal-title" style="margin-bottom: 1rem;"><i class="bi bi-pencil-square me-2"></i>Edit User Details</div>
+      <form id="editUserForm" onsubmit="handleUpdateUser(event)">
+        <input type="hidden" id="editUserId" />
+        <div style="margin-bottom: 0.75rem;">
+          <label style="font-size:0.85rem; font-weight:600; display:block; margin-bottom:0.25rem;">Full Name</label>
+          <input type="text" id="editFullname" style="width:100%; padding:0.5rem; border-radius:6px; border:1px solid #cbd5e1;" required placeholder="Full Name" />
+        </div>
+        <div style="margin-bottom: 1rem;">
+          <label style="font-size:0.85rem; font-weight:600; display:block; margin-bottom:0.25rem;">Phone Number</label>
+          <input type="tel" id="editPhone" style="width:100%; padding:0.5rem; border-radius:6px; border:1px solid #cbd5e1;" placeholder="Phone Number" />
+        </div>
+        <div class="modal-actions" style="justify-content: flex-end; gap:0.5rem;">
+          <button type="button" class="btn-modal-cancel" onclick="closeEditUserModal()">Cancel</button>
+          <button type="submit" class="btn-modal-delete" style="background:#2563eb;">Save Changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <script>
+    let usersList = [];
+    let deleteTargetId = null;
+
+    async function initDashboard() {
+      const authUser = getAuthUser();
+      if (!authUser || !authUser.fullname) {
+        window.location.href = '../Assets/login.html';
+        return;
+      }
+      const name = authUser.fullname;
+      const role = authUser.role || 'Admin';
+      const id = authUser.userId || 1;
+
+      const topbarLabel = document.querySelector('.topbar-user-label');
+      if (topbarLabel) topbarLabel.textContent = `${name} (${role})`;
+
+      const sidebarName = document.querySelector('.sidebar-user-name');
+      if (sidebarName) sidebarName.textContent = name;
+
+      const sidebarRole = document.querySelector('.sidebar-user-role');
+      if (sidebarRole) sidebarRole.textContent = `UID: ADM-${String(id).padStart(3, '0')}`;
+
+      // Show Access Denied banner only if the logged-in user is not an Admin
+      const accessBanner = document.getElementById('accessDeniedBanner');
+      if (accessBanner) {
+        if (role.toLowerCase() !== 'admin') {
+          accessBanner.style.display = 'flex';
+        } else {
+          accessBanner.style.display = 'none';
+        }
+      }
+
+      await loadUsers();
+    }
+
+    async function loadUsers() {
+      const tbody = document.querySelector('.user-table tbody');
+      if (tbody) tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding: 2rem; color: #64748b;"><i class="bi bi-hourglass-split me-1"></i>Loading user records from database...</td></tr>';
+
+      try {
+        const data = await apiFetch('/User/all');
+        usersList = Array.isArray(data) ? data : [];
+      } catch (err) {
+        console.error('Error fetching users:', err);
+        usersList = [];
+      }
+
+      filterUsers();
+      updateStats(usersList);
+    }
+
+    function filterUsers() {
+      const search = (document.getElementById('userSearchInput')?.value || '').toLowerCase().trim();
+      const roleFilter = (document.getElementById('roleFilterSelect')?.value || 'all').toLowerCase();
+
+      const filtered = usersList.filter(u => {
+        const id = String(u.userID || u.id || '');
+        const name = (u.fullname || u.Fullname || '').toLowerCase();
+        const email = (u.email || '').toLowerCase();
+        const phone = (u.phone || u.Phone || '').toLowerCase();
+        const role = (u.role || '').toLowerCase();
+
+        const matchesSearch = !search || id.includes(search) || name.includes(search) || email.includes(search) || phone.includes(search);
+        const matchesRole = roleFilter === 'all' || role === roleFilter;
+        return matchesSearch && matchesRole;
+      });
+
+      renderUsers(filtered);
+    }
+
+    function renderUsers(list) {
+      const tbody = document.querySelector('.user-table tbody');
+      if (!tbody) return;
+      tbody.innerHTML = '';
+
+      if (list.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding: 2rem; color: #64748b;">No matching user accounts found.</td></tr>';
+        return;
+      }
+
+      list.forEach(u => {
+        const id = u.userID || u.id;
+        const name = u.fullname || u.Fullname || 'N/A';
+        const email = u.email || 'N/A';
+        const role = u.role || 'Patient';
+        const phone = u.phone || u.Phone || 'N/A';
+
+        const roleClass = role.toLowerCase() === 'admin' ? 'admin' : (role.toLowerCase() === 'doctor' ? 'doctor' : 'patient');
+
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td class="usr-id">USR-${String(id).padStart(3, '0')}</td>
+          <td><strong>${escapeHtml(name)}</strong></td>
+          <td>${escapeHtml(email)}</td>
+          <td><span class="role-badge ${roleClass}">${escapeHtml(role)}</span></td>
+          <td>${escapeHtml(phone)}</td>
+          <td>
+            <button class="btn-tbl-edit" onclick="openEditUserModal(${id}, '${name.replace(/'/g, "\\'")}', '${phone.replace(/'/g, "\\'")}')">Edit</button>
+            <button class="btn-tbl-delete" onclick="openDeleteModal(${id}, '${name.replace(/'/g, "\\'")}')">Delete</button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function updateStats(list) {
+      const patients = list.filter(u => (u.role || '').toLowerCase() === 'patient').length;
+      const doctors = list.filter(u => (u.role || '').toLowerCase() === 'doctor').length;
+      const admins = list.filter(u => (u.role || '').toLowerCase() === 'admin').length;
+
+      const statVals = document.querySelectorAll('.admin-stat-val');
+      if (statVals.length >= 3) {
+        statVals[0].textContent = patients;
+        statVals[1].textContent = doctors;
+        statVals[2].textContent = admins;
+      }
+    }
+
+    function openAddUserModal() {
+      document.getElementById('newFullname').value = '';
+      document.getElementById('newEmail').value = '';
+      document.getElementById('newPhone').value = '';
+      document.getElementById('newPassword').value = '';
+      document.getElementById('newRole').value = 'Patient';
+      document.getElementById('addUserModal').style.display = 'flex';
+    }
+
+    function closeAddUserModal() {
+      document.getElementById('addUserModal').style.display = 'none';
+    }
+
+    async function handleCreateUser(e) {
+      e.preventDefault();
+      const name = document.getElementById('newFullname').value.trim();
+      const email = document.getElementById('newEmail').value.trim();
+      const role = document.getElementById('newRole').value;
+      const phone = document.getElementById('newPhone').value.trim();
+      const pwd = document.getElementById('newPassword').value;
+
+      try {
+        await apiFetch('/User/register', {
+          method: 'POST',
+          body: JSON.stringify({
+            Fullname: name,
+            email: email,
+            role: role,
+            Phone: phone,
+            PasswordHash: pwd
+          })
+        });
+        showAdminAlert(`Created new ${role} user account "${name}" successfully!`, false);
+        closeAddUserModal();
+        await loadUsers();
+      } catch (err) {
+        showAdminAlert('Failed to create user: ' + err.message, true);
+      }
+    }
+
+    function openEditUserModal(userId, name, phone) {
+      document.getElementById('editUserId').value = userId;
+      document.getElementById('editFullname').value = name;
+      document.getElementById('editPhone').value = phone === 'N/A' ? '' : phone;
+      document.getElementById('editUserModal').style.display = 'flex';
+    }
+
+    function closeEditUserModal() {
+      document.getElementById('editUserModal').style.display = 'none';
+    }
+
+    async function handleUpdateUser(e) {
+      e.preventDefault();
+      const id = parseInt(document.getElementById('editUserId').value);
+      const name = document.getElementById('editFullname').value.trim();
+      const phone = document.getElementById('editPhone').value.trim();
+
+      try {
+        await apiFetch(`/User/update/${id}`, {
+          method: 'PUT',
+          body: JSON.stringify({
+            Fullname: name,
+            Phone: phone
+          })
+        });
+        showAdminAlert(`User "${name}" details updated successfully!`, false);
+        closeEditUserModal();
+        await loadUsers();
+      } catch (err) {
+        showAdminAlert('Failed to update user: ' + err.message, true);
+      }
+    }
+
     function openDeleteModal(userId, userName) {
-      document.getElementById('deleteModal').style.display = 'flex';
+      const authUser = getAuthUser();
+      if (authUser && String(authUser.userId) === String(userId)) {
+        showAdminAlert('You cannot delete your own active administrator account.', true);
+        return;
+      }
+
+      deleteTargetId = userId;
+      const modal = document.getElementById('deleteModal');
+      const desc = modal.querySelector('.modal-desc');
+      if (desc) desc.textContent = `You are about to permanently delete user "${userName}" (ID: USR-${String(userId).padStart(3, '0')}). This action cannot be undone.`;
+      modal.style.display = 'flex';
     }
 
     function closeDeleteModal() {
+      deleteTargetId = null;
       document.getElementById('deleteModal').style.display = 'none';
     }
 
-    function confirmDeleteUser() {
-      alert('User deletion processed.');
-      closeDeleteModal();
+    async function confirmDeleteUser() {
+      if (!deleteTargetId) return;
+
+      try {
+        await apiFetch(`/User/delete/${deleteTargetId}`, { method: 'DELETE' });
+        showAdminAlert('User account deleted successfully.', false);
+        closeDeleteModal();
+        await loadUsers();
+      } catch (err) {
+        showAdminAlert('Delete failed: ' + err.message, true);
+      }
     }
+
+    function showAdminAlert(msg, isError = false) {
+      const alertBox = document.getElementById('adminAlert');
+      const alertMsg = document.getElementById('adminAlertMsg');
+      const alertIcon = document.getElementById('adminAlertIcon');
+
+      if (!alertBox || !alertMsg) return;
+
+      alertMsg.textContent = msg;
+      if (isError) {
+        alertBox.style.background = '#fef2f2';
+        alertBox.style.border = '1px solid #fca5a5';
+        alertBox.style.color = '#b91c1c';
+        alertIcon.className = 'bi bi-exclamation-circle-fill';
+      } else {
+        alertBox.style.background = '#f0fdf4';
+        alertBox.style.border = '1px solid #86efac';
+        alertBox.style.color = '#15803d';
+        alertIcon.className = 'bi bi-check-circle-fill';
+      }
+
+      alertBox.style.display = 'flex';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      setTimeout(() => { alertBox.style.display = 'none'; }, 4500);
+    }
+
+    function escapeHtml(text) {
+      if (!text) return '';
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    document.addEventListener('DOMContentLoaded', initDashboard);
   </script>
 </body>
 

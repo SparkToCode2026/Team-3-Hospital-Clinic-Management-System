@@ -111,6 +111,9 @@ a { text-decoration: none; }
   color: rgba(255,255,255,0.55);
   font-size: 0.85rem;
   font-weight: 500;
+  line-height: 1.4;
+  text-decoration: none;
+  box-sizing: border-box;
   transition: all 0.18s ease;
   white-space: nowrap;
 }

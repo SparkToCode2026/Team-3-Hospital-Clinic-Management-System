@@ -1,2163 +1,644 @@
-```html
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Doctor Profile & Settings | HMS Clinical</title>
-  <meta name="description" content="Manage your clinical profile, license, consultation fee, and account credentials.">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Doctor Profile & Settings – MedCore HMS</title>
+  <meta name="description" content="Manage your clinical profile, practitioner license, consultation fee, and login credentials." />
 
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="style.css" rel="stylesheet" />
 </head>
 
 <body>
-
   <div class="portal-wrapper">
 
-    <!-- SIDEBAR -->
+    <!-- ══════════════════ SIDEBAR ══════════════════ -->
     <aside class="sidebar">
 
+      <!-- Brand -->
       <div class="sidebar-brand">
         <div class="sidebar-logo">
           <i class="bi bi-hospital"></i>
         </div>
-
         <div>
           <div class="sidebar-brand-name">HMS Clinical</div>
           <div class="sidebar-brand-sub">Doctor Portal</div>
         </div>
       </div>
 
+      <!-- Navigation -->
       <nav class="sidebar-nav">
-<<<<<<< HEAD
-
         <a href="dashboard.html" class="nav-item">
           <i class="bi bi-grid-1x2-fill"></i> Dashboard
         </a>
-
         <a href="medical-records.html" class="nav-item">
           <i class="bi bi-journal-medical"></i> Medical Records
         </a>
-
         <a href="prescriptions.html" class="nav-item">
-          <i class="bi bi-capsule"></i> Prescriptions
+          <i class="bi bi-prescription2"></i> Prescriptions
         </a>
-
         <a href="medications.html" class="nav-item">
-          <i class="bi bi-capsule-pills"></i> Medications
+          <i class="bi bi-capsule"></i> Medications
         </a>
-
         <a href="lab-tests.html" class="nav-item">
-          <i class="bi bi-virus"></i> Lab Tests
+          <i class="bi bi-eyedropper"></i> Lab Tests
         </a>
-
         <a href="appointments.html" class="nav-item">
           <i class="bi bi-calendar-check"></i> Appointments
         </a>
-
         <a href="patients.html" class="nav-item">
           <i class="bi bi-people"></i> Patients
         </a>
-
         <a href="doctor-profile.html" class="nav-item active">
-          <i class="bi bi-person-gear"></i> Settings & Profile
+          <i class="bi bi-person-gear"></i> Settings &amp; Profile
         </a>
-
-=======
-        <a href="dashboard.html" class="nav-item"><i class="bi bi-grid-1x2-fill"></i> Dashboard</a>
-        <a href="medical-records.html" class="nav-item"><i class="bi bi-journal-medical"></i> Medical Records</a>
-        <a href="lab-tests.html" class="nav-item"><i class="bi bi-virus"></i> Lab Tests</a>
-        <a href="appointments.html" class="nav-item"><i class="bi bi-calendar-check"></i> Appointments</a>
-        <a href="patients.html" class="nav-item"><i class="bi bi-people"></i> Patients</a>
-        <a href="doctor-profile.html" class="nav-item active"><i class="bi bi-person-gear"></i> Settings &amp;
-          Profile</a>
->>>>>>> origin/main
       </nav>
 
+      <!-- Bottom user info -->
       <div class="sidebar-user">
         <div>
-          <div class="sidebar-user-name">Dr. Sarah Chen</div>
-          <div class="sidebar-user-role">Chief Endocrinologist</div>
+          <div class="sidebar-user-name">Doctor Console</div>
+          <div class="sidebar-user-role">Attending Physician</div>
         </div>
       </div>
 
     </aside>
 
-
-    <!-- MAIN CONTENT -->
-
+    <!-- ══════════════════ MAIN CONTENT ══════════════════ -->
     <div class="main-content">
 
+      <!-- Topbar -->
       <header class="topbar">
-
-        <span class="topbar-title">
-          Settings & Profile
-        </span>
-
+        <span class="topbar-title">Doctor Profile Settings</span>
         <div class="topbar-actions">
-
-          <span class="topbar-user-label">
-            Dr. Sarah Chen
-          </span>
-
-          <a href="../Assets/login.html"
-             class="btn-logout"
-             title="Log Out">
-
-            <i class="bi bi-box-arrow-right"></i>
-            Log Out
-
+          <span class="topbar-user-label">Doctor Console</span>
+          <a href="../Assets/login.html" class="btn-logout" title="Log Out">
+            <i class="bi bi-box-arrow-right"></i> Log Out
           </a>
-
         </div>
-
       </header>
 
-
+      <!-- Page Body -->
       <main class="page-body">
 
-        <!-- Success Alert -->
-
-        <div class="alert alert-success d-none"
-             id="saveSuccessAlert"
-             role="alert">
-
+        <!-- Success banner -->
+        <div class="alert alert-success" id="save-alert" style="display:none;">
           <i class="bi bi-check-circle-fill"></i>
-
-          <span id="successMessage">
-            Doctor profile updated successfully.
-          </span>
-
+          <span id="save-alert-msg">Doctor profile updated successfully. All changes have been synced with hospital clinical records.</span>
         </div>
 
-
-        <!-- Error Alert -->
-
-        <div class="alert alert-danger d-none"
-             id="errorAlert"
-             role="alert">
-
+        <!-- Error banner -->
+        <div class="alert alert-danger" id="error-alert" style="display:none; background:#fee2e2; border:1px solid #fecaca; color:#b91c1c;">
           <i class="bi bi-exclamation-circle-fill"></i>
-
-          <span id="errorMessage">
-            Something went wrong.
-          </span>
-
+          <span id="error-alert-msg">Something went wrong.</span>
         </div>
-
-
-        <!-- Page Header -->
-
-        <div class="page-header">
-
-          <h1>
-            Doctor Profile & Settings
-          </h1>
-
-          <p>
-            Manage your account credentials, clinical profile details, and consultation fees.
-          </p>
-
-        </div>
-
-
-        <!-- Doctor ID -->
-
-        <div class="card mb-3">
-
-          <div class="card-header">
-
-            <span class="card-title">
-              Doctor Profile ID
-            </span>
-
-          </div>
-
-
-          <div class="d-flex gap-2 align-items-end">
-
-            <div class="form-group flex-grow-1">
-
-              <label class="form-label">
-                Doctor ID
-              </label>
-
-              <input
-                type="number"
-                class="form-control"
-                id="doctorId"
-                placeholder="Enter doctor ID">
-
-            </div>
-
-
-            <button
-              class="btn-primary"
-              onclick="getDoctorById()">
-
-              Find Doctor
-
-            </button>
-
-
-            <button
-              class="btn-secondary"
-              onclick="getAllDoctors()">
-
-              Get All
-
-            </button>
-
-          </div>
-
-        </div>
-
-
-        <!-- Profile 2-col -->
 
         <div class="profile-cols">
 
-
-          <!-- LEFT: Forms -->
-
-          <div class="d-flex flex-column gap-3">
-
-
-            <!-- Core Account -->
-
-            <div class="card">
-
-              <div class="card-header">
-
-                <span class="card-title">
-                  Core Physician Account
-                </span>
-
-                <span class="badge badge-success">
-                  Active Physician
-                </span>
-
-              </div>
-
-
-              <div class="form-grid">
-
-                <div class="form-group">
-
-                  <label class="form-label">
-                    Doctor Name
-                  </label>
-
-                  <input
-                    type="text"
-                    class="form-control"
-                    value="Dr. Sarah Chen"
-                    id="docName">
-
-                </div>
-
-
-                <div class="form-group">
-
-                  <label class="form-label">
-                    Email Address
-                  </label>
-
-                  <input
-                    type="email"
-                    class="form-control"
-                    value="dr.sarah.chen@hmsclinical.com"
-                    id="docEmail">
-
-                </div>
-
-
-                <div class="form-group">
-
-                  <label class="form-label">
-                    Phone Number
-                  </label>
-
-                  <input
-                    type="tel"
-                    class="form-control"
-                    value="+1 (555) 219-2831"
-                    id="docPhone">
-
-                </div>
-
-
-                <div class="form-group">
-
-                  <label class="form-label">
-                    License Number
-                  </label>
-
-                  <input
-                    type="text"
-                    class="form-control"
-                    value="LIC-48291"
-                    id="docLicense">
-
-                </div>
-
-              </div>
-
-
-              <div class="d-flex justify-content-end mt-3">
-
-                <button
-                  class="btn-primary"
-                  onclick="updateDoctorProfile()">
-
-                  Save Account Changes
-
-                </button>
-
-              </div>
-
-            </div>
-
-
-            <!-- Professional File -->
-
-            <div class="card">
-
-              <div class="card-header">
-
-                <span class="card-title">
-                  Doctor Professional File
-                </span>
-
-              </div>
-
-
-              <div class="form-grid">
-
-                <div class="form-group">
-
-                  <label class="form-label">
-                    Years of Experience
-                  </label>
-
-                  <input
-                    type="number"
-                    class="form-control"
-                    value="15"
-                    id="docExp">
-
-                </div>
-
-
-                <div class="form-group">
-
-                  <label class="form-label">
-                    Primary Department
-                  </label>
-
-                  <select
-                    class="form-control"
-                    id="docDept">
-
-                    <option selected>
-                      Endocrinology
-                    </option>
-
-                    <option>
-                      Cardiology
-                    </option>
-
-                    <option>
-                      Neurology
-                    </option>
-
-                    <option>
-                      Pediatrics
-                    </option>
-
-                    <option>
-                      Oncology
-                    </option>
-
-                  </select>
-
-                </div>
-
-
-                <div class="form-group">
-
-                  <label class="form-label">
-                    Specialization ID
-                  </label>
-
-                  <input
-                    type="number"
-                    class="form-control"
-                    id="docSpec"
-                    placeholder="Enter specialization ID">
-
-                </div>
-
-
-                <div class="form-group">
-
-                  <label class="form-label">
-                    Office Location
-                  </label>
-
-                  <input
-                    type="text"
-                    class="form-control"
-                    value="Building A, Suite 304"
-                    id="docOffice">
-
-                </div>
-
-              </div>
-
-
-              <div class="d-flex justify-content-end mt-3">
-
-                <button
-                  class="btn-primary"
-                  onclick="updateDoctorProfile()">
-
-                  Update Professional File
-
-                </button>
-
-              </div>
-
-            </div>
-
-          </div>
-
-
-          <!-- RIGHT: Security + Fee -->
-
+          <!-- ── LEFT: Forms ── -->
           <div>
 
-
-            <!-- Security -->
-
-            <div class="card mb-3">
-
-              <div class="card-header">
-
-                <span class="card-title">
-                  Security & Password
-                </span>
-
-              </div>
-
-
-              <div class="d-flex flex-column gap-3">
-
-                <div class="form-group">
-
-                  <label class="form-label">
-                    Current Password
-                  </label>
-
-                  <input
-                    type="password"
-                    class="form-control"
-                    placeholder="Enter current password">
-
-                </div>
-
-
-                <div class="form-group">
-
-                  <label class="form-label">
-                    New Password
-                  </label>
-
-                  <input
-                    type="password"
-                    class="form-control"
-                    placeholder="Enter new password">
-
-                </div>
-
-
-                <div class="form-group">
-
-                  <label class="form-label">
-                    Confirm Password
-                  </label>
-
-                  <input
-                    type="password"
-                    class="form-control"
-                    placeholder="Re-enter new password">
-
-                </div>
-
-              </div>
-
-
-              <div class="mt-3">
-
-                <button
-                  class="btn-secondary w-100"
-                  onclick="saveProfileChanges()">
-
-                  Change Password
-
-                </button>
-
-              </div>
-
-            </div>
-
-
-            <!-- Consultation Fee -->
-
+            <!-- Core Contact / Practitioner Account -->
             <div class="card">
-
               <div class="card-header">
-
-                <span class="card-title">
-                  Consultation Fee
-                </span>
-
+                <span class="card-title">Core Physician Account</span>
+                <span class="badge badge-success" id="account-status-badge">Active Physician</span>
               </div>
 
+              <div class="form-grid">
+                <div class="form-group">
+                  <label class="form-label" for="full-name">Full Name</label>
+                  <input type="text" id="full-name" class="form-control" placeholder="Doctor Full Name" />
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="email-address">Email Address</label>
+                  <input type="email" id="email-address" class="form-control" placeholder="doctor@medcore.com" readonly />
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="phone-number">Phone Number</label>
+                  <input type="tel" id="phone-number" class="form-control" placeholder="+968 9XXX XXXX" />
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="account-type">Account Type</label>
+                  <input type="text" id="account-type" class="form-control" value="Standard Doctor Portal" readonly />
+                </div>
+              </div>
 
-              <p style="font-size:.83rem;color:var(--text-secondary);margin-bottom:.85rem;">
-
-                Current fee:
-
-                <strong
-                  id="currentFeeDisplay"
-                  style="color:var(--text-primary);font-size:1rem;">
-
-                  $150.00
-
-                </strong>
-
+              <p class="form-hint">
+                <i class="bi bi-clock"></i> Core Practitioner Account Directory
               </p>
 
+              <div style="margin-top:1.1rem; display:flex; justify-content:flex-end;">
+                <button class="btn btn-primary" onclick="saveCoreAccount()">
+                  <i class="bi bi-floppy"></i> Save Core Account Changes
+                </button>
+              </div>
+            </div>
 
-              <div class="d-flex gap-2">
-
-                <div class="input-group">
-
-                  <span class="input-group-text">
-                    $
-                  </span>
-
-                  <input
-                    type="number"
-                    class="form-control"
-                    value="165"
-                    id="feeInput">
-
-                </div>
-
+            <!-- Doctor Professional File -->
+            <div class="card">
+              <div class="card-header">
+                <span class="card-title">Doctor Professional File</span>
+                <span class="badge badge-warn" id="profile-id-badge" style="background:#e0f2fe; color:#0284c7; border:1px solid #bae6fd;">Profile #--</span>
               </div>
 
+              <div class="form-grid">
+                <div class="form-group">
+                  <label class="form-label" for="license-number">License Number</label>
+                  <input type="text" id="license-number" class="form-control" placeholder="e.g. LIC-48291" />
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="years-experience">Years of Experience</label>
+                  <input type="number" id="years-experience" min="0" max="60" class="form-control" placeholder="0" />
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="doc-fee-input">Consultation Fee (OMR)</label>
+                  <input type="number" id="doc-fee-input" step="0.01" min="0" class="form-control" placeholder="30.00" oninput="syncConsultationFeeInputs('doc-fee-input')" />
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="department-select">Primary Department</label>
+                  <select id="department-select" class="form-control">
+                    <option value="1">Endocrinology</option>
+                    <option value="2">Cardiology</option>
+                    <option value="3">Neurology</option>
+                    <option value="4">Pediatrics</option>
+                    <option value="5">Oncology</option>
+                    <option value="6">General Medicine</option>
+                  </select>
+                </div>
+                <div class="form-group span-2">
+                  <label class="form-label" for="specialization-select">Specialization</label>
+                  <select id="specialization-select" class="form-control">
+                    <option value="1">Endocrinology Specialist</option>
+                    <option value="2">Cardiologist</option>
+                    <option value="3">Neurologist</option>
+                    <option value="4">Pediatrician</option>
+                    <option value="5">Clinical Oncology</option>
+                    <option value="6">Internal Medicine</option>
+                  </select>
+                </div>
+              </div>
+
+              <p class="form-hint">
+                <i class="bi bi-database-lock"></i> Directly linked to Hospital Clinical Staff Directory
+              </p>
+
+              <div style="margin-top:1.1rem; display:flex; justify-content:flex-end; gap:0.5rem; flex-wrap:wrap;">
+                <button class="btn btn-secondary" onclick="createDoctorProfile()" style="background:#0f172a; color:#ffffff; border:none;">
+                  <i class="bi bi-plus-circle me-1"></i> Add Doctor Info to DB
+                </button>
+                <button class="btn btn-primary" onclick="saveProfessionalFile()">
+                  <i class="bi bi-floppy me-1"></i> Update Professional File
+                </button>
+              </div>
             </div>
 
           </div>
 
-        </div>
+          <!-- ── RIGHT: Security + Consultation Fee ── -->
+          <div>
 
+            <!-- Security & Password -->
+            <div class="card">
+              <div class="card-header">
+                <span class="card-title">Security &amp; Password</span>
+                <i class="bi bi-shield-check" style="color:var(--green); font-size:1rem;"></i>
+              </div>
 
-        <!-- Doctor Results -->
+              <div style="display:flex; flex-direction:column; gap:0.9rem;">
+                <div class="form-group">
+                  <label class="form-label" for="current-password">Current Password</label>
+                  <input type="password" id="current-password" class="form-control" placeholder="Enter current password" />
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="new-password">New Password</label>
+                  <input type="password" id="new-password" class="form-control" placeholder="Enter new password (min 6 chars)" />
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="confirm-password">Confirm Password</label>
+                  <input type="password" id="confirm-password" class="form-control" placeholder="Re-enter new password" />
+                </div>
+              </div>
 
-        <div class="card mt-3">
+              <div id="pw-error" class="alert" style="display:none; margin-top:0.9rem; background:#fee2e2; border:1px solid #fecaca; color:#b91c1c;">
+                <i class="bi bi-x-circle-fill"></i>
+                <span id="pw-error-msg">Passwords do not match. Please try again.</span>
+              </div>
 
-
-          <div class="card-header">
-
-            <span class="card-title">
-              Doctor Profiles
-            </span>
-
-
-            <div class="d-flex gap-2">
-
-              <!-- ADD BUTTON -->
-
-              <button
-                class="btn-primary"
-                onclick="addDoctor()">
-
-                Add Doctor
-
+              <button class="btn btn-secondary" style="width:100%; margin-top:1rem; justify-content:center;" onclick="changeDoctorPassword()">
+                <i class="bi bi-key"></i> Change Password
               </button>
+            </div>
 
+            <!-- Consultation Fee -->
+            <div class="card">
+              <div class="card-header">
+                <span class="card-title">Consultation Fee</span>
+                <i class="bi bi-wallet2" style="color:var(--green,#16a34a); font-size:1rem;"></i>
+              </div>
 
-              <!-- EDIT BUTTON -->
+              <p style="font-size:0.85rem; color:var(--text-secondary); margin-bottom:0.75rem;">
+                Current fee: <strong id="current-fee-display" style="color:var(--text-primary); font-size:1.05rem;">OMR 0.00</strong>
+              </p>
 
-              <button
-                class="btn-primary"
-                onclick="editDoctor()">
+              <div class="form-group">
+                <label class="form-label" for="consultation-fee">New Consultation Fee (OMR)</label>
+                <div style="display:flex; align-items:center; border:1px solid var(--border); border-radius:8px; overflow:hidden; background:#fff;">
+                  <span style="padding:0.6rem 0.85rem; background:#f8fafc; border-right:1px solid var(--border); font-size:0.85rem; font-weight:700; color:var(--text-secondary);">OMR</span>
+                  <input type="number" id="consultation-fee" step="0.01" min="0" class="form-control" style="border:none; border-radius:0;" placeholder="30.00" />
+                </div>
+              </div>
 
-                Edit Doctor
-
+              <button class="btn btn-primary" style="width:100%; margin-top:1rem; justify-content:center;" onclick="updateDoctorConsultationFee()">
+                <i class="bi bi-cash-stack"></i> Update Consultation Fee
               </button>
-
-
-              <!-- DELETE BUTTON -->
-
-              <button
-                class="btn-secondary"
-                onclick="deleteDoctorById()">
-
-                Delete Doctor
-
-              </button>
-
-
-              <!-- FILTER -->
-
-              <button
-                class="btn-secondary"
-                onclick="getDoctorsByExperience()">
-
-                Filter Experience
-
-              </button>
-
-
-              <!-- SORT -->
-
-              <button
-                class="btn-secondary"
-                onclick="getDoctorsSortedByFee()">
-
-                Sort By Fee
-
-              </button>
-
             </div>
 
           </div>
 
-
-          <div class="table-responsive">
-
-            <table class="table">
-
-              <thead>
-
-                <tr>
-
-                  <th>ID</th>
-
-                  <th>License</th>
-
-                  <th>Experience</th>
-
-                  <th>Consultation Fee</th>
-
-                  <th>User ID</th>
-
-                  <th>Specialization ID</th>
-
-                  <th>Fee</th>
-
-                </tr>
-
-              </thead>
-
-
-              <tbody id="doctorTableBody">
-
-                <tr>
-
-                  <td
-                    colspan="7"
-                    class="text-center">
-
-                    Click "Get All" to load doctors.
-
-                  </td>
-
-                </tr>
-
-              </tbody>
-
-            </table>
-
-          </div>
-
-        </div>
+        </div><!-- /profile-cols -->
 
       </main>
 
     </div>
 
-  </div>
+  </div><!-- /portal-wrapper -->
 
-
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
-
+  <script src="../Assets/api.js"></script>
   <script>
+    let currentDoctorProfileId = null;
+    let activeDoctorRecord = null;
 
-    /* =========================================================
-       API BASE URL
-    ========================================================= */
+    document.addEventListener("DOMContentLoaded", loadMyDoctorProfile);
 
-    const API_BASE_URL =
-      "http://localhost:5251/DoctorProfile";
+    async function loadMyDoctorProfile() {
+      const user = getAuthUser();
+      if (!user || !user.userId) {
+        window.location.href = '../Assets/login.html';
+        return;
+      }
 
+      // Display name and role
+      if (user.fullname) {
+        document.getElementById('full-name').value = user.fullname;
+        document.querySelectorAll('.sidebar-user-name, .topbar-user-label').forEach(el => el.textContent = user.fullname);
+      }
+      const sidebarRole = document.querySelector('.sidebar-user-role');
+      if (sidebarRole) sidebarRole.textContent = `Doctor · ID ${user.userId}`;
 
-    /* =========================================================
-       GET TOKEN
-    ========================================================= */
+      // 1. Fetch User details (email, phone)
+      try {
+        const u = await apiFetch(`/User/find/${user.userId}`);
+        if (u) {
+          if (u.email) document.getElementById('email-address').value = u.email;
+          if (u.phone || u.Phone) document.getElementById('phone-number').value = u.phone || u.Phone;
+        }
+      } catch (e) {
+        console.log('User find error:', e.message);
+      }
 
-    function getToken() {
+      // 2. Fetch Departments & Specializations for dropdowns
+      await loadDropdownOptions();
 
-      return localStorage.getItem("token");
+      // 3. Fetch Doctor Profile (Directly by User ID with fallback)
+      try {
+        let doc = null;
+        try {
+          if (user.userId) {
+            doc = await apiFetch(`/DoctorProfile/user/${user.userId}`);
+          }
+        } catch (e) {}
 
+        if (!doc) {
+          try {
+            const doctors = await apiFetch('/DoctorProfile/GetAllDoctorProfiles');
+            const docList = Array.isArray(doctors) ? doctors : [];
+            doc = docList.find(d => {
+              const docUserId = d.userID ?? d.userId ?? d.UserID ?? d.userid?.userID ?? d.userid?.userId ?? d.user?.userID ?? d.user?.userId;
+              return docUserId && user.userId && String(docUserId) === String(user.userId);
+            }) || docList.find(d => {
+              const docUserName = d.userid?.fullname || d.userid?.Fullname || d.user?.fullname || d.user?.Fullname || '';
+              return docUserName && user.fullname && docUserName.toLowerCase() === user.fullname.toLowerCase();
+            }) || (docList.length === 1 ? docList[0] : null);
+          } catch (e) {
+            console.error('Error querying all doctor profiles:', e);
+          }
+        }
+
+        activeDoctorRecord = doc;
+
+        if (activeDoctorRecord && (activeDoctorRecord.doctorProfileId || activeDoctorRecord.DoctorProfileId || activeDoctorRecord.id)) {
+          currentDoctorProfileId = activeDoctorRecord.doctorProfileId || activeDoctorRecord.DoctorProfileId || activeDoctorRecord.id;
+          
+          const license = activeDoctorRecord.licenseNumber || activeDoctorRecord.LicenseNumber || '';
+          document.getElementById('license-number').value = license;
+          document.getElementById('years-experience').value = activeDoctorRecord.yearsOfExperience ?? activeDoctorRecord.YearsOfExperience ?? 0;
+          
+          if (activeDoctorRecord.specializationId || activeDoctorRecord.SpecializationId) {
+            document.getElementById('specialization-select').value = String(activeDoctorRecord.specializationId || activeDoctorRecord.SpecializationId);
+          }
+          if (activeDoctorRecord.departmentId || activeDoctorRecord.DepartmentId) {
+            document.getElementById('department-select').value = String(activeDoctorRecord.departmentId || activeDoctorRecord.DepartmentId);
+          }
+
+          document.getElementById('profile-id-badge').textContent = `Profile #${currentDoctorProfileId}`;
+
+          const fee = Number(activeDoctorRecord.consultationFee ?? activeDoctorRecord.ConsultationFee ?? 30).toFixed(2);
+          document.getElementById('current-fee-display').textContent = `OMR ${fee}`;
+          document.getElementById('consultation-fee').value = fee;
+          const docFeeInput = document.getElementById('doc-fee-input');
+          if (docFeeInput) docFeeInput.value = fee;
+        } else {
+          currentDoctorProfileId = null;
+          document.getElementById('profile-id-badge').textContent = 'New Doctor (Unregistered)';
+          document.getElementById('current-fee-display').textContent = 'OMR 0.00 (Unregistered)';
+          document.getElementById('consultation-fee').value = '30.00';
+          const docFeeInput = document.getElementById('doc-fee-input');
+          if (docFeeInput) docFeeInput.value = '30.00';
+        }
+      } catch (err) {
+        console.error('Error fetching doctor profile:', err);
+      }
     }
 
+    async function loadDropdownOptions() {
+      // Departments
+      try {
+        const depts = await apiFetch('/Department/GetAllDepartments');
+        if (Array.isArray(depts) && depts.length > 0) {
+          const deptSelect = document.getElementById('department-select');
+          deptSelect.innerHTML = depts.map(d => {
+            const id = d.departmentId || d.DepartmentId || d.id;
+            const name = d.name || d.Name || `Department #${id}`;
+            return `<option value="${id}">${escapeHtml(name)}</option>`;
+          }).join('');
+        }
+      } catch (e) {}
 
-    /* =========================================================
-       HEADERS FOR ADMIN REQUESTS
-    ========================================================= */
-
-    function getAuthHeaders() {
-
-      const token = getToken();
-
-      return {
-
-        "Content-Type": "application/json",
-
-        "Authorization": "Bearer " + token
-
-      };
-
+      // Specializations
+      try {
+        const specs = await apiFetch('/Specialization/GetAllSpecializations');
+        if (Array.isArray(specs) && specs.length > 0) {
+          const specSelect = document.getElementById('specialization-select');
+          specSelect.innerHTML = specs.map(s => {
+            const id = s.specializationId || s.SpecializationId || s.id;
+            const name = s.name || s.Name || `Specialization #${id}`;
+            return `<option value="${id}">${escapeHtml(name)}</option>`;
+          }).join('');
+        }
+      } catch (e) {}
     }
 
+    /* ── 1. Save Core Physician Account Changes ── */
+    async function saveCoreAccount() {
+      const user = getAuthUser();
+      const userId = user.userId || user.id;
+      const fullname = document.getElementById('full-name').value.trim();
+      const phone = document.getElementById('phone-number').value.trim();
+      const license = document.getElementById('license-number').value.trim();
 
-    /* =========================================================
-       SHOW SUCCESS MESSAGE
-    ========================================================= */
-
-    function showSuccess(message) {
-
-      const alert =
-        document.getElementById("saveSuccessAlert");
-
-      const messageElement =
-        document.getElementById("successMessage");
-
-      messageElement.textContent = message;
-
-      alert.classList.remove("d-none");
-
-      window.scrollTo({
-
-        top: 0,
-
-        behavior: "smooth"
-
-      });
-
-      setTimeout(() => {
-
-        alert.classList.add("d-none");
-
-      }, 4000);
-
-    }
-
-
-    /* =========================================================
-       SHOW ERROR MESSAGE
-    ========================================================= */
-
-    function showError(message) {
-
-      const alert =
-        document.getElementById("errorAlert");
-
-      const messageElement =
-        document.getElementById("errorMessage");
-
-      messageElement.textContent = message;
-
-      alert.classList.remove("d-none");
-
-      window.scrollTo({
-
-        top: 0,
-
-        behavior: "smooth"
-
-      });
-
-    }
-
-
-    /* =========================================================
-       CLEAR ERROR
-    ========================================================= */
-
-    function clearError() {
-
-      document
-        .getElementById("errorAlert")
-        .classList.add("d-none");
-
-    }
-
-
-    /* =========================================================
-       SAVE PROFILE CHANGES
-    ========================================================= */
-
-    function saveProfileChanges() {
-
-      showSuccess(
-        "Changes saved successfully."
-      );
-
-    }
-
-
-    /* =========================================================
-       GET ALL DOCTORS
-    ========================================================= */
-
-    async function getAllDoctors() {
-
-      clearError();
+      if (!fullname) {
+        showError('Please enter your full name.');
+        return;
+      }
 
       try {
+        if (userId) {
+          await apiFetch(`/User/update/${userId}`, {
+            method: 'PUT',
+            body: JSON.stringify({
+              Fullname: fullname,
+              Phone: phone || ''
+            })
+          });
 
-        const response = await fetch(
-          API_BASE_URL +
-          "/GetAllDoctorProfiles"
-        );
+          // Sync localStorage
+          const localUser = JSON.parse(localStorage.getItem('user') || '{}');
+          localUser.fullname = fullname;
+          localUser.phone = phone;
+          localStorage.setItem('user', JSON.stringify(localUser));
 
-
-        if (!response.ok) {
-
-          throw new Error(
-            "Failed to get doctor profiles."
-          );
-
+          document.querySelectorAll('.sidebar-user-name, .topbar-user-label').forEach(el => el.textContent = fullname);
         }
 
+        // Sync license in doctor profile if profile exists
+        if (currentDoctorProfileId && license) {
+          const exp = Number(document.getElementById('years-experience').value || 0);
+          const fee = Number(document.getElementById('consultation-fee').value || 30);
+          const specId = Number(document.getElementById('specialization-select').value || 1);
 
-        const doctors =
-          await response.json();
+          await apiFetch(`/DoctorProfile/UpdateDoctorProfile?id=${currentDoctorProfileId}`, {
+            method: 'PUT',
+            body: JSON.stringify({
+              DoctorProfileId: currentDoctorProfileId,
+              LicenseNumber: license,
+              YearsOfExperience: exp,
+              ConsultationFee: fee,
+              userID: userId,
+              SpecializationId: specId
+            })
+          });
+        }
 
-
-        displayDoctors(doctors);
-
+        showSuccess('Core Physician Account changes saved successfully.');
+      } catch (err) {
+        showError('Failed to save account changes: ' + err.message);
       }
-
-      catch (error) {
-
-        console.error(error);
-
-        showError(error.message);
-
-      }
-
     }
 
-
-    /* =========================================================
-       GET DOCTOR BY ID
-    ========================================================= */
-
-    async function getDoctorById() {
-
-      clearError();
-
-      const id =
-        document.getElementById("doctorId").value;
-
-
-      if (!id) {
-
-        showError(
-          "Please enter a Doctor ID."
-        );
-
-        return;
-
-      }
-
+    /* ── 2. Add Doctor Info to Database ── */
+    async function createDoctorProfile() {
+      const user = getAuthUser();
+      const userId = user.userId || user.id || 1;
+      const license = document.getElementById('license-number').value.trim() || 'LIC-Active';
+      const exp = Number(document.getElementById('years-experience').value || 0);
+      const fee = Number(document.getElementById('doc-fee-input')?.value || document.getElementById('consultation-fee')?.value || 30);
+      const specId = Number(document.getElementById('specialization-select').value || 1);
 
       try {
+        const result = await apiFetch('/DoctorProfile/AddDoctorProfile', {
+          method: 'POST',
+          body: JSON.stringify({
+            LicenseNumber: license,
+            YearsOfExperience: exp,
+            ConsultationFee: fee,
+            userID: userId,
+            SpecializationId: specId
+          })
+        });
 
-        const response = await fetch(
-
-          API_BASE_URL +
-          "/GetDoctorProfile?id=" +
-          encodeURIComponent(id)
-
-        );
-
-
-        if (!response.ok) {
-
-          if (response.status === 404) {
-
-            throw new Error(
-              "Doctor profile not found."
-            );
-
-          }
-
-          throw new Error(
-            "Failed to find doctor."
-          );
-
+        if (result && (result.doctor?.doctorProfileId || result.doctor?.DoctorProfileId)) {
+          currentDoctorProfileId = result.doctor.doctorProfileId || result.doctor.DoctorProfileId;
+          document.getElementById('profile-id-badge').textContent = `Profile #${currentDoctorProfileId}`;
         }
 
-
-        const doctor =
-          await response.json();
-
-
-        fillDoctorForm(doctor);
-
-        displayDoctors([doctor]);
-
-
-        showSuccess(
-          "Doctor profile found successfully."
-        );
-
+        showSuccess('Doctor profile record created and saved to database successfully.');
+        await loadMyDoctorProfile();
+      } catch (err) {
+        showError('Failed to add doctor data: ' + err.message);
       }
-
-      catch (error) {
-
-        console.error(error);
-
-        showError(error.message);
-
-      }
-
     }
 
+    /* ── 3. Update Professional File ── */
+    async function saveProfessionalFile() {
+      const user = getAuthUser();
+      const userId = user.userId || user.id || 1;
+      const license = document.getElementById('license-number').value.trim() || 'LIC-Active';
+      const exp = Number(document.getElementById('years-experience').value || 0);
+      const fee = Number(document.getElementById('doc-fee-input')?.value || document.getElementById('consultation-fee')?.value || 30);
+      const specId = Number(document.getElementById('specialization-select').value || 1);
 
-    /* =========================================================
-       FILL FORM WITH DOCTOR DATA
-    ========================================================= */
-
-    function fillDoctorForm(doctor) {
-
-      document.getElementById("doctorId").value =
-        doctor.doctorProfileId ?? "";
-
-
-      document.getElementById("docLicense").value =
-        doctor.licenseNumber ?? "";
-
-
-      document.getElementById("docExp").value =
-        doctor.yearsOfExperience ?? "";
-
-
-      document.getElementById("feeInput").value =
-        doctor.consultationFee ?? "";
-
-
-      document.getElementById("currentFeeDisplay").textContent =
-        "$" +
-        Number(
-          doctor.consultationFee ?? 0
-        ).toFixed(2);
-
-
-      document.getElementById("docSpec").value =
-        doctor.specializationId ?? "";
-
-    }
-
-
-    /* =========================================================
-       FILTER BY EXPERIENCE
-    ========================================================= */
-
-    async function getDoctorsByExperience() {
-
-      clearError();
-
-      const years = prompt(
-        "Enter minimum years of experience:"
-      );
-
-
-      if (
-        years === null ||
-        years === ""
-      ) {
-
-        return;
-
+      if (!currentDoctorProfileId) {
+        return createDoctorProfile();
       }
-
 
       try {
+        await apiFetch(`/DoctorProfile/UpdateDoctorProfile?id=${currentDoctorProfileId}`, {
+          method: 'PUT',
+          body: JSON.stringify({
+            DoctorProfileId: currentDoctorProfileId,
+            LicenseNumber: license,
+            YearsOfExperience: exp,
+            ConsultationFee: fee,
+            userID: userId,
+            SpecializationId: specId
+          })
+        });
 
-        const response = await fetch(
-
-          API_BASE_URL +
-          "/GetDoctorsByExperience?years=" +
-          encodeURIComponent(years)
-
-        );
-
-
-        if (!response.ok) {
-
-          throw new Error(
-            "Failed to filter doctors."
-          );
-
-        }
-
-
-        const doctors =
-          await response.json();
-
-
-        displayDoctors(doctors);
-
-
-        showSuccess(
-          "Doctors filtered successfully."
-        );
-
+        showSuccess('Doctor professional file updated successfully.');
+        await loadMyDoctorProfile();
+      } catch (err) {
+        showError('Failed to update professional file: ' + err.message);
       }
-
-      catch (error) {
-
-        console.error(error);
-
-        showError(error.message);
-
-      }
-
     }
 
+    /* ── 4. Change Password ── */
+    async function changeDoctorPassword() {
+      const user = getAuthUser();
+      const userId = user.userId || user.id;
+      if (!userId) {
+        showError('User ID not found in session.');
+        return;
+      }
 
-    /* =========================================================
-       SORT BY CONSULTATION FEE
-    ========================================================= */
+      const curr = document.getElementById('current-password').value;
+      const newP = document.getElementById('new-password').value;
+      const conf = document.getElementById('confirm-password').value;
+      const pwErr = document.getElementById('pw-error');
+      const pwMsg = document.getElementById('pw-error-msg');
 
-    async function getDoctorsSortedByFee() {
+      if (!curr || !newP || !conf) {
+        pwMsg.textContent = 'Please fill in all password fields.';
+        pwErr.style.display = 'flex';
+        return;
+      }
 
-      clearError();
+      if (newP !== conf) {
+        pwMsg.textContent = 'New password and confirm password do not match.';
+        pwErr.style.display = 'flex';
+        return;
+      }
+
+      if (newP.length < 6) {
+        pwMsg.textContent = 'Password must be at least 6 characters.';
+        pwErr.style.display = 'flex';
+        return;
+      }
+
+      pwErr.style.display = 'none';
 
       try {
+        const url = `/User/change-password/${userId}?oldPassword=${encodeURIComponent(curr)}&newPassword=${encodeURIComponent(newP)}`;
+        await apiFetch(url, { method: 'PUT' });
 
-        const response = await fetch(
+        document.getElementById('current-password').value = '';
+        document.getElementById('new-password').value = '';
+        document.getElementById('confirm-password').value = '';
 
-          API_BASE_URL +
-          "/GetDoctorsSortedByFee"
-
-        );
-
-
-        if (!response.ok) {
-
-          throw new Error(
-            "Failed to sort doctors."
-          );
-
-        }
-
-
-        const doctors =
-          await response.json();
-
-
-        displayDoctors(doctors);
-
-
-        showSuccess(
-          "Doctors sorted by consultation fee."
-        );
-
+        showSuccess('Password updated successfully.');
+      } catch (err) {
+        pwMsg.textContent = err.message || 'Failed to change password. Please check your current password.';
+        pwErr.style.display = 'flex';
       }
-
-      catch (error) {
-
-        console.error(error);
-
-        showError(error.message);
-
-      }
-
     }
 
+    /* ── Real-time Fee Sync ── */
+    function syncConsultationFeeInputs(sourceId) {
+      const sourceVal = document.getElementById(sourceId).value;
+      const targetId = sourceId === 'doc-fee-input' ? 'consultation-fee' : 'doc-fee-input';
+      const target = document.getElementById(targetId);
+      if (target) target.value = sourceVal;
+      const feeNum = Number(sourceVal);
+      if (!isNaN(feeNum) && feeNum >= 0) {
+        document.getElementById('current-fee-display').textContent = `OMR ${feeNum.toFixed(2)}`;
+      }
+    }
 
-    /* =========================================================
-       ADD DOCTOR
+    /* ── 5. Update Consultation Fee ── */
+    async function updateDoctorConsultationFee() {
+      const feeVal = document.getElementById('consultation-fee').value || document.getElementById('doc-fee-input').value;
+      const fee = Number(feeVal);
 
-       POST:
-       /DoctorProfile/AddDoctorProfile
-    ========================================================= */
-
-    async function addDoctor() {
-
-      clearError();
-
-
-      const licenseNumber = prompt(
-        "Enter License Number:"
-      );
-
-
-      if (
-        licenseNumber === null ||
-        licenseNumber.trim() === ""
-      ) {
-
+      if (isNaN(fee) || fee < 0) {
+        showError('Please enter a valid positive consultation fee.');
         return;
-
       }
 
-
-      const yearsOfExperience = prompt(
-        "Enter Years of Experience:"
-      );
-
-
-      if (
-        yearsOfExperience === null ||
-        yearsOfExperience.trim() === ""
-      ) {
-
+      if (!currentDoctorProfileId) {
+        showError('No active doctor profile found to update fee. Please click "Add Doctor Info to DB" first.');
         return;
-
       }
-
-
-      const consultationFee = prompt(
-        "Enter Consultation Fee:"
-      );
-
-
-      if (
-        consultationFee === null ||
-        consultationFee.trim() === ""
-      ) {
-
-        return;
-
-      }
-
-
-      const userID = prompt(
-        "Enter User ID:"
-      );
-
-
-      if (
-        userID === null ||
-        userID.trim() === ""
-      ) {
-
-        return;
-
-      }
-
-
-      const specializationId = prompt(
-        "Enter Specialization ID:"
-      );
-
-
-      if (
-        specializationId === null ||
-        specializationId.trim() === ""
-      ) {
-
-        return;
-
-      }
-
-
-      const doctor = {
-
-        licenseNumber:
-          licenseNumber,
-
-        yearsOfExperience:
-          Number(yearsOfExperience),
-
-        consultationFee:
-          Number(consultationFee),
-
-        userID:
-          Number(userID),
-
-        specializationId:
-          Number(specializationId)
-
-      };
-
-
-      if (isNaN(doctor.yearsOfExperience)) {
-
-        showError(
-          "Please enter a valid number of years."
-        );
-
-        return;
-
-      }
-
-
-      if (isNaN(doctor.consultationFee)) {
-
-        showError(
-          "Please enter a valid consultation fee."
-        );
-
-        return;
-
-      }
-
-
-      if (isNaN(doctor.userID)) {
-
-        showError(
-          "Please enter a valid User ID."
-        );
-
-        return;
-
-      }
-
-
-      if (isNaN(doctor.specializationId)) {
-
-        showError(
-          "Please enter a valid Specialization ID."
-        );
-
-        return;
-
-      }
-
 
       try {
+        await apiFetch(`/DoctorProfile/UpdateConsultationFee?id=${currentDoctorProfileId}&newFee=${fee}`, {
+          method: 'PATCH'
+        });
 
-        const response = await fetch(
+        document.getElementById('current-fee-display').textContent = `OMR ${fee.toFixed(2)}`;
+        document.getElementById('consultation-fee').value = fee.toFixed(2);
+        const docFeeInput = document.getElementById('doc-fee-input');
+        if (docFeeInput) docFeeInput.value = fee.toFixed(2);
 
-          API_BASE_URL +
-          "/AddDoctorProfile",
-
-          {
-
-            method: "POST",
-
-            headers: getAuthHeaders(),
-
-            body: JSON.stringify(doctor)
-
-          }
-
-        );
-
-
-        if (!response.ok) {
-
-          if (response.status === 401) {
-
-            throw new Error(
-              "Unauthorized. Please login as Admin."
-            );
-
-          }
-
-
-          if (response.status === 403) {
-
-            throw new Error(
-              "Access denied. Admin role is required."
-            );
-
-          }
-
-
-          throw new Error(
-            "Failed to add doctor."
-          );
-
-        }
-
-
-        const result =
-          await response.json();
-
-
-        console.log(
-          "Doctor added:",
-          result
-        );
-
-
-        showSuccess(
-          "Doctor profile added successfully."
-        );
-
-
-        getAllDoctors();
-
+        showSuccess(`Consultation fee updated to OMR ${fee.toFixed(2)}.`);
+      } catch (err) {
+        showError('Failed to update consultation fee: ' + err.message);
       }
-
-      catch (error) {
-
-        console.error(error);
-
-        showError(error.message);
-
-      }
-
     }
 
-
-    /* =========================================================
-       GET USER ID
-    ========================================================= */
-
-    function getUserIdValue() {
-
-      const value =
-        localStorage.getItem("userID");
-
-
-      if (!value) {
-
-        return null;
-
-      }
-
-
-      return Number(value);
-
+    /* ── Notification Utilities ── */
+    function showSuccess(msg) {
+      const a = document.getElementById('save-alert');
+      const err = document.getElementById('error-alert');
+      if (err) err.style.display = 'none';
+      if (!a) return;
+      document.getElementById('save-alert-msg').textContent = msg;
+      a.style.display = 'flex';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      setTimeout(() => { a.style.display = 'none'; }, 4000);
     }
 
-
-    /* =========================================================
-       EDIT DOCTOR
-
-       PUT:
-       /DoctorProfile/UpdateDoctorProfile?id=1
-    ========================================================= */
-
-    async function editDoctor() {
-
-      clearError();
-
-
-      const id = prompt(
-        "Enter the Doctor ID you want to edit:"
-      );
-
-
-      if (
-        id === null ||
-        id.trim() === ""
-      ) {
-
-        return;
-
-      }
-
-
-      try {
-
-        const getResponse = await fetch(
-
-          API_BASE_URL +
-          "/GetDoctorProfile?id=" +
-          encodeURIComponent(id)
-
-        );
-
-
-        if (!getResponse.ok) {
-
-          if (getResponse.status === 404) {
-
-            throw new Error(
-              "Doctor profile not found."
-            );
-
-          }
-
-
-          throw new Error(
-            "Failed to find doctor."
-          );
-
-        }
-
-
-        const existingDoctor =
-          await getResponse.json();
-
-
-        const licenseNumber = prompt(
-
-          "Enter License Number:",
-
-          existingDoctor.licenseNumber ?? ""
-
-        );
-
-
-        if (licenseNumber === null) {
-
-          return;
-
-        }
-
-
-        const yearsOfExperience = prompt(
-
-          "Enter Years of Experience:",
-
-          existingDoctor.yearsOfExperience ?? ""
-
-        );
-
-
-        if (yearsOfExperience === null) {
-
-          return;
-
-        }
-
-
-        const consultationFee = prompt(
-
-          "Enter Consultation Fee:",
-
-          existingDoctor.consultationFee ?? ""
-
-        );
-
-
-        if (consultationFee === null) {
-
-          return;
-
-        }
-
-
-        const userID = prompt(
-
-          "Enter User ID:",
-
-          existingDoctor.userID ?? ""
-
-        );
-
-
-        if (userID === null) {
-
-          return;
-
-        }
-
-
-        const specializationId = prompt(
-
-          "Enter Specialization ID:",
-
-          existingDoctor.specializationId ?? ""
-
-        );
-
-
-        if (specializationId === null) {
-
-          return;
-
-        }
-
-
-        const updatedDoctor = {
-
-          licenseNumber:
-            licenseNumber,
-
-          yearsOfExperience:
-            Number(yearsOfExperience),
-
-          consultationFee:
-            Number(consultationFee),
-
-          userID:
-            Number(userID),
-
-          specializationId:
-            Number(specializationId)
-
-        };
-
-
-        const response = await fetch(
-
-          API_BASE_URL +
-          "/UpdateDoctorProfile?id=" +
-          encodeURIComponent(id),
-
-          {
-
-            method: "PUT",
-
-            headers: getAuthHeaders(),
-
-            body: JSON.stringify(
-              updatedDoctor
-            )
-
-          }
-
-        );
-
-
-        if (!response.ok) {
-
-          if (response.status === 401) {
-
-            throw new Error(
-              "Unauthorized. Please login as Admin."
-            );
-
-          }
-
-
-          if (response.status === 403) {
-
-            throw new Error(
-              "Access denied. Admin role is required."
-            );
-
-          }
-
-
-          if (response.status === 404) {
-
-            throw new Error(
-              "Doctor profile not found."
-            );
-
-          }
-
-
-          throw new Error(
-            "Failed to update doctor profile."
-          );
-
-        }
-
-
-        const result =
-          await response.json();
-
-
-        console.log(
-          "Updated doctor:",
-          result
-        );
-
-
-        if (result.updatedDoctor) {
-
-          fillDoctorForm(
-            result.updatedDoctor
-          );
-
-          displayDoctors([
-            result.updatedDoctor
-          ]);
-
-        }
-
-
-        showSuccess(
-          "Doctor profile updated successfully."
-        );
-
-      }
-
-      catch (error) {
-
-        console.error(error);
-
-        showError(error.message);
-
-      }
-
+    function showError(msg) {
+      const a = document.getElementById('error-alert');
+      const succ = document.getElementById('save-alert');
+      if (succ) succ.style.display = 'none';
+      if (!a) return;
+      document.getElementById('error-alert-msg').textContent = msg;
+      a.style.display = 'flex';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      setTimeout(() => { a.style.display = 'none'; }, 4500);
     }
 
-
-    /* =========================================================
-       UPDATE DOCTOR FROM FORM
-
-       PUT:
-       /DoctorProfile/UpdateDoctorProfile?id=1
-    ========================================================= */
-
-    async function updateDoctorProfile() {
-
-      clearError();
-
-
-      const id =
-        document.getElementById(
-          "doctorId"
-        ).value;
-
-
-      if (!id) {
-
-        showError(
-          "Please enter the Doctor ID first."
-        );
-
-        return;
-
-      }
-
-
-      const doctor = {
-
-        licenseNumber:
-          document.getElementById(
-            "docLicense"
-          ).value,
-
-        yearsOfExperience:
-          Number(
-            document.getElementById(
-              "docExp"
-            ).value
-          ),
-
-        consultationFee:
-          Number(
-            document.getElementById(
-              "feeInput"
-            ).value
-          ),
-
-        userID:
-          getUserIdValue(),
-
-        specializationId:
-          Number(
-            document.getElementById(
-              "docSpec"
-            ).value
-          )
-
-      };
-
-
-      try {
-
-        const response = await fetch(
-
-          API_BASE_URL +
-          "/UpdateDoctorProfile?id=" +
-          encodeURIComponent(id),
-
-          {
-
-            method: "PUT",
-
-            headers: getAuthHeaders(),
-
-            body: JSON.stringify(doctor)
-
-          }
-
-        );
-
-
-        if (!response.ok) {
-
-          if (response.status === 401) {
-
-            throw new Error(
-              "Unauthorized. Please login as Admin."
-            );
-
-          }
-
-
-          if (response.status === 403) {
-
-            throw new Error(
-              "Access denied. Admin role is required."
-            );
-
-          }
-
-
-          if (response.status === 404) {
-
-            throw new Error(
-              "Doctor profile not found."
-            );
-
-          }
-
-
-          throw new Error(
-            "Failed to update doctor profile."
-          );
-
-        }
-
-
-        const result =
-          await response.json();
-
-
-        console.log(
-          "Updated doctor:",
-          result
-        );
-
-
-        if (result.updatedDoctor) {
-
-          fillDoctorForm(
-            result.updatedDoctor
-          );
-
-          displayDoctors([
-            result.updatedDoctor
-          ]);
-
-        }
-
-
-        showSuccess(
-          "Doctor profile updated successfully."
-        );
-
-      }
-
-      catch (error) {
-
-        console.error(error);
-
-        showError(error.message);
-
-      }
-
+    function escapeHtml(text) {
+      if (!text) return '';
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
     }
-
-
-    /* =========================================================
-       UPDATE CONSULTATION FEE FOR ONE DOCTOR
-
-       PATCH:
-       /DoctorProfile/UpdateConsultationFee?id=1&newFee=200
-    ========================================================= */
-
-    async function updateConsultationFee(id) {
-
-      clearError();
-
-
-      if (!id) {
-
-        showError(
-          "Doctor ID is required."
-        );
-
-        return;
-
-      }
-
-
-      const newFee = prompt(
-        "Enter new consultation fee for Doctor ID " +
-        id +
-        ":"
-      );
-
-
-      if (
-        newFee === null ||
-        newFee.trim() === ""
-      ) {
-
-        return;
-
-      }
-
-
-      if (isNaN(Number(newFee))) {
-
-        showError(
-          "Please enter a valid consultation fee."
-        );
-
-        return;
-
-      }
-
-
-      try {
-
-        const response = await fetch(
-
-          API_BASE_URL +
-          "/UpdateConsultationFee?id=" +
-          encodeURIComponent(id) +
-          "&newFee=" +
-          encodeURIComponent(newFee),
-
-          {
-
-            method: "PATCH",
-
-            headers: getAuthHeaders()
-
-          }
-
-        );
-
-
-        if (!response.ok) {
-
-          if (response.status === 401) {
-
-            throw new Error(
-              "Unauthorized. Please login as Admin."
-            );
-
-          }
-
-
-          if (response.status === 403) {
-
-            throw new Error(
-              "Access denied. Admin role is required."
-            );
-
-          }
-
-
-          if (response.status === 404) {
-
-            throw new Error(
-              "Doctor profile not found."
-            );
-
-          }
-
-
-          throw new Error(
-            "Failed to update consultation fee."
-          );
-
-        }
-
-
-        const result =
-          await response.json();
-
-
-        console.log(
-          "Fee updated:",
-          result
-        );
-
-
-        if (result.updatedDoctor) {
-
-          fillDoctorForm(
-            result.updatedDoctor
-          );
-
-          displayDoctors([
-            result.updatedDoctor
-          ]);
-
-        }
-
-
-        showSuccess(
-          "Consultation fee updated successfully."
-        );
-
-      }
-
-      catch (error) {
-
-        console.error(
-          "Error updating fee:",
-          error
-        );
-
-        showError(
-          error.message
-        );
-
-      }
-
-    }
-
-
-    /* =========================================================
-       DELETE DOCTOR BY ID
-    ========================================================= */
-
-    async function deleteDoctorById() {
-
-      clearError();
-
-
-      const id = prompt(
-        "Enter the Doctor ID you want to delete:"
-      );
-
-
-      if (
-        id === null ||
-        id.trim() === ""
-      ) {
-
-        return;
-
-      }
-
-
-      const confirmed =
-        confirm(
-          "Are you sure you want to delete Doctor ID " +
-          id +
-          "?"
-        );
-
-
-      if (!confirmed) {
-
-        return;
-
-      }
-
-
-      try {
-
-        const response = await fetch(
-
-          API_BASE_URL +
-          "/RemoveDoctorProfile?id=" +
-          encodeURIComponent(id),
-
-          {
-
-            method: "DELETE",
-
-            headers: getAuthHeaders()
-
-          }
-
-        );
-
-
-        if (!response.ok) {
-
-          if (response.status === 401) {
-
-            throw new Error(
-              "Unauthorized. Please login as Admin."
-            );
-
-          }
-
-
-          if (response.status === 403) {
-
-            throw new Error(
-              "Access denied. Admin role is required."
-            );
-
-          }
-
-
-          if (response.status === 404) {
-
-            throw new Error(
-              "Doctor profile not found."
-            );
-
-          }
-
-
-          throw new Error(
-            "Failed to delete doctor."
-          );
-
-        }
-
-
-        const result =
-          await response.json();
-
-
-        console.log(
-          "Deleted doctor:",
-          result
-        );
-
-
-        showSuccess(
-          "Doctor profile deleted successfully."
-        );
-
-
-        getAllDoctors();
-
-      }
-
-      catch (error) {
-
-        console.error(error);
-
-        showError(error.message);
-
-      }
-
-    }
-
-
-    /* =========================================================
-       DISPLAY DOCTORS IN TABLE
-    ========================================================= */
-
-    function displayDoctors(doctors) {
-
-      const tableBody =
-        document.getElementById(
-          "doctorTableBody"
-        );
-
-
-      tableBody.innerHTML = "";
-
-
-      if (
-        !doctors ||
-        doctors.length === 0
-      ) {
-
-        tableBody.innerHTML = `
-
-          <tr>
-
-            <td
-              colspan="7"
-              class="text-center">
-
-              No doctors found.
-
-            </td>
-
-          </tr>
-
-        `;
-
-        return;
-
-      }
-
-
-      doctors.forEach(doctor => {
-
-        const row =
-          document.createElement("tr");
-
-
-        row.innerHTML = `
-
-          <td>
-            ${doctor.doctorProfileId ?? ""}
-          </td>
-
-          <td>
-            ${doctor.licenseNumber ?? ""}
-          </td>
-
-          <td>
-            ${doctor.yearsOfExperience ?? ""}
-          </td>
-
-          <td>
-            $${Number(
-              doctor.consultationFee ?? 0
-            ).toFixed(2)}
-          </td>
-
-          <td>
-            ${doctor.userID ?? ""}
-          </td>
-
-          <td>
-            ${doctor.specializationId ?? ""}
-          </td>
-
-          <td>
-
-            <button
-              class="btn-primary"
-              onclick="updateConsultationFee(${doctor.doctorProfileId})">
-
-              Fee
-
-            </button>
-
-          </td>
-
-        `;
-
-
-        tableBody.appendChild(row);
-
-      });
-
-    }
-
-
-    /* =========================================================
-       LOAD ALL DOCTORS WHEN PAGE OPENS
-    ========================================================= */
-
-    document.addEventListener(
-      "DOMContentLoaded",
-      function () {
-
-        getAllDoctors();
-
-      }
-    );
-
   </script>
-
 </body>
 
 </html>
-```

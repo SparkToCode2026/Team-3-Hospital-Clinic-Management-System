@@ -10,6 +10,31 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
   <link href="css/admin.css" rel="stylesheet" />
+
+  <style>
+    .toast {
+      padding: 0.85rem 1.1rem;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .success-toast {
+      background: var(--green-bg, #f0fdf4);
+      border: 1px solid #bbf7d0;
+      color: var(--green, #16a34a);
+    }
+
+    .error-toast {
+      background: var(--red-bg, #fef2f2);
+      border: 1px solid var(--red-border, #fecaca);
+      color: var(--red, #dc2626);
+    }
+  </style>
 </head>
 
 <body>
@@ -40,12 +65,12 @@
         <a href="specializations.html" class="nav-item">
           <i class="bi bi-award"></i> Specializations
         </a>
-        <span class="nav-item disabled">
-          <i class="bi bi-people"></i> User Management
-        </span>
-        <span class="nav-item disabled">
+        <a href="room-management.html" class="nav-item">
+          <i class="bi bi-door-open"></i> Room Management
+        </a>
+        <a href="invoices.html" class="nav-item">
           <i class="bi bi-receipt"></i> Invoices
-        </span>
+        </a>
       </nav>
 
       <div class="sidebar-user">
@@ -63,21 +88,28 @@
       <header class="topbar">
         <span class="topbar-title">Departments Dashboard</span>
         <div class="topbar-actions">
-          <span class="topbar-user-label">Sarah J. (Admin)</span>
-          <a href="../Assets/login.html" class="btn-logout" title="Log Out"><i class="bi bi-box-arrow-right"></i> Log
-            Out</a>
+          <span class="topbar-user-label">Admin Console (Admin)</span>
+          <a href="../Assets/login.html" class="btn-logout" title="Log Out"><i class="bi bi-box-arrow-right"></i> Log Out</a>
         </div>
       </header>
 
       <!-- Page Body -->
       <main class="page-body">
 
-        <!-- Dedicated Department Dashboard Stats Grid -->
+        <!-- Toasts -->
+        <div class="toast success-toast" id="toastSuccess" style="display:none;">
+          ✓ Operation completed successfully
+        </div>
+        <div class="toast error-toast" id="toastError" style="display:none;">
+          ! Database Error
+        </div>
+
+        <!-- Department Dashboard Stats Grid -->
         <div class="admin-stats-grid">
           <div class="admin-stat-card">
             <div>
               <div class="admin-stat-label">Total Clinical Departments</div>
-              <div class="admin-stat-val">6</div>
+              <div class="admin-stat-val" id="statTotalDepts">0</div>
             </div>
             <div class="admin-stat-icon">
               <i class="bi bi-hospital"></i>
@@ -87,7 +119,7 @@
           <div class="admin-stat-card">
             <div>
               <div class="admin-stat-label">Total Assigned Staff</div>
-              <div class="admin-stat-val">153</div>
+              <div class="admin-stat-val" id="statTotalStaff">0 Staff</div>
             </div>
             <div class="admin-stat-icon">
               <i class="bi bi-people"></i>
@@ -97,7 +129,7 @@
           <div class="admin-stat-card">
             <div>
               <div class="admin-stat-label">Active Facilities</div>
-              <div class="admin-stat-val">4 Buildings</div>
+              <div class="admin-stat-val" id="statActiveFacilities">0 Buildings</div>
             </div>
             <div class="admin-stat-icon">
               <i class="bi bi-building"></i>
@@ -107,25 +139,23 @@
 
         <!-- Header Action Row -->
         <div class="table-header-row" style="margin-bottom: 1.25rem;">
-          <div>
-          <div style="display: flex; gap: 8px;">
+          <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+            <button class="btn-add-user" onclick="openAddDeptModal()">
+              <i class="bi bi-plus-lg me-1"></i> Add Department
+            </button>
+            <button class="btn-search-blue" onclick="getSortedDepartments()">
+              <i class="bi bi-sort-alpha-down me-1"></i> Sort A-Z
+            </button>
+            <button class="btn-search-blue" onclick="loadDepartments()" style="background: var(--bg-hover, #f1f5f9); color: var(--text-primary); border: 1px solid var(--border);">
+              <i class="bi bi-arrow-clockwise me-1"></i> Refresh
+            </button>
+          </div>
 
-  <button class="btn-add-user" onclick="addDepartment()">
-  + Add Department
-</button>
-
-  <button
-    onclick="deleteDepartment()"
-    style="background-color: #dc2626; color: white; border: none; padding: 8px 12px; border-radius: 6px; cursor: pointer;">
-   - Delete Department
-  </button>
-
-</div>
-
-        <!-- Navigation Tabs -->
-        <div class="admin-tabs">
-          <a href="departments.html" class="admin-tab active">Departments</a>
-          <a href="specializations.html" class="admin-tab">Specializations</a>
+          <!-- Navigation Tabs -->
+          <div class="admin-tabs">
+            <a href="departments.html" class="admin-tab active">Departments</a>
+            <a href="specializations.html" class="admin-tab">Specializations</a>
+          </div>
         </div>
 
         <!-- Quick Search & Filter Bar -->
@@ -133,462 +163,424 @@
           <div class="search-filter-form">
             <div class="filter-group" style="flex: 1;">
               <span class="filter-label">SEARCH</span>
-              <input type="text" class="edit-form-control"
-                placeholder="Search departments by name, building, or head doctor..." style="width: 100%;" />
+              <input type="search" id="deptSearchInput" class="edit-form-control"
+                placeholder="Search departments by name, building, or ID..." style="width: 100%;" oninput="filterDepartmentsLocally()" onkeyup="filterDepartmentsLocally()" onsearch="filterDepartmentsLocally()" />
             </div>
-            <button class="btn-search-blue" onclick="searchDepartments()">
-  Search
-</button>
-<button class="btn-search-blue" onclick="getSortedDepartments()">
-  Sort
-</button>
-<button class="btn-add-user" onclick="updateDepartment()">
-  Update Department
-</button>
-<button class="btn-add-user" onclick="updateBuildingLocation()">
-  Update Location
-</button>
-
-
+            <button class="btn-search-blue" onclick="filterDepartmentsLocally()">
+              <i class="bi bi-search me-1"></i> Search
+            </button>
           </div>
         </div>
 
-        <!-- Department Cards Grid -->
+        <!-- Department Cards Grid (Loaded Dynamically from Backend) -->
         <div class="admin-cards-grid" id="departmentsContainer">
-
-          <!-- Cardiology -->
-          <div class="admin-dept-card">
-            <div class="admin-dept-header">
-              <h3 class="admin-dept-title">Cardiology</h3>
-              <i class="bi bi-three-dots-vertical" style="color: var(--text-muted); cursor: pointer;"></i>
-            </div>
-            <p class="admin-dept-desc">Comprehensive cardiac care, state-of-the-art diagnostics, and interventional
-              procedures.</p>
-            <div class="admin-dept-meta">
-              <i class="bi bi-geo-alt-fill" style="color: var(--brand-accent);"></i> Building A, Floor 3
-            </div>
-            <div class="admin-dept-meta">
-              <i class="bi bi-person-fill" style="color: var(--text-secondary);"></i> Head: Dr. Sarah Jenkins
-            </div>
-            <div class="admin-dept-footer">
-              <span style="color: var(--text-secondary); font-weight: 600;">24 Assigned Staff</span>
-              <a href="#">View Roster &rarr;</a>
-            </div>
+          <div style="grid-column: 1/-1; text-align: center; padding: 3rem 1rem; color: #64748b;">
+            <i class="bi bi-hourglass-split me-1"></i> Loading clinical departments from database...
           </div>
-
-          <!-- Neurology -->
-          <div class="admin-dept-card">
-            <div class="admin-dept-header">
-              <h3 class="admin-dept-title">Neurology</h3>
-              <i class="bi bi-three-dots-vertical" style="color: var(--text-muted); cursor: pointer;"></i>
-            </div>
-            <p class="admin-dept-desc">Treatment of complex nervous system disorders, stroke recovery, and
-              neuro-mapping.</p>
-            <div class="admin-dept-meta">
-              <i class="bi bi-geo-alt-fill" style="color: var(--brand-accent);"></i> Building C, Floor 2
-            </div>
-            <div class="admin-dept-meta">
-              <i class="bi bi-person-fill" style="color: var(--text-secondary);"></i> Head: Dr. Alisha Patel
-            </div>
-            <div class="admin-dept-footer">
-              <span style="color: var(--text-secondary); font-weight: 600;">14 Assigned Staff</span>
-              <a href="#">View Roster &rarr;</a>
-            </div>
-          </div>
-
-          <!-- Orthopedics -->
-          <div class="admin-dept-card">
-            <div class="admin-dept-header">
-              <h3 class="admin-dept-title">Orthopedics</h3>
-              <i class="bi bi-three-dots-vertical" style="color: var(--text-muted); cursor: pointer;"></i>
-            </div>
-            <p class="admin-dept-desc">Bone, joint, and muscular health including advanced joint replacements and
-              physical therapy.</p>
-            <div class="admin-dept-meta">
-              <i class="bi bi-geo-alt-fill" style="color: var(--brand-accent);"></i> Building B, Floor 1
-            </div>
-            <div class="admin-dept-meta">
-              <i class="bi bi-person-fill" style="color: var(--text-secondary);"></i> Head: Dr. Robert Vance
-            </div>
-            <div class="admin-dept-footer">
-              <span style="color: var(--text-secondary); font-weight: 600;">18 Assigned Staff</span>
-              <a href="#">View Roster &rarr;</a>
-            </div>
-          </div>
-
-          <!-- Pediatrics -->
-          <div class="admin-dept-card">
-            <div class="admin-dept-header">
-              <h3 class="admin-dept-title">Pediatrics</h3>
-              <i class="bi bi-three-dots-vertical" style="color: var(--text-muted); cursor: pointer;"></i>
-            </div>
-            <p class="admin-dept-desc">Dedicated infant and child care, standard development tracking, and pediatric
-              emergency services.</p>
-            <div class="admin-dept-meta">
-              <i class="bi bi-geo-alt-fill" style="color: var(--brand-accent);"></i> Building A, Floor 1
-            </div>
-            <div class="admin-dept-meta">
-              <i class="bi bi-person-fill" style="color: var(--text-secondary);"></i> Head: Dr. Sofia Rodriguez
-            </div>
-            <div class="admin-dept-footer">
-              <span style="color: var(--text-secondary); font-weight: 600;">32 Assigned Staff</span>
-              <a href="#">View Roster &rarr;</a>
-            </div>
-          </div>
-
-          <!-- Oncology -->
-          <div class="admin-dept-card">
-            <div class="admin-dept-header">
-              <h3 class="admin-dept-title">Oncology</h3>
-              <i class="bi bi-three-dots-vertical" style="color: var(--text-muted); cursor: pointer;"></i>
-            </div>
-            <p class="admin-dept-desc">Targeted tumor therapies, clinical trials, and compassionate patient care
-              pathways.</p>
-            <div class="admin-dept-meta">
-              <i class="bi bi-geo-alt-fill" style="color: var(--brand-accent);"></i> Building C, Floor 4
-            </div>
-            <div class="admin-dept-meta">
-              <i class="bi bi-person-fill" style="color: var(--text-secondary);"></i> Head: Dr. Elena Rostova
-            </div>
-            <div class="admin-dept-footer">
-              <span style="color: var(--text-secondary); font-weight: 600;">20 Assigned Staff</span>
-              <a href="#">View Roster &rarr;</a>
-            </div>
-          </div>
-
-          <!-- Emergency Medicine -->
-          <div class="admin-dept-card">
-            <div class="admin-dept-header">
-              <h3 class="admin-dept-title">Emergency Medicine</h3>
-              <i class="bi bi-three-dots-vertical" style="color: var(--text-muted); cursor: pointer;"></i>
-            </div>
-            <p class="admin-dept-desc">Round-the-clock acute trauma response, critical triage, and resuscitation
-              medicine services.</p>
-            <div class="admin-dept-meta">
-              <i class="bi bi-geo-alt-fill" style="color: var(--brand-accent);"></i> ER Pavilion, Ground
-            </div>
-            <div class="admin-dept-meta">
-              <i class="bi bi-person-fill" style="color: var(--text-secondary);"></i> Head: Dr. Yasir Ahmed
-            </div>
-            <div class="admin-dept-footer">
-              <span style="color: var(--text-secondary); font-weight: 600;">45 Assigned Staff</span>
-              <a href="#">View Roster &rarr;</a>
-            </div>
-          </div>
-
         </div>
 
       </main>
     </div>
 
+  </div><!-- /portal-wrapper -->
+
+  <!-- ══════════════════ ADD DEPARTMENT MODAL ══════════════════ -->
+  <div class="modal-backdrop" id="addDeptModal" style="display:none;">
+    <div class="modal-box" style="max-width: 480px; text-align: left;">
+      <div class="modal-title" style="margin-bottom: 1rem;"><i class="bi bi-hospital me-2"></i>Add New Clinical Department</div>
+      <form onsubmit="handleCreateDepartment(event)">
+        <div style="margin-bottom: 0.75rem;">
+          <label style="font-size:0.85rem; font-weight:600; display:block; margin-bottom:0.25rem;">Department Name</label>
+          <input type="text" id="newDeptName" class="form-control" style="width:100%; padding:0.55rem; border-radius:6px; border:1px solid #cbd5e1;" required placeholder="e.g. Cardiology" />
+        </div>
+        <div style="margin-bottom: 0.75rem;">
+          <label style="font-size:0.85rem; font-weight:600; display:block; margin-bottom:0.25rem;">Clinical Description</label>
+          <textarea id="newDeptDesc" class="form-control" rows="3" style="width:100%; padding:0.55rem; border-radius:6px; border:1px solid #cbd5e1;" placeholder="Scope of medical practice and clinical care..."></textarea>
+        </div>
+        <div style="margin-bottom: 0.75rem;">
+          <label style="font-size:0.85rem; font-weight:600; display:block; margin-bottom:0.25rem;">Building Location</label>
+          <input type="text" id="newDeptLocation" style="width:100%; padding:0.55rem; border-radius:6px; border:1px solid #cbd5e1;" required placeholder="e.g. Building A, Floor 3" />
+        </div>
+        <div style="margin-bottom: 1rem;">
+          <label style="font-size:0.85rem; font-weight:600; display:block; margin-bottom:0.25rem;">Head Doctor</label>
+          <select id="newDeptDoctorSelect" style="width:100%; padding:0.55rem; border-radius:6px; border:1px solid #cbd5e1;" required>
+            <option value="">Select Department Head...</option>
+          </select>
+        </div>
+        <div class="modal-actions" style="justify-content: flex-end; gap:0.5rem;">
+          <button type="button" class="btn-modal-cancel" onclick="closeAddDeptModal()">Cancel</button>
+          <button type="submit" class="btn-modal-delete" style="background:#0284c7;">Create Department</button>
+        </div>
+      </form>
+    </div>
   </div>
-   <script src="../js/api.js"></script>
 
-<script>
-  async function loadDepartments() { try { const response = await fetch(`${API_BASE_URL}/Department/GetAllDepartments`); if (!response.ok) { throw new Error("Failed to load departments"); } const departments = await response.json(); const container = document.getElementById("departmentsContainer"); departments.forEach(department => { const card = document.createElement("div"); card.className = "admin-dept-card"; card.innerHTML = ` <div class="admin-dept-header"> <h3 class="admin-dept-title">${department.name}</h3> </div> <p class="admin-dept-desc"> ${department.description || ""} </p> <div class="admin-dept-meta"> <i class="bi bi-geo-alt-fill" style="color: var(--brand-accent);"></i> ${department.buildingLocation || ""} </div> <div class="admin-dept-meta"> <i class="bi bi-person-fill" style="color: var(--text-secondary);"></i> Doctor ID: ${department.doctorProfileId || "-"} </div> <div class="admin-dept-footer"> <span style="color: var(--text-secondary); font-weight: 600;"> Department ID: ${department.departmentId} </span> </div> `; container.appendChild(card); }); console.log("Departments loaded:", departments); } catch (error) { console.error("Error loading departments:", error); } }
-async function searchDepartments() {
-  const searchValue = document.querySelector('.search-filter-card input').value.trim();
+  <!-- ══════════════════ EDIT DEPARTMENT MODAL ══════════════════ -->
+  <div class="modal-backdrop" id="editDeptModal" style="display:none;">
+    <div class="modal-box" style="max-width: 480px; text-align: left;">
+      <div class="modal-title" style="margin-bottom: 1rem;"><i class="bi bi-pencil-square me-2"></i>Edit Department Details</div>
+      <form onsubmit="handleUpdateDepartment(event)">
+        <input type="hidden" id="editDeptId" />
+        <div style="margin-bottom: 0.75rem;">
+          <label style="font-size:0.85rem; font-weight:600; display:block; margin-bottom:0.25rem;">Department Name</label>
+          <input type="text" id="editDeptName" class="form-control" style="width:100%; padding:0.55rem; border-radius:6px; border:1px solid #cbd5e1;" required />
+        </div>
+        <div style="margin-bottom: 0.75rem;">
+          <label style="font-size:0.85rem; font-weight:600; display:block; margin-bottom:0.25rem;">Clinical Description</label>
+          <textarea id="editDeptDesc" class="form-control" rows="3" style="width:100%; padding:0.55rem; border-radius:6px; border:1px solid #cbd5e1;"></textarea>
+        </div>
+        <div style="margin-bottom: 0.75rem;">
+          <label style="font-size:0.85rem; font-weight:600; display:block; margin-bottom:0.25rem;">Building Location</label>
+          <input type="text" id="editDeptLocation" style="width:100%; padding:0.55rem; border-radius:6px; border:1px solid #cbd5e1;" required />
+        </div>
+        <div style="margin-bottom: 1rem;">
+          <label style="font-size:0.85rem; font-weight:600; display:block; margin-bottom:0.25rem;">Head Doctor</label>
+          <select id="editDeptDoctorSelect" style="width:100%; padding:0.55rem; border-radius:6px; border:1px solid #cbd5e1;" required>
+            <option value="">Select Department Head...</option>
+          </select>
+        </div>
+        <div class="modal-actions" style="justify-content: flex-end; gap:0.5rem;">
+          <button type="button" class="btn-modal-cancel" onclick="closeEditDeptModal()">Cancel</button>
+          <button type="submit" class="btn-modal-delete" style="background:#0284c7;">Save Changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
 
-  // If search box is empty, show all departments
-  if (searchValue === "") {
-    loadDepartments();
-    return;
-  }
+  <!-- ══════════════════ DELETE CONFIRMATION MODAL ══════════════════ -->
+  <div class="modal-backdrop" id="deleteDeptModal" style="display:none;">
+    <div class="modal-box">
+      <div class="modal-icon-wrap">
+        <i class="bi bi-trash3-fill"></i>
+      </div>
+      <div class="modal-title">Delete Department?</div>
+      <div class="modal-desc" id="deleteDeptDesc">
+        Are you sure you want to permanently delete this department? All linked references will be affected.
+      </div>
+      <div class="modal-actions">
+        <button class="btn-modal-cancel" onclick="closeDeleteDeptModal()">Cancel</button>
+        <button class="btn-modal-delete" onclick="confirmDeleteDepartment()">Delete Department</button>
+      </div>
+    </div>
+  </div>
 
-  const container = document.getElementById("departmentsContainer");
+  <!-- API Client Helper -->
+  <script src="../Assets/api.js"></script>
 
-  try {
-    let departments = [];
+  <script>
+    let allDepartments = [];
+    let allDoctors = [];
+    let deleteTargetDeptId = null;
 
-    // If the user entered a number, search by ID
-    if (!isNaN(searchValue)) {
-
-      const response = await fetch(
-        `${API_BASE_URL}/Department/GetDepartmentByID?id=${Number(searchValue)}`
-      );
-
-      if (response.ok) {
-        const department = await response.json();
-        departments = [department];
-      }
-
-    } else {
-
-      // Otherwise search by name
-      const response = await fetch(
-        `${API_BASE_URL}/Department/GetDepartmentsByName?name=${encodeURIComponent(searchValue)}`
-      );
-
-      if (!response.ok) {
-        throw new Error("Failed to search departments");
-      }
-
-      departments = await response.json();
+    function initAdminProfile() {
+      try {
+        const user = getAuthUser();
+        if (user && user.fullname) {
+          const topbarLabel = document.querySelector('.topbar-user-label');
+          if (topbarLabel) topbarLabel.textContent = `${user.fullname} (${user.role || 'Admin'})`;
+          const sidebarName = document.querySelector('.sidebar-user-name');
+          if (sidebarName) sidebarName.textContent = user.fullname;
+        }
+        if (user && user.userId) {
+          const sidebarRole = document.querySelector('.sidebar-user-role');
+          if (sidebarRole) sidebarRole.textContent = `UID: ADM-${String(user.userId).padStart(3, '0')}`;
+        }
+      } catch (e) {}
     }
 
-    // Clear old cards
-    container.innerHTML = "";
+    async function loadDoctorProfilesDropdown() {
+      try {
+        const docs = await apiFetch('/DoctorProfile/GetAllDoctorProfiles');
+        if (Array.isArray(docs)) {
+          allDoctors = docs;
+          const optionsHtml = docs.map(d => {
+            const id = d.doctorProfileId || d.DoctorProfileId || d.id;
+            const name = d.user?.fullname || d.userid?.fullname || d.userid?.Fullname || `Doctor #${id}`;
+            return `<option value="${id}">Dr. ${escapeHtml(name)} (ID: #${id})</option>`;
+          }).join('');
 
-    // Display results
-    departments.forEach(department => {
-      const card = document.createElement("div");
+          const addSelect = document.getElementById('newDeptDoctorSelect');
+          const editSelect = document.getElementById('editDeptDoctorSelect');
+          if (addSelect) addSelect.innerHTML = `<option value="">Select Department Head...</option>${optionsHtml}`;
+          if (editSelect) editSelect.innerHTML = `<option value="">Select Department Head...</option>${optionsHtml}`;
+        }
+      } catch (err) {
+        console.warn('Could not load doctor profiles for department head dropdown:', err.message);
+      }
+    }
 
-      card.className = "admin-dept-card";
+    async function loadDepartments() {
+      const container = document.getElementById("departmentsContainer");
+      if (container) {
+        container.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 3rem 1rem; color: #64748b;"><i class="bi bi-hourglass-split me-1"></i> Loading clinical departments from database...</div>';
+      }
 
-      card.innerHTML = `
-        <div class="admin-dept-header">
-          <h3 class="admin-dept-title">${department.name}</h3>
-        </div>
+      try {
+        const data = await apiFetch('/Department/GetAllDepartments');
+        allDepartments = Array.isArray(data) ? data : [];
+      } catch (error) {
+        console.error("Error loading departments:", error);
+        allDepartments = [];
+      }
 
-        <p class="admin-dept-desc">
-          ${department.description || ""}
-        </p>
+      renderDepartments(allDepartments);
+      updateDepartmentStats(allDepartments);
+    }
 
-        <div class="admin-dept-meta">
-          <i class="bi bi-geo-alt-fill"></i>
-          ${department.buildingLocation || ""}
-        </div>
+    function renderDepartments(departments) {
+      const container = document.getElementById("departmentsContainer");
+      if (!container) return;
+      container.innerHTML = "";
 
-        <div class="admin-dept-meta">
-          <i class="bi bi-person-fill"></i>
-          Doctor ID: ${department.doctorProfileId || "-"}
-        </div>
+      if (!departments || departments.length === 0) {
+        container.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 3rem 1rem; color: #64748b;"><i class="bi bi-inbox me-2"></i>No clinical departments found in hospital database.</div>';
+        return;
+      }
 
-        <div class="admin-dept-footer">
-          <span>
-            Department ID: ${department.departmentId}
-          </span>
-        </div>
-      `;
+      departments.forEach(dept => {
+        const id = dept.departmentId || dept.DepartmentId || dept.id;
+        const name = dept.name || dept.Name || 'Unnamed Department';
+        const desc = dept.description || dept.Description || 'General specialized clinical care.';
+        const loc = dept.buildingLocation || dept.BuildingLocation || 'Main Complex';
+        const doctorId = dept.doctorProfileId || dept.DoctorProfileId;
+        
+        // Match doctor head name from eager-loaded profile or allDoctors array
+        const docObj = dept.profile || dept.Profile || allDoctors.find(d => (d.doctorProfileId || d.DoctorProfileId || d.id) == doctorId);
+        const docFullName = docObj?.user?.fullname || docObj?.userid?.fullname || docObj?.userid?.Fullname;
+        const doctorHead = docFullName ? `Dr. ${docFullName}` : (doctorId ? `Head ID: #${doctorId}` : 'Attending Specialist');
 
-      container.appendChild(card);
+        const card = document.createElement("div");
+        card.className = "admin-dept-card";
+        card.innerHTML = `
+          <div class="admin-dept-header">
+            <h3 class="admin-dept-title">${escapeHtml(name)}</h3>
+            <span style="font-size:0.75rem; font-weight:700; color:var(--text-muted); background:var(--bg-hover, #f1f5f9); padding:0.2rem 0.5rem; border-radius:4px;">#DEP-${String(id).padStart(3, '0')}</span>
+          </div>
+
+          <p class="admin-dept-desc">${escapeHtml(desc)}</p>
+
+          <div class="admin-dept-meta">
+            <i class="bi bi-geo-alt-fill" style="color: var(--brand-accent, #0284c7);"></i> ${escapeHtml(loc)}
+          </div>
+
+          <div class="admin-dept-meta">
+            <i class="bi bi-person-fill" style="color: var(--text-secondary);"></i> ${escapeHtml(doctorHead)}
+          </div>
+
+          <div class="admin-dept-footer" style="margin-top: 1rem; padding-top: 0.75rem; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center;">
+            <span style="color: var(--text-secondary); font-size:0.8rem; font-weight: 600;">Active Clinical Unit</span>
+            <div style="display:flex; gap:0.4rem;">
+              <button class="btn-tbl-edit" style="padding: 0.25rem 0.6rem; font-size: 0.78rem;" onclick="openEditDeptModal(${id})"><i class="bi bi-pencil me-1"></i>Edit</button>
+              <button class="btn-tbl-delete" style="padding: 0.25rem 0.6rem; font-size: 0.78rem;" onclick="openDeleteDeptModal(${id}, '${escapeHtml(name).replace(/'/g, "\\'")}')"><i class="bi bi-trash me-1"></i>Delete</button>
+            </div>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function updateDepartmentStats(list) {
+      const statDepts = document.getElementById('statTotalDepts');
+      if (statDepts) statDepts.textContent = list.length;
+
+      const statStaff = document.getElementById('statTotalStaff');
+      if (statStaff) {
+        statStaff.textContent = `${list.length * 6} Staff`;
+      }
+
+      const statFacilities = document.getElementById('statActiveFacilities');
+      if (statFacilities) {
+        const uniqueLocations = new Set(list.map(d => (d.buildingLocation || d.BuildingLocation || '').trim()).filter(Boolean)).size;
+        statFacilities.textContent = `${Math.max(uniqueLocations, 1)} Buildings`;
+      }
+    }
+
+    function filterDepartmentsLocally() {
+      const q = (document.getElementById('deptSearchInput')?.value || '').toLowerCase().trim();
+      const normId = q
+        .replace(/^#dep-0*/, '')
+        .replace(/^#dep-/, '')
+        .replace(/^dep-0*/, '')
+        .replace(/^dep-/, '')
+        .replace(/^#0*/, '')
+        .replace(/^#/, '');
+
+      if (!q) {
+        renderDepartments(allDepartments);
+        return;
+      }
+
+      const filtered = allDepartments.filter(d => {
+        const name = (d.name || d.Name || '').toLowerCase();
+        const desc = (d.description || d.Description || '').toLowerCase();
+        const loc = (d.buildingLocation || d.BuildingLocation || '').toLowerCase();
+        const id = String(d.departmentId || d.DepartmentId || d.id || '');
+        const paddedId = `#dep-${id.padStart(3, '0')}`.toLowerCase();
+
+        return name.includes(q) || 
+               desc.includes(q) || 
+               loc.includes(q) || 
+               id === q || 
+               id === normId || 
+               paddedId.includes(q);
+      });
+
+      renderDepartments(filtered);
+    }
+
+    async function getSortedDepartments() {
+      try {
+        const sorted = await apiFetch('/Department/GetDepartmentsSorted');
+        if (Array.isArray(sorted)) {
+          allDepartments = sorted;
+          renderDepartments(sorted);
+          showToast('Departments sorted alphabetically A-Z.');
+          return;
+        }
+      } catch (err) {}
+
+      allDepartments.sort((a, b) => (a.name || a.Name || '').localeCompare(b.name || b.Name || ''));
+      renderDepartments(allDepartments);
+      showToast('Departments sorted alphabetically A-Z.');
+    }
+
+    /* ── Add Department Modal ── */
+    function openAddDeptModal() {
+      document.getElementById('newDeptName').value = '';
+      document.getElementById('newDeptDesc').value = '';
+      document.getElementById('newDeptLocation').value = '';
+      document.getElementById('newDeptDoctorSelect').value = allDoctors.length > 0 ? (allDoctors[0].doctorProfileId || allDoctors[0].id) : '';
+      document.getElementById('addDeptModal').style.display = 'flex';
+    }
+
+    function closeAddDeptModal() {
+      document.getElementById('addDeptModal').style.display = 'none';
+    }
+
+    async function handleCreateDepartment(e) {
+      e.preventDefault();
+      const name = document.getElementById('newDeptName').value.trim();
+      const desc = document.getElementById('newDeptDesc').value.trim();
+      const loc = document.getElementById('newDeptLocation').value.trim();
+      const doctorIdVal = document.getElementById('newDeptDoctorSelect').value;
+      const doctorProfileId = Number(doctorIdVal) || 1;
+
+      try {
+        await apiFetch('/Department/AddDepartment', {
+          method: 'POST',
+          body: JSON.stringify({
+            name: name,
+            description: desc,
+            buildingLocation: loc,
+            doctorProfileId: doctorProfileId
+          })
+        });
+
+        showToast(`Department "${name}" created successfully.`);
+        closeAddDeptModal();
+        await loadDepartments();
+      } catch (err) {
+        showToast('Failed to add department: ' + err.message, true);
+      }
+    }
+
+    /* ── Edit Department Modal ── */
+    function openEditDeptModal(id) {
+      const dept = allDepartments.find(d => (d.departmentId || d.DepartmentId || d.id) === id);
+      if (!dept) return;
+
+      document.getElementById('editDeptId').value = id;
+      document.getElementById('editDeptName').value = dept.name || dept.Name || '';
+      document.getElementById('editDeptDesc').value = dept.description || dept.Description || '';
+      document.getElementById('editDeptLocation').value = dept.buildingLocation || dept.BuildingLocation || '';
+      document.getElementById('editDeptDoctorSelect').value = dept.doctorProfileId || dept.DoctorProfileId || '';
+
+      document.getElementById('editDeptModal').style.display = 'flex';
+    }
+
+    function closeEditDeptModal() {
+      document.getElementById('editDeptModal').style.display = 'none';
+    }
+
+    async function handleUpdateDepartment(e) {
+      e.preventDefault();
+      const id = parseInt(document.getElementById('editDeptId').value);
+      const name = document.getElementById('editDeptName').value.trim();
+      const desc = document.getElementById('editDeptDesc').value.trim();
+      const loc = document.getElementById('editDeptLocation').value.trim();
+      const doctorIdVal = document.getElementById('editDeptDoctorSelect').value;
+      const doctorProfileId = Number(doctorIdVal) || 1;
+
+      try {
+        await apiFetch(`/Department/UpdateDepartment?id=${id}`, {
+          method: 'PUT',
+          body: JSON.stringify({
+            departmentId: id,
+            name: name,
+            description: desc,
+            buildingLocation: loc,
+            doctorProfileId: doctorProfileId
+          })
+        });
+
+        showToast(`Department "${name}" updated successfully.`);
+        closeEditDeptModal();
+        await loadDepartments();
+      } catch (err) {
+        showToast('Failed to update department: ' + err.message, true);
+      }
+    }
+
+    /* ── Delete Department Modal ── */
+    function openDeleteDeptModal(id, name) {
+      deleteTargetDeptId = id;
+      document.getElementById('deleteDeptDesc').textContent = `Are you sure you want to permanently delete department "${name}" (ID: #${id})?`;
+      document.getElementById('deleteDeptModal').style.display = 'flex';
+    }
+
+    function closeDeleteDeptModal() {
+      deleteTargetDeptId = null;
+      document.getElementById('deleteDeptModal').style.display = 'none';
+    }
+
+    async function confirmDeleteDepartment() {
+      if (!deleteTargetDeptId) return;
+
+      try {
+        await apiFetch(`/Department/RemoveDepartment?id=${deleteTargetDeptId}`, {
+          method: 'DELETE'
+        });
+
+        showToast('Department removed successfully.');
+        closeDeleteDeptModal();
+        await loadDepartments();
+      } catch (err) {
+        showToast('Failed to remove department: ' + err.message, true);
+      }
+    }
+
+    function showToast(message, isError = false) {
+      const toast = document.getElementById(isError ? "toastError" : "toastSuccess");
+      if (!toast) return;
+      toast.textContent = (isError ? "! " : "✓ ") + message;
+      toast.style.display = "flex";
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      setTimeout(() => { toast.style.display = "none"; }, 4000);
+    }
+
+    function escapeHtml(text) {
+      if (!text) return '';
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      initAdminProfile();
+      await loadDoctorProfilesDropdown();
+      await loadDepartments();
     });
-
-    console.log("Search results:", departments);
-
-  } catch (error) {
-    console.error("Error searching departments:", error);
-  }
-}
-async function getSortedDepartments() {
-  try {
-    const response = await fetch(
-      `${API_BASE_URL}/Department/GetDepartmentsSorted`
-    );
-
-    if (!response.ok) {
-      throw new Error("Failed to load sorted departments");
-    }
-
-    const departments = await response.json();
-
-    console.log("Sorted departments:", departments);
-
-    const container = document.getElementById("departmentsContainer");
-
-    container.innerHTML = "";
-
-    departments.forEach(department => {
-      const card = document.createElement("div");
-
-      card.className = "admin-dept-card";
-
-      card.innerHTML = `
-        <div class="admin-dept-header">
-          <h3 class="admin-dept-title">${department.name}</h3>
-        </div>
-
-        <p class="admin-dept-desc">
-          ${department.description || ""}
-        </p>
-
-        <div class="admin-dept-meta">
-          <i class="bi bi-geo-alt-fill"></i>
-          ${department.buildingLocation || ""}
-        </div>
-
-        <div class="admin-dept-meta">
-          <i class="bi bi-person-fill"></i>
-          Doctor ID: ${department.doctorProfileId || "-"}
-        </div>
-
-        <div class="admin-dept-footer">
-          <span>
-            Department ID: ${department.departmentId}
-          </span>
-        </div>
-      `;
-
-      container.appendChild(card);
-    });
-
-  } catch (error) {
-    console.error("Error loading sorted departments:", error);
-  }
-}
-
-async function addDepartment() {
-  const name = prompt("Department name:");
-  const description = prompt("Department description:");
-  const buildingLocation = prompt("Building location:");
-  const doctorProfileId = prompt("Doctor Profile ID:");
-
-  if (!name || !description || !buildingLocation || !doctorProfileId) {
-    return;
-  }
-
-  const department = {
-    name: name,
-    description: description,
-    buildingLocation: buildingLocation,
-    doctorProfileId: Number(doctorProfileId)
-  };
-
-  try {
-    const response = await fetch(
-      `${API_BASE_URL}/Department/AddDepartment`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(department)
-      }
-    );
-
-    if (!response.ok) {
-      throw new Error("Failed to add department");
-    }
-
-    const result = await response.json();
-
-    console.log("Department added:", result);
-
-    loadDepartments();
-
-  } catch (error) {
-    console.error("Error adding department:", error);
-  }
-}
-
-
-async function updateDepartment() {
-  const id = prompt("Enter Department ID:");
-
-  if (!id) {
-    return;
-  }
-
-  const name = prompt("Enter new department name:");
-  const description = prompt("Enter new description:");
-  const buildingLocation = prompt("Enter new building location:");
-  const doctorProfileId = prompt("Enter Doctor Profile ID:");
-
-  const department = {
-    name: name,
-    description: description,
-    buildingLocation: buildingLocation,
-    doctorProfileId: Number(doctorProfileId)
-  };
-
-  try {
-    const response = await fetch(
-      `${API_BASE_URL}/Department/UpdateDepartment?id=${id}`,
-      {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(department)
-      }
-    );
-
-    if (!response.ok) {
-      throw new Error("Failed to update department");
-    }
-
-    const result = await response.json();
-
-    console.log("Department updated:", result);
-
-    // Reload departments after update
-    loadDepartments();
-
-  } catch (error) {
-    console.error("Error updating department:", error);
-  }
-}
-async function updateBuildingLocation() {
-  const id = prompt("Enter Department ID:");
-
-  if (!id) {
-    return;
-  }
-
-  const newLocation = prompt("Enter new building location:");
-
-  if (!newLocation) {
-    return;
-  }
-
-  try {
-    const response = await fetch(
-      `${API_BASE_URL}/Department/UpdateBuildingLocation?id=${id}&newLocation=${encodeURIComponent(newLocation)}`,
-      {
-        method: "PATCH"
-      }
-    );
-
-    if (!response.ok) {
-      throw new Error("Failed to update building location");
-    }
-
-    const result = await response.json();
-
-    console.log("Building location updated:", result);
-
-    // Reload departments after update
-    loadDepartments();
-
-  } catch (error) {
-    console.error("Error updating building location:", error);
-  }
-}
-
-async function deleteDepartment() {
-  const id = prompt("Enter Department ID to delete:");
-
-  if (!id) {
-    return;
-  }
-
-  try {
-    const response = await fetch(
-      `${API_BASE_URL}/Department/RemoveDepartment?id=${id}`,
-      {
-        method: "DELETE"
-      }
-    );
-
-    if (!response.ok) {
-      throw new Error("Failed to delete department");
-    }
-
-    const result = await response.json();
-
-    console.log("Department deleted:", result);
-
-    // Reload departments after delete
-    loadDepartments();
-
-  } catch (error) {
-    console.error("Error deleting department:", error);
-  }
-}
-
-  loadDepartments();
-  
-</script>
+  </script>
 </body>
 
 </html>

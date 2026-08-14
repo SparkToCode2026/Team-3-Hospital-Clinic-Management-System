@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 using Team_3_HMS.Models;
 
 namespace Team_3_HMS.Controllers
 {
+    [Route("PatientProfile")]
     [Route("api/[controller]")]
     [ApiController]
     public class PatientProfileController : ControllerBase
@@ -18,11 +20,13 @@ namespace Team_3_HMS.Controllers
 
         // 1. GET ALL PROFILES
         // GET: api/PatientProfile/all
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin,Doctor")]
         [HttpGet("all")]
         public IActionResult GetAll()
         {
-            var profiles = _context.PatientProfiles.ToList();
+            var profiles = _context.PatientProfiles
+                .Include(p => p.user)
+                .ToList();
             return Ok(profiles);
         }
 

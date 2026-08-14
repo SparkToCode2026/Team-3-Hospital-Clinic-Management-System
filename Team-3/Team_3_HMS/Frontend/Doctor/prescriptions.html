@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Patient Prescriptions | HMS Clinical</title>
+  <meta name="description" content="Doctor portal for issuing and managing medical prescriptions and medication regimens.">
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="prescriptions.css">
+</head>
+
+<body>
+  <div class="portal-wrapper">
+
+    <!-- ══ SIDEBAR ══ -->
+    <aside class="sidebar">
+      <div class="sidebar-brand">
+        <div class="sidebar-logo"><i class="bi bi-hospital"></i></div>
+        <div>
+          <div class="sidebar-brand-name">HMS Clinical</div>
+          <div class="sidebar-brand-sub">Doctor Portal</div>
+        </div>
+      </div>
+      <nav class="sidebar-nav">
+        <a href="dashboard.html" class="nav-item"><i class="bi bi-grid-1x2-fill"></i> Dashboard</a>
+        <a href="medical-records.html" class="nav-item"><i class="bi bi-journal-medical"></i> Medical Records</a>
+        <a href="prescriptions.html" class="nav-item active"><i class="bi bi-prescription2"></i> Prescriptions</a>
+        <a href="medications.html" class="nav-item"><i class="bi bi-capsule"></i> Medications</a>
+        <a href="lab-tests.html" class="nav-item"><i class="bi bi-eyedropper"></i> Lab Tests</a>
+        <a href="appointments.html" class="nav-item"><i class="bi bi-calendar-check"></i> Appointments</a>
+        <a href="patients.html" class="nav-item"><i class="bi bi-people"></i> Patients</a>
+        <a href="doctor-profile.html" class="nav-item"><i class="bi bi-person-gear"></i> Settings &amp; Profile</a>
+      </nav>
+      <div class="sidebar-user">
+        <div>
+          <div class="sidebar-user-name">Doctor Console</div>
+          <div class="sidebar-user-role">Attending Physician</div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- ══ MAIN CONTENT ══ -->
+    <div class="main-content">
+      <header class="topbar">
+        <span class="topbar-title">Prescriptions Management</span>
+        <div class="topbar-actions">
+          <span class="topbar-user-label">Doctor Console</span>
+          <a href="../Assets/login.html" class="btn-logout" title="Log Out"><i class="bi bi-box-arrow-right"></i> Log Out</a>
+        </div>
+      </header>
+
+      <main class="page-body">
+
+        <!-- Alert Notification -->
+        <div class="alert alert-success d-none mb-3" id="actionAlert" role="alert">
+          <i class="bi bi-check-circle-fill me-2"></i>
+          <span id="alertMsg">Action completed successfully.</span>
+        </div>
+
+        <!-- Page Header -->
+        <div class="page-header d-flex justify-content-between align-items-center flex-wrap gap-2">
+          <div>
+            <h1>Prescription Orders &amp; Regimens</h1>
+            <p>Issue new prescriptions, adjust dosage instructions, and track medication plans linked directly to patient EHR files.</p>
+          </div>
+          <div>
+            <button class="btn-primary" onclick="openAddRxModal()">
+              <i class="bi bi-plus-lg me-1"></i> Issue Prescription
+            </button>
+          </div>
+        </div>
+
+        <!-- Summary Stats -->
+        <div class="stats-grid" style="grid-template-columns:repeat(2,1fr);max-width:600px;margin-bottom:1.5rem;">
+          <div class="stat-card">
+            <div>
+              <div class="stat-label">Total Prescriptions Issued</div>
+              <div class="stat-value" id="statTotalRx">0</div>
+              <div class="stat-sub" style="color:var(--green);"><i class="bi bi-check-circle me-1"></i>Live EHR Orders</div>
+            </div>
+            <div class="stat-icon blue"><i class="bi bi-capsule"></i></div>
+          </div>
+          <div class="stat-card">
+            <div>
+              <div class="stat-label">Linked Medical Files</div>
+              <div class="stat-value" id="statLinkedRecords">0</div>
+              <div class="stat-sub" style="color:var(--primary);"><i class="bi bi-journal-medical me-1"></i>Active Charts</div>
+            </div>
+            <div class="stat-icon green"><i class="bi bi-file-earmark-medical"></i></div>
+          </div>
+        </div>
+
+        <!-- Toolbar -->
+        <div class="table-toolbar">
+          <div class="toolbar-filters">
+            <input type="search" class="search-input" id="searchRxInput" placeholder="Search RX ID, record #, or instructions..." onkeyup="filterPrescriptions()">
+          </div>
+          <button class="btn-ghost" onclick="loadPrescriptions()"><i class="bi bi-arrow-clockwise me-1"></i>Refresh</button>
+        </div>
+
+        <!-- Table -->
+        <div class="table-wrap">
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Prescription ID</th>
+                  <th>Medical Record</th>
+                  <th>Issued Date</th>
+                  <th>Instructions &amp; Dosage</th>
+                  <th>Clinical Notes</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="rxTableBody">
+                <tr>
+                  <td colspan="6" class="text-center p-4 text-muted">Loading prescriptions from database...</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="table-pagination">
+            <p class="pagination-info" id="paginationInfo">Showing 0 prescriptions</p>
+          </div>
+        </div>
+
+      </main>
+    </div>
+  </div>
+
+  <!-- ── Add Prescription Modal ── -->
+  <div class="modal fade" id="addRxModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content" style="border-radius: 16px; border: none; box-shadow: 0 20px 40px rgba(0,0,0,0.15);">
+        <form id="newRxForm" onsubmit="handleCreatePrescription(event)">
+          <div class="modal-header border-bottom">
+            <h5 class="modal-title fw-bold"><i class="bi bi-capsule me-2" style="color:var(--brand-accent, #0284c7);"></i>Issue New Prescription</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body p-4">
+            <div class="mb-3">
+              <label class="form-label fw-semibold" style="font-size:0.85rem;">Linked Medical Record</label>
+              <div class="d-flex gap-2">
+                <select id="newRecordSelect" class="form-select" onchange="onRecordSelectChange(this)">
+                  <option value="">Select a medical record...</option>
+                </select>
+                <input type="number" id="newRecordId" class="form-control" placeholder="ID #" style="width: 85px;" required />
+              </div>
+              <small class="text-muted" style="font-size:0.75rem;">Choose from patient EHR consultations or enter record ID.</small>
+            </div>
+            <div class="mb-3">
+              <label class="form-label fw-semibold" style="font-size:0.85rem;">Issued Date</label>
+              <input type="date" id="newIssuedDate" class="form-control" required />
+            </div>
+            <div class="mb-3">
+              <label class="form-label fw-semibold" style="font-size:0.85rem;">Prescription Instructions &amp; Dosage</label>
+              <textarea id="newInstructions" class="form-control" rows="3" placeholder="e.g. Take 1 tablet twice daily after meals for 7 days." required></textarea>
+            </div>
+            <div class="mb-3">
+              <label class="form-label fw-semibold" style="font-size:0.85rem;">Internal Doctor Notes</label>
+              <input type="text" id="newNotes" class="form-control" placeholder="e.g. Patient advised on hydration; follow-up in 2 weeks." />
+            </div>
+          </div>
+          <div class="modal-footer border-top">
+            <button type="button" class="btn-ghost" data-bs-dismiss="modal">Cancel</button>
+            <button type="submit" class="btn-primary"><i class="bi bi-plus-circle me-1"></i>Issue &amp; Save Prescription</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Edit Prescription Modal ── -->
+  <div class="modal fade" id="editRxModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content" style="border-radius: 16px; border: none; box-shadow: 0 20px 40px rgba(0,0,0,0.15);">
+        <form onsubmit="handleUpdatePrescription(event)">
+          <input type="hidden" id="editRxId" />
+          <div class="modal-header border-bottom">
+            <h5 class="modal-title fw-bold"><i class="bi bi-pencil-square me-2" style="color:var(--brand-accent, #0284c7);"></i>Edit Prescription Order</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body p-4">
+            <div class="mb-3">
+              <label class="form-label fw-semibold" style="font-size:0.85rem;">Medical Record ID</label>
+              <input type="number" id="editRecordId" class="form-control" readonly style="background:#f1f5f9;" />
+            </div>
+            <div class="mb-3">
+              <label class="form-label fw-semibold" style="font-size:0.85rem;">Issued Date</label>
+              <input type="date" id="editIssuedDate" class="form-control" required />
+            </div>
+            <div class="mb-3">
+              <label class="form-label fw-semibold" style="font-size:0.85rem;">Instructions &amp; Dosage</label>
+              <textarea id="editInstructions" class="form-control" rows="3" required></textarea>
+            </div>
+            <div class="mb-3">
+              <label class="form-label fw-semibold" style="font-size:0.85rem;">Notes</label>
+              <input type="text" id="editNotes" class="form-control" />
+            </div>
+          </div>
+          <div class="modal-footer border-top">
+            <button type="button" class="btn-ghost" data-bs-dismiss="modal">Cancel</button>
+            <button type="submit" class="btn-primary"><i class="bi bi-floppy me-1"></i>Save Changes</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Delete Prescription Modal ── -->
+  <div class="modal fade" id="deleteRxModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content" style="border-radius: 16px; border: none; box-shadow: 0 20px 40px rgba(0,0,0,0.15); text-align: center;">
+        <div class="modal-body p-4">
+          <div style="width:54px;height:54px;background:#fee2e2;color:#dc2626;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 1rem;font-size:1.5rem;">
+            <i class="bi bi-trash3-fill"></i>
+          </div>
+          <h4 class="fw-bold mb-2">Delete Prescription?</h4>
+          <p class="text-muted" style="font-size:0.85rem;" id="deleteRxPrompt">Are you sure you want to delete this prescription?</p>
+          <div class="d-flex gap-2 justify-content-center mt-4">
+            <button type="button" class="btn-ghost" data-bs-dismiss="modal">Cancel</button>
+            <button type="button" class="btn btn-danger px-4" onclick="confirmDeletePrescription()">Yes, Delete</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="../Assets/api.js"></script>
+  <script src="prescriptions.js"></script>
+</body>
+
+</html>
