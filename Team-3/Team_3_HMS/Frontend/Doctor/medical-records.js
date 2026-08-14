@@ -1572,9 +1572,8 @@ function setupDeleteButton() {
 
 }
 
-// 
 // Helpers
-// 
+
 
 function getMedicalRecordId(record) {
 
