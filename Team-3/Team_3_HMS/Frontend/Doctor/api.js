@@ -6,6 +6,24 @@ let detectedBaseUrl = "http://localhost:5251/api";
 
 function getAuthToken() {
     return localStorage.getItem('token') || sessionStorage.getItem('token') || '';
+const MEDICAL_RECORD_API = `${API_BASE_URL}/MedicalRecord`;
+const LAB_TEST_API = `${API_BASE_URL}/LabTest`;
+const APPOINTMENT_API = `${API_BASE_URL}/Appointment`;
+const ROOM_API = `${API_BASE_URL}/Room`;
+const PATIENT_PROFILE_API = `${API_BASE_URL}/PatientProfile`;
+
+async function handleResponse(response) {
+    if (!response.ok) {
+        const message = await response.text();
+        throw new Error(message || "Something went wrong.");
+    }
+
+
+    if (response.status === 204) {
+        return null;
+    }
+
+    return await response.json();
 }
 
 async function requestApi(endpoint, options = {}) {
@@ -149,4 +167,143 @@ async function deleteLabTest(id) {
     return await requestApi(`/LabTest/${id}`, {
         method: 'DELETE'
     });
+    const response = await fetch(
+        `${LAB_TEST_API}/${id}`,
+        {
+            method: "DELETE",
+            credentials: "include"
+        }
+    );
+
+    return await handleResponse(response);
+}
+
+
+
+// ── Appointments ─────────────────────────────────────────────
+// A confirmation/reminder email is sent automatically by the server on create.
+
+async function getAppointments() {
+    const response = await fetch(APPOINTMENT_API, {
+        credentials: "include"
+    });
+
+    return await handleResponse(response);
+}
+
+async function getAppointmentById(id) {
+    const response = await fetch(
+        `${APPOINTMENT_API}/${id}`,
+        {
+            credentials: "include"
+        }
+    );
+
+    return await handleResponse(response);
+}
+
+async function getAppointmentsByStatus(status) {
+    const response = await fetch(
+        `${APPOINTMENT_API}/by-status/${encodeURIComponent(status)}`,
+        {
+            credentials: "include"
+        }
+    );
+
+    return await handleResponse(response);
+}
+
+async function createAppointment(appointment) {
+    const response = await fetch(APPOINTMENT_API, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        credentials: "include",
+        body: JSON.stringify(appointment)
+    });
+
+    return await handleResponse(response);
+}
+
+async function updateAppointment(id, appointment) {
+    const response = await fetch(
+        `${APPOINTMENT_API}/${id}`,
+        {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            credentials: "include",
+            body: JSON.stringify(appointment)
+        }
+    );
+
+    return await handleResponse(response);
+}
+
+async function updateAppointmentStatus(id, status) {
+    const response = await fetch(
+        `${APPOINTMENT_API}/${id}/status`,
+        {
+            method: "PATCH",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            credentials: "include",
+            body: JSON.stringify(status)
+        }
+    );
+
+    return await handleResponse(response);
+}
+
+async function deleteAppointment(id) {
+    const response = await fetch(
+        `${APPOINTMENT_API}/${id}`,
+        {
+            method: "DELETE",
+            credentials: "include"
+        }
+    );
+
+    return await handleResponse(response);
+}
+
+
+
+// ── Rooms ────────────────────────────────────────────────────
+
+async function getRooms() {
+    const response = await fetch(ROOM_API, {
+        credentials: "include"
+    });
+
+    return await handleResponse(response);
+}
+
+async function getAvailableRooms() {
+    const response = await fetch(
+        `${ROOM_API}/available`,
+        {
+            credentials: "include"
+        }
+    );
+
+    return await handleResponse(response);
+}
+
+
+
+// ── Patient profiles  ──
+
+async function getPatientProfileById(id) {
+    const response = await fetch(
+        `${PATIENT_PROFILE_API}/find/${id}`,
+        {
+            credentials: "include"
+        }
+    );
+
+    return await handleResponse(response);
 }
