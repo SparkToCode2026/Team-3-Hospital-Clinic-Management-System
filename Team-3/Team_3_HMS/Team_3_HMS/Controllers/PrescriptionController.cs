@@ -41,7 +41,7 @@ namespace Team_3_HMS.Controllers
                     await _emailService.SendEmailAsync(
                         patient.email,
                         "Prescription Created",
-                        OMR"Your prescription has been created.\n\nInstructions: {prescription.Instructions}"
+                        $"Your prescription has been created.\n\nInstructions: {prescription.Instructions}"
                     );
                 }
             }

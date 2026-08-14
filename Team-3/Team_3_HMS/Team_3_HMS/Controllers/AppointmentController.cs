@@ -39,7 +39,7 @@ namespace Team_3_HMS.Controllers
                 await _emailService.SendEmailAsync(
                     patient.user.email,
                     "Appointment Confirmation",
-                    OMR"Your appointment is confirmed for {appointment.AppointmentDateTime} in Room {appointment.RoomId}."
+                    $"Your appointment is confirmed for {appointment.AppointmentDateTime} in Room {appointment.RoomId}."
                 );
             }
 
@@ -168,7 +168,7 @@ namespace Team_3_HMS.Controllers
                                 await emailService.SendEmailAsync(
                                     appt.PatientProfile.user.email,
                                     "Appointment Reminder",
-                                    OMR"Reminder: your appointment is tomorrow at {appointmentDate}."
+                                    $"Reminder: your appointment is tomorrow at {appointmentDate}."
                                 );
                             }
                         }
