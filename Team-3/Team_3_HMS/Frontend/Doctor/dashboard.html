@@ -8,178 +8,445 @@
   <meta name="description"
     content="Doctor clinical dashboard with profile roster, appointments, and consultation management.">
 
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet">
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+    rel="stylesheet">
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+    rel="stylesheet">
+
   <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
+
   <div class="portal-wrapper">
 
-    <!-- ══════════════════════ SIDEBAR ══════════════════════ -->
+    <!-- SIDEBAR -->
     <aside class="sidebar">
+
       <div class="sidebar-brand">
-        <div class="sidebar-logo"><i class="bi bi-hospital"></i></div>
+
+        <div class="sidebar-logo">
+          <i class="bi bi-hospital"></i>
+        </div>
+
         <div>
           <div class="sidebar-brand-name">HMS Clinical</div>
           <div class="sidebar-brand-sub">Doctor Portal</div>
         </div>
+
       </div>
 
       <nav class="sidebar-nav">
+
         <a href="dashboard.html" class="nav-item active">
-          <i class="bi bi-grid-1x2-fill"></i> Dashboard
+          <i class="bi bi-grid-1x2-fill"></i>
+          Dashboard
         </a>
+
         <a href="medical-records.html" class="nav-item">
-          <i class="bi bi-journal-medical"></i> Medical Records
+          <i class="bi bi-journal-medical"></i>
+          Medical Records
         </a>
+
         <a href="prescriptions.html" class="nav-item">
-          <i class="bi bi-capsule"></i> Prescriptions
+          <i class="bi bi-capsule"></i>
+          Prescriptions
         </a>
+
         <a href="medications.html" class="nav-item">
-          <i class="bi bi-capsule-pills"></i> Medications
+          <i class="bi bi-capsule-pills"></i>
+          Medications
         </a>
+
         <a href="lab-tests.html" class="nav-item">
-          <i class="bi bi-virus"></i> Lab Tests
+          <i class="bi bi-virus"></i>
+          Lab Tests
         </a>
+
         <a href="appointments.html" class="nav-item">
-          <i class="bi bi-calendar-check"></i> Appointments
+          <i class="bi bi-calendar-check"></i>
+          Appointments
         </a>
+
         <a href="patients.html" class="nav-item">
-          <i class="bi bi-people"></i> Patients
+          <i class="bi bi-people"></i>
+          Patients
         </a>
+
         <a href="doctor-profile.html" class="nav-item">
-          <i class="bi bi-person-gear"></i> Settings &amp; Profile
+          <i class="bi bi-person-gear"></i>
+          Settings &amp; Profile
         </a>
+
       </nav>
 
       <div class="sidebar-user">
+
         <div>
-          <div class="sidebar-user-name">Dr. Sarah Chen</div>
-          <div class="sidebar-user-role">Chief Endocrinologist</div>
+          <div class="sidebar-user-name">
+            Dr. Sarah Chen
+          </div>
+
+          <div class="sidebar-user-role">
+            Chief Endocrinologist
+          </div>
         </div>
+
       </div>
+
     </aside>
 
-    <!-- ══════════════════════ MAIN CONTENT ══════════════════════ -->
+
+    <!-- MAIN CONTENT -->
     <div class="main-content">
 
-      <!-- Topbar -->
+      <!-- TOPBAR -->
       <header class="topbar">
-        <span class="topbar-title">Doctor Dashboard</span>
+
+        <span class="topbar-title">
+          Doctor Dashboard
+        </span>
+
         <div class="topbar-actions">
-          <span class="topbar-user-label">Dr. Sarah Chen</span>
-          <a href="../Assets/login.html" class="btn-logout" title="Log Out"><i class="bi bi-box-arrow-right"></i> Log
-            Out</a>
+
+          <span class="topbar-user-label">
+            Dr. Sarah Chen
+          </span>
+
+          <a href="../Assets/login.html"
+            class="btn-logout"
+            title="Log Out">
+
+            <i class="bi bi-box-arrow-right"></i>
+            Log Out
+
+          </a>
+
         </div>
+
       </header>
 
-      <!-- Page Body -->
+
+      <!-- PAGE BODY -->
       <main class="page-body">
 
-        <!-- Alert Toast -->
-        <div class="alert alert-success d-none" id="actionAlert" role="alert">
+        <!-- ALERT -->
+        <div class="alert alert-success d-none"
+          id="actionAlert"
+          role="alert">
+
           <i class="bi bi-check-circle-fill"></i>
-          <span id="alertMsg">Action completed successfully.</span>
+
+          <span id="alertMsg">
+            Action completed successfully.
+          </span>
+
         </div>
 
-        <!-- Physician Banner -->
+
+        <!-- PHYSICIAN BANNER -->
         <div class="doc-profile-banner">
+
           <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
+
             <div>
+
               <div class="d-flex align-items-center gap-2 mb-2">
-                <span class="doc-profile-badge"><i class="bi bi-award-fill me-1"></i>LIC-48291</span>
-                <span class="doc-profile-badge"><i class="bi bi-clock-history me-1"></i>15 Yrs Exp</span>
-                <span class="doc-profile-badge"><i class="bi bi-currency-dollar me-1"></i>Fee: $150.00</span>
+
+                <span class="doc-profile-badge">
+                  <i class="bi bi-award-fill me-1"></i>
+                  LIC-48291
+                </span>
+
+                <span class="doc-profile-badge">
+                  <i class="bi bi-clock-history me-1"></i>
+                  15 Yrs Exp
+                </span>
+
+                <span class="doc-profile-badge">
+                  <i class="bi bi-currency-dollar me-1"></i>
+                  Fee: $150.00
+                </span>
+
               </div>
-              <h2 class="fw-bold mb-1" style="font-size:1.4rem;">Welcome back, Dr. Sarah Chen</h2>
-              <p class="mb-0" style="font-size:0.83rem;opacity:.75;">Department of Endocrinology &bull; Office: Building
-                A, Suite 304</p>
+
+              <h2 class="fw-bold mb-1"
+                style="font-size:1.4rem;">
+
+                Welcome back, Dr. Sarah Chen
+
+              </h2>
+
+              <p class="mb-0"
+                style="font-size:0.83rem;opacity:.75;">
+
+                Department of Endocrinology &bull;
+                Office: Building A, Suite 304
+
+              </p>
+
             </div>
+
+
             <div class="d-flex gap-2">
-              <button class="btn btn-light fw-semibold" style="font-size:0.85rem;" data-bs-toggle="modal"
+
+              <button class="btn btn-light fw-semibold"
+                style="font-size:0.85rem;"
+                data-bs-toggle="modal"
                 data-bs-target="#updateFeeModal">
-                <i class="bi bi-pencil-square me-1"></i>Update Consultation Fee
+
+                <i class="bi bi-pencil-square me-1"></i>
+                Update Consultation Fee
+
               </button>
-              <a href="doctor-profile.html" class="btn btn-outline-light fw-semibold" style="font-size:0.85rem;">
-                <i class="bi bi-gear me-1"></i>Manage Profile
+
+              <a href="doctor-profile.html"
+                class="btn btn-outline-light fw-semibold"
+                style="font-size:0.85rem;">
+
+                <i class="bi bi-gear me-1"></i>
+                Manage Profile
+
               </a>
+
             </div>
+
           </div>
+
         </div>
 
-        <!-- KPI Stats -->
+
+        <!-- KPI STATS -->
         <div class="stats-grid">
+
           <div class="stat-card">
+
             <div>
-              <div class="stat-label">Total Doctors</div>
-              <div class="stat-value" id="totalDoctorsCount">8</div>
-              <div class="stat-sub" style="color:var(--green);"><i class="bi bi-arrow-up-right me-1"></i>Active Roster
+
+              <div class="stat-label">
+                Total Doctors
               </div>
+
+              <div class="stat-value"
+                id="totalDoctorsCount">
+
+                8
+
+              </div>
+
+              <div class="stat-sub"
+                style="color:var(--green);">
+
+                <i class="bi bi-arrow-up-right me-1"></i>
+                Active Roster
+
+              </div>
+
             </div>
-            <div class="stat-icon"><i class="bi bi-person-badge-fill"></i></div>
+
+            <div class="stat-icon">
+              <i class="bi bi-person-badge-fill"></i>
+            </div>
+
           </div>
+
+
           <div class="stat-card">
+
             <div>
-              <div class="stat-label">Today's Consultations</div>
-              <div class="stat-value">12</div>
-              <div class="stat-sub" style="color:var(--brand-accent);"><i class="bi bi-calendar2-check me-1"></i>4
-                Completed</div>
+
+              <div class="stat-label">
+                Today's Consultations
+              </div>
+
+              <div class="stat-value">
+                12
+              </div>
+
+              <div class="stat-sub"
+                style="color:var(--brand-accent);">
+
+                <i class="bi bi-calendar2-check me-1"></i>
+                4 Completed
+
+              </div>
+
             </div>
-            <div class="stat-icon green"><i class="bi bi-calendar-event-fill"></i></div>
+
+            <div class="stat-icon green">
+              <i class="bi bi-calendar-event-fill"></i>
+            </div>
+
           </div>
+
+
           <div class="stat-card">
+
             <div>
-              <div class="stat-label">Avg Experience</div>
-              <div class="stat-value">11.5 Yrs</div>
-              <div class="stat-sub"><i class="bi bi-shield-check me-1"></i>Senior Staff</div>
+
+              <div class="stat-label">
+                Avg Experience
+              </div>
+
+              <div class="stat-value">
+                11.5 Yrs
+              </div>
+
+              <div class="stat-sub">
+
+                <i class="bi bi-shield-check me-1"></i>
+                Senior Staff
+
+              </div>
+
             </div>
-            <div class="stat-icon yellow"><i class="bi bi-graph-up-arrow"></i></div>
+
+            <div class="stat-icon yellow">
+              <i class="bi bi-graph-up-arrow"></i>
+            </div>
+
           </div>
+
+
           <div class="stat-card">
+
             <div>
-              <div class="stat-label">Fee Range</div>
-              <div class="stat-value" style="font-size:1.25rem;">$120–$250</div>
-              <div class="stat-sub" style="color:var(--green);"><i class="bi bi-cash-stack me-1"></i>Avg $172.50</div>
+
+              <div class="stat-label">
+                Fee Range
+              </div>
+
+              <div class="stat-value"
+                style="font-size:1.25rem;">
+
+                $120–$250
+
+              </div>
+
+              <div class="stat-sub"
+                style="color:var(--green);">
+
+                <i class="bi bi-cash-stack me-1"></i>
+                Avg $172.50
+
+              </div>
+
             </div>
-            <div class="stat-icon"><i class="bi bi-wallet2"></i></div>
+
+            <div class="stat-icon">
+              <i class="bi bi-wallet2"></i>
+            </div>
+
           </div>
+
         </div>
 
-        <!-- Main 2-col grid -->
+
+        <!-- MAIN 2 COLUMN GRID -->
         <div class="two-col-grid">
 
-          <!-- LEFT: Doctor Roster -->
+          <!-- LEFT: DOCTOR ROSTER -->
           <div>
-            <!-- Toolbar -->
-            <div class="table-toolbar">
-              <div class="toolbar-filters">
-                <input type="search" class="search-input" id="doctorSearchInput" placeholder="Search name or license..."
-                  onkeyup="filterDoctors()">
-                <select class="filter-select" id="expFilter" onchange="filterDoctors()">
-                  <option value="0" selected>All Experience</option>
-                  <option value="5">&ge; 5 Years</option>
-                  <option value="10">&ge; 10 Years</option>
-                  <option value="15">&ge; 15 Years</option>
+
+         <!-- TOOLBAR -->
+<div class="table-toolbar">
+
+  <div class="toolbar-filters">
+
+    <input type="search"
+      class="search-input"
+      id="doctorSearchInput"
+      placeholder="Search ID, name "
+      onkeyup="filterDoctors()">
+
+    <select class="filter-select"
+      id="expFilter"
+      onchange="filterDoctors()">
+
+                  <option value="0" selected>
+                    All Experience
+                  </option>
+
+                  <option value="5">
+                    &ge; 5 Years
+                  </option>
+
+                  <option value="10">
+                    &ge; 10 Years
+                  </option>
+
+                  <option value="15">
+                    &ge; 15 Years
+                  </option>
+
                 </select>
-                <select class="filter-select" id="feeSort" onchange="sortDoctorsByFee()">
-                  <option value="default" selected>Sort by Fee</option>
-                  <option value="asc">Fee: Low → High</option>
-                  <option value="desc">Fee: High → Low</option>
+
+
+                <select class="filter-select"
+                  id="feeSort"
+                  onchange="sortDoctorsByFee()">
+
+                  <option value="default" selected>
+                    Sort by Fee
+                  </option>
+
+                  <option value="asc">
+                    Fee: Low → High
+                  </option>
+
+                  <option value="desc">
+                    Fee: High → Low
+                  </option>
+
                 </select>
+
               </div>
-              <button class="btn-primary" data-bs-toggle="modal" data-bs-target="#addDoctorModal">
-                <i class="bi bi-plus-lg"></i> Add Doctor
-              </button>
+
+
+              <!-- ADD + DELETE BY ID BUTTONS -->
+              <div class="d-flex gap-2">
+
+                <button class="btn-primary"
+                  data-bs-toggle="modal"
+                  data-bs-target="#addDoctorModal">
+
+                  <i class="bi bi-plus-lg"></i>
+                  Add Doctor
+
+                </button>
+
+
+                <button class="btn-primary"
+                  type="button"
+                  data-bs-toggle="modal"
+                  data-bs-target="#deleteDoctorModal">
+
+                  <i class="bi bi-trash"></i>
+                  Delete Doctor
+
+                </button>
+
+              </div>
+
             </div>
 
-            <!-- Table -->
+
+            <!-- TABLE -->
             <div class="table-wrap">
+
               <div class="table-responsive">
-                <table class="data-table" id="doctorTable">
+
+                <table class="data-table"
+                  id="doctorTable">
+
                   <thead>
+
                     <tr>
+
                       <th>ID</th>
                       <th>Doctor Name</th>
                       <th>License #</th>
@@ -187,510 +454,3263 @@
                       <th>Dept &amp; Specialization</th>
                       <th>Fee</th>
                       <th>Actions</th>
+
                     </tr>
+
                   </thead>
+
+
                   <tbody id="doctorTableBody">
-                    <tr data-id="101" data-exp="15" data-fee="150.00" data-license="LIC-48291">
-                      <td><strong>#DOC-101</strong></td>
+
+
+                    <!-- DOCTOR 1 -->
+                    <tr data-id="1"
+                      data-exp="15"
+                      data-fee="150.00"
+                      data-license="LIC-48291">
+
                       <td>
+                        <strong>1</strong>
+                      </td>
+
+                      <td>
+
                         <div class="d-flex align-items-center gap-2">
-                          <div class="avatar-circle">SC</div>
+
+                          <div class="avatar-circle">
+                            SC
+                          </div>
+
                           <div>
-                            <strong>Dr. Sarah Chen</strong>
-                            <div style="font-size:0.72rem;color:var(--text-secondary);">dr.sarah.chen@hmsclinical.com
+
+                            <strong>
+                              Dr. Sarah Chen
+                            </strong>
+
+                            <div style="font-size:0.72rem;color:var(--text-secondary);">
+                              dr.sarah.chen@hmsclinical.com
                             </div>
+
                           </div>
+
                         </div>
+
                       </td>
-                      <td><code>LIC-48291</code></td>
-                      <td><span class="badge badge-blue">15 Years</span></td>
-                      <td><span class="badge-dept me-1">Endocrinology</span><span class="badge-spec">Endocrine
-                          Surgery</span></td>
-                      <td><strong>$150.00</strong></td>
+
                       <td>
-                        <button class="btn-ghost me-1" onclick="viewDoctorDetails(101)">View</button>
-                        <button class="btn-ghost" onclick="openFeeEditModal(101,'Dr. Sarah Chen',150.00)">Fee</button>
+                        <code>LIC-48291</code>
                       </td>
-                    </tr>
-                    <tr data-id="102" data-exp="12" data-fee="180.00" data-license="LIC-90214">
-                      <td><strong>#DOC-102</strong></td>
+
                       <td>
-                        <div class="d-flex align-items-center gap-2">
-                          <div class="avatar-circle">ER</div>
-                          <div>
-                            <strong>Dr. Elizabeth Reed</strong>
-                            <div style="font-size:0.72rem;color:var(--text-secondary);">dr.eli@hmsclinical.com</div>
-                          </div>
-                        </div>
+                        <span class="badge badge-blue">
+                          15 Years
+                        </span>
                       </td>
-                      <td><code>LIC-90214</code></td>
-                      <td><span class="badge badge-blue">12 Years</span></td>
-                      <td><span class="badge-dept me-1">Cardiology</span><span class="badge-spec">Interventional
-                          Cardiology</span></td>
-                      <td><strong>$180.00</strong></td>
+
                       <td>
-                        <button class="btn-ghost me-1" onclick="viewDoctorDetails(102)">View</button>
+
+                        <span class="badge-dept me-1">
+                          Endocrinology
+                        </span>
+
+                        <span class="badge-spec">
+                          Endocrine Surgery
+                        </span>
+
+                      </td>
+
+                      <td>
+                        <strong>$150.00</strong>
+                      </td>
+
+                      <td>
+
+                        <button class="btn-ghost me-1"
+                          onclick="viewDoctorDetails(1)">
+                          View
+                        </button>
+
                         <button class="btn-ghost"
-                          onclick="openFeeEditModal(102,'Dr. Elizabeth Reed',180.00)">Fee</button>
+                          onclick="openFeeEditModal(1,'Dr. Sarah Chen',150.00)">
+                          Fee
+                        </button>
+
                       </td>
+
                     </tr>
-                    <tr data-id="103" data-exp="8" data-fee="130.00" data-license="LIC-33412">
-                      <td><strong>#DOC-103</strong></td>
+
+
+                    <!-- DOCTOR 2 -->
+                    <tr data-id="2"
+                      data-exp="12"
+                      data-fee="180.00"
+                      data-license="LIC-90214">
+
                       <td>
+                        <strong>2</strong>
+                      </td>
+
+                      <td>
+
                         <div class="d-flex align-items-center gap-2">
-                          <div class="avatar-circle">AV</div>
-                          <div>
-                            <strong>Dr. Alan Vance</strong>
-                            <div style="font-size:0.72rem;color:var(--text-secondary);">dr.alan@hmsclinical.com</div>
+
+                          <div class="avatar-circle">
+                            ER
                           </div>
+
+                          <div>
+
+                            <strong>
+                              Dr. Elizabeth Reed
+                            </strong>
+
+                            <div style="font-size:0.72rem;color:var(--text-secondary);">
+                              dr.eli@hmsclinical.com
+                            </div>
+
+                          </div>
+
                         </div>
+
                       </td>
-                      <td><code>LIC-33412</code></td>
-                      <td><span class="badge badge-blue">8 Years</span></td>
-                      <td><span class="badge-dept me-1">Neurology</span><span class="badge-spec">Clinical
-                          Neurophysiology</span></td>
-                      <td><strong>$130.00</strong></td>
+
                       <td>
-                        <button class="btn-ghost me-1" onclick="viewDoctorDetails(103)">View</button>
-                        <button class="btn-ghost" onclick="openFeeEditModal(103,'Dr. Alan Vance',130.00)">Fee</button>
+                        <code>LIC-90214</code>
                       </td>
+
+                      <td>
+                        <span class="badge badge-blue">
+                          12 Years
+                        </span>
+                      </td>
+
+                      <td>
+
+                        <span class="badge-dept me-1">
+                          Cardiology
+                        </span>
+
+                        <span class="badge-spec">
+                          Interventional Cardiology
+                        </span>
+
+                      </td>
+
+                      <td>
+                        <strong>$180.00</strong>
+                      </td>
+
+                      <td>
+
+                        <button class="btn-ghost me-1"
+                          onclick="viewDoctorDetails(2)">
+                          View
+                        </button>
+
+                        <button class="btn-ghost"
+                          onclick="openFeeEditModal(2,'Dr. Elizabeth Reed',180.00)">
+                          Fee
+                        </button>
+
+                      </td>
+
                     </tr>
-                    <tr data-id="104" data-exp="20" data-fee="250.00" data-license="LIC-10928">
-                      <td><strong>#DOC-104</strong></td>
+
+
+                    <!-- DOCTOR 3 -->
+                    <tr data-id="3"
+                      data-exp="8"
+                      data-fee="130.00"
+                      data-license="LIC-33412">
+
                       <td>
+                        <strong>3</strong>
+                      </td>
+
+                      <td>
+
                         <div class="d-flex align-items-center gap-2">
-                          <div class="avatar-circle">AD</div>
-                          <div>
-                            <strong>Dr. Alex Dunphy</strong>
-                            <div style="font-size:0.72rem;color:var(--text-secondary);">alex.d@hmsclinical.com</div>
+
+                          <div class="avatar-circle">
+                            AV
                           </div>
+
+                          <div>
+
+                            <strong>
+                              Dr. Alan Vance
+                            </strong>
+
+                            <div style="font-size:0.72rem;color:var(--text-secondary);">
+                              dr.alan@hmsclinical.com
+                            </div>
+
+                          </div>
+
                         </div>
+
                       </td>
-                      <td><code>LIC-10928</code></td>
-                      <td><span class="badge badge-blue">20 Years</span></td>
-                      <td><span class="badge-dept me-1">Pediatrics</span><span class="badge-spec">Pediatric
-                          Endocrinology</span></td>
-                      <td><strong>$250.00</strong></td>
+
                       <td>
-                        <button class="btn-ghost me-1" onclick="viewDoctorDetails(104)">View</button>
-                        <button class="btn-ghost" onclick="openFeeEditModal(104,'Dr. Alex Dunphy',250.00)">Fee</button>
+                        <code>LIC-33412</code>
                       </td>
+
+                      <td>
+
+                        <span class="badge badge-blue">
+                          8 Years
+                        </span>
+
+                      </td>
+
+                      <td>
+
+                        <span class="badge-dept me-1">
+                          Neurology
+                        </span>
+
+                        <span class="badge-spec">
+                          Clinical Neurophysiology
+                        </span>
+
+                      </td>
+
+                      <td>
+                        <strong>$130.00</strong>
+                      </td>
+
+                      <td>
+
+                        <button class="btn-ghost me-1"
+                          onclick="viewDoctorDetails(3)">
+                          View
+                        </button>
+
+                        <button class="btn-ghost"
+                          onclick="openFeeEditModal(3,'Dr. Alan Vance',130.00)">
+                          Fee
+                        </button>
+
+                      </td>
+
                     </tr>
-                    <tr data-id="105" data-exp="6" data-fee="120.00" data-license="LIC-55129">
-                      <td><strong>#DOC-105</strong></td>
+
+
+                    <!-- DOCTOR 4 -->
+                    <tr data-id="4"
+                      data-exp="20"
+                      data-fee="250.00"
+                      data-license="LIC-10928">
+
                       <td>
+                        <strong>4</strong>
+                      </td>
+
+                      <td>
+
                         <div class="d-flex align-items-center gap-2">
-                          <div class="avatar-circle">MK</div>
-                          <div>
-                            <strong>Dr. Marcus Kane</strong>
-                            <div style="font-size:0.72rem;color:var(--text-secondary);">m.kane@hmsclinical.com</div>
+
+                          <div class="avatar-circle">
+                            AD
                           </div>
+
+                          <div>
+
+                            <strong>
+                              Dr. Alex Dunphy
+                            </strong>
+
+                            <div style="font-size:0.72rem;color:var(--text-secondary);">
+                              alex.d@hmsclinical.com
+                            </div>
+
+                          </div>
+
                         </div>
+
                       </td>
-                      <td><code>LIC-55129</code></td>
-                      <td><span class="badge badge-blue">6 Years</span></td>
-                      <td><span class="badge-dept me-1">Oncology</span><span class="badge-spec">Medical Oncology</span>
-                      </td>
-                      <td><strong>$120.00</strong></td>
+
                       <td>
-                        <button class="btn-ghost me-1" onclick="viewDoctorDetails(105)">View</button>
-                        <button class="btn-ghost" onclick="openFeeEditModal(105,'Dr. Marcus Kane',120.00)">Fee</button>
+                        <code>LIC-10928</code>
                       </td>
+
+                      <td>
+
+                        <span class="badge badge-blue">
+                          20 Years
+                        </span>
+
+                      </td>
+
+                      <td>
+
+                        <span class="badge-dept me-1">
+                          Pediatrics
+                        </span>
+
+                        <span class="badge-spec">
+                          Pediatric Endocrinology
+                        </span>
+
+                      </td>
+
+                      <td>
+                        <strong>$250.00</strong>
+                      </td>
+
+                      <td>
+
+                        <button class="btn-ghost me-1"
+                          onclick="viewDoctorDetails(4)">
+                          View
+                        </button>
+
+                        <button class="btn-ghost"
+                          onclick="openFeeEditModal(4,'Dr. Alex Dunphy',250.00)">
+                          Fee
+                        </button>
+
+                      </td>
+
                     </tr>
+
+
+                    <!-- DOCTOR 5 -->
+                    <tr data-id="5"
+                      data-exp="6"
+                      data-fee="120.00"
+                      data-license="LIC-55129">
+
+                      <td>
+                        <strong>5</strong>
+                      </td>
+
+                      <td>
+
+                        <div class="d-flex align-items-center gap-2">
+
+                          <div class="avatar-circle">
+                            MK
+                          </div>
+
+                          <div>
+
+                            <strong>
+                              Dr. Marcus Kane
+                            </strong>
+
+                            <div style="font-size:0.72rem;color:var(--text-secondary);">
+                              m.kane@hmsclinical.com
+                            </div>
+
+                          </div>
+
+                        </div>
+
+                      </td>
+
+                      <td>
+                        <code>LIC-55129</code>
+                      </td>
+
+                      <td>
+
+                        <span class="badge badge-blue">
+                          6 Years
+                        </span>
+
+                      </td>
+
+                      <td>
+
+                        <span class="badge-dept me-1">
+                          Oncology
+                        </span>
+
+                        <span class="badge-spec">
+                          Medical Oncology
+                        </span>
+
+                      </td>
+
+                      <td>
+                        <strong>$120.00</strong>
+                      </td>
+
+                      <td>
+
+                        <button class="btn-ghost me-1"
+                          onclick="viewDoctorDetails(5)">
+                          View
+                        </button>
+
+                        <button class="btn-ghost"
+                          onclick="openFeeEditModal(5,'Dr. Marcus Kane',120.00)">
+                          Fee
+                        </button>
+
+                      </td>
+
+                    </tr>
+
                   </tbody>
+
                 </table>
+
               </div>
+
+
               <div class="table-pagination">
-                <p class="pagination-info" id="rosterCountText">Showing 5 of 8 registered doctors</p>
+
+                <p class="pagination-info"
+                  id="rosterCountText">
+
+                  Showing 5 of 8 registered doctors
+
+                </p>
+
                 <nav aria-label="Doctor pagination">
+
                   <ul class="pagination pagination-sm mb-0">
-                    <li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
-                    <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                    <li class="page-item"><a class="page-link" href="#">2</a></li>
-                    <li class="page-item"><a class="page-link" href="#">Next</a></li>
+
+                    <li class="page-item disabled">
+
+                      <a class="page-link" href="#">
+                        Previous
+                      </a>
+
+                    </li>
+
+                    <li class="page-item active">
+
+                      <a class="page-link" href="#">
+                        1
+                      </a>
+
+                    </li>
+
+                    <li class="page-item">
+
+                      <a class="page-link" href="#">
+                        2
+                      </a>
+
+                    </li>
+
+                    <li class="page-item">
+
+                      <a class="page-link" href="#">
+                        Next
+                      </a>
+
+                    </li>
+
                   </ul>
+
                 </nav>
+
               </div>
+
             </div>
+
           </div>
 
-          <!-- RIGHT: Schedule + Endpoints -->
+
+          <!-- RIGHT SIDE -->
           <div>
-            <!-- Today's Schedule -->
+
+            <!-- TODAY'S SCHEDULE -->
             <div class="card">
+
               <div class="card-header">
-                <span class="card-title"><i class="bi bi-clock me-2" style="color:var(--brand-accent);"></i>Today's
-                  Schedule</span>
-                <span class="badge badge-blue">Aug 12, 2026</span>
+
+                <span class="card-title">
+
+                  <i class="bi bi-clock me-2"
+                    style="color:var(--brand-accent);"></i>
+
+                  Today's Schedule
+
+                </span>
+
+                <span class="badge badge-blue">
+                  Aug 12, 2026
+                </span>
+
               </div>
+
+
               <div>
+
                 <div class="appt-item">
+
                   <div class="d-flex align-items-center gap-2">
-                    <span class="badge badge-success" style="white-space:nowrap;">09:00 AM</span>
+
+                    <span class="badge badge-success"
+                      style="white-space:nowrap;">
+
+                      09:00 AM
+
+                    </span>
+
                     <div>
-                      <strong style="font-size:0.85rem;">Michael Wilson</strong>
-                      <div style="font-size:0.72rem;color:var(--text-secondary);">Type 2 Diabetes Review &bull; Room 304
+
+                      <strong style="font-size:0.85rem;">
+                        Michael Wilson
+                      </strong>
+
+                      <div style="font-size:0.72rem;color:var(--text-secondary);">
+                        Type 2 Diabetes Review &bull; Room 304
                       </div>
+
                     </div>
+
                   </div>
-                  <span class="badge badge-success">Done</span>
+
+                  <span class="badge badge-success">
+                    Done
+                  </span>
+
                 </div>
+
+
                 <div class="appt-item">
+
                   <div class="d-flex align-items-center gap-2">
-                    <span class="badge badge-blue" style="white-space:nowrap;">10:30 AM</span>
+
+                    <span class="badge badge-blue"
+                      style="white-space:nowrap;">
+
+                      10:30 AM
+
+                    </span>
+
                     <div>
-                      <strong style="font-size:0.85rem;">Lisa Andersen</strong>
-                      <div style="font-size:0.72rem;color:var(--text-secondary);">Thyroid Hormone Check &bull; Room 304
+
+                      <strong style="font-size:0.85rem;">
+                        Lisa Andersen
+                      </strong>
+
+                      <div style="font-size:0.72rem;color:var(--text-secondary);">
+                        Thyroid Hormone Check &bull; Room 304
                       </div>
+
                     </div>
+
                   </div>
-                  <span class="badge badge-blue">Active</span>
+
+                  <span class="badge badge-blue">
+                    Active
+                  </span>
+
                 </div>
+
+
                 <div class="appt-item">
+
                   <div class="d-flex align-items-center gap-2">
-                    <span class="badge badge-neutral" style="white-space:nowrap;">01:15 PM</span>
+
+                    <span class="badge badge-neutral"
+                      style="white-space:nowrap;">
+
+                      01:15 PM
+
+                    </span>
+
                     <div>
-                      <strong style="font-size:0.85rem;">Emily Carter</strong>
-                      <div style="font-size:0.72rem;color:var(--text-secondary);">Initial Consultation &bull; Room 304
+
+                      <strong style="font-size:0.85rem;">
+                        Emily Carter
+                      </strong>
+
+                      <div style="font-size:0.72rem;color:var(--text-secondary);">
+                        Initial Consultation &bull; Room 304
                       </div>
+
                     </div>
+
                   </div>
-                  <span class="badge badge-warn">Soon</span>
+
+                  <span class="badge badge-warn">
+                    Soon
+                  </span>
+
                 </div>
+
+
                 <div class="appt-item">
+
                   <div class="d-flex align-items-center gap-2">
-                    <span class="badge badge-neutral" style="white-space:nowrap;">03:00 PM</span>
+
+                    <span class="badge badge-neutral"
+                      style="white-space:nowrap;">
+
+                      03:00 PM
+
+                    </span>
+
                     <div>
-                      <strong style="font-size:0.85rem;">James Wilson</strong>
-                      <div style="font-size:0.72rem;color:var(--text-secondary);">Hypertension Follow-Up &bull; Room 304
+
+                      <strong style="font-size:0.85rem;">
+                        James Wilson
+                      </strong>
+
+                      <div style="font-size:0.72rem;color:var(--text-secondary);">
+                        Hypertension Follow-Up &bull; Room 304
                       </div>
+
                     </div>
+
                   </div>
-                  <span class="badge badge-warn">Soon</span>
+
+                  <span class="badge badge-warn">
+                    Soon
+                  </span>
+
                 </div>
+
               </div>
+
+
               <div class="mt-3">
-                <a href="patients.html" class="btn-secondary w-100 text-center"
+
+                <a href="patients.html"
+                  class="btn-secondary w-100 text-center"
                   style="display:block;padding:.6rem;border-radius:8px;font-weight:600;font-size:.85rem;text-decoration:none;">
+
                   View Full Patient Queue &rarr;
+
                 </a>
+
               </div>
+
             </div>
 
-            <!-- Controller Endpoints -->
-            <div class="card">
-              <div class="card-header">
-                <span class="card-title"><i class="bi bi-sliders me-2" style="color:var(--brand-accent);"></i>Controller
-                  Endpoints</span>
-              </div>
-              <div class="d-flex flex-column gap-2">
-                <button class="endpoint-btn" onclick="triggerFilter(5)">
-                  <strong><i class="bi bi-funnel me-1"
-                      style="color:var(--brand-accent);"></i>GetDoctorsByExperience(&ge;5)</strong>
-                  <span>Filters doctors with 5+ years experience</span>
-                </button>
-                <button class="endpoint-btn" onclick="triggerSortFee()">
-                  <strong><i class="bi bi-sort-numeric-down me-1"
-                      style="color:var(--brand-accent);"></i>GetDoctorsSortedByFee()</strong>
-                  <span>Orders roster by consultation fee</span>
-                </button>
-                <button class="endpoint-btn" onclick="viewDoctorDetails(101)">
-                  <strong><i class="bi bi-person-lines-fill me-1"
-                      style="color:var(--brand-accent);"></i>GetDoctorProfile(101)</strong>
-                  <span>Retrieves full profile model with departments</span>
-                </button>
-              </div>
-            </div>
           </div>
 
-        </div><!-- /two-col-grid -->
+        </div>
+
       </main>
-    </div><!-- /main-content -->
-  </div><!-- /portal-wrapper -->
 
-  <!-- ══ OFFCANVAS: Doctor Profile Details (GetDoctorProfile) ══ -->
-  <div class="offcanvas offcanvas-end details-panel" tabindex="-1" id="doctorDetailsOffcanvas">
+    </div>
+
+  </div>
+
+
+  <!-- DOCTOR PROFILE DETAILS -->
+  <div class="offcanvas offcanvas-end details-panel"
+    tabindex="-1"
+    id="doctorDetailsOffcanvas">
+
     <div class="offcanvas-header border-bottom">
+
       <div>
-        <small
-          style="font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-muted);">Doctor
-          Profile Entity</small>
-        <h5 class="offcanvas-title mt-1" id="offcanvasDocName">Dr. Sarah Chen</h5>
+
+        <small style="font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-muted);">
+
+          Doctor Profile Entity
+
+        </small>
+
+        <h5 class="offcanvas-title mt-1"
+          id="offcanvasDocName">
+
+          Dr. Sarah Chen
+
+        </h5>
+
       </div>
-      <button type="button" class="modal-close-btn" data-bs-dismiss="offcanvas"><i class="bi bi-x-lg"></i></button>
+
+      <button type="button"
+        class="modal-close-btn"
+        data-bs-dismiss="offcanvas">
+
+        <i class="bi bi-x-lg"></i>
+
+      </button>
+
     </div>
+
+
     <div class="offcanvas-body p-4">
+
       <div class="details-section">
-        <span class="details-label">License &amp; Credentials</span>
-        <h6 id="offcanvasLicense">LIC-48291</h6>
-        <p><span class="badge badge-success">Active Registered Physician</span></p>
+
+        <span class="details-label">
+          Doctor ID
+        </span>
+
+        <h6 id="offcanvasDoctorId">
+          1
+        </h6>
+
       </div>
+
+
       <div class="details-section">
-        <span class="details-label">Years of Experience</span>
-        <h6 id="offcanvasExp">15 Years Clinical Practice</h6>
+
+        <span class="details-label">
+          License &amp; Credentials
+        </span>
+
+        <h6 id="offcanvasLicense">
+          LIC-48291
+        </h6>
+
+        <p>
+
+          <span class="badge badge-success">
+            Active Registered Physician
+          </span>
+
+        </p>
+
       </div>
+
+
       <div class="details-section">
-        <span class="details-label">Consultation Fee</span>
-        <h6 id="offcanvasFee" style="font-size:1.1rem;color:var(--brand-accent);">$150.00 / Consultation</h6>
+
+        <span class="details-label">
+          Years of Experience
+        </span>
+
+        <h6 id="offcanvasExp">
+          15 Years Clinical Practice
+        </h6>
+
       </div>
+
+
       <div class="details-section">
-        <span class="details-label">Department &amp; Specialization</span>
-        <p><strong>Dept:</strong> <span id="offcanvasDept">Endocrinology</span></p>
-        <p><strong>Specialization:</strong> <span id="offcanvasSpec">Endocrine &amp; Metabolic Surgery</span></p>
+
+        <span class="details-label">
+          Consultation Fee
+        </span>
+
+        <h6 id="offcanvasFee"
+          style="font-size:1.1rem;color:var(--brand-accent);">
+
+          $150.00 / Consultation
+
+        </h6>
+
       </div>
+
+
       <div class="details-section">
-        <span class="details-label">User Account (1:1 User FK)</span>
-        <p><strong>User ID:</strong> <span id="offcanvasUserId">#USR-201</span></p>
-        <p><strong>Email:</strong> <span id="offcanvasEmail">dr.sarah.chen@hmsclinical.com</span></p>
+
+        <span class="details-label">
+          Department &amp; Specialization
+        </span>
+
+        <p>
+
+          <strong>Dept:</strong>
+
+          <span id="offcanvasDept">
+            Endocrinology
+          </span>
+
+        </p>
+
+        <p>
+
+          <strong>Specialization:</strong>
+
+          <span id="offcanvasSpec">
+            Endocrine &amp; Metabolic Surgery
+          </span>
+
+        </p>
+
       </div>
-      <div class="details-section" style="border:none;">
-        <button class="btn-primary w-100" data-bs-dismiss="offcanvas" onclick="openFeeEditModalFromOffcanvas()">
-          Update Consultation Fee
+
+
+      <div class="details-section">
+
+        <span class="details-label">
+          User Account (1:1 User FK)
+        </span>
+
+        <p>
+
+          <strong>User ID:</strong>
+
+          <span id="offcanvasUserId">
+            201
+          </span>
+
+        </p>
+
+        <p>
+
+          <strong>Email:</strong>
+
+          <span id="offcanvasEmail">
+            dr.sarah.chen@hmsclinical.com
+          </span>
+
+        </p>
+
+      </div>
+
+
+      <!-- UPDATE DOCTOR BUTTON -->
+      <div class="details-section">
+
+        <button class="btn-primary w-100 mb-2"
+          onclick="openUpdateDoctorModal()">
+
+          Update Doctor Profile
+
         </button>
+
+        <button class="btn-primary w-100"
+          data-bs-dismiss="offcanvas"
+          onclick="openFeeEditModalFromOffcanvas()">
+
+          Update Consultation Fee
+
+        </button>
+
       </div>
+
     </div>
+
   </div>
 
-  <!-- ══ MODAL: Update Consultation Fee (UpdateConsultationFee) ══ -->
-  <div class="modal fade" id="updateFeeModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content" style="border:none;border-radius:16px;box-shadow:0 20px 40px rgba(0,0,0,.12);">
-        <div class="p-4">
-          <div class="modal-header-bar">
-            <div>
-              <small
-                style="font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-muted);">DoctorProfileController
-                · PATCH</small>
-              <div class="modal-title mt-1">Update Consultation Fee</div>
-            </div>
-            <button type="button" class="modal-close-btn" data-bs-dismiss="modal"><i class="bi bi-x-lg"></i></button>
-          </div>
-          <form id="feeUpdateForm" onsubmit="handleFeeUpdate(event)">
-            <input type="hidden" id="feeDocId" value="101">
-            <div class="form-group mb-3">
-              <label class="form-label">Doctor Profile</label>
-              <input type="text" class="form-control" id="feeDocName" value="Dr. Sarah Chen" readonly>
-            </div>
-            <div class="form-group mb-3">
-              <label class="form-label">New Consultation Fee (USD)</label>
-              <div class="input-group">
-                <span class="input-group-text">$</span>
-                <input type="number" step="0.01" class="form-control" id="newFeeInput" value="150.00" required>
-              </div>
-              <div style="font-size:0.72rem;color:var(--text-muted);margin-top:.35rem;">Executes
-                <code>PATCH /DoctorProfile/UpdateConsultationFee</code></div>
-            </div>
-            <div class="modal-footer-bar">
-              <button type="button" class="btn-modal-cancel" data-bs-dismiss="modal">Cancel</button>
-              <button type="submit" class="btn-modal-confirm">Update Fee</button>
-            </div>
-          </form>
-        </div>
-      </div>
-    </div>
-  </div>
 
-  <!-- ══ MODAL: Add Doctor Profile (AddDoctorProfile) ══ -->
-  <div class="modal fade" id="addDoctorModal" tabindex="-1" aria-hidden="true">
+  <!-- UPDATE DOCTOR PROFILE MODAL -->
+  <div class="modal fade"
+    id="updateDoctorModal"
+    tabindex="-1"
+    aria-hidden="true">
+
     <div class="modal-dialog modal-dialog-centered modal-lg">
-      <div class="modal-content" style="border:none;border-radius:16px;box-shadow:0 20px 40px rgba(0,0,0,.12);">
+
+      <div class="modal-content"
+        style="border:none;border-radius:16px;box-shadow:0 20px 40px rgba(0,0,0,.12);">
+
         <div class="p-4">
+
           <div class="modal-header-bar">
+
             <div>
-              <small
-                style="font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-muted);">DoctorProfileController
-                · POST</small>
-              <div class="modal-title mt-1">Add New Doctor Profile</div>
+
+              <small style="font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-muted);">
+
+                DoctorProfileController · PUT
+
+              </small>
+
+              <div class="modal-title mt-1">
+                Update Doctor Profile
+              </div>
+
             </div>
-            <button type="button" class="modal-close-btn" data-bs-dismiss="modal"><i class="bi bi-x-lg"></i></button>
+
+            <button type="button"
+              class="modal-close-btn"
+              data-bs-dismiss="modal">
+
+              <i class="bi bi-x-lg"></i>
+
+            </button>
+
           </div>
-          <form id="addDoctorForm" onsubmit="handleAddDoctor(event)">
+
+
+          <form id="updateDoctorForm"
+            onsubmit="handleUpdateDoctor(event)">
+
+            <input type="hidden"
+              id="updateDoctorId">
+
+
             <div class="form-grid">
+
               <div class="form-group">
-                <label class="form-label">Doctor Full Name</label>
-                <input type="text" class="form-control" id="addDocName" placeholder="Dr. Firstname Lastname" required>
+
+                <label class="form-label">
+                  License Number
+                </label>
+
+                <input type="text"
+                  class="form-control"
+                  id="updateLicenseNumber"
+                  required>
+
               </div>
+
+
               <div class="form-group">
-                <label class="form-label">Email Address</label>
-                <input type="email" class="form-control" id="addDocEmail" placeholder="doctor@hmsclinical.com" required>
+
+                <label class="form-label">
+                  Years of Experience
+                </label>
+
+                <input type="number"
+                  class="form-control"
+                  id="updateYearsExperience"
+                  min="0"
+                  required>
+
               </div>
+
+
               <div class="form-group">
-                <label class="form-label">License Number</label>
-                <input type="text" class="form-control" id="addDocLicense" placeholder="LIC-XXXXX" required>
+
+                <label class="form-label">
+                  Consultation Fee
+                </label>
+
+                <input type="number"
+                  step="0.01"
+                  class="form-control"
+                  id="updateConsultationFee"
+                  required>
+
               </div>
+
+
               <div class="form-group">
-                <label class="form-label">Years of Experience</label>
-                <input type="number" class="form-control" id="addDocExp" min="0" value="5" required>
+
+                <label class="form-label">
+                  User ID
+                </label>
+
+                <input type="number"
+                  class="form-control"
+                  id="updateUserId"
+                  required>
+
               </div>
+
+
               <div class="form-group">
-                <label class="form-label">Department</label>
-                <select class="form-control" id="addDocDept" required>
-                  <option>Endocrinology</option>
-                  <option>Cardiology</option>
-                  <option>Neurology</option>
-                  <option>Pediatrics</option>
-                  <option>Oncology</option>
-                </select>
+
+                <label class="form-label">
+                  Specialization ID
+                </label>
+
+                <input type="number"
+                  class="form-control"
+                  id="updateSpecializationId"
+                  required>
+
               </div>
-              <div class="form-group">
-                <label class="form-label">Specialization</label>
-                <select class="form-control" id="addDocSpec" required>
-                  <option>Endocrine Surgery</option>
-                  <option>Interventional Cardiology</option>
-                  <option>Clinical Neurophysiology</option>
-                  <option>Pediatric Endocrinology</option>
-                  <option>Medical Oncology</option>
-                </select>
-              </div>
-              <div class="form-group">
-                <label class="form-label">Consultation Fee ($)</label>
-                <input type="number" step="0.01" class="form-control" id="addDocFee" value="150.00" required>
-              </div>
-              <div class="form-group">
-                <label class="form-label">User ID <small style="font-weight:400;text-transform:none;">(1:1 User
-                    FK)</small></label>
-                <input type="number" class="form-control" id="addDocUserId" placeholder="e.g. 207" required>
-              </div>
-              <div class="form-group">
-                <label class="form-label">Specialization ID <small
-                    style="font-weight:400;text-transform:none;">(FK)</small></label>
-                <input type="number" class="form-control" id="addDocSpecId" placeholder="e.g. 3" required>
-              </div>
+
             </div>
+
+
             <div class="modal-footer-bar">
-              <button type="button" class="btn-modal-cancel" data-bs-dismiss="modal">Cancel</button>
-              <button type="submit" class="btn-modal-confirm">Add Doctor Profile</button>
+
+              <button type="button"
+                class="btn-modal-cancel"
+                data-bs-dismiss="modal">
+
+                Cancel
+
+              </button>
+
+              <button type="submit"
+                class="btn-modal-confirm">
+
+                Update Doctor Profile
+
+              </button>
+
             </div>
+
           </form>
+
         </div>
+
       </div>
+
     </div>
+
   </div>
 
+
+  <!-- UPDATE CONSULTATION FEE MODAL -->
+  <div class="modal fade"
+    id="updateFeeModal"
+    tabindex="-1"
+    aria-hidden="true">
+
+    <div class="modal-dialog modal-dialog-centered">
+
+      <div class="modal-content"
+        style="border:none;border-radius:16px;box-shadow:0 20px 40px rgba(0,0,0,.12);">
+
+        <div class="p-4">
+
+          <div class="modal-header-bar">
+
+            <div>
+
+              <small style="font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-muted);">
+
+                DoctorProfileController · PATCH
+
+              </small>
+
+              <div class="modal-title mt-1">
+                Update Consultation Fee
+              </div>
+
+            </div>
+
+            <button type="button"
+              class="modal-close-btn"
+              data-bs-dismiss="modal">
+
+              <i class="bi bi-x-lg"></i>
+
+            </button>
+
+          </div>
+
+
+          <form id="feeUpdateForm"
+            onsubmit="handleFeeUpdate(event)">
+
+            <input type="hidden"
+              id="feeDocId"
+              value="1">
+
+
+            <div class="form-group mb-3">
+
+              <label class="form-label">
+                Doctor Profile
+              </label>
+
+              <input type="text"
+                class="form-control"
+                id="feeDocName"
+                value="Dr. Sarah Chen"
+                readonly>
+
+            </div>
+
+
+            <div class="form-group mb-3">
+
+              <label class="form-label">
+                New Consultation Fee (USD)
+              </label>
+
+              <div class="input-group">
+
+                <span class="input-group-text">
+                  $
+                </span>
+
+                <input type="number"
+                  step="0.01"
+                  class="form-control"
+                  id="newFeeInput"
+                  value="150.00"
+                  required>
+
+              </div>
+
+            </div>
+
+
+            <div class="modal-footer-bar">
+
+              <button type="button"
+                class="btn-modal-cancel"
+                data-bs-dismiss="modal">
+
+                Cancel
+
+              </button>
+
+              <button type="submit"
+                class="btn-modal-confirm">
+
+                Update Fee
+
+              </button>
+
+            </div>
+
+          </form>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- ADD DOCTOR MODAL -->
+  <div class="modal fade"
+    id="addDoctorModal"
+    tabindex="-1"
+    aria-hidden="true">
+
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+
+      <div class="modal-content"
+        style="border:none;border-radius:16px;box-shadow:0 20px 40px rgba(0,0,0,.12);">
+
+        <div class="p-4">
+
+          <div class="modal-header-bar">
+
+            <div>
+
+              <small style="font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-muted);">
+
+                DoctorProfileController · POST
+
+              </small>
+
+              <div class="modal-title mt-1">
+                Add New Doctor Profile
+              </div>
+
+            </div>
+
+            <button type="button"
+              class="modal-close-btn"
+              data-bs-dismiss="modal">
+
+              <i class="bi bi-x-lg"></i>
+
+            </button>
+
+          </div>
+
+
+          <form id="addDoctorForm"
+            onsubmit="handleAddDoctor(event)">
+
+            <div class="form-grid">
+
+              <div class="form-group">
+
+                <label class="form-label">
+                  Doctor Full Name
+                </label>
+
+                <input type="text"
+                  class="form-control"
+                  id="addDocName"
+                  placeholder="Dr. Firstname Lastname"
+                  required>
+
+              </div>
+
+
+              <div class="form-group">
+
+                <label class="form-label">
+                  Email Address
+                </label>
+
+                <input type="email"
+                  class="form-control"
+                  id="addDocEmail"
+                  placeholder="doctor@hmsclinical.com"
+                  required>
+
+              </div>
+
+
+              <div class="form-group">
+
+                <label class="form-label">
+                  License Number
+                </label>
+
+                <input type="text"
+                  class="form-control"
+                  id="addDocLicense"
+                  placeholder="LIC-XXXXX"
+                  required>
+
+              </div>
+
+
+              <div class="form-group">
+
+                <label class="form-label">
+                  Years of Experience
+                </label>
+
+                <input type="number"
+                  class="form-control"
+                  id="addDocExp"
+                  min="0"
+                  value="5"
+                  required>
+
+              </div>
+
+
+              <div class="form-group">
+
+                <label class="form-label">
+                  Department
+                </label>
+
+                <select class="form-control"
+                  id="addDocDept"
+                  required>
+
+                  <option>
+                    Endocrinology
+                  </option>
+
+                  <option>
+                    Cardiology
+                  </option>
+
+                  <option>
+                    Neurology
+                  </option>
+
+                  <option>
+                    Pediatrics
+                  </option>
+
+                  <option>
+                    Oncology
+                  </option>
+
+                </select>
+
+              </div>
+
+
+              <div class="form-group">
+
+                <label class="form-label">
+                  Specialization
+                </label>
+
+                <select class="form-control"
+                  id="addDocSpec"
+                  required>
+
+                  <option>
+                    Endocrine Surgery
+                  </option>
+
+                  <option>
+                    Interventional Cardiology
+                  </option>
+
+                  <option>
+                    Clinical Neurophysiology
+                  </option>
+
+                  <option>
+                    Pediatric Endocrinology
+                  </option>
+
+                  <option>
+                    Medical Oncology
+                  </option>
+
+                </select>
+
+              </div>
+
+
+              <div class="form-group">
+
+                <label class="form-label">
+                  Consultation Fee ($)
+                </label>
+
+                <input type="number"
+                  step="0.01"
+                  class="form-control"
+                  id="addDocFee"
+                  value="150.00"
+                  required>
+
+              </div>
+
+
+              <div class="form-group">
+
+                <label class="form-label">
+                  User ID
+                  <small style="font-weight:400;text-transform:none;">
+                    (1:1 User FK)
+                  </small>
+                </label>
+
+                <input type="number"
+                  class="form-control"
+                  id="addDocUserId"
+                  placeholder="e.g. 207"
+                  required>
+
+              </div>
+
+
+              <div class="form-group">
+
+                <label class="form-label">
+                  Specialization ID
+                  <small style="font-weight:400;text-transform:none;">
+                    (FK)
+                  </small>
+                </label>
+
+                <input type="number"
+                  class="form-control"
+                  id="addDocSpecId"
+                  placeholder="e.g. 3"
+                  required>
+
+              </div>
+
+            </div>
+
+
+            <div class="modal-footer-bar">
+
+              <button type="button"
+                class="btn-modal-cancel"
+                data-bs-dismiss="modal">
+
+                Cancel
+
+              </button>
+
+              <button type="submit"
+                class="btn-modal-confirm">
+
+                Add Doctor Profile
+
+              </button>
+
+            </div>
+
+          </form>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- DELETE DOCTOR BY ID MODAL -->
+  <div class="modal fade"
+    id="deleteDoctorModal"
+    tabindex="-1"
+    aria-hidden="true">
+
+    <div class="modal-dialog modal-dialog-centered">
+
+      <div class="modal-content"
+        style="border:none;border-radius:16px;box-shadow:0 20px 40px rgba(0,0,0,.12);">
+
+        <div class="p-4">
+
+          <div class="modal-header-bar">
+
+            <div>
+
+              <small style="font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-muted);">
+
+                DoctorProfileController · DELETE
+
+              </small>
+
+              <div class="modal-title mt-1">
+                Delete Doctor Profile
+              </div>
+
+            </div>
+
+            <button type="button"
+              class="modal-close-btn"
+              data-bs-dismiss="modal">
+
+              <i class="bi bi-x-lg"></i>
+
+            </button>
+
+          </div>
+
+
+          <form id="deleteDoctorForm"
+            onsubmit="handleDeleteDoctor(event)">
+
+            <div class="form-group">
+
+              <label class="form-label">
+                Doctor Profile ID
+              </label>
+
+              <input type="number"
+                class="form-control"
+                id="deleteDoctorId"
+                placeholder="Enter Doctor ID"
+                min="1"
+                required>
+
+            </div>
+
+
+            <div class="mt-3"
+              style="font-size:0.8rem;color:var(--text-secondary);">
+
+              Enter the Doctor Profile ID that you want to delete.
+
+            </div>
+
+
+            <div class="modal-footer-bar">
+
+              <button type="button"
+                class="btn-modal-cancel"
+                data-bs-dismiss="modal">
+
+                Cancel
+
+              </button>
+
+              <button type="submit"
+                class="btn-modal-confirm">
+
+                Delete Doctor
+
+              </button>
+
+            </div>
+
+          </form>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- BOOTSTRAP -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+
   <script>
+
+    /* =====================================================
+       API
+       ===================================================== */
+
+    const API_URL = "http://localhost:5251/DoctorProfile";
+
+
+    /* =====================================================
+       EXISTING DOCTOR DATA
+       ===================================================== */
+
     const doctorData = {
-      101: { name: "Dr. Sarah Chen", email: "dr.sarah.chen@hmsclinical.com", license: "LIC-48291", exp: 15, fee: 150.00, dept: "Endocrinology", spec: "Endocrine & Metabolic Surgery", userId: "#USR-201" },
-      102: { name: "Dr. Elizabeth Reed", email: "dr.eli@hmsclinical.com", license: "LIC-90214", exp: 12, fee: 180.00, dept: "Cardiology", spec: "Interventional Cardiology", userId: "#USR-202" },
-      103: { name: "Dr. Alan Vance", email: "dr.alan@hmsclinical.com", license: "LIC-33412", exp: 8, fee: 130.00, dept: "Neurology", spec: "Clinical Neurophysiology", userId: "#USR-203" },
-      104: { name: "Dr. Alex Dunphy", email: "alex.d@hmsclinical.com", license: "LIC-10928", exp: 20, fee: 250.00, dept: "Pediatrics", spec: "Pediatric Endocrinology", userId: "#USR-204" },
-      105: { name: "Dr. Marcus Kane", email: "m.kane@hmsclinical.com", license: "LIC-55129", exp: 6, fee: 120.00, dept: "Oncology", spec: "Medical Oncology", userId: "#USR-205" }
+
+      1: {
+        name: "Dr. Sarah Chen",
+        email: "dr.sarah.chen@hmsclinical.com",
+        license: "LIC-48291",
+        exp: 15,
+        fee: 150.00,
+        dept: "Endocrinology",
+        spec: "Endocrine & Metabolic Surgery",
+        userId: 201,
+        specializationId: 1
+      },
+
+      2: {
+        name: "Dr. Elizabeth Reed",
+        email: "dr.eli@hmsclinical.com",
+        license: "LIC-90214",
+        exp: 12,
+        fee: 180.00,
+        dept: "Cardiology",
+        spec: "Interventional Cardiology",
+        userId: 202,
+        specializationId: 2
+      },
+
+      3: {
+        name: "Dr. Alan Vance",
+        email: "dr.alan@hmsclinical.com",
+        license: "LIC-33412",
+        exp: 8,
+        fee: 130.00,
+        dept: "Neurology",
+        spec: "Clinical Neurophysiology",
+        userId: 203,
+        specializationId: 3
+      },
+
+      4: {
+        name: "Dr. Alex Dunphy",
+        email: "alex.d@hmsclinical.com",
+        license: "LIC-10928",
+        exp: 20,
+        fee: 250.00,
+        dept: "Pediatrics",
+        spec: "Pediatric Endocrinology",
+        userId: 204,
+        specializationId: 4
+      },
+
+      5: {
+        name: "Dr. Marcus Kane",
+        email: "m.kane@hmsclinical.com",
+        license: "LIC-55129",
+        exp: 6,
+        fee: 120.00,
+        dept: "Oncology",
+        spec: "Medical Oncology",
+        userId: 205,
+        specializationId: 5
+      }
+
     };
-    let currentActiveDocId = 101;
 
-    function viewDoctorDetails(id) {
-      const d = doctorData[id]; if (!d) return;
-      currentActiveDocId = id;
-      document.getElementById('offcanvasDocName').textContent = d.name;
-      document.getElementById('offcanvasLicense').textContent = d.license;
-      document.getElementById('offcanvasExp').textContent = d.exp + ' Years Clinical Practice';
-      document.getElementById('offcanvasFee').textContent = '$' + parseFloat(d.fee).toFixed(2) + ' / Consultation';
-      document.getElementById('offcanvasDept').textContent = d.dept;
-      document.getElementById('offcanvasSpec').textContent = d.spec;
-      document.getElementById('offcanvasUserId').textContent = d.userId;
-      document.getElementById('offcanvasEmail').textContent = d.email;
-      new bootstrap.Offcanvas(document.getElementById('doctorDetailsOffcanvas')).show();
+
+    let currentActiveDocId = 1;
+
+
+    /* =====================================================
+       FIND DOCTOR BY ID
+       ===================================================== */
+
+    async function findDoctorById(id) {
+
+      try {
+
+        const response =
+          await fetch(
+            `${API_URL}/GetDoctorProfile?id=${id}`
+          );
+
+
+        if (!response.ok) {
+
+          throw new Error("Doctor not found");
+
+        }
+
+
+        const doctor =
+          await response.json();
+
+
+        console.log(
+          "Doctor found:",
+          doctor
+        );
+
+
+        return doctor;
+
+
+      } catch (error) {
+
+        console.error(
+          "Error finding doctor:",
+          error
+        );
+
+
+        showAlert(
+          "Unable to find doctor profile."
+        );
+
+
+        return null;
+
+      }
+
     }
 
-    function openFeeEditModal(id, name, fee) {
+
+    /* =====================================================
+       VIEW DOCTOR DETAILS
+       ===================================================== */
+
+    async function viewDoctorDetails(id) {
+
       currentActiveDocId = id;
-      document.getElementById('feeDocId').value = id;
-      document.getElementById('feeDocName').value = name;
-      document.getElementById('newFeeInput').value = parseFloat(fee).toFixed(2);
-      new bootstrap.Modal(document.getElementById('updateFeeModal')).show();
+
+
+      const d = doctorData[id];
+
+
+      if (d) {
+
+        document.getElementById(
+          "offcanvasDoctorId"
+        ).textContent = id;
+
+
+        document.getElementById(
+          "offcanvasDocName"
+        ).textContent = d.name;
+
+
+        document.getElementById(
+          "offcanvasLicense"
+        ).textContent = d.license;
+
+
+        document.getElementById(
+          "offcanvasExp"
+        ).textContent =
+          d.exp + " Years Clinical Practice";
+
+
+        document.getElementById(
+          "offcanvasFee"
+        ).textContent =
+          "$" +
+          parseFloat(d.fee).toFixed(2) +
+          " / Consultation";
+
+
+        document.getElementById(
+          "offcanvasDept"
+        ).textContent = d.dept;
+
+
+        document.getElementById(
+          "offcanvasSpec"
+        ).textContent = d.spec;
+
+
+        document.getElementById(
+          "offcanvasUserId"
+        ).textContent = d.userId;
+
+
+        document.getElementById(
+          "offcanvasEmail"
+        ).textContent = d.email;
+
+
+        new bootstrap.Offcanvas(
+          document.getElementById(
+            "doctorDetailsOffcanvas"
+          )
+        ).show();
+
+
+        return;
+
+      }
+
+
+      await findDoctorById(id);
+
     }
+
+
+    /* =====================================================
+       OPEN UPDATE DOCTOR MODAL
+       ===================================================== */
+
+    async function openUpdateDoctorModal() {
+
+      const id =
+        currentActiveDocId;
+
+
+      let doctor =
+        doctorData[id];
+
+
+      if (!doctor) {
+
+        doctor =
+          await findDoctorById(id);
+
+      }
+
+
+      if (!doctor) {
+        return;
+      }
+
+
+      document.getElementById(
+        "updateDoctorId"
+      ).value = id;
+
+
+      document.getElementById(
+        "updateLicenseNumber"
+      ).value =
+        doctor.license ||
+        doctor.LicenseNumber ||
+        "";
+
+
+      document.getElementById(
+        "updateYearsExperience"
+      ).value =
+        doctor.exp ||
+        doctor.YearsOfExperience ||
+        0;
+
+
+      document.getElementById(
+        "updateConsultationFee"
+      ).value =
+        doctor.fee ||
+        doctor.ConsultationFee ||
+        0;
+
+
+      document.getElementById(
+        "updateUserId"
+      ).value =
+        doctor.userId ||
+        doctor.userID ||
+        0;
+
+
+      document.getElementById(
+        "updateSpecializationId"
+      ).value =
+        doctor.specializationId ||
+        doctor.SpecializationId ||
+        0;
+
+
+      const offcanvas =
+        bootstrap.Offcanvas.getInstance(
+          document.getElementById(
+            "doctorDetailsOffcanvas"
+          )
+        );
+
+
+      if (offcanvas) {
+        offcanvas.hide();
+      }
+
+
+      new bootstrap.Modal(
+        document.getElementById(
+          "updateDoctorModal"
+        )
+      ).show();
+
+    }
+
+
+    /* =====================================================
+       UPDATE DOCTOR PROFILE
+       ===================================================== */
+
+    async function handleUpdateDoctor(e) {
+
+      e.preventDefault();
+
+
+      const id =
+        parseInt(
+          document.getElementById(
+            "updateDoctorId"
+          ).value
+        );
+
+
+      const updatedDoctor = {
+
+        LicenseNumber:
+          document.getElementById(
+            "updateLicenseNumber"
+          ).value,
+
+        YearsOfExperience:
+          parseInt(
+            document.getElementById(
+              "updateYearsExperience"
+            ).value
+          ),
+
+        ConsultationFee:
+          parseFloat(
+            document.getElementById(
+              "updateConsultationFee"
+            ).value
+          ),
+
+        userID:
+          parseInt(
+            document.getElementById(
+              "updateUserId"
+            ).value
+          ),
+
+        SpecializationId:
+          parseInt(
+            document.getElementById(
+              "updateSpecializationId"
+            ).value
+          )
+
+      };
+
+
+      try {
+
+        const response =
+          await fetch(
+            `${API_URL}/UpdateDoctorProfile?id=${id}`,
+            {
+
+              method: "PUT",
+
+              headers: {
+                "Content-Type": "application/json"
+              },
+
+              body:
+                JSON.stringify(updatedDoctor)
+
+            }
+          );
+
+
+        if (!response.ok) {
+
+          throw new Error(
+            "Failed to update doctor profile"
+          );
+
+        }
+
+
+        const result =
+          await response.json();
+
+
+        console.log(
+          "Doctor updated:",
+          result
+        );
+
+
+        if (doctorData[id]) {
+
+          doctorData[id].license =
+            updatedDoctor.LicenseNumber;
+
+          doctorData[id].exp =
+            updatedDoctor.YearsOfExperience;
+
+          doctorData[id].fee =
+            updatedDoctor.ConsultationFee;
+
+          doctorData[id].userId =
+            updatedDoctor.userID;
+
+          doctorData[id].specializationId =
+            updatedDoctor.SpecializationId;
+
+        }
+
+
+        const row =
+          document.querySelector(
+            `#doctorTableBody tr[data-id="${id}"]`
+          );
+
+
+        if (row) {
+
+          row.setAttribute(
+            "data-exp",
+            updatedDoctor.YearsOfExperience
+          );
+
+
+          row.setAttribute(
+            "data-fee",
+            updatedDoctor.ConsultationFee
+          );
+
+
+          row.setAttribute(
+            "data-license",
+            updatedDoctor.LicenseNumber
+          );
+
+
+          row.cells[2].innerHTML =
+            `<code>${updatedDoctor.LicenseNumber}</code>`;
+
+
+          row.cells[3].innerHTML =
+            `<span class="badge badge-blue">
+              ${updatedDoctor.YearsOfExperience} Years
+            </span>`;
+
+
+          row.cells[5].innerHTML =
+            `<strong>$${updatedDoctor.ConsultationFee.toFixed(2)}</strong>`;
+
+        }
+
+
+        showAlert(
+          "Doctor profile updated successfully."
+        );
+
+
+        bootstrap.Modal
+          .getInstance(
+            document.getElementById(
+              "updateDoctorModal"
+            )
+          )
+          .hide();
+
+
+      } catch (error) {
+
+        console.error(
+          "Error updating doctor:",
+          error
+        );
+
+
+        showAlert(
+          "Unable to update doctor profile."
+        );
+
+      }
+
+    }
+
+
+    /* =====================================================
+       DELETE DOCTOR PROFILE BY ID
+       ===================================================== */
+
+    async function handleDeleteDoctor(e) {
+
+      e.preventDefault();
+
+
+      const id =
+        parseInt(
+          document.getElementById(
+            "deleteDoctorId"
+          ).value
+        );
+
+
+      if (!id || id < 1) {
+
+        showAlert(
+          "Please enter a valid Doctor Profile ID."
+        );
+
+        return;
+
+      }
+
+
+      const confirmed =
+        confirm(
+          `Are you sure you want to delete Doctor Profile ID ${id}?`
+        );
+
+
+      if (!confirmed) {
+        return;
+      }
+
+
+      try {
+
+        /*
+         * Your backend endpoint is:
+         *
+         * DELETE /DoctorProfile/RemoveDoctorProfile?id=1
+         *
+         */
+
+        const response =
+          await fetch(
+            `${API_URL}/RemoveDoctorProfile?id=${id}`,
+            {
+
+              method: "DELETE"
+
+            }
+          );
+
+
+        console.log(
+          "Delete response status:",
+          response.status
+        );
+
+
+        if (!response.ok) {
+
+          const errorText =
+            await response.text();
+
+          console.error(
+            "Delete API error:",
+            errorText
+          );
+
+
+          if (response.status === 401) {
+
+            throw new Error(
+              "Unauthorized. Admin authorization is required."
+            );
+
+          }
+
+
+          if (response.status === 404) {
+
+            throw new Error(
+              "Doctor profile not found."
+            );
+
+          }
+
+
+          throw new Error(
+            "Failed to delete doctor profile"
+          );
+
+        }
+
+
+        const result =
+          await response.json();
+
+
+        console.log(
+          "Doctor deleted:",
+          result
+        );
+
+
+        /* Remove doctor from local data */
+
+        delete doctorData[id];
+
+
+        /* Remove doctor row from table */
+
+        const row =
+          document.querySelector(
+            `#doctorTableBody tr[data-id="${id}"]`
+          );
+
+
+        if (row) {
+
+          row.remove();
+
+        }
+
+
+        /* Update doctor count */
+
+        document.getElementById(
+          "totalDoctorsCount"
+        ).textContent =
+          Object.keys(doctorData).length;
+
+
+        /* Update roster text */
+
+        filterDoctors();
+
+
+        /* Close delete modal */
+
+        const deleteModal =
+          bootstrap.Modal.getInstance(
+            document.getElementById(
+              "deleteDoctorModal"
+            )
+          );
+
+
+        if (deleteModal) {
+
+          deleteModal.hide();
+
+        }
+
+
+        /* Clear ID input */
+
+        document.getElementById(
+          "deleteDoctorForm"
+        ).reset();
+
+
+        /* Close details panel if open */
+
+        const offcanvas =
+          bootstrap.Offcanvas.getInstance(
+            document.getElementById(
+              "doctorDetailsOffcanvas"
+            )
+          );
+
+
+        if (offcanvas) {
+
+          offcanvas.hide();
+
+        }
+
+
+        showAlert(
+          `Doctor Profile ID ${id} deleted successfully.`
+        );
+
+
+      } catch (error) {
+
+        console.error(
+          "Error deleting doctor:",
+          error
+        );
+
+
+        showAlert(
+          error.message ||
+          "Unable to delete doctor profile."
+        );
+
+      }
+
+    }
+
+
+    /* =====================================================
+       OPEN FEE EDIT MODAL
+       ===================================================== */
+
+    function openFeeEditModal(
+      id,
+      name,
+      fee
+    ) {
+
+      currentActiveDocId = id;
+
+
+      document.getElementById(
+        "feeDocId"
+      ).value = id;
+
+
+      document.getElementById(
+        "feeDocName"
+      ).value = name;
+
+
+      document.getElementById(
+        "newFeeInput"
+      ).value =
+        parseFloat(fee).toFixed(2);
+
+
+      new bootstrap.Modal(
+        document.getElementById(
+          "updateFeeModal"
+        )
+      ).show();
+
+    }
+
+
+    /* =====================================================
+       OPEN FEE MODAL FROM OFFCANVAS
+       ===================================================== */
 
     function openFeeEditModalFromOffcanvas() {
-      const d = doctorData[currentActiveDocId];
-      if (d) openFeeEditModal(currentActiveDocId, d.name, d.fee);
-    }
 
-    function handleFeeUpdate(e) {
-      e.preventDefault();
-      const id = parseInt(document.getElementById('feeDocId').value);
-      const newFee = parseFloat(document.getElementById('newFeeInput').value);
-      if (doctorData[id]) {
-        doctorData[id].fee = newFee;
-        const row = document.querySelector(`#doctorTableBody tr[data-id="${id}"]`);
-        if (row) { row.setAttribute('data-fee', newFee); row.cells[5].innerHTML = `<strong>$${newFee.toFixed(2)}</strong>`; }
-        showAlert(`Consultation fee updated to $${newFee.toFixed(2)} for ${doctorData[id].name}.`);
+      const d =
+        doctorData[
+          currentActiveDocId
+        ];
+
+
+      if (d) {
+
+        openFeeEditModal(
+          currentActiveDocId,
+          d.name,
+          d.fee
+        );
+
       }
-      bootstrap.Modal.getInstance(document.getElementById('updateFeeModal')).hide();
+
     }
 
-    function handleAddDoctor(e) {
+
+    /* =====================================================
+       UPDATE CONSULTATION FEE
+       ===================================================== */
+
+    async function handleFeeUpdate(e) {
+
       e.preventDefault();
-      const name = document.getElementById('addDocName').value;
-      const email = document.getElementById('addDocEmail').value;
-      const license = document.getElementById('addDocLicense').value;
-      const exp = parseInt(document.getElementById('addDocExp').value);
-      const dept = document.getElementById('addDocDept').value;
-      const spec = document.getElementById('addDocSpec').value;
-      const fee = parseFloat(document.getElementById('addDocFee').value);
-      const newId = 100 + Object.keys(doctorData).length + 1;
-      const initials = name.replace('Dr.', '').trim().split(' ').map(n => n[0]).join('').substring(0, 2);
-      doctorData[newId] = { name, email, license, exp, fee, dept, spec, userId: `#USR-${200 + newId}` };
-      const tbody = document.getElementById('doctorTableBody');
-      const tr = document.createElement('tr');
-      tr.setAttribute('data-id', newId); tr.setAttribute('data-exp', exp);
-      tr.setAttribute('data-fee', fee); tr.setAttribute('data-license', license);
-      tr.innerHTML = `
-      <td><strong>#DOC-${newId}</strong></td>
-      <td><div class="d-flex align-items-center gap-2"><div class="avatar-circle">${initials}</div><div><strong>${name}</strong><div style="font-size:.72rem;color:var(--text-secondary);">${email}</div></div></div></td>
-      <td><code>${license}</code></td>
-      <td><span class="badge badge-blue">${exp} Yrs</span></td>
-      <td><span class="badge-dept me-1">${dept}</span><span class="badge-spec">${spec}</span></td>
-      <td><strong>$${fee.toFixed(2)}</strong></td>
-      <td><button class="btn-ghost me-1" onclick="viewDoctorDetails(${newId})">View</button><button class="btn-ghost" onclick="openFeeEditModal(${newId},'${name}',${fee})">Fee</button></td>`;
-      tbody.appendChild(tr);
-      document.getElementById('totalDoctorsCount').textContent = Object.keys(doctorData).length;
-      showAlert(`Doctor profile added: ${name} (${license})`);
-      document.getElementById('addDoctorForm').reset();
-      bootstrap.Modal.getInstance(document.getElementById('addDoctorModal')).hide();
+
+
+      const id =
+        parseInt(
+          document.getElementById(
+            "feeDocId"
+          ).value
+        );
+
+
+      const newFee =
+        parseFloat(
+          document.getElementById(
+            "newFeeInput"
+          ).value
+        );
+
+
+      try {
+
+        const response =
+          await fetch(
+            `${API_URL}/UpdateConsultationFee?id=${id}&newFee=${newFee}`,
+            {
+
+              method: "PATCH",
+
+              headers: {
+                "Content-Type": "application/json"
+              }
+
+            }
+          );
+
+
+        if (!response.ok) {
+
+          throw new Error(
+            "Failed to update consultation fee"
+          );
+
+        }
+
+
+        if (doctorData[id]) {
+
+          doctorData[id].fee =
+            newFee;
+
+        }
+
+
+        const row =
+          document.querySelector(
+            `#doctorTableBody tr[data-id="${id}"]`
+          );
+
+
+        if (row) {
+
+          row.setAttribute(
+            "data-fee",
+            newFee
+          );
+
+
+          row.cells[5].innerHTML =
+            `<strong>$${newFee.toFixed(2)}</strong>`;
+
+        }
+
+
+        showAlert(
+          `Consultation fee updated to $${newFee.toFixed(2)}.`
+        );
+
+
+        bootstrap.Modal
+          .getInstance(
+            document.getElementById(
+              "updateFeeModal"
+            )
+          )
+          .hide();
+
+
+      } catch (error) {
+
+        console.error(
+          "Error updating fee:",
+          error
+        );
+
+
+        showAlert(
+          "Unable to update consultation fee."
+        );
+
+      }
+
     }
 
-    function filterDoctors() {
-      const q = document.getElementById('doctorSearchInput').value.toLowerCase();
-      const minExp = parseInt(document.getElementById('expFilter').value);
-      let visible = 0;
-      document.querySelectorAll('#doctorTableBody tr').forEach(row => {
-        const show = row.textContent.toLowerCase().includes(q) && parseInt(row.getAttribute('data-exp')) >= minExp;
-        row.style.display = show ? '' : 'none';
-        if (show) visible++;
-      });
-      document.getElementById('rosterCountText').textContent = `Showing ${visible} of ${Object.keys(doctorData).length} doctors`;
+/* =====================================================
+   ADD DOCTOR - API
+   ===================================================== */
+
+async function handleAddDoctor(e) {
+
+  e.preventDefault();
+
+  const license = document.getElementById("addDocLicense").value.trim();
+
+  const exp = parseInt(
+    document.getElementById("addDocExp").value
+  );
+
+  const fee = parseFloat(
+    document.getElementById("addDocFee").value
+  );
+
+  const userId = parseInt(
+    document.getElementById("addDocUserId").value
+  );
+
+  const specializationId = parseInt(
+    document.getElementById("addDocSpecId").value
+  );
+
+
+  /* Create DoctorProfile object
+     matching your C# model */
+
+  const doctor = {
+
+    LicenseNumber: license,
+
+    YearsOfExperience: exp,
+
+    ConsultationFee: fee,
+
+    userID: userId,
+
+    SpecializationId: specializationId
+
+  };
+
+
+  try {
+
+    const response = await fetch(
+      `${API_URL}/AddDoctorProfile`,
+      {
+        method: "POST",
+
+        headers: {
+          "Content-Type": "application/json"
+        },
+
+        body: JSON.stringify(doctor)
+      }
+    );
+
+
+    /* Check API response */
+
+    if (!response.ok) {
+
+      const errorText = await response.text();
+
+      console.error(
+        "Add Doctor API Error:",
+        errorText
+      );
+
+      if (response.status === 401) {
+
+        throw new Error(
+          "Unauthorized. Admin authorization is required."
+        );
+
+      }
+
+      if (response.status === 403) {
+
+        throw new Error(
+          "Access denied. Only Admin can add a doctor."
+        );
+
+      }
+
+      throw new Error(
+        "Failed to add doctor profile."
+      );
+
     }
+
+
+    /* Get response from controller */
+
+    const result = await response.json();
+
+    console.log(
+      "Doctor added successfully:",
+      result
+    );
+
+
+    /* Get doctor returned from API */
+
+    const addedDoctor = result.doctor;
+
+
+    /* Doctor ID generated by database */
+
+    const newId =
+      addedDoctor.doctorProfileId;
+
+
+    /* Add doctor to local data */
+
+    doctorData[newId] = {
+
+      name:
+        document.getElementById("addDocName").value,
+
+      email:
+        document.getElementById("addDocEmail").value,
+
+      license:
+        addedDoctor.licenseNumber,
+
+      exp:
+        addedDoctor.yearsOfExperience,
+
+      fee:
+        addedDoctor.consultationFee,
+
+      dept:
+        document.getElementById("addDocDept").value,
+
+      spec:
+        document.getElementById("addDocSpec").value,
+
+      userId:
+        addedDoctor.userID,
+
+      specializationId:
+        addedDoctor.specializationId
+
+    };
+
+
+    /* Get doctor information for table */
+
+    const name =
+      document.getElementById("addDocName").value;
+
+    const email =
+      document.getElementById("addDocEmail").value;
+
+    const dept =
+      document.getElementById("addDocDept").value;
+
+    const spec =
+      document.getElementById("addDocSpec").value;
+
+
+    /* Create initials */
+
+    const initials =
+      name
+        .replace("Dr.", "")
+        .trim()
+        .split(" ")
+        .map(n => n[0])
+        .join("")
+        .substring(0, 2)
+        .toUpperCase();
+
+
+    /* Create table row */
+
+    const tbody =
+      document.getElementById(
+        "doctorTableBody"
+      );
+
+
+    const tr =
+      document.createElement("tr");
+
+
+    tr.setAttribute(
+      "data-id",
+      newId
+    );
+
+    tr.setAttribute(
+      "data-exp",
+      addedDoctor.yearsOfExperience
+    );
+
+    tr.setAttribute(
+      "data-fee",
+      addedDoctor.consultationFee
+    );
+
+    tr.setAttribute(
+      "data-license",
+      addedDoctor.licenseNumber
+    );
+
+
+    tr.innerHTML = `
+
+      <td>
+        <strong>${newId}</strong>
+      </td>
+
+      <td>
+
+        <div class="d-flex align-items-center gap-2">
+
+          <div class="avatar-circle">
+            ${initials}
+          </div>
+
+          <div>
+
+            <strong>
+              ${name}
+            </strong>
+
+            <div style="font-size:.72rem;color:var(--text-secondary);">
+              ${email}
+            </div>
+
+          </div>
+
+        </div>
+
+      </td>
+
+      <td>
+        <code>
+          ${addedDoctor.licenseNumber}
+        </code>
+      </td>
+
+      <td>
+
+        <span class="badge badge-blue">
+          ${addedDoctor.yearsOfExperience} Years
+        </span>
+
+      </td>
+
+      <td>
+
+        <span class="badge-dept me-1">
+          ${dept}
+        </span>
+
+        <span class="badge-spec">
+          ${spec}
+        </span>
+
+      </td>
+
+      <td>
+
+        <strong>
+          $${parseFloat(
+            addedDoctor.consultationFee
+          ).toFixed(2)}
+        </strong>
+
+      </td>
+
+      <td>
+
+        <button
+          class="btn-ghost me-1"
+          onclick="viewDoctorDetails(${newId})">
+
+          View
+
+        </button>
+
+        <button
+          class="btn-ghost"
+          onclick="openFeeEditModal(
+            ${newId},
+            '${name}',
+            ${addedDoctor.consultationFee}
+          )">
+
+          Fee
+
+        </button>
+
+      </td>
+
+    `;
+
+
+    /* Add row to table */
+
+    tbody.appendChild(tr);
+
+
+    /* Update total doctor count */
+
+    document.getElementById(
+      "totalDoctorsCount"
+    ).textContent =
+      Object.keys(doctorData).length;
+
+
+    /* Show success message */
+
+    showAlert(
+      `Doctor profile added successfully. Doctor ID: ${newId}`
+    );
+
+
+    /* Reset form */
+
+    document.getElementById(
+      "addDoctorForm"
+    ).reset();
+
+
+    /* Close modal */
+
+    const modal =
+      bootstrap.Modal.getInstance(
+        document.getElementById(
+          "addDoctorModal"
+        )
+      );
+
+
+    if (modal) {
+
+      modal.hide();
+
+    }
+
+
+  } catch (error) {
+
+    console.error(
+      "Error adding doctor:",
+      error
+    );
+
+    showAlert(
+      error.message ||
+      "Unable to add doctor profile."
+    );
+
+  }
+
+}
+
+   
+   
+async function getAllDoctorProfiles() {
+
+  try {
+
+    const response = await fetch(
+      `${API_URL}/GetAllDoctorProfiles`
+    );
+
+    if (!response.ok) {
+
+      throw new Error(
+        "Failed to get all doctor profiles"
+      );
+
+    }
+
+    const doctors = await response.json();
+
+    console.log(
+      "All doctors:",
+      doctors
+    );
+
+    return doctors;
+
+  } catch (error) {
+
+    console.error(
+      "Error getting all doctors:",
+      error
+    );
+
+    showAlert(
+      "Unable to get all doctor profiles."
+    );
+
+    return [];
+
+  }
+
+}
+function displayDoctors(doctors) {
+
+  const tbody = document.getElementById("doctorTableBody");
+
+  tbody.innerHTML = "";
+
+  doctors.forEach(doctor => {
+
+    const id = doctor.doctorProfileId;
+    const license = doctor.licenseNumber;
+    const exp = doctor.yearsOfExperience;
+    const fee = doctor.consultationFee;
+
+    const tr = document.createElement("tr");
+
+    tr.setAttribute("data-id", id);
+    tr.setAttribute("data-exp", exp);
+    tr.setAttribute("data-fee", fee);
+    tr.setAttribute("data-license", license);
+
+    tr.innerHTML = `
+
+      <td>
+        <strong>${id}</strong>
+      </td>
+
+      <td>
+        <div class="d-flex align-items-center gap-2">
+
+          <div class="avatar-circle">
+            DR
+          </div>
+
+          <div>
+            <strong>Doctor ${id}</strong>
+
+            <div style="font-size:0.72rem;color:var(--text-secondary);">
+              Doctor Profile
+            </div>
+          </div>
+
+        </div>
+      </td>
+
+      <td>
+        <code>${license}</code>
+      </td>
+
+      <td>
+        <span class="badge badge-blue">
+          ${exp} Years
+        </span>
+      </td>
+
+      <td>
+        <span class="badge badge-neutral">
+          Doctor Profile
+        </span>
+      </td>
+
+      <td>
+        <strong>$${parseFloat(fee).toFixed(2)}</strong>
+      </td>
+
+      <td>
+
+        <button
+          class="btn-ghost me-1"
+          onclick="viewDoctorDetails(${id})">
+          View
+        </button>
+
+        <button
+          class="btn-ghost"
+          onclick="openFeeEditModal(${id}, 'Doctor ${id}', ${fee})">
+          Fee
+        </button>
+
+      </td>
+
+    `;
+
+    tbody.appendChild(tr);
+  });
+
+
+  document.getElementById("totalDoctorsCount").textContent =
+    doctors.length;
+
+  document.getElementById("rosterCountText").textContent =
+    `Showing ${doctors.length} registered doctors`;
+}
+/* 
+   GET ALL DOCTORS WHEN PAGE LOADS
+   */
+window.addEventListener("DOMContentLoaded", async () => {
+
+  const doctors = await getAllDoctorProfiles();
+
+  console.log("Doctors loaded:", doctors);
+
+  displayDoctors(doctors);
+
+});
+async function filterDoctors() {
+
+  const searchValue =
+    document.getElementById(
+      "doctorSearchInput"
+    ).value.trim();
+
+  const minExp =
+    parseInt(
+      document.getElementById(
+        "expFilter"
+      ).value
+    );
+
+  // If search box is empty, show all existing rows
+  if (searchValue === "") {
+
+    document
+      .querySelectorAll(
+        "#doctorTableBody tr"
+      )
+      .forEach(row => {
+
+        const exp =
+          parseInt(
+            row.getAttribute("data-exp")
+          );
+
+        row.style.display =
+          exp >= minExp ? "" : "none";
+
+      });
+
+    document.getElementById(
+      "rosterCountText"
+    ).textContent =
+      `Showing ${document.querySelectorAll("#doctorTableBody tr").length} doctors`;
+
+    return;
+  }
+
+
+  // If the search value is a number, search by ID using API
+  const id = parseInt(searchValue);
+
+
+  if (!isNaN(id)) {
+
+    try {
+
+      const response =
+        await fetch(
+          `${API_URL}/GetDoctorProfile?id=${id}`
+        );
+
+
+      if (!response.ok) {
+
+        document
+          .querySelectorAll(
+            "#doctorTableBody tr"
+          )
+          .forEach(row => {
+            row.style.display = "none";
+          });
+
+        document.getElementById(
+          "rosterCountText"
+        ).textContent =
+          `Doctor ID ${id} not found in database`;
+
+        return;
+      }
+
+
+      const doctor =
+        await response.json();
+
+
+      console.log(
+        "Doctor found from API:",
+        doctor
+      );
+
+
+      // Hide all existing rows
+      document
+        .querySelectorAll(
+          "#doctorTableBody tr"
+        )
+        .forEach(row => {
+          row.style.display = "none";
+        });
+
+
+      // Check whether this doctor already has a row
+      let row =
+        document.querySelector(
+          `#doctorTableBody tr[data-id="${id}"]`
+        );
+
+
+      /*
+       * If the doctor is already in the HTML table,
+       * show that row.
+       */
+      if (row) {
+
+        const exp =
+          parseInt(
+            row.getAttribute(
+              "data-exp"
+            )
+          );
+
+
+        if (exp >= minExp) {
+
+          row.style.display = "";
+
+          document.getElementById(
+            "rosterCountText"
+          ).textContent =
+            "Showing 1 doctor";
+
+        }
+
+        return;
+      }
+
+
+      /*
+       * If the doctor came from the API but
+       * does NOT already exist in the HTML table,
+       * create a new row.
+       */
+
+      const tbody =
+        document.getElementById(
+          "doctorTableBody"
+        );
+
+
+      row =
+        document.createElement(
+          "tr"
+        );
+
+
+      row.setAttribute(
+        "data-id",
+        doctor.doctorProfileId
+      );
+
+
+      row.setAttribute(
+        "data-exp",
+        doctor.yearsOfExperience
+      );
+
+
+      row.setAttribute(
+        "data-fee",
+        doctor.consultationFee
+      );
+
+
+      row.setAttribute(
+        "data-license",
+        doctor.licenseNumber
+      );
+
+
+      row.innerHTML = `
+
+        <td>
+          <strong>
+            ${doctor.doctorProfileId}
+          </strong>
+        </td>
+
+        <td>
+          <strong>
+            Doctor ID ${doctor.doctorProfileId}
+          </strong>
+        </td>
+
+        <td>
+          <code>
+            ${doctor.licenseNumber}
+          </code>
+        </td>
+
+        <td>
+          <span class="badge badge-blue">
+            ${doctor.yearsOfExperience} Years
+          </span>
+        </td>
+
+        <td>
+          <span class="badge badge-neutral">
+            Doctor Profile
+          </span>
+        </td>
+
+        <td>
+          <strong>
+            $${parseFloat(
+              doctor.consultationFee
+            ).toFixed(2)}
+          </strong>
+        </td>
+
+        <td>
+
+          <button
+            class="btn-ghost"
+            onclick="viewDoctorDetails(${doctor.doctorProfileId})">
+
+            View
+
+          </button>
+
+        </td>
+
+      `;
+
+
+      tbody.appendChild(row);
+
+
+      if (
+        parseInt(
+          doctor.yearsOfExperience
+        ) >= minExp
+      ) {
+
+        row.style.display = "";
+
+        document.getElementById(
+          "rosterCountText"
+        ).textContent =
+          "Showing 1 doctor";
+
+      } else {
+
+        row.style.display = "none";
+
+        document.getElementById(
+          "rosterCountText"
+        ).textContent =
+          "Doctor found but does not match experience filter";
+
+      }
+
+
+    } catch (error) {
+
+      console.error(
+        "Error finding doctor:",
+        error
+      );
+
+      document.getElementById(
+        "rosterCountText"
+      ).textContent =
+        "Error connecting to Doctor API.";
+
+    }
+
+    return;
+  }
+
+
+  // Name / license search stays available
+  const q =
+    searchValue.toLowerCase();
+
+  document
+    .querySelectorAll(
+      "#doctorTableBody tr"
+    )
+    .forEach(row => {
+
+      const matchesSearch =
+        row.textContent
+          .toLowerCase()
+          .includes(q);
+
+      const matchesExperience =
+        parseInt(
+          row.getAttribute(
+            "data-exp"
+          )
+        ) >= minExp;
+
+      const show =
+        matchesSearch &&
+        matchesExperience;
+
+      row.style.display =
+        show ? "" : "none";
+
+    });
+
+}
+    /* =====================================================
+       SORT DOCTORS BY FEE
+       ===================================================== */
 
     function sortDoctorsByFee() {
-      const mode = document.getElementById('feeSort').value;
-      if (mode === 'default') return;
-      const tbody = document.getElementById('doctorTableBody');
-      const rows = Array.from(tbody.querySelectorAll('tr'));
-      rows.sort((a, b) => { const fa = parseFloat(a.getAttribute('data-fee')), fb = parseFloat(b.getAttribute('data-fee')); return mode === 'asc' ? fa - fb : fb - fa; });
-      rows.forEach(r => tbody.appendChild(r));
-      showAlert(`Sorted by fee (${mode === 'asc' ? 'Low → High' : 'High → Low'})`);
+
+      const mode =
+        document.getElementById(
+          "feeSort"
+        ).value;
+
+
+      if (mode === "default") {
+        return;
+      }
+
+
+      const tbody =
+        document.getElementById(
+          "doctorTableBody"
+        );
+
+
+      const rows =
+        Array.from(
+          tbody.querySelectorAll(
+            "tr"
+          )
+        );
+
+
+      rows.sort((a, b) => {
+
+        const fa =
+          parseFloat(
+            a.getAttribute(
+              "data-fee"
+            )
+          );
+
+
+        const fb =
+          parseFloat(
+            b.getAttribute(
+              "data-fee"
+            )
+          );
+
+
+        return mode === "asc"
+          ? fa - fb
+          : fb - fa;
+
+      });
+
+
+      rows.forEach(
+        r => tbody.appendChild(r)
+      );
+
+
+      showAlert(
+        `Sorted by fee (${mode === "asc"
+          ? "Low → High"
+          : "High → Low"})`
+      );
+
     }
 
-    function triggerFilter(yrs) {
-      document.getElementById('expFilter').value = yrs;
-      filterDoctors();
-      showAlert(`GetDoctorsByExperience(${yrs}): showing doctors with ≥ ${yrs} years experience.`);
-    }
 
-    function triggerSortFee() {
-      const cur = document.getElementById('feeSort').value;
-      document.getElementById('feeSort').value = cur === 'asc' ? 'desc' : 'asc';
-      sortDoctorsByFee();
-    }
+    /* =====================================================
+       ALERT
+       ===================================================== */
 
     function showAlert(msg) {
-      const a = document.getElementById('actionAlert');
-      document.getElementById('alertMsg').textContent = msg;
-      a.classList.remove('d-none');
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-      setTimeout(() => a.classList.add('d-none'), 4500);
+
+      const a =
+        document.getElementById(
+          "actionAlert"
+        );
+
+
+      document.getElementById(
+        "alertMsg"
+      ).textContent = msg;
+
+
+      a.classList.remove(
+        "d-none"
+      );
+
+
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+      });
+
+
+      setTimeout(
+        () => a.classList.add("d-none"),
+        4500
+      );
+
     }
+
   </script>
+
 </body>
 
 </html>
