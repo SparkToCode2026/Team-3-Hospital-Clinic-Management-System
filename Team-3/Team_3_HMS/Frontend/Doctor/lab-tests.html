@@ -1,337 +1,1077 @@
 <!DOCTYPE html>
+
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Lab Tests | HMS Clinical</title>
-  <meta name="description" content="View and manage lab tests, results, and clinical diagnostic orders.">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
+    <title>Lab Tests | HMS Clinical</title>
+
+    <meta name="description"
+          content="View and manage lab tests, results, and clinical diagnostic orders.">
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+          rel="stylesheet">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+          rel="stylesheet">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+          rel="stylesheet">
+
+    <link rel="stylesheet" href="style.css">
+
 </head>
 
 <body>
-  <div class="portal-wrapper">
 
-    <!-- ══ SIDEBAR ══ -->
-    <aside class="sidebar">
-      <div class="sidebar-brand">
-        <div class="sidebar-logo"><i class="bi bi-hospital"></i></div>
-        <div>
-          <div class="sidebar-brand-name">HMS Clinical</div>
-          <div class="sidebar-brand-sub">Doctor Portal</div>
-        </div>
-      </div>
-      <nav class="sidebar-nav">
-        <a href="dashboard.html" class="nav-item"><i class="bi bi-grid-1x2-fill"></i> Dashboard</a>
-        <a href="medical-records.html" class="nav-item"><i class="bi bi-journal-medical"></i> Medical Records</a>
-        <a href="lab-tests.html" class="nav-item active"><i class="bi bi-virus"></i> Lab Tests</a>
-        <a href="appointments.html" class="nav-item"><i class="bi bi-calendar-check"></i> Appointments</a>
-        <a href="patients.html" class="nav-item"><i class="bi bi-people"></i> Patients</a>
-        <a href="doctor-profile.html" class="nav-item"><i class="bi bi-person-gear"></i> Settings &amp; Profile</a>
-      </nav>
-      <div class="sidebar-user">
-        <div>
-          <div class="sidebar-user-name">Dr. Sarah Chen</div>
-          <div class="sidebar-user-role">Chief Endocrinologist</div>
-        </div>
-      </div>
-    </aside>
+    <div class="portal-wrapper">
 
-    <!-- ══ MAIN CONTENT ══ -->
-    <div class="main-content">
-      <header class="topbar">
-        <span class="topbar-title">Lab Tests</span>
-        <div class="topbar-actions">
-          <span class="topbar-user-label">Dr. Sarah Chen</span>
-          <a href="../Assets/login.html" class="btn-logout" title="Log Out"><i class="bi bi-box-arrow-right"></i> Log
-            Out</a>
-        </div>
-      </header>
+        <!-- ══ SIDEBAR ══ -->
+        <aside class="sidebar">
 
-      <main class="page-body">
+            <div class="sidebar-brand">
 
-        <!-- Page Header -->
-        <div class="page-header">
-          <h1>Lab Tests &amp; Diagnostics</h1>
-          <p>View lab orders, manage results, and track diagnostic test statuses for your patients.</p>
-        </div>
+                <div class="sidebar-logo">
+                    <i class="bi bi-hospital"></i>
+                </div>
 
-        <!-- Stats -->
-        <div class="stats-grid" style="grid-template-columns:repeat(3,1fr);margin-bottom:1.5rem;">
-          <div class="stat-card">
-            <div>
-              <div class="stat-label">Total Lab Tests</div>
-              <div class="stat-value">386</div>
-              <div class="stat-sub" style="color:var(--green);"><i class="bi bi-arrow-up-right me-1"></i>+7.2%</div>
+                <div>
+                    <div class="sidebar-brand-name">
+                        HMS Clinical
+                    </div>
+
+                    <div class="sidebar-brand-sub">
+                        Doctor Portal
+                    </div>
+                </div>
+
             </div>
-            <div class="stat-icon green"><i class="bi bi-clipboard2-pulse-fill"></i></div>
-          </div>
-          <div class="stat-card">
-            <div>
-              <div class="stat-label">Pending Results</div>
-              <div class="stat-value">14</div>
-              <div class="stat-sub" style="color:var(--yellow);"><i class="bi bi-hourglass-split me-1"></i>Awaiting
-              </div>
-            </div>
-            <div class="stat-icon yellow"><i class="bi bi-hourglass-split"></i></div>
-          </div>
-          <div class="stat-card">
-            <div>
-              <div class="stat-label">Completed Today</div>
-              <div class="stat-value">8</div>
-              <div class="stat-sub" style="color:var(--brand-accent);"><i class="bi bi-check2-all me-1"></i>On Track
-              </div>
-            </div>
-            <div class="stat-icon"><i class="bi bi-check2-circle"></i></div>
-          </div>
-        </div>
 
-        <!-- Toolbar -->
-        <div class="table-toolbar">
-          <div class="toolbar-filters">
-            <input type="search" class="search-input" placeholder="Search test name or patient...">
-            <select class="filter-select">
-              <option selected>All Categories</option>
-              <option>Blood Test</option>
-              <option>Urine Test</option>
-              <option>Imaging</option>
-              <option>Microbiology</option>
-            </select>
-            <select class="filter-select">
-              <option selected>All Statuses</option>
-              <option>Pending</option>
-              <option>Completed</option>
-            </select>
-          </div>
-          <button class="btn-primary" data-bs-toggle="modal" data-bs-target="#orderLabModal">
-            <i class="bi bi-plus-lg"></i> Order Lab Test
-          </button>
-        </div>
 
-        <!-- Table -->
-        <div class="table-wrap">
-          <div class="table-responsive">
-            <table class="data-table">
-              <thead>
-                <tr>
-                  <th>Test ID</th>
-                  <th>Test Name</th>
-                  <th>Patient</th>
-                  <th>Category</th>
-                  <th>Order Date</th>
-                  <th>Cost (OMR)</th>
-                  <th>Status</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td><strong>#LT-3041</strong></td>
-                  <td>HbA1c Test</td>
-                  <td>Emily Carter</td>
-                  <td><span class="badge badge-blue">Blood Test</span></td>
-                  <td>2026-08-04</td>
-                  <td>OMR 42.50</td>
-                  <td><span class="badge badge-success">Completed</span></td>
-                  <td>
-                    <button class="btn-ghost me-1" data-bs-toggle="offcanvas"
-                      data-bs-target="#labTestDetails">View</button>
-                    <button class="btn-ghost" data-bs-toggle="modal" data-bs-target="#updateResultModal">Result</button>
-                  </td>
-                </tr>
-                <tr>
-                  <td><strong>#LT-3042</strong></td>
-                  <td>Lipid Panel</td>
-                  <td>James Wilson</td>
-                  <td><span class="badge badge-blue">Blood Test</span></td>
-                  <td>2026-08-05</td>
-                  <td>OMR 55.00</td>
-                  <td><span class="badge badge-warn">Pending</span></td>
-                  <td>
-                    <button class="btn-ghost me-1" data-bs-toggle="offcanvas"
-                      data-bs-target="#labTestDetails">View</button>
-                    <button class="btn-ghost" data-bs-toggle="modal" data-bs-target="#updateResultModal">Result</button>
-                  </td>
-                </tr>
-                <tr>
-                  <td><strong>#LT-3043</strong></td>
-                  <td>Thyroid Panel (TSH/T4)</td>
-                  <td>Lisa Andersen</td>
-                  <td><span class="badge badge-blue">Blood Test</span></td>
-                  <td>2026-08-05</td>
-                  <td>OMR 38.75</td>
-                  <td><span class="badge badge-warn">Pending</span></td>
-                  <td>
-                    <button class="btn-ghost me-1" data-bs-toggle="offcanvas"
-                      data-bs-target="#labTestDetails">View</button>
-                    <button class="btn-ghost" data-bs-toggle="modal" data-bs-target="#updateResultModal">Result</button>
-                  </td>
-                </tr>
-                <tr>
-                  <td><strong>#LT-3044</strong></td>
-                  <td>Urinalysis</td>
-                  <td>Michael Wilson</td>
-                  <td><span class="badge badge-neutral">Urine Test</span></td>
-                  <td>2026-08-06</td>
-                  <td>OMR 18.00</td>
-                  <td><span class="badge badge-success">Completed</span></td>
-                  <td>
-                    <button class="btn-ghost me-1" data-bs-toggle="offcanvas"
-                      data-bs-target="#labTestDetails">View</button>
-                    <button class="btn-ghost" data-bs-toggle="modal" data-bs-target="#updateResultModal">Result</button>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-          <div class="table-pagination">
-            <p class="pagination-info">Showing 1 to 4 of 386 lab tests</p>
-            <nav>
-              <ul class="pagination pagination-sm mb-0">
-                <li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
-                <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                <li class="page-item"><a class="page-link" href="#">2</a></li>
-                <li class="page-item"><a class="page-link" href="#">Next</a></li>
-              </ul>
+            <nav class="sidebar-nav">
+
+                <a href="dashboard.html" class="nav-item">
+                    <i class="bi bi-grid-1x2-fill"></i>
+                    Dashboard
+                </a>
+
+                <a href="medical-records.html" class="nav-item">
+                    <i class="bi bi-journal-medical"></i>
+                    Medical Records
+                </a>
+
+                <a href="lab-tests.html" class="nav-item active">
+                    <i class="bi bi-virus"></i>
+                    Lab Tests
+                </a>
+
+                <a href="appointments.html" class="nav-item">
+                    <i class="bi bi-calendar-check"></i>
+                    Appointments
+                </a>
+
+                <a href="patients.html" class="nav-item">
+                    <i class="bi bi-people"></i>
+                    Patients
+                </a>
+
+                <a href="doctor-profile.html" class="nav-item">
+                    <i class="bi bi-person-gear"></i>
+                    Settings &amp; Profile
+                </a>
+
             </nav>
-          </div>
+
+
+            <div class="sidebar-user">
+                <div>
+                    <div class="sidebar-user-name">
+                        Dr. Sarah Chen
+                    </div>
+
+                    <div class="sidebar-user-role">
+                        Chief Endocrinologist
+                    </div>
+                </div>
+            </div>
+
+        </aside>
+
+
+        <!-- ══ MAIN CONTENT ══ -->
+        <div class="main-content">
+
+            <header class="topbar">
+
+                <span class="topbar-title">
+                    Lab Tests
+                </span>
+
+                <div class="topbar-actions">
+
+                    <span class="topbar-user-label">
+                        Dr. Sarah Chen
+                    </span>
+
+                    <a href="../Assets/login.html"
+                       class="btn-logout"
+                       title="Log Out">
+
+                        <i class="bi bi-box-arrow-right"></i>
+                        Log Out
+
+                    </a>
+
+                </div>
+
+            </header>
+
+
+            <main class="page-body">
+
+                <!-- Page Header -->
+                <div class="page-header">
+
+                    <h1>
+                        Lab Tests &amp; Diagnostics
+                    </h1>
+
+                    <p>
+                        View lab orders, manage results,
+                        and track diagnostic tests.
+                    </p>
+
+                </div>
+
+
+                <!-- ══ STATS ══ -->
+                <div class="stats-grid"
+                     style="grid-template-columns:repeat(2,1fr);
+                   max-width:600px;
+                   margin-bottom:1.5rem;">
+
+                    <!-- Total Lab Tests -->
+                    <div class="stat-card">
+
+                        <div>
+
+                            <div class="stat-label">
+                                Total Lab Tests
+                            </div>
+
+                            <div class="stat-value"
+                                 id="totalLabTests">
+                                0
+                            </div>
+
+                        </div>
+
+                        <div class="stat-icon green">
+                            <i class="bi bi-clipboard2-pulse-fill"></i>
+                        </div>
+
+                    </div>
+
+
+                    <!-- Total Cost -->
+                    <div class="stat-card">
+
+                        <div>
+
+                            <div class="stat-label">
+                                Total Cost
+                            </div>
+
+                            <div class="stat-value"
+                                 id="totalLabTestCost"
+                                 style="font-size:1.2rem;">
+
+                                OMR 0.000
+
+                            </div>
+
+                        </div>
+
+                        <div class="stat-icon">
+                            <i class="bi bi-cash-stack"></i>
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ══ TOOLBAR ══ -->
+                <div class="table-toolbar">
+
+                    <div class="toolbar-filters">
+
+                        <!-- Search -->
+                        <input type="search"
+                               id="labTestSearch"
+                               class="search-input"
+                               placeholder="Search by test name...">
+
+
+                        <!-- Category Filter -->
+                        <select id="categoryFilter"
+                                class="filter-select">
+
+                            <option value="" selected>
+                                All Categories
+                            </option>
+
+                            <option value="Blood Test">
+                                Blood Test
+                            </option>
+
+                            <option value="Urine Test">
+                                Urine Test
+                            </option>
+
+                            <option value="Imaging">
+                                Imaging
+                            </option>
+
+                            <option value="Microbiology">
+                                Microbiology
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- Add Lab Test -->
+                    <button type="button"
+                            class="btn-primary"
+                            data-bs-toggle="modal"
+                            data-bs-target="#orderLabModal">
+
+                        <i class="bi bi-plus-lg"></i>
+                        Order Lab Test
+
+                    </button>
+
+                </div>
+
+
+                <!-- ══ TABLE ══ -->
+                <div class="table-wrap">
+
+                    <div class="table-responsive">
+
+                        <table class="data-table">
+
+                            <thead>
+
+                                <tr>
+                                    <th>Test ID</th>
+                                    <th>Test Name</th>
+                                    <th>Category</th>
+                                    <th>Test Date</th>
+                                    <th>Cost (OMR)</th>
+                                    <th>Result</th>
+                                    <th>Medical Record ID</th>
+                                    <th>Actions</th>
+                                </tr>
+
+                            </thead>
+
+
+                            <tbody id="labTestsTableBody">
+
+                                <tr>
+
+                                    <td colspan="8"
+                                        class="text-center py-4">
+
+                                        Loading lab tests...
+
+                                    </td>
+
+                                </tr>
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+
+                    <div class="table-pagination">
+
+                        <p class="pagination-info"
+                           id="labTestsCount">
+
+                            Loading lab tests...
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </main>
+
         </div>
 
-      </main>
     </div>
-  </div>
 
-  <!-- ══ OFFCANVAS: Lab Test Details ══ -->
-  <div class="offcanvas offcanvas-end details-panel" tabindex="-1" id="labTestDetails">
-    <div class="offcanvas-header border-bottom">
-      <div>
-        <small
-          style="font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-muted);">Lab
-          Test Diagnostic</small>
-        <h5 class="offcanvas-title mt-1">#LT-3041 — HbA1c Test</h5>
-      </div>
-      <button type="button" class="modal-close-btn" data-bs-dismiss="offcanvas"><i class="bi bi-x-lg"></i></button>
-    </div>
-    <div class="offcanvas-body p-4">
-      <div class="details-section"><span class="details-label">Patient</span>
-        <h6>Emily Carter</h6>
-      </div>
-      <div class="details-section"><span class="details-label">Test Category</span><span class="badge badge-blue">Blood
-          Test</span></div>
-      <div class="details-section"><span class="details-label">Order Date</span>
-        <h6>2026-08-04</h6>
-      </div>
-      <div class="details-section"><span class="details-label">Cost</span>
-        <h6 style="color:var(--brand-accent);">OMR 42.50</h6>
-      </div>
-      <div class="details-section">
-        <span class="details-label">Status</span>
-        <span class="badge badge-success">Completed</span>
-      </div>
-      <div class="details-section">
-        <span class="details-label">Result</span>
-        <p>HbA1c = <strong>7.1%</strong> — Above normal range (&lt;5.7% normal, 5.7–6.4% pre-diabetic). Patient requires
-          continued glycemic management.</p>
-      </div>
-      <div class="details-section" style="border:none;">
-        <button class="btn-primary w-100" data-bs-toggle="modal" data-bs-target="#updateResultModal"
-          data-bs-dismiss="offcanvas">Update Lab Result</button>
-      </div>
-    </div>
-  </div>
+   
+    <!-- OFFCANVAS: LAB TEST DETAILS -->
+  
 
-  <!-- ══ MODAL: Order Lab Test ══ -->
-  <div class="modal fade" id="orderLabModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-lg">
-      <div class="modal-content" style="border:none;border-radius:16px;box-shadow:0 20px 40px rgba(0,0,0,.12);">
-        <div class="p-4">
-          <div class="modal-header-bar">
+    <div class="offcanvas offcanvas-end details-panel"
+         tabindex="-1"
+         id="labTestDetails">
+
+        <div class="offcanvas-header border-bottom">
+
             <div>
-              <small
-                style="font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-muted);">Lab
-                Orders</small>
-              <div class="modal-title mt-1">Order Lab Test</div>
-            </div>
-            <button type="button" class="modal-close-btn" data-bs-dismiss="modal"><i class="bi bi-x-lg"></i></button>
-          </div>
-          <form>
-            <div class="form-grid mb-3">
-              <div class="form-group">
-                <label class="form-label">Patient</label>
-                <input type="text" class="form-control" placeholder="Patient name or ID" required>
-              </div>
-              <div class="form-group">
-                <label class="form-label">Medical Record ID</label>
-                <input type="number" class="form-control" placeholder="e.g. 1024" required>
-              </div>
-              <div class="form-group">
-                <label class="form-label">Test Name</label>
-                <input type="text" class="form-control" placeholder="e.g. HbA1c Test" required>
-              </div>
-              <div class="form-group">
-                <label class="form-label">Category</label>
-                <select class="form-control" required>
-                  <option>Blood Test</option>
-                  <option>Urine Test</option>
-                  <option>Imaging</option>
-                  <option>Microbiology</option>
-                </select>
-              </div>
-              <div class="form-group">
-                <label class="form-label">Order Date</label>
-                <input type="date" class="form-control" required>
-              </div>
-              <div class="form-group">
-                <label class="form-label">Cost (OMR)</label>
-                <input type="number" step="0.01" class="form-control" placeholder="e.g. 42.50" required>
-              </div>
-            </div>
-            <div class="modal-footer-bar">
-              <button type="button" class="btn-modal-cancel" data-bs-dismiss="modal">Cancel</button>
-              <button type="submit" class="btn-modal-confirm">Order Test</button>
-            </div>
-          </form>
-        </div>
-      </div>
-    </div>
-  </div>
 
-  <!-- ══ MODAL: Update Lab Result ══ -->
-  <div class="modal fade" id="updateResultModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content" style="border:none;border-radius:16px;box-shadow:0 20px 40px rgba(0,0,0,.12);">
-        <div class="p-4">
-          <div class="modal-header-bar">
-            <div>
-              <small
-                style="font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-muted);">Lab
-                Test</small>
-              <div class="modal-title mt-1">Update Lab Test Result</div>
-            </div>
-            <button type="button" class="modal-close-btn" data-bs-dismiss="modal"><i class="bi bi-x-lg"></i></button>
-          </div>
-          <div class="form-group mb-3">
-            <label class="form-label">Test Name</label>
-            <input type="text" class="form-control" value="HbA1c Test" readonly>
-          </div>
-          <div class="form-group mb-3">
-            <label class="form-label">Result</label>
-            <textarea class="form-control" rows="3" placeholder="Enter lab test result">7.1%</textarea>
-          </div>
-          <div class="modal-footer-bar">
-            <button type="button" class="btn-modal-cancel" data-bs-dismiss="modal">Cancel</button>
-            <button type="button" class="btn-modal-confirm">Update Result</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+                <small style="font-size:.7rem;
+                   font-weight:700;
+                   text-transform:uppercase;
+                   letter-spacing:.05em;
+                   color:var(--text-muted);">
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+                    Lab Test Diagnostic
+
+                </small>
+
+                <h5 class="offcanvas-title mt-1"
+                    id="detailsLabTestTitle">
+
+                    -
+
+                </h5>
+
+            </div>
+
+
+            <button type="button"
+                    class="modal-close-btn"
+                    data-bs-dismiss="offcanvas">
+
+                <i class="bi bi-x-lg"></i>
+
+            </button>
+
+        </div>
+
+
+        <div class="offcanvas-body p-4">
+
+            <!-- Test Name -->
+            <div class="details-section">
+
+                <span class="details-label">
+                    Test Name
+                </span>
+
+                <h6 id="detailsTestName">
+                    -
+                </h6>
+
+            </div>
+
+
+            <!-- Category -->
+            <div class="details-section">
+
+                <span class="details-label">
+                    Test Category
+                </span>
+
+                <p id="detailsCategory">
+                    -
+                </p>
+
+            </div>
+
+
+            <!-- Test Date -->
+            <div class="details-section">
+
+                <span class="details-label">
+                    Test Date
+                </span>
+
+                <h6 id="detailsTestDate">
+                    -
+                </h6>
+
+            </div>
+
+
+            <!-- Cost -->
+            <div class="details-section">
+
+                <span class="details-label">
+                    Cost
+                </span>
+
+                <h6 id="detailsCost"
+                    style="color:var(--brand-accent);">
+
+                    OMR 0.000
+
+                </h6>
+
+            </div>
+
+
+            <!-- Medical Record ID -->
+            <div class="details-section">
+
+                <span class="details-label">
+                    Medical Record ID
+                </span>
+
+                <p id="detailsMedicalRecordId">
+                    -
+                </p>
+
+            </div>
+
+
+            <!-- Result -->
+            <div class="details-section">
+
+                <span class="details-label">
+                    Result
+                </span>
+
+                <p id="detailsResult">
+                    -
+                </p>
+
+            </div>
+
+
+            <!-- Update Result Button -->
+            <div class="details-section"
+                 style="border:none;">
+
+                <button type="button"
+                        id="detailsUpdateResultBtn"
+                        class="btn-primary w-100">
+
+                    Update Lab Result
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- MODAL: ORDER LAB TEST -->
+
+
+    <div class="modal fade"
+         id="orderLabModal"
+         tabindex="-1"
+         aria-hidden="true">
+
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+
+            <div class="modal-content"
+                 style="border:none;
+               border-radius:16px;
+               box-shadow:0 20px 40px rgba(0,0,0,.12);">
+
+                <div class="p-4">
+
+                    <div class="modal-header-bar">
+
+                        <div>
+
+                            <small style="font-size:.7rem;
+                               font-weight:700;
+                               text-transform:uppercase;
+                               letter-spacing:.05em;
+                               color:var(--text-muted);">
+
+                                Lab Orders
+
+                            </small>
+
+                            <div class="modal-title mt-1">
+                                Order Lab Test
+                            </div>
+
+                        </div>
+
+
+                        <button type="button"
+                                class="modal-close-btn"
+                                data-bs-dismiss="modal">
+
+                            <i class="bi bi-x-lg"></i>
+
+                        </button>
+
+                    </div>
+
+
+                    <form id="createLabTestForm">
+
+                        <div class="form-grid mb-3">
+
+                            <!-- Medical Record ID -->
+                            <div class="form-group">
+
+                                <label class="form-label">
+                                    Medical Record ID
+                                </label>
+
+                                <input type="number"
+                                       id="createLabMedicalRecordId"
+                                       class="form-control"
+                                       placeholder="Enter medical record ID"
+                                       required>
+
+                            </div>
+
+
+                            <!-- Test Name -->
+                            <div class="form-group">
+
+                                <label class="form-label">
+                                    Test Name
+                                </label>
+
+                                <input type="text"
+                                       id="createLabTestName"
+                                       class="form-control"
+                                       placeholder="e.g. HbA1c Test"
+                                       required>
+
+                            </div>
+
+
+                            <!-- Category -->
+                            <div class="form-group">
+
+                                <label class="form-label">
+                                    Category
+                                </label>
+
+                                <select id="createLabCategory"
+                                        class="form-control"
+                                        required>
+
+                                    <option value="Blood Test">
+                                        Blood Test
+                                    </option>
+
+                                    <option value="Urine Test">
+                                        Urine Test
+                                    </option>
+
+                                    <option value="Imaging">
+                                        Imaging
+                                    </option>
+
+                                    <option value="Microbiology">
+                                        Microbiology
+                                    </option>
+
+                                </select>
+
+                            </div>
+
+
+                            <!-- Test Date -->
+                            <div class="form-group">
+
+                                <label class="form-label">
+                                    Test Date
+                                </label>
+
+                                <input type="date"
+                                       id="createLabTestDate"
+                                       class="form-control"
+                                       required>
+
+                            </div>
+
+
+                            <!-- Cost -->
+                            <div class="form-group span-2">
+
+                                <label class="form-label">
+                                    Cost (OMR)
+                                </label>
+
+                                <input type="number"
+                                       id="createLabCost"
+                                       step="0.001"
+                                       min="0"
+                                       class="form-control"
+                                       placeholder="e.g. 42.500"
+                                       required>
+
+                            </div>
+
+
+                            <!-- Result -->
+                            <div class="form-group span-2">
+
+                                <label class="form-label">
+                                    Result
+                                </label>
+
+                                <textarea id="createLabResult"
+                                          class="form-control"
+                                          rows="3"
+                                          placeholder="Enter result or leave as Pending"></textarea>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="modal-footer-bar">
+
+                            <button type="button"
+                                    class="btn-modal-cancel"
+                                    data-bs-dismiss="modal">
+
+                                Cancel
+
+                            </button>
+
+
+                            <button type="submit"
+                                    class="btn-modal-confirm">
+
+                                Order Test
+
+                            </button>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    
+    <!-- MODAL: EDIT LAB TEST -->
+    
+
+    <div class="modal fade"
+         id="editLabTestModal"
+         tabindex="-1"
+         aria-hidden="true">
+
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+
+            <div class="modal-content"
+                 style="border:none;
+               border-radius:16px;
+               box-shadow:0 20px 40px rgba(0,0,0,.12);">
+
+                <div class="p-4">
+
+                    <div class="modal-header-bar">
+
+                        <div>
+
+                            <small id="editLabTestLabel"
+                                   style="font-size:.7rem;
+                               font-weight:700;
+                               text-transform:uppercase;
+                               letter-spacing:.05em;
+                               color:var(--text-muted);">
+
+                                Lab Test
+
+                            </small>
+
+                            <div class="modal-title mt-1">
+                                Edit Lab Test
+                            </div>
+
+                        </div>
+
+
+                        <button type="button"
+                                class="modal-close-btn"
+                                data-bs-dismiss="modal">
+
+                            <i class="bi bi-x-lg"></i>
+
+                        </button>
+
+                    </div>
+
+
+                    <form id="editLabTestForm">
+
+                        <input type="hidden"
+                               id="editLabTestId">
+
+
+                        <div class="form-grid mb-3">
+
+                            <!-- Medical Record ID -->
+                            <div class="form-group">
+
+                                <label class="form-label">
+                                    Medical Record ID
+                                </label>
+
+                                <input type="number"
+                                       id="editLabMedicalRecordId"
+                                       class="form-control"
+                                       required>
+
+                            </div>
+
+
+                            <!-- Test Name -->
+                            <div class="form-group">
+
+                                <label class="form-label">
+                                    Test Name
+                                </label>
+
+                                <input type="text"
+                                       id="editLabTestName"
+                                       class="form-control"
+                                       required>
+
+                            </div>
+
+
+                            <!-- Category -->
+                            <div class="form-group">
+
+                                <label class="form-label">
+                                    Category
+                                </label>
+
+                                <select id="editLabCategory"
+                                        class="form-control"
+                                        required>
+
+                                    <option value="Blood Test">
+                                        Blood Test
+                                    </option>
+
+                                    <option value="Urine Test">
+                                        Urine Test
+                                    </option>
+
+                                    <option value="Imaging">
+                                        Imaging
+                                    </option>
+
+                                    <option value="Microbiology">
+                                        Microbiology
+                                    </option>
+
+                                </select>
+
+                            </div>
+
+
+                            <!-- Test Date -->
+                            <div class="form-group">
+
+                                <label class="form-label">
+                                    Test Date
+                                </label>
+
+                                <input type="date"
+                                       id="editLabTestDate"
+                                       class="form-control"
+                                       required>
+
+                            </div>
+
+
+                            <!-- Cost -->
+                            <div class="form-group span-2">
+
+                                <label class="form-label">
+                                    Cost (OMR)
+                                </label>
+
+                                <input type="number"
+                                       id="editLabCost"
+                                       step="0.001"
+                                       min="0"
+                                       class="form-control"
+                                       required>
+
+                            </div>
+
+
+                            <!-- Result -->
+                            <div class="form-group span-2">
+
+                                <label class="form-label">
+                                    Result
+                                </label>
+
+                                <textarea id="editLabResult"
+                                          class="form-control"
+                                          rows="3"></textarea>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="modal-footer-bar">
+
+                            <button type="button"
+                                    class="btn-modal-cancel"
+                                    data-bs-dismiss="modal">
+
+                                Cancel
+
+                            </button>
+
+
+                            <button type="submit"
+                                    class="btn-modal-confirm">
+
+                                Save Lab Test
+
+                            </button>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    
+    <!-- MODAL: UPDATE RESULT -->
+ 
+
+    <div class="modal fade"
+         id="updateResultModal"
+         tabindex="-1"
+         aria-hidden="true">
+
+        <div class="modal-dialog modal-dialog-centered">
+
+            <div class="modal-content"
+                 style="border:none;
+               border-radius:16px;
+               box-shadow:0 20px 40px rgba(0,0,0,.12);">
+
+                <div class="p-4">
+
+                    <div class="modal-header-bar">
+
+                        <div>
+
+                            <small id="updateLabTestLabel"
+                                   style="font-size:.7rem;
+                               font-weight:700;
+                               text-transform:uppercase;
+                               letter-spacing:.05em;
+                               color:var(--text-muted);">
+
+                                Lab Test
+
+                            </small>
+
+                            <div class="modal-title mt-1">
+                                Update Lab Test Result
+                            </div>
+
+                        </div>
+
+
+                        <button type="button"
+                                class="modal-close-btn"
+                                data-bs-dismiss="modal">
+
+                            <i class="bi bi-x-lg"></i>
+
+                        </button>
+
+                    </div>
+
+
+                    <input type="hidden"
+                           id="updateLabTestId">
+
+
+                    <div class="form-group mb-3">
+
+                        <label class="form-label">
+                            Test Name
+                        </label>
+
+                        <input type="text"
+                               id="updateLabTestName"
+                               class="form-control"
+                               readonly>
+
+                    </div>
+
+
+                    <div class="form-group mb-3">
+
+                        <label class="form-label">
+                            Result
+                        </label>
+
+                        <textarea id="updateLabTestResult"
+                                  class="form-control"
+                                  rows="3"
+                                  placeholder="Enter lab test result"
+                                  required></textarea>
+
+                    </div>
+
+
+                    <div class="modal-footer-bar">
+
+                        <button type="button"
+                                class="btn-modal-cancel"
+                                data-bs-dismiss="modal">
+
+                            Cancel
+
+                        </button>
+
+
+                        <button type="button"
+                                id="updateLabResultBtn"
+                                class="btn-modal-confirm">
+
+                            Update Result
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- MODAL: DELETE LAB TEST -->
+    
+
+    <div class="modal fade"
+         id="deleteLabTestModal"
+         tabindex="-1"
+         aria-hidden="true">
+
+        <div class="modal-dialog modal-dialog-centered">
+
+            <div class="modal-content"
+                 style="border:none;
+               border-radius:16px;
+               box-shadow:0 20px 40px rgba(0,0,0,.12);">
+
+                <div class="p-4 text-center">
+
+                    <div class="modal-icon-wrap">
+
+                        <i class="bi bi-exclamation-triangle-fill"></i>
+
+                    </div>
+
+
+                    <div class="modal-title mb-2">
+
+                        Delete Lab Test?
+
+                    </div>
+
+
+                    <input type="hidden"
+                           id="deleteLabTestId">
+
+
+                    <p class="modal-desc">
+
+                        Lab Test
+
+                        <strong id="deleteLabTestIdLabel">
+                            -
+                        </strong>
+
+                        will be permanently deleted.
+
+                        This action cannot be undone.
+
+                    </p>
+
+
+                    <div class="d-flex gap-2">
+
+                        <button type="button"
+                                class="btn-modal-cancel flex-fill"
+                                data-bs-dismiss="modal">
+
+                            Cancel
+
+                        </button>
+
+
+                        <button type="button"
+                                id="confirmDeleteLabTestBtn"
+                                class="btn-modal-delete flex-fill">
+
+                            Delete Lab Test
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Bootstrap -->
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- API Functions -->
+
+    <script src="api.js"></script>
+
+    <!-- Lab Tests Page -->
+
+    <script src="lab-tests.js"></script>
+
 </body>
 
 </html>
