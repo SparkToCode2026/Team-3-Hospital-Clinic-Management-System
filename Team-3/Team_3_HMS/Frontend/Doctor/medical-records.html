@@ -475,37 +475,84 @@
             </div>
         </div>
     </div>
-
     <!-- ══ MODAL: Edit Diagnosis ══ -->
     <div class="modal fade" id="editDiagnosisModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content" style="border:none;border-radius:16px;box-shadow:0 20px 40px rgba(0,0,0,.12);">
+            <div class="modal-content"
+                 style="border:none;border-radius:16px;box-shadow:0 20px 40px rgba(0,0,0,.12);">
+
                 <div class="p-4">
+
                     <div class="modal-header-bar">
                         <div>
-                            <small style="font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-muted);">
-                                Medical
-                                Record #MR-1024
+                            <small id="editDiagnosisRecordLabel"
+                                   style="font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-muted);">
+                                Medical Record
                             </small>
-                            <div class="modal-title mt-1">Edit Diagnosis</div>
+
+                            <div class="modal-title mt-1">
+                                Edit Diagnosis
+                            </div>
                         </div>
-                        <button type="button" class="modal-close-btn" data-bs-dismiss="modal"><i class="bi bi-x-lg"></i></button>
+
+                        <button type="button"
+                                class="modal-close-btn"
+                                data-bs-dismiss="modal">
+                            <i class="bi bi-x-lg"></i>
+                        </button>
                     </div>
-                    <form>
+
+
+                    <form id="editDiagnosisForm">
+
+                        <!-- Store selected Medical Record ID -->
+                        <input type="hidden"
+                               id="diagnosisRecordId">
+
+
+                        <!-- Diagnosis -->
                         <div class="form-group mb-3">
-                            <label class="form-label">Diagnosis</label>
-                            <input type="text" class="form-control" value="Type 2 Diabetes">
+                            <label class="form-label">
+                                Diagnosis
+                            </label>
+
+                            <input type="text"
+                                   id="editDiagnosisOnly"
+                                   class="form-control"
+                                   required>
                         </div>
+
+
+                        <!-- Treatment Plan -->
                         <div class="form-group mb-3">
-                            <label class="form-label">Treatment Plan</label>
-                            <textarea class="form-control"
-                                      rows="4">Continue medication, monitor blood glucose levels, and schedule a follow-up consultation.</textarea>
+                            <label class="form-label">
+                                Treatment Plan
+                            </label>
+
+                            <textarea id="editDiagnosisTreatmentPlan"
+                                      class="form-control"
+                                      rows="4"
+                                      required></textarea>
                         </div>
+
+
                         <div class="modal-footer-bar">
-                            <button type="button" class="btn-modal-cancel" data-bs-dismiss="modal">Cancel</button>
-                            <button type="submit" class="btn-modal-confirm">Save Changes</button>
+
+                            <button type="button"
+                                    class="btn-modal-cancel"
+                                    data-bs-dismiss="modal">
+                                Cancel
+                            </button>
+
+                            <button type="submit"
+                                    class="btn-modal-confirm">
+                                Save Changes
+                            </button>
+
                         </div>
+
                     </form>
+
                 </div>
             </div>
         </div>
