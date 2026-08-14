@@ -108,12 +108,19 @@
         <!-- Header Action Row -->
         <div class="table-header-row" style="margin-bottom: 1.25rem;">
           <div>
-            <div class="table-title" style="font-size: 1.1rem;">Clinical Divisions Directory</div>
-          </div>
-          <button class="btn-add-user" onclick="alert('Add Department dialog triggered')">
-            + Add Department
-          </button>
-        </div>
+          <div style="display: flex; gap: 8px;">
+
+  <button class="btn-add-user" onclick="addDepartment()">
+  + Add Department
+</button>
+
+  <button
+    onclick="deleteDepartment()"
+    style="background-color: #dc2626; color: white; border: none; padding: 8px 12px; border-radius: 6px; cursor: pointer;">
+   - Delete Department
+  </button>
+
+</div>
 
         <!-- Navigation Tabs -->
         <div class="admin-tabs">
@@ -129,12 +136,25 @@
               <input type="text" class="edit-form-control"
                 placeholder="Search departments by name, building, or head doctor..." style="width: 100%;" />
             </div>
-            <button class="btn-search-blue" onclick="alert('Filtering departments...')">Search</button>
+            <button class="btn-search-blue" onclick="searchDepartments()">
+  Search
+</button>
+<button class="btn-search-blue" onclick="getSortedDepartments()">
+  Sort
+</button>
+<button class="btn-add-user" onclick="updateDepartment()">
+  Update Department
+</button>
+<button class="btn-add-user" onclick="updateBuildingLocation()">
+  Update Location
+</button>
+
+
           </div>
         </div>
 
         <!-- Department Cards Grid -->
-        <div class="admin-cards-grid">
+        <div class="admin-cards-grid" id="departmentsContainer">
 
           <!-- Cardiology -->
           <div class="admin-dept-card">
@@ -262,6 +282,313 @@
     </div>
 
   </div>
+   <script src="../js/api.js"></script>
+
+<script>
+  async function loadDepartments() { try { const response = await fetch(`${API_BASE_URL}/Department/GetAllDepartments`); if (!response.ok) { throw new Error("Failed to load departments"); } const departments = await response.json(); const container = document.getElementById("departmentsContainer"); departments.forEach(department => { const card = document.createElement("div"); card.className = "admin-dept-card"; card.innerHTML = ` <div class="admin-dept-header"> <h3 class="admin-dept-title">${department.name}</h3> </div> <p class="admin-dept-desc"> ${department.description || ""} </p> <div class="admin-dept-meta"> <i class="bi bi-geo-alt-fill" style="color: var(--brand-accent);"></i> ${department.buildingLocation || ""} </div> <div class="admin-dept-meta"> <i class="bi bi-person-fill" style="color: var(--text-secondary);"></i> Doctor ID: ${department.doctorProfileId || "-"} </div> <div class="admin-dept-footer"> <span style="color: var(--text-secondary); font-weight: 600;"> Department ID: ${department.departmentId} </span> </div> `; container.appendChild(card); }); console.log("Departments loaded:", departments); } catch (error) { console.error("Error loading departments:", error); } }
+async function searchDepartments() {
+  const searchValue = document.querySelector('.search-filter-card input').value.trim();
+
+  // If search box is empty, show all departments
+  if (searchValue === "") {
+    loadDepartments();
+    return;
+  }
+
+  const container = document.getElementById("departmentsContainer");
+
+  try {
+    let departments = [];
+
+    // If the user entered a number, search by ID
+    if (!isNaN(searchValue)) {
+
+      const response = await fetch(
+        `${API_BASE_URL}/Department/GetDepartmentByID?id=${Number(searchValue)}`
+      );
+
+      if (response.ok) {
+        const department = await response.json();
+        departments = [department];
+      }
+
+    } else {
+
+      // Otherwise search by name
+      const response = await fetch(
+        `${API_BASE_URL}/Department/GetDepartmentsByName?name=${encodeURIComponent(searchValue)}`
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to search departments");
+      }
+
+      departments = await response.json();
+    }
+
+    // Clear old cards
+    container.innerHTML = "";
+
+    // Display results
+    departments.forEach(department => {
+      const card = document.createElement("div");
+
+      card.className = "admin-dept-card";
+
+      card.innerHTML = `
+        <div class="admin-dept-header">
+          <h3 class="admin-dept-title">${department.name}</h3>
+        </div>
+
+        <p class="admin-dept-desc">
+          ${department.description || ""}
+        </p>
+
+        <div class="admin-dept-meta">
+          <i class="bi bi-geo-alt-fill"></i>
+          ${department.buildingLocation || ""}
+        </div>
+
+        <div class="admin-dept-meta">
+          <i class="bi bi-person-fill"></i>
+          Doctor ID: ${department.doctorProfileId || "-"}
+        </div>
+
+        <div class="admin-dept-footer">
+          <span>
+            Department ID: ${department.departmentId}
+          </span>
+        </div>
+      `;
+
+      container.appendChild(card);
+    });
+
+    console.log("Search results:", departments);
+
+  } catch (error) {
+    console.error("Error searching departments:", error);
+  }
+}
+async function getSortedDepartments() {
+  try {
+    const response = await fetch(
+      `${API_BASE_URL}/Department/GetDepartmentsSorted`
+    );
+
+    if (!response.ok) {
+      throw new Error("Failed to load sorted departments");
+    }
+
+    const departments = await response.json();
+
+    console.log("Sorted departments:", departments);
+
+    const container = document.getElementById("departmentsContainer");
+
+    container.innerHTML = "";
+
+    departments.forEach(department => {
+      const card = document.createElement("div");
+
+      card.className = "admin-dept-card";
+
+      card.innerHTML = `
+        <div class="admin-dept-header">
+          <h3 class="admin-dept-title">${department.name}</h3>
+        </div>
+
+        <p class="admin-dept-desc">
+          ${department.description || ""}
+        </p>
+
+        <div class="admin-dept-meta">
+          <i class="bi bi-geo-alt-fill"></i>
+          ${department.buildingLocation || ""}
+        </div>
+
+        <div class="admin-dept-meta">
+          <i class="bi bi-person-fill"></i>
+          Doctor ID: ${department.doctorProfileId || "-"}
+        </div>
+
+        <div class="admin-dept-footer">
+          <span>
+            Department ID: ${department.departmentId}
+          </span>
+        </div>
+      `;
+
+      container.appendChild(card);
+    });
+
+  } catch (error) {
+    console.error("Error loading sorted departments:", error);
+  }
+}
+
+async function addDepartment() {
+  const name = prompt("Department name:");
+  const description = prompt("Department description:");
+  const buildingLocation = prompt("Building location:");
+  const doctorProfileId = prompt("Doctor Profile ID:");
+
+  if (!name || !description || !buildingLocation || !doctorProfileId) {
+    return;
+  }
+
+  const department = {
+    name: name,
+    description: description,
+    buildingLocation: buildingLocation,
+    doctorProfileId: Number(doctorProfileId)
+  };
+
+  try {
+    const response = await fetch(
+      `${API_BASE_URL}/Department/AddDepartment`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(department)
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Failed to add department");
+    }
+
+    const result = await response.json();
+
+    console.log("Department added:", result);
+
+    loadDepartments();
+
+  } catch (error) {
+    console.error("Error adding department:", error);
+  }
+}
+
+
+async function updateDepartment() {
+  const id = prompt("Enter Department ID:");
+
+  if (!id) {
+    return;
+  }
+
+  const name = prompt("Enter new department name:");
+  const description = prompt("Enter new description:");
+  const buildingLocation = prompt("Enter new building location:");
+  const doctorProfileId = prompt("Enter Doctor Profile ID:");
+
+  const department = {
+    name: name,
+    description: description,
+    buildingLocation: buildingLocation,
+    doctorProfileId: Number(doctorProfileId)
+  };
+
+  try {
+    const response = await fetch(
+      `${API_BASE_URL}/Department/UpdateDepartment?id=${id}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(department)
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Failed to update department");
+    }
+
+    const result = await response.json();
+
+    console.log("Department updated:", result);
+
+    // Reload departments after update
+    loadDepartments();
+
+  } catch (error) {
+    console.error("Error updating department:", error);
+  }
+}
+async function updateBuildingLocation() {
+  const id = prompt("Enter Department ID:");
+
+  if (!id) {
+    return;
+  }
+
+  const newLocation = prompt("Enter new building location:");
+
+  if (!newLocation) {
+    return;
+  }
+
+  try {
+    const response = await fetch(
+      `${API_BASE_URL}/Department/UpdateBuildingLocation?id=${id}&newLocation=${encodeURIComponent(newLocation)}`,
+      {
+        method: "PATCH"
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Failed to update building location");
+    }
+
+    const result = await response.json();
+
+    console.log("Building location updated:", result);
+
+    // Reload departments after update
+    loadDepartments();
+
+  } catch (error) {
+    console.error("Error updating building location:", error);
+  }
+}
+
+async function deleteDepartment() {
+  const id = prompt("Enter Department ID to delete:");
+
+  if (!id) {
+    return;
+  }
+
+  try {
+    const response = await fetch(
+      `${API_BASE_URL}/Department/RemoveDepartment?id=${id}`,
+      {
+        method: "DELETE"
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Failed to delete department");
+    }
+
+    const result = await response.json();
+
+    console.log("Department deleted:", result);
+
+    // Reload departments after delete
+    loadDepartments();
+
+  } catch (error) {
+    console.error("Error deleting department:", error);
+  }
+}
+
+  loadDepartments();
+  
+</script>
 </body>
 
 </html>

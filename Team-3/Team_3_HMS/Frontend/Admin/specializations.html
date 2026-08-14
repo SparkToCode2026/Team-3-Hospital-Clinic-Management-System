@@ -106,16 +106,28 @@
           </div>
         </div>
 
-        <!-- Header Action Row -->
-        <div class="table-header-row" style="margin-bottom: 1.25rem;">
-          <div>
-            <div class="table-title" style="font-size: 1.1rem;">Clinical Specializations Directory</div>
-          </div>
-          <button class="btn-add-user" onclick="alert('Add Specialization dialog triggered')">
-            + Add Specialization
-          </button>
-        </div>
+       <!-- Header Action Row -->
+<div class="table-header-row" style="margin-bottom: 1.25rem;">
+  <div>
+    <div class="table-title" style="font-size: 1.1rem;">
+      Clinical Specializations Directory
+    </div>
+  </div>
 
+  <div style="display: flex; gap: 8px;">
+
+    <button class="btn-add-user" onclick="addSpecialization()">
+      + Add Specialization
+    </button>
+
+    <button
+      onclick="deleteSpecialization()"
+      style="background-color: #dc2626; color: white; border: none; padding: 8px 12px; border-radius: 6px; cursor: pointer;">
+      - Delete Specialization
+    </button>
+
+  </div>
+</div>
         <!-- Navigation Tabs -->
         <div class="admin-tabs">
           <a href="departments.html" class="admin-tab">Departments</a>
@@ -130,13 +142,26 @@
               <input type="text" class="edit-form-control" placeholder="Search specializations by name or category..."
                 style="width: 100%;" />
             </div>
-            <button class="btn-search-blue" onclick="alert('Filtering specializations...')">Search</button>
+            <button class="btn-search-blue" onclick="searchSpecializations()">
+  Search
+</button>
+
+<button class="btn-search-blue" onclick="getSortedSpecializations()">
+  Sort
+</button>
+
+<button class="btn-add-user" onclick="updateSpecialization()">
+  Update Specialization
+</button>
+<button class="btn-add-user" onclick="updateSpecializationDescription()">
+  Update Description
+</button>
           </div>
         </div>
 
         <!-- Specialization Cards Grid -->
-        <div class="admin-cards-grid">
-
+       <div class="admin-cards-grid" id="specializationsContainer">
+      </div>
           <!-- Cardiology -->
           <div class="admin-dept-card">
             <div class="admin-dept-header">
@@ -222,7 +247,378 @@
       </main>
     </div>
 
-  </div>
-</body>
+     </div>
+<script src="../js/api.js"></script>
 
-</html>
+<script>
+
+function createSpecializationCard(specialization) {
+
+  const card = document.createElement("div");
+
+  card.className = "admin-dept-card";
+
+  card.innerHTML = `
+    <div class="admin-dept-header">
+      <h3 class="admin-dept-title">
+        ${specialization.name}
+      </h3>
+    </div>
+
+    <p class="admin-dept-desc">
+      ${specialization.description || ""}
+    </p>
+
+    <div class="admin-dept-meta">
+      <i class="bi bi-award"></i>
+      Specialization ID: ${specialization.specializationId}
+    </div>
+
+    <div class="admin-dept-meta">
+      <i class="bi bi-person-fill"></i>
+      Doctor ID: ${specialization.doctorProfileId || "-"}
+    </div>
+  `;
+
+  return card;
+}
+
+
+async function loadSpecializations() {
+
+  try {
+
+    const response = await fetch(
+      `${API_BASE_URL}/Specialization/GetAllSpecializations`
+    );
+
+    if (!response.ok) {
+      throw new Error("Failed to load specializations");
+    }
+
+    const specializations = await response.json();
+
+    const container =
+      document.getElementById("specializationsContainer");
+
+    // Remove only cards previously created from database
+    container
+      .querySelectorAll(".database-specialization")
+      .forEach(card => card.remove());
+
+    specializations.forEach(specialization => {
+
+      const card = createSpecializationCard(specialization);
+
+      // Mark this card as a database card
+      card.classList.add("database-specialization");
+
+      container.appendChild(card);
+    });
+
+    console.log("Database specializations:", specializations);
+
+  } catch (error) {
+
+    console.error("Error loading specializations:", error);
+
+  }
+}
+
+
+async function searchSpecializations() {
+
+  const searchValue =
+    document.querySelector(".search-filter-card input").value.trim();
+
+  if (searchValue === "") {
+    loadSpecializations();
+    return;
+  }
+
+  try {
+
+    let specializations = [];
+
+    // Search by ID
+    if (!isNaN(searchValue)) {
+
+      const response = await fetch(
+        `${API_BASE_URL}/Specialization/GetSpecialization?id=${Number(searchValue)}`
+      );
+
+      if (response.ok) {
+
+        const specialization = await response.json();
+
+        specializations = [specialization];
+
+      }
+
+    }
+
+    // Search by name
+    else {
+
+      const response = await fetch(
+        `${API_BASE_URL}/Specialization/GetSpecializationsByName?name=${encodeURIComponent(searchValue)}`
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to search specializations");
+      }
+
+      specializations = await response.json();
+    }
+
+    const container =
+      document.getElementById("specializationsContainer");
+
+    // Remove only database cards
+    container
+      .querySelectorAll(".database-specialization")
+      .forEach(card => card.remove());
+
+    specializations.forEach(specialization => {
+
+      const card = createSpecializationCard(specialization);
+
+      card.classList.add("database-specialization");
+
+      container.appendChild(card);
+    });
+
+    console.log("Search results:", specializations);
+
+  } catch (error) {
+
+    console.error("Error searching specializations:", error);
+
+  }
+}
+
+
+async function getSortedSpecializations() {
+
+  try {
+
+    const response = await fetch(
+      `${API_BASE_URL}/Specialization/GetSpecializationsSorted`
+    );
+
+    if (!response.ok) {
+      throw new Error("Failed to load sorted specializations");
+    }
+
+    const specializations = await response.json();
+
+    const container =
+      document.getElementById("specializationsContainer");
+
+    // Remove previous database cards
+    container
+      .querySelectorAll(".database-specialization")
+      .forEach(card => card.remove());
+
+    // Add ALL sorted database specializations
+    specializations.forEach(specialization => {
+
+      const card = createSpecializationCard(specialization);
+
+      card.classList.add("database-specialization");
+
+      container.appendChild(card);
+    });
+
+    console.log("Sorted 7 specializations:", specializations);
+
+  } catch (error) {
+
+    console.error("Error loading sorted specializations:", error);
+
+  }
+}
+
+
+async function addSpecialization() {
+
+  const name = prompt("Specialization name:");
+  const description = prompt("Specialization description:");
+  const doctorProfileId = prompt("Doctor Profile ID:");
+
+  if (!name || !description || !doctorProfileId) {
+    return;
+  }
+
+  const specialization = {
+
+    name: name,
+    description: description,
+    doctorProfileId: Number(doctorProfileId)
+
+  };
+
+  try {
+
+    const response = await fetch(
+      `${API_BASE_URL}/Specialization/AddSpecialization`,
+      {
+        method: "POST",
+
+        headers: {
+          "Content-Type": "application/json"
+        },
+
+        body: JSON.stringify(specialization)
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Failed to add specialization");
+    }
+
+    const result = await response.json();
+
+    console.log("Specialization added:", result);
+
+    loadSpecializations();
+
+  } catch (error) {
+
+    console.error("Error adding specialization:", error);
+
+  }
+}
+
+
+async function updateSpecialization() {
+
+  const id = prompt("Enter Specialization ID:");
+
+  if (!id) {
+    return;
+  }
+
+  const name =
+    prompt("Enter new specialization name:");
+
+  const description =
+    prompt("Enter new description:");
+
+  const doctorProfileId =
+    prompt("Enter Doctor Profile ID:");
+
+  const specialization = {
+
+    name: name,
+    description: description,
+    doctorProfileId: Number(doctorProfileId)
+
+  };
+
+  try {
+
+    const response = await fetch(
+      `${API_BASE_URL}/Specialization/UpdateSpecialization?id=${id}`,
+      {
+        method: "PUT",
+
+        headers: {
+          "Content-Type": "application/json"
+        },
+
+        body: JSON.stringify(specialization)
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Failed to update specialization");
+    }
+
+    const result = await response.json();
+
+    console.log("Specialization updated:", result);
+
+    loadSpecializations();
+
+  } catch (error) {
+
+    console.error("Error updating specialization:", error);
+
+  }
+}
+
+
+async function deleteSpecialization() {
+
+  const id =
+    prompt("Enter Specialization ID to delete:");
+
+  if (!id) {
+    return;
+  }
+
+  try {
+
+    const response = await fetch(
+      `${API_BASE_URL}/Specialization/RemoveSpecialization?id=${id}`,
+      {
+        method: "DELETE"
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Failed to delete specialization");
+    }
+
+    const result = await response.json();
+
+    console.log("Specialization deleted:", result);
+
+    loadSpecializations();
+
+  } catch (error) {
+
+    console.error("Error deleting specialization:", error);
+
+  }
+}
+async function updateSpecializationDescription() {
+
+  const id = prompt("Enter Specialization ID:");
+
+  if (!id) return;
+
+  const newDescription = prompt("Enter new description:");
+
+  if (!newDescription) return;
+
+  try {
+
+    const response = await fetch(
+      `${API_BASE_URL}/Specialization/UpdateSpecializationDescription?id=${id}&newDescription=${encodeURIComponent(newDescription)}`,
+      {
+        method: "PATCH"
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Failed to update description");
+    }
+
+    const result = await response.json();
+
+    console.log("Description updated:", result);
+
+    loadSpecializations();
+
+  } catch (error) {
+
+    console.error("Error:", error);
+
+  }
+}
+
+loadSpecializations();
+
+</script>

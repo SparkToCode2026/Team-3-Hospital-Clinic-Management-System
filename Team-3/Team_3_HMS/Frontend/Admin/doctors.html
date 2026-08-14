@@ -5,11 +5,13 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Doctor Profiles Dashboard – MedCore HMS</title>
-  <meta name="description" content="Manage active physicians, consultation fees, and department assignments." />
 
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+    rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet" />
   <link href="css/admin.css" rel="stylesheet" />
+
   <style>
     .toast {
       padding: 0.85rem 1.1rem;
@@ -20,7 +22,6 @@
       align-items: center;
       gap: 0.65rem;
       margin-bottom: 1.25rem;
-      transition: all 0.2s ease;
     }
 
     .success-toast {
@@ -41,7 +42,7 @@
       width: 100%;
       max-width: 520px;
       padding: 1.75rem;
-      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
       display: flex;
       flex-direction: column;
       gap: 1rem;
@@ -84,23 +85,6 @@
       gap: 0.85rem;
     }
 
-    .error-input {
-      border-color: var(--red) !important;
-      background: var(--red-bg) !important;
-    }
-
-    .required-text {
-      color: var(--red);
-      font-size: 0.72rem;
-      font-weight: 600;
-    }
-
-    .error-message {
-      color: var(--red-alert-text);
-      font-size: 0.75rem;
-      margin: -0.4rem 0 0 0;
-    }
-
     .modal-buttons {
       display: flex;
       justify-content: flex-end;
@@ -110,7 +94,6 @@
       margin-top: 0.5rem;
     }
 
-    /* Danger / Delete Card Modal */
     .danger-card-box {
       background: #ffffff;
       border: 1px solid var(--red-alert-border);
@@ -154,186 +137,307 @@
       gap: 0.75rem;
     }
 
-    .cancel-btn-lg {
-      flex: 1;
-      padding: 0.65rem;
-      background: var(--bg-page);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      font-size: 0.85rem;
-      font-weight: 600;
-      color: var(--text-primary);
-      cursor: pointer;
-    }
-
+    .cancel-btn-lg,
     .delete-btn-lg {
       flex: 1;
       padding: 0.65rem;
-      background: var(--red);
-      color: #ffffff;
-      border: none;
       border-radius: 8px;
       font-size: 0.85rem;
       font-weight: 600;
       cursor: pointer;
-      transition: background 0.18s;
     }
 
-    .delete-btn-lg:hover {
-      background: #b91c1c;
+    .cancel-btn-lg {
+      background: var(--bg-page);
+      border: 1px solid var(--border);
+      color: var(--text-primary);
+    }
+
+    .delete-btn-lg {
+      background: var(--red);
+      color: #ffffff;
+      border: none;
     }
   </style>
 </head>
 
 <body>
+
   <div class="portal-wrapper">
 
-    <!-- ══════════════════ SIDEBAR ══════════════════ -->
+    <!-- SIDEBAR -->
     <aside class="sidebar">
+
       <div class="sidebar-brand">
+
         <div class="sidebar-logo">
           <i class="bi bi-hospital"></i>
         </div>
+
         <div>
           <div class="sidebar-brand-name">MedCore</div>
           <div class="sidebar-brand-sub">HMS Platform</div>
         </div>
+
       </div>
 
       <nav class="sidebar-nav">
+
         <a href="dashboard.html" class="nav-item">
           <i class="bi bi-grid-1x2"></i> Dashboard
         </a>
+
         <a href="doctors.html" class="nav-item active">
           <i class="bi bi-person-badge"></i> Doctor Profiles
         </a>
+
         <a href="departments.html" class="nav-item">
           <i class="bi bi-hospital"></i> Departments
         </a>
+
         <a href="specializations.html" class="nav-item">
           <i class="bi bi-award"></i> Specializations
         </a>
+
         <span class="nav-item disabled">
           <i class="bi bi-people"></i> User Management
         </span>
+
         <span class="nav-item disabled">
           <i class="bi bi-receipt"></i> Invoices
         </span>
+
       </nav>
 
       <div class="sidebar-user">
+
         <div>
           <div class="sidebar-user-name">Admin Console</div>
           <div class="sidebar-user-role">UID: ADM-2022</div>
         </div>
+
       </div>
+
     </aside>
 
-    <!-- ══════════════════ MAIN CONTENT ══════════════════ -->
+
+    <!-- MAIN CONTENT -->
     <div class="main-content">
 
-      <!-- Topbar -->
+      <!-- TOPBAR -->
       <header class="topbar">
-        <span class="topbar-title">Doctor Profiles Dashboard</span>
+
+        <span class="topbar-title">
+          Doctor Profiles Dashboard
+        </span>
+
         <div class="topbar-actions">
-          <span class="topbar-user-label">Sarah J. (Admin)</span>
-          <a href="../Assets/login.html" class="btn-logout" title="Log Out"><i class="bi bi-box-arrow-right"></i> Log
-            Out</a>
+
+          <span class="topbar-user-label">
+            Sarah J. (Admin)
+          </span>
+
+          <a href="../Assets/login.html" class="btn-logout">
+            <i class="bi bi-box-arrow-right"></i>
+            Log Out
+          </a>
+
         </div>
+
       </header>
 
-      <!-- Page Body -->
+
+      <!-- PAGE BODY -->
       <main class="page-body">
 
-        <!-- SUCCESS TOAST BANNER -->
-        <div class="toast success-toast" id="toastSuccess" style="display: none;">
-          ✓ Doctor profile added successfully
+        <!-- TOASTS -->
+
+        <div class="toast success-toast" id="toastSuccess" style="display:none;">
+          ✓ Operation completed successfully
         </div>
 
-        <!-- ERROR TOAST BANNER -->
-        <div class="toast error-toast" id="toastError" style="display: none;">
-          ! Database Error — Doctor profile not found
+        <div class="toast error-toast" id="toastError" style="display:none;">
+          ! Database Error
         </div>
 
-        <!-- Dedicated Doctor Dashboard Stats Grid -->
+
+        <!-- STATS -->
         <div class="admin-stats-grid">
+
           <div class="admin-stat-card">
+
             <div>
-              <div class="admin-stat-label">Total Active Physicians</div>
-              <div class="admin-stat-val">86</div>
+              <div class="admin-stat-label">
+                Total Active Physicians
+              </div>
+
+              <div class="admin-stat-val" id="totalDoctors">
+                0
+              </div>
             </div>
+
             <div class="admin-stat-icon">
               <i class="bi bi-person-badge"></i>
             </div>
+
           </div>
 
+
           <div class="admin-stat-card">
+
             <div>
-              <div class="admin-stat-label">Average Consult Fee</div>
-              <div class="admin-stat-val">$180.00</div>
+              <div class="admin-stat-label">
+                Average Consult Fee
+              </div>
+
+              <div class="admin-stat-val" id="averageFee">
+                $0.00
+              </div>
             </div>
+
             <div class="admin-stat-icon">
               <i class="bi bi-currency-dollar"></i>
             </div>
+
           </div>
 
+
           <div class="admin-stat-card">
+
             <div>
-              <div class="admin-stat-label">Clinical Divisions Covered</div>
-              <div class="admin-stat-val">6 Departments</div>
+              <div class="admin-stat-label">
+                Clinical Divisions Covered
+              </div>
+
+              <div class="admin-stat-val" id="totalDepartments">
+                0 Departments
+              </div>
             </div>
+
             <div class="admin-stat-icon">
               <i class="bi bi-hospital"></i>
             </div>
+
           </div>
+
         </div>
 
-        <!-- Header Action Row -->
-        <div class="table-header-row" style="margin-bottom: 1.25rem;">
+
+        <!-- HEADER -->
+        <div class="table-header-row" style="margin-bottom:1.25rem;">
+
           <div>
-            <div class="table-title" style="font-size: 1.1rem;">Physician Directory & Roster</div>
+
+            <div class="table-title" style="font-size:1.1rem;">
+              Physician Directory & Roster
+            </div>
+
           </div>
+
           <button class="btn-add-user" onclick="openAddDoctorModal()">
             + Add Doctor Profile
           </button>
+
         </div>
 
-        <!-- Search & Filter Card -->
+
+        <!-- SEARCH FILTER -->
         <div class="search-filter-card">
+
           <div class="search-filter-form">
-            <div class="filter-group" style="flex: 1;">
-              <span class="filter-label">SEARCH</span>
-              <input type="text" class="edit-form-control" placeholder="Search by name or specialty..."
-                style="width: 100%;" />
+
+            <div class="filter-group" style="flex:1;">
+
+              <span class="filter-label">
+                SEARCH BY ID
+              </span>
+
+              <input
+                type="text"
+                id="searchInput"
+                class="edit-form-control"
+                placeholder="Search by Doctor Profile ID..."
+                style="width:100%;"
+              />
+
             </div>
+
+
             <div class="filter-group">
-              <span class="filter-label">EXPERIENCE</span>
-              <select class="filter-select">
-                <option selected>All Levels</option>
-                <option>8+ Years</option>
-                <option>10+ Years</option>
-                <option>15+ Years</option>
+
+              <span class="filter-label">
+                EXPERIENCE
+              </span>
+
+              <select id="experienceFilter" class="filter-select">
+
+                <option value="">
+                  All Levels
+                </option>
+
+                <option value="8">
+                  8+ Years
+                </option>
+
+                <option value="10">
+                  10+ Years
+                </option>
+
+                <option value="15">
+                  15+ Years
+                </option>
+
               </select>
+
             </div>
+
+
             <div class="filter-group">
-              <span class="filter-label">SORT FEE</span>
-              <select class="filter-select">
-                <option selected>Fee: High to Low</option>
-                <option>Fee: Low to High</option>
+
+              <span class="filter-label">
+                SORT FEE
+              </span>
+
+              <select id="sortFee" class="filter-select">
+
+                <option value="">
+                  Default
+                </option>
+
+                <option value="asc">
+                  Fee: Low to High
+                </option>
+
+                <option value="desc">
+                  Fee: High to Low
+                </option>
+
               </select>
+
             </div>
-            <button class="btn-search-blue" onclick="triggerErrorToast()">Filter</button>
+
+
+            <button class="btn-search-blue" onclick="applyFilters()">
+              Filter
+            </button>
+
           </div>
+
         </div>
 
-        <!-- Doctor Table Card -->
-        <div class="card" style="padding: 0; overflow: hidden;">
+
+        <!-- TABLE -->
+        <div class="card" style="padding:0;overflow:hidden;">
+
           <div class="table-responsive">
+
             <table class="user-table">
+
               <thead>
+
                 <tr>
                   <th>ID</th>
-                  <th>DOCTOR NAME</th>
+                  <th>DOCTOR</th>
                   <th>LICENSE NO.</th>
                   <th>EXPERIENCE</th>
                   <th>CONSULT FEE</th>
@@ -341,305 +445,1124 @@
                   <th>DEPARTMENT</th>
                   <th>ACTIONS</th>
                 </tr>
+
               </thead>
-              <tbody>
-                <!-- Doctor 1 -->
+
+
+              <tbody id="doctorTableBody">
+
                 <tr>
-                  <td class="usr-id">DOC-001</td>
-                  <td>
-                    <div style="display: flex; align-items: center; gap: 0.65rem;">
-                      <div
-                        style="width: 32px; height: 32px; border-radius: 50%; background: #e0f2fe; color: #0284c7; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.78rem;">
-                        SA</div>
-                      <strong>Dr. Sarah Ahmed</strong>
-                    </div>
+
+                  <td colspan="8" style="text-align:center;">
+                    Loading doctors...
                   </td>
-                  <td>LIC-48291</td>
-                  <td>15 Years</td>
-                  <td style="font-weight: 700; color: var(--brand-accent);">$220.00</td>
-                  <td>Cardiology</td>
-                  <td><span class="role-badge doctor">Cardiology</span></td>
-                  <td>
-                    <button class="btn-tbl-edit" onclick="window.location.href='doctor-profile.html'">Edit</button>
-                    <button class="btn-tbl-delete"
-                      onclick="openDeleteDoctorModal('DOC-001', 'Dr. Sarah Ahmed')">Delete</button>
-                  </td>
+
                 </tr>
 
-                <!-- Doctor 2 -->
-                <tr>
-                  <td class="usr-id">DOC-002</td>
-                  <td>
-                    <div style="display: flex; align-items: center; gap: 0.65rem;">
-                      <div
-                        style="width: 32px; height: 32px; border-radius: 50%; background: #e0f2fe; color: #0284c7; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.78rem;">
-                        KM</div>
-                      <strong>Dr. Khalid Mansoor</strong>
-                    </div>
-                  </td>
-                  <td>LIC-37105</td>
-                  <td>13 Years</td>
-                  <td style="font-weight: 700; color: var(--brand-accent);">$200.00</td>
-                  <td>Neurosurgery</td>
-                  <td><span class="role-badge admin">Neurology</span></td>
-                  <td>
-                    <button class="btn-tbl-edit" onclick="window.location.href='doctor-profile.html'">Edit</button>
-                    <button class="btn-tbl-delete"
-                      onclick="openDeleteDoctorModal('DOC-002', 'Dr. Khalid Mansoor')">Delete</button>
-                  </td>
-                </tr>
-
-                <!-- Doctor 3 -->
-                <tr>
-                  <td class="usr-id">DOC-003</td>
-                  <td>
-                    <div style="display: flex; align-items: center; gap: 0.65rem;">
-                      <div
-                        style="width: 32px; height: 32px; border-radius: 50%; background: #e0f2fe; color: #0284c7; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.78rem;">
-                        LN</div>
-                      <strong>Dr. Lina Noor</strong>
-                    </div>
-                  </td>
-                  <td>LIC-55920</td>
-                  <td>11 Years</td>
-                  <td style="font-weight: 700; color: var(--brand-accent);">$185.00</td>
-                  <td>Orthopedic Surgery</td>
-                  <td><span class="role-badge patient">Orthopedics</span></td>
-                  <td>
-                    <button class="btn-tbl-edit" onclick="window.location.href='doctor-profile.html'">Edit</button>
-                    <button class="btn-tbl-delete"
-                      onclick="openDeleteDoctorModal('DOC-003', 'Dr. Lina Noor')">Delete</button>
-                  </td>
-                </tr>
-
-                <!-- Doctor 4 -->
-                <tr>
-                  <td class="usr-id">DOC-004</td>
-                  <td>
-                    <div style="display: flex; align-items: center; gap: 0.65rem;">
-                      <div
-                        style="width: 32px; height: 32px; border-radius: 50%; background: #e0f2fe; color: #0284c7; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.78rem;">
-                        OA</div>
-                      <strong>Dr. Omar Ali</strong>
-                    </div>
-                  </td>
-                  <td>LIC-60412</td>
-                  <td>10 Years</td>
-                  <td style="font-weight: 700; color: var(--brand-accent);">$170.00</td>
-                  <td>Pediatric Care</td>
-                  <td><span class="role-badge doctor">Pediatrics</span></td>
-                  <td>
-                    <button class="btn-tbl-edit" onclick="window.location.href='doctor-profile.html'">Edit</button>
-                    <button class="btn-tbl-delete"
-                      onclick="openDeleteDoctorModal('DOC-004', 'Dr. Omar Ali')">Delete</button>
-                  </td>
-                </tr>
-
-                <!-- Doctor 5 -->
-                <tr>
-                  <td class="usr-id">DOC-005</td>
-                  <td>
-                    <div style="display: flex; align-items: center; gap: 0.65rem;">
-                      <div
-                        style="width: 32px; height: 32px; border-radius: 50%; background: #e0f2fe; color: #0284c7; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.78rem;">
-                        FH</div>
-                      <strong>Dr. Fatima Hassan</strong>
-                    </div>
-                  </td>
-                  <td>LIC-22874</td>
-                  <td>9 Years</td>
-                  <td style="font-weight: 700; color: var(--brand-accent);">$160.00</td>
-                  <td>Medical Oncology</td>
-                  <td><span class="role-badge" style="background: #fef2f2; color: #dc2626;">Oncology</span></td>
-                  <td>
-                    <button class="btn-tbl-edit" onclick="window.location.href='doctor-profile.html'">Edit</button>
-                    <button class="btn-tbl-delete"
-                      onclick="openDeleteDoctorModal('DOC-005', 'Dr. Fatima Hassan')">Delete</button>
-                  </td>
-                </tr>
-
-                <!-- Doctor 6 -->
-                <tr>
-                  <td class="usr-id">DOC-006</td>
-                  <td>
-                    <div style="display: flex; align-items: center; gap: 0.65rem;">
-                      <div
-                        style="width: 32px; height: 32px; border-radius: 50%; background: #e0f2fe; color: #0284c7; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.78rem;">
-                        YA</div>
-                      <strong>Dr. Yasir Ahmed</strong>
-                    </div>
-                  </td>
-                  <td>LIC-91833</td>
-                  <td>8 Years</td>
-                  <td style="font-weight: 700; color: var(--brand-accent);">$150.00</td>
-                  <td>Emergency Medicine</td>
-                  <td><span class="role-badge" style="background: #fff7ed; color: #c2410c;">Emergency</span></td>
-                  <td>
-                    <button class="btn-tbl-edit" onclick="window.location.href='doctor-profile.html'">Edit</button>
-                    <button class="btn-tbl-delete"
-                      onclick="openDeleteDoctorModal('DOC-006', 'Dr. Yasir Ahmed')">Delete</button>
-                  </td>
-                </tr>
               </tbody>
+
             </table>
+
           </div>
 
-          <!-- Table Footer / Pagination -->
-          <div
-            style="padding: 0.85rem 1.25rem; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border);">
-            <span style="font-size: 0.8rem; color: var(--text-secondary);">Showing 1 to 6 of 86 Doctors</span>
-            <div style="display: flex; gap: 0.35rem;">
-              <button class="btn-filter">Previous</button>
-              <button class="btn-add-user" style="padding: 0.35rem 0.75rem;">1</button>
-              <button class="btn-filter">2</button>
-              <button class="btn-filter">3</button>
-              <button class="btn-filter">Next</button>
-            </div>
+
+          <div style="
+            padding:0.85rem 1.25rem;
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            border-top:1px solid var(--border);
+          ">
+
+            <span
+              id="doctorCountText"
+              style="font-size:0.8rem;color:var(--text-secondary);">
+              Loading...
+            </span>
+
           </div>
+
         </div>
 
       </main>
+
     </div>
 
   </div>
 
-  <!-- ══════════════════ ADD DOCTOR FORM MODAL DIALOG ══════════════════ -->
-  <div class="modal-backdrop" id="addDoctorModal" style="display: none;">
+
+  <!-- ================================================= -->
+  <!-- ADD DOCTOR MODAL -->
+  <!-- ================================================= -->
+
+  <div class="modal-backdrop" id="addDoctorModal" style="display:none;">
+
     <div class="form-modal-box">
 
       <div class="form-modal-header">
-        <h3 class="form-modal-title">Add New Doctor Profile</h3>
-        <button type="button" onclick="closeAddDoctorModal()"
-          style="background: transparent; border: none; font-size: 1.2rem; cursor: pointer; color: var(--text-secondary);"
-          title="Close">
+
+        <h3 class="form-modal-title">
+          Add New Doctor Profile
+        </h3>
+
+        <button
+          type="button"
+          onclick="closeAddDoctorModal()"
+          style="background:transparent;border:none;font-size:1.2rem;cursor:pointer;color:var(--text-secondary);">
+
           <i class="bi bi-x-lg"></i>
+
         </button>
+
       </div>
+
 
       <div class="form-modal-body">
-        <div>
-          <label class="modal-label">Doctor Name</label>
-          <input type="text" class="edit-form-control" placeholder="Enter doctor name" style="width: 100%;" />
-        </div>
 
         <div>
-          <label class="modal-label">License Number</label>
-          <input type="text" class="edit-form-control error-input" placeholder="Enter license number"
-            style="width: 100%;" />
-          <span class="required-text">Required Field</span>
-          <p class="error-message">Please input a valid medical registry license identifier.</p>
+
+          <label class="modal-label">
+            License Number
+          </label>
+
+          <input
+            type="text"
+            id="licenseNumber"
+            class="edit-form-control"
+            placeholder="Enter license number"
+            style="width:100%;"
+          />
+
         </div>
+
 
         <div class="two-columns">
+
           <div>
-            <label class="modal-label">Experience</label>
-            <input type="number" class="edit-form-control" placeholder="Years" style="width: 100%;" />
+
+            <label class="modal-label">
+              Experience
+            </label>
+
+            <input
+              type="number"
+              id="yearsExperience"
+              class="edit-form-control"
+              placeholder="Years"
+              style="width:100%;"
+            />
+
           </div>
+
+
           <div>
-            <label class="modal-label">Consultation Fee</label>
-            <input type="number" class="edit-form-control" placeholder="150" style="width: 100%;" />
+
+            <label class="modal-label">
+              Consultation Fee
+            </label>
+
+            <input
+              type="number"
+              id="consultationFee"
+              class="edit-form-control"
+              placeholder="150"
+              style="width:100%;"
+            />
+
           </div>
+
         </div>
 
-        <div>
-          <label class="modal-label">Specialization</label>
-          <select class="filter-select" style="width: 100%;">
-            <option selected>Orthopedic Surgery</option>
-            <option>Cardiology</option>
-            <option>Neurosurgery</option>
-            <option>Pediatric Care</option>
-            <option>Medical Oncology</option>
-            <option>Emergency Medicine</option>
-          </select>
-        </div>
 
         <div>
-          <label class="modal-label">Department</label>
-          <select class="filter-select" style="width: 100%;">
-            <option selected>Orthopedics</option>
-            <option>Cardiology</option>
-            <option>Neurology</option>
-            <option>Pediatrics</option>
-            <option>Oncology</option>
-            <option>Emergency</option>
-          </select>
+
+          <label class="modal-label">
+            User ID
+          </label>
+
+          <input
+            type="number"
+            id="userID"
+            class="edit-form-control"
+            placeholder="User ID"
+            style="width:100%;"
+          />
+
         </div>
+
+
+        <div>
+
+          <label class="modal-label">
+            Specialization ID
+          </label>
+
+          <input
+            type="number"
+            id="specializationId"
+            class="edit-form-control"
+            placeholder="Specialization ID"
+            style="width:100%;"
+          />
+
+        </div>
+
       </div>
 
+
       <div class="modal-buttons">
-        <button class="btn-modal-cancel" onclick="closeAddDoctorModal()">Cancel</button>
-        <button class="btn-search-blue" onclick="saveDoctorProfile()">Save Profile</button>
+
+        <button
+          class="btn-modal-cancel"
+          onclick="closeAddDoctorModal()">
+          Cancel
+        </button>
+
+        <button
+          class="btn-search-blue"
+          onclick="saveDoctorProfile()">
+          Save Profile
+        </button>
+
       </div>
 
     </div>
+
   </div>
 
-  <!-- ══════════════════ DELETE DOCTOR MODAL DIALOG ══════════════════ -->
-  <div class="modal-backdrop" id="deleteDoctorModal" style="display: none;">
+
+  <!-- ================================================= -->
+  <!-- EDIT CONSULTATION FEE MODAL -->
+  <!-- ================================================= -->
+
+  <div class="modal-backdrop" id="editFeeModal" style="display:none;">
+
+    <div class="form-modal-box">
+
+      <div class="form-modal-header">
+
+        <h3 class="form-modal-title">
+          Edit Consultation Fee
+        </h3>
+
+        <button
+          type="button"
+          onclick="closeEditFeeModal()"
+          style="background:transparent;border:none;font-size:1.2rem;cursor:pointer;color:var(--text-secondary);">
+
+          <i class="bi bi-x-lg"></i>
+
+        </button>
+
+      </div>
+
+
+      <div class="form-modal-body">
+
+        <div>
+
+          <label class="modal-label">
+            Doctor Profile ID
+          </label>
+
+          <input
+            type="text"
+            id="editFeeDoctorId"
+            class="edit-form-control"
+            readonly
+            style="width:100%;background:#f3f4f6;"
+          />
+
+        </div>
+
+
+        <div>
+
+          <label class="modal-label">
+            New Consultation Fee
+          </label>
+
+          <input
+            type="number"
+            id="editConsultationFee"
+            class="edit-form-control"
+            placeholder="Enter new consultation fee"
+            min="0"
+            step="0.01"
+            style="width:100%;"
+          />
+
+        </div>
+
+      </div>
+
+
+      <div class="modal-buttons">
+
+        <button
+          class="btn-modal-cancel"
+          onclick="closeEditFeeModal()">
+          Cancel
+        </button>
+
+        <button
+          class="btn-search-blue"
+          onclick="updateConsultationFee()">
+          Update Fee
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- ================================================= -->
+  <!-- DELETE MODAL -->
+  <!-- ================================================= -->
+
+  <div class="modal-backdrop" id="deleteDoctorModal" style="display:none;">
+
     <div class="danger-card-box">
+
       <div class="danger-card-icon">
         <i class="bi bi-exclamation-triangle-fill"></i>
       </div>
-      <h3 class="danger-card-title">Delete Doctor Profile?</h3>
-      <p class="danger-card-desc">This action will unlink schedules and associated profile data.</p>
+
+      <h3 class="danger-card-title">
+        Delete Doctor Profile?
+      </h3>
+
+      <p class="danger-card-desc" id="deleteDoctorText">
+        This action will permanently remove the doctor profile.
+      </p>
 
       <div class="action-row-buttons">
-        <button class="cancel-btn-lg" onclick="closeDeleteDoctorModal()">Cancel</button>
-        <button class="delete-btn-lg" onclick="confirmDeleteDoctor()">Delete Profile</button>
+
+        <button
+          class="cancel-btn-lg"
+          onclick="closeDeleteDoctorModal()">
+          Cancel
+        </button>
+
+        <button
+          class="delete-btn-lg"
+          onclick="confirmDeleteDoctor()">
+          Delete Profile
+        </button>
+
       </div>
+
     </div>
+
   </div>
 
+
+  <!-- ================================================= -->
+  <!-- JAVASCRIPT -->
+  <!-- ================================================= -->
+
   <script>
+
+    const API_BASE_URL = "http://localhost:5251";
+
+    let allDoctors = [];
+
     let targetDoctorId = null;
 
-    function openAddDoctorModal() {
-      document.getElementById('addDoctorModal').style.display = 'flex';
+
+    // ==========================================
+    // GET ALL DOCTORS
+    // ==========================================
+
+    async function loadDoctors() {
+
+      try {
+
+        const response = await fetch(
+          `${API_BASE_URL}/DoctorProfile/GetAllDoctorProfiles`
+        );
+
+        if (!response.ok) {
+          throw new Error("Failed to load doctors");
+        }
+
+        allDoctors = await response.json();
+
+        displayDoctors(allDoctors);
+
+        updateStatistics(allDoctors);
+
+      }
+      catch (error) {
+
+        console.error(error);
+
+        document.getElementById("doctorTableBody").innerHTML = `
+          <tr>
+            <td colspan="8" style="text-align:center;color:red;">
+              Could not connect to the database.
+            </td>
+          </tr>
+        `;
+
+        showError(
+          "Could not connect to the backend API."
+        );
+
+      }
+
     }
 
-    function closeAddDoctorModal() {
-      document.getElementById('addDoctorModal').style.display = 'none';
+
+    // ==========================================
+    // DISPLAY DOCTORS
+    // ==========================================
+
+    function displayDoctors(doctors) {
+
+      const tableBody =
+        document.getElementById("doctorTableBody");
+
+      tableBody.innerHTML = "";
+
+
+      if (doctors.length === 0) {
+
+        tableBody.innerHTML = `
+          <tr>
+            <td colspan="8" style="text-align:center;">
+              No doctors found.
+            </td>
+          </tr>
+        `;
+
+        document.getElementById("doctorCountText").textContent =
+          "Showing 0 doctors";
+
+        return;
+
+      }
+
+
+      doctors.forEach(doctor => {
+
+        const id = doctor.doctorProfileId;
+
+        const license =
+          doctor.licenseNumber || "-";
+
+        const experience =
+          doctor.yearsOfExperience ?? 0;
+
+        const fee =
+          doctor.consultationFee ?? 0;
+
+        const specialization =
+          doctor.specialization?.name ||
+          doctor.specializations?.name ||
+          doctor.specializationName ||
+          doctor.specializationId ||
+          "-";
+
+        const department =
+          doctor.department?.name ||
+          doctor.departments?.name ||
+          doctor.departmentName ||
+          "-";
+
+
+        const row =
+          document.createElement("tr");
+
+
+        row.innerHTML = `
+
+          <td class="usr-id">
+            ${id}
+          </td>
+
+
+          <td>
+
+            <div style="
+              display:flex;
+              align-items:center;
+              gap:0.65rem;
+            ">
+
+              <div style="
+                width:32px;
+                height:32px;
+                border-radius:50%;
+                background:#e0f2fe;
+                color:#0284c7;
+                display:flex;
+                align-items:center;
+                justify-content:center;
+                font-weight:700;
+                font-size:0.78rem;
+              ">
+                DR
+              </div>
+
+              <strong>
+                Doctor ${id}
+              </strong>
+
+            </div>
+
+          </td>
+
+
+          <td>
+            ${license}
+          </td>
+
+
+          <td>
+            ${experience} Years
+          </td>
+
+
+          <td style="
+            font-weight:700;
+            color:var(--brand-accent);
+          ">
+            $${Number(fee).toFixed(2)}
+          </td>
+
+
+          <td>
+            ${specialization}
+          </td>
+
+
+          <td>
+
+            <span class="role-badge doctor">
+              ${department}
+            </span>
+
+          </td>
+
+
+          <td>
+
+            <button
+              class="btn-tbl-edit"
+              onclick="editDoctor(${id})">
+              Edit
+            </button>
+
+
+            <button
+              class="btn-tbl-delete"
+              onclick="openDeleteDoctorModal(${id})">
+              Delete
+            </button>
+
+          </td>
+
+        `;
+
+
+        tableBody.appendChild(row);
+
+      });
+
+
+      document.getElementById("doctorCountText").textContent =
+        `Showing ${doctors.length} doctors`;
+
     }
 
-    function saveDoctorProfile() {
-      closeAddDoctorModal();
-      triggerSuccessToast();
+
+    // ==========================================
+    // EDIT DOCTOR
+    // ONLY CONSULTATION FEE
+    // ==========================================
+
+    function editDoctor(id) {
+
+      document.getElementById("editFeeDoctorId").value =
+        id;
+
+      document.getElementById("editConsultationFee").value =
+        "";
+
+      document.getElementById("editFeeModal").style.display =
+        "flex";
+
     }
 
-    function openDeleteDoctorModal(docId, docName) {
-      targetDoctorId = docId;
-      document.getElementById('deleteDoctorModal').style.display = 'flex';
+
+    // ==========================================
+    // CLOSE EDIT FEE MODAL
+    // ==========================================
+
+    function closeEditFeeModal() {
+
+      document.getElementById("editFeeModal").style.display =
+        "none";
+
     }
+
+
+    // ==========================================
+    // UPDATE CONSULTATION FEE
+    // PATCH API
+    // ==========================================
+
+    async function updateConsultationFee() {
+
+      const id =
+        document.getElementById("editFeeDoctorId").value;
+
+      const newFee =
+        Number(
+          document.getElementById("editConsultationFee").value
+        );
+
+
+      if (!newFee || newFee < 0) {
+
+        showError(
+          "Please enter a valid consultation fee."
+        );
+
+        return;
+
+      }
+
+
+      try {
+
+        const response = await fetch(
+          `${API_BASE_URL}/DoctorProfile/UpdateConsultationFee?id=${id}&newFee=${newFee}`,
+          {
+            method: "PATCH"
+          }
+        );
+
+
+        if (!response.ok) {
+
+          const errorText =
+            await response.text();
+
+          console.error(errorText);
+
+          throw new Error(
+            "Update consultation fee failed"
+          );
+
+        }
+
+
+        closeEditFeeModal();
+
+
+        showSuccess(
+          `Consultation fee for Doctor Profile ID ${id} updated successfully.`
+        );
+
+
+        loadDoctors();
+
+      }
+      catch (error) {
+
+        console.error(error);
+
+        showError(
+          "Failed to update consultation fee."
+        );
+
+      }
+
+    }
+
+
+    // ==========================================
+    // DELETE DOCTOR
+    // ==========================================
+
+    function openDeleteDoctorModal(id) {
+
+      targetDoctorId = id;
+
+      document.getElementById("deleteDoctorText").textContent =
+        `Are you sure you want to delete Doctor Profile ID ${id}?`;
+
+      document.getElementById("deleteDoctorModal").style.display =
+        "flex";
+
+    }
+
 
     function closeDeleteDoctorModal() {
-      document.getElementById('deleteDoctorModal').style.display = 'none';
+
+      document.getElementById("deleteDoctorModal").style.display =
+        "none";
+
+      targetDoctorId = null;
+
     }
 
-    function confirmDeleteDoctor() {
-      closeDeleteDoctorModal();
-      triggerErrorToast();
+
+    async function confirmDeleteDoctor() {
+
+      if (!targetDoctorId) {
+        return;
+      }
+
+
+      try {
+
+        const response = await fetch(
+          `${API_BASE_URL}/DoctorProfile/RemoveDoctorProfile?id=${targetDoctorId}`,
+          {
+            method: "DELETE"
+          }
+        );
+
+
+        if (!response.ok) {
+
+          const errorText =
+            await response.text();
+
+          console.error(errorText);
+
+          throw new Error(
+            "Delete failed"
+          );
+
+        }
+
+
+        closeDeleteDoctorModal();
+
+
+        showSuccess(
+          "Doctor profile deleted successfully."
+        );
+
+
+        loadDoctors();
+
+      }
+      catch (error) {
+
+        console.error(error);
+
+        showError(
+          "Failed to delete doctor profile."
+        );
+
+      }
+
     }
 
-    function triggerSuccessToast() {
-      const successToast = document.getElementById('toastSuccess');
-      const errorToast = document.getElementById('toastError');
-      errorToast.style.display = 'none';
-      successToast.style.display = 'flex';
+
+    // ==========================================
+    // ADD DOCTOR
+    // ==========================================
+
+    function openAddDoctorModal() {
+
+      document.getElementById("addDoctorModal").style.display =
+        "flex";
+
+    }
+
+
+    function closeAddDoctorModal() {
+
+      document.getElementById("addDoctorModal").style.display =
+        "none";
+
+    }
+
+
+    async function saveDoctorProfile() {
+
+      const licenseNumber =
+        document.getElementById("licenseNumber").value.trim();
+
+      const yearsOfExperience =
+        Number(
+          document.getElementById("yearsExperience").value
+        );
+
+      const consultationFee =
+        Number(
+          document.getElementById("consultationFee").value
+        );
+
+      const userID =
+        Number(
+          document.getElementById("userID").value
+        );
+
+      const specializationId =
+        Number(
+          document.getElementById("specializationId").value
+        );
+
+
+      if (
+        !licenseNumber ||
+        !yearsOfExperience ||
+        !consultationFee ||
+        !userID
+      ) {
+
+        showError(
+          "Please fill in all required fields."
+        );
+
+        return;
+
+      }
+
+
+      const doctor = {
+
+        licenseNumber:
+          licenseNumber,
+
+        yearsOfExperience:
+          yearsOfExperience,
+
+        consultationFee:
+          consultationFee,
+
+        userID:
+          userID,
+
+        specializationId:
+          specializationId
+
+      };
+
+
+      try {
+
+        const response = await fetch(
+          `${API_BASE_URL}/DoctorProfile/AddDoctorProfile`,
+          {
+            method: "POST",
+
+            headers: {
+              "Content-Type": "application/json"
+            },
+
+            body:
+              JSON.stringify(doctor)
+          }
+        );
+
+
+        if (!response.ok) {
+
+          const errorText =
+            await response.text();
+
+          console.error(errorText);
+
+          throw new Error(
+            "Add doctor failed"
+          );
+
+        }
+
+
+        closeAddDoctorModal();
+
+        clearAddDoctorForm();
+
+
+        showSuccess(
+          "Doctor profile added successfully."
+        );
+
+
+        loadDoctors();
+
+      }
+      catch (error) {
+
+        console.error(error);
+
+        showError(
+          "Failed to add doctor profile."
+        );
+
+      }
+
+    }
+
+
+    // ==========================================
+    // CLEAR ADD FORM
+    // ==========================================
+
+    function clearAddDoctorForm() {
+
+      document.getElementById("licenseNumber").value =
+        "";
+
+      document.getElementById("yearsExperience").value =
+        "";
+
+      document.getElementById("consultationFee").value =
+        "";
+
+      document.getElementById("userID").value =
+        "";
+
+      document.getElementById("specializationId").value =
+        "";
+
+    }
+
+
+    // ==========================================
+    // SEARCH BY ID
+    // EXPERIENCE FILTER
+    // SORT BY FEE
+    // ==========================================
+
+    function applyFilters() {
+
+      const search =
+        document.getElementById("searchInput").value
+          .trim();
+
+
+      const experience =
+        document.getElementById("experienceFilter").value;
+
+
+      const sort =
+        document.getElementById("sortFee").value;
+
+
+      let doctors =
+        [...allDoctors];
+
+
+      // SEARCH ONLY BY DOCTOR PROFILE ID
+
+      if (search) {
+
+        doctors =
+          doctors.filter(d =>
+            String(d.doctorProfileId)
+              .includes(search)
+          );
+
+      }
+
+
+      // EXPERIENCE FILTER
+
+      if (experience) {
+
+        doctors =
+          doctors.filter(d =>
+            Number(d.yearsOfExperience) >=
+            Number(experience)
+          );
+
+      }
+
+
+      // SORT LOW TO HIGH
+
+      if (sort === "asc") {
+
+        doctors.sort(
+          (a, b) =>
+            Number(a.consultationFee) -
+            Number(b.consultationFee)
+        );
+
+      }
+
+
+      // SORT HIGH TO LOW
+
+      if (sort === "desc") {
+
+        doctors.sort(
+          (a, b) =>
+            Number(b.consultationFee) -
+            Number(a.consultationFee)
+        );
+
+      }
+
+
+      displayDoctors(doctors);
+
+    }
+
+
+    // ==========================================
+    // STATISTICS
+    // ==========================================
+
+    function updateStatistics(doctors) {
+
+      const total =
+        doctors.length;
+
+
+      document.getElementById("totalDoctors").textContent =
+        total;
+
+
+      if (total > 0) {
+
+        const totalFee =
+          doctors.reduce(
+            (sum, doctor) =>
+              sum +
+              Number(
+                doctor.consultationFee || 0
+              ),
+            0
+          );
+
+
+        const average =
+          totalFee / total;
+
+
+        document.getElementById("averageFee").textContent =
+          `$${average.toFixed(2)}`;
+
+      }
+      else {
+
+        document.getElementById("averageFee").textContent =
+          "$0.00";
+
+      }
+
+
+      const departments =
+        new Set();
+
+
+      doctors.forEach(doctor => {
+
+        if (doctor.department?.name) {
+
+          departments.add(
+            doctor.department.name
+          );
+
+        }
+
+
+        if (doctor.departments?.name) {
+
+          departments.add(
+            doctor.departments.name
+          );
+
+        }
+
+
+        if (doctor.departmentName) {
+
+          departments.add(
+            doctor.departmentName
+          );
+
+        }
+
+      });
+
+
+      document.getElementById("totalDepartments").textContent =
+        `${departments.size} Departments`;
+
+    }
+
+
+    // ==========================================
+    // SUCCESS MESSAGE
+    // ==========================================
+
+    function showSuccess(message) {
+
+      const toast =
+        document.getElementById("toastSuccess");
+
+
+      toast.textContent =
+        "✓ " + message;
+
+
+      toast.style.display =
+        "flex";
+
+
       setTimeout(() => {
-        successToast.style.display = 'none';
+
+        toast.style.display =
+          "none";
+
       }, 4000);
+
     }
 
-    function triggerErrorToast() {
-      const successToast = document.getElementById('toastSuccess');
-      const errorToast = document.getElementById('toastError');
-      successToast.style.display = 'none';
-      errorToast.style.display = 'flex';
+
+    // ==========================================
+    // ERROR MESSAGE
+    // ==========================================
+
+    function showError(message) {
+
+      const toast =
+        document.getElementById("toastError");
+
+
+      toast.textContent =
+        "! " + message;
+
+
+      toast.style.display =
+        "flex";
+
+
       setTimeout(() => {
-        errorToast.style.display = 'none';
+
+        toast.style.display =
+          "none";
+
       }, 4000);
+
     }
+
+
+    // ==========================================
+    // LOAD DOCTORS WHEN PAGE OPENS
+    // ==========================================
+
+    document.addEventListener(
+      "DOMContentLoaded",
+      loadDoctors
+    );
+
   </script>
+
 </body>
 
 </html>

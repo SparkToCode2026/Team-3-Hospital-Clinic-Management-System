@@ -29,7 +29,7 @@ namespace Team_3_HMS
             });
 
             // Configure CORS policy to allow frontend cross-origin requests
-            builder.Services.AddCors(options =>
+            builder.Services.g b(options =>
             {
                 options.AddPolicy("AllowFrontend", policy =>
                 {
