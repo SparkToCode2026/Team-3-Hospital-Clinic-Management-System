@@ -646,7 +646,7 @@
 
       list.forEach(inv => {
         const id = inv.invoiceID || inv.InvoiceID || inv.id;
-        const apptId = inv.appointmentID || inv.AppointmentID || 'N/A';
+        const apptId = inv.appointmentID || inv.AppointmentID || inv.appointmentId || inv.AppointmentId || (inv.appointment?.appointmentId || 'N/A');
         const rawDate = inv.issuedDate || inv.IssuedDate;
         const dt = rawDate ? (rawDate.includes('T') ? rawDate.split('T')[0] : rawDate) : 'N/A';
         const method = inv.paymentmethod || inv.Paymentmethod || 'Card';
@@ -719,8 +719,8 @@
       const methodVal = document.getElementById('methodFilter').value;
 
       const filtered = invoices.filter(i => {
-        const id = (i.invoiceID || i.InvoiceID || '').toString();
-        const apptId = (i.appointmentID || i.AppointmentID || '').toString();
+        const id = (i.invoiceID || i.InvoiceID || i.id || '').toString();
+        const apptId = (i.appointmentID || i.AppointmentID || i.appointmentId || i.AppointmentId || '').toString();
         const method = (i.paymentmethod || i.Paymentmethod || '').toLowerCase();
         const status = (i.paymentStatus || i.PaymentStatus || 'Pending').toLowerCase();
         const date = (i.issuedDate || i.IssuedDate || '').toLowerCase();
@@ -749,10 +749,13 @@
       renderTable(filtered);
     }
 
-    function openCreateModal() {
+    async function openCreateModal() {
       document.getElementById('newDate').value = new Date().toISOString().split('T')[0];
       document.getElementById('newAmount').value = '';
       document.getElementById('newApptId').value = '';
+      if (!appointmentsList || appointmentsList.length === 0) {
+        await loadAppointments();
+      }
       document.getElementById('newApptSelect').value = '';
       document.getElementById("createModal").style.display = "flex";
     }
@@ -816,9 +819,10 @@
       const rawMethod = (inv.paymentmethod || inv.Paymentmethod || '').toLowerCase();
       const rawStatus = (inv.paymentStatus || inv.PaymentStatus || 'Pending').toLowerCase();
       const rawDate = inv.issuedDate || inv.IssuedDate || '';
+      const apptId = inv.appointmentID || inv.AppointmentID || inv.appointmentId || inv.AppointmentId || '';
 
       document.getElementById('editInvId').value = id;
-      document.getElementById('editApptId').value = inv.appointmentID || inv.AppointmentID || '';
+      document.getElementById('editApptId').value = apptId;
       document.getElementById('editAmount').value = parseFloat(inv.totalAmount || inv.TotalAmount || 0).toFixed(2);
       document.getElementById('editMethod').value = rawMethod.includes('cash') ? 'Cash' : 'Card';
       document.getElementById('editStatus').value = rawStatus.includes('paid') ? 'Paid' : 'Pending';

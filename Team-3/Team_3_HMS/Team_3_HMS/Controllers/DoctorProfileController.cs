@@ -16,13 +16,25 @@ namespace Team_3_HMS.Controllers
         {
             context = _context;
         }
+        private int? GetCurrentUserId()
+        {
+            var userIdClaim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+            return int.TryParse(userIdClaim, out int uid) ? uid : null;
+        }
+
         // Method: POST create new doctor Profile
         [Authorize(Roles = "Admin,Doctor")]
         [HttpPost("AddDoctorProfile")]
         public IActionResult AddDoctorProfile(DoctorProfile doctor)
         {
-            context.DoctorProfiles.Add(doctor);
+            if (User.IsInRole("Doctor"))
+            {
+                int? currentUserId = GetCurrentUserId();
+                if (!currentUserId.HasValue) return Unauthorized();
+                doctor.userID = currentUserId.Value;
+            }
 
+            context.DoctorProfiles.Add(doctor);
             context.SaveChanges();
 
             return Ok(new
@@ -31,6 +43,7 @@ namespace Team_3_HMS.Controllers
                 doctor = doctor
             });
         }
+
         // Method: PUT update all doctor profile details
         [Authorize(Roles = "Admin,Doctor")]
         [HttpPut("UpdateDoctorProfile")]
@@ -51,10 +64,20 @@ namespace Team_3_HMS.Controllers
             {
                 return NotFound("Doctor profile not found");
             }
+
+            if (User.IsInRole("Doctor"))
+            {
+                int? currentUserId = GetCurrentUserId();
+                if (!currentUserId.HasValue || doctor.userID != currentUserId.Value)
+                {
+                    return Forbid();
+                }
+            }
+
             doctor.LicenseNumber = updatedDoctor.LicenseNumber;
             doctor.YearsOfExperience = updatedDoctor.YearsOfExperience;
             doctor.ConsultationFee = updatedDoctor.ConsultationFee;
-            if (updatedDoctor.userID > 0) doctor.userID = updatedDoctor.userID;
+            if (updatedDoctor.userID > 0 && User.IsInRole("Admin")) doctor.userID = updatedDoctor.userID;
             if (updatedDoctor.SpecializationId > 0) doctor.SpecializationId = updatedDoctor.SpecializationId;
 
             context.SaveChanges();
@@ -64,6 +87,7 @@ namespace Team_3_HMS.Controllers
                 updatedDoctor = doctor
             });
         }
+
         // Method: PATCH Update one field (Consultation Fee)
         [Authorize(Roles = "Admin,Doctor")]
         [HttpPatch("UpdateConsultationFee")]
@@ -79,6 +103,16 @@ namespace Team_3_HMS.Controllers
             {
                 return NotFound("Doctor profile not found");
             }
+
+            if (User.IsInRole("Doctor"))
+            {
+                int? currentUserId = GetCurrentUserId();
+                if (!currentUserId.HasValue || doctor.userID != currentUserId.Value)
+                {
+                    return Forbid();
+                }
+            }
+
             // Change only the consultation fee
             doctor.ConsultationFee = fee;
 

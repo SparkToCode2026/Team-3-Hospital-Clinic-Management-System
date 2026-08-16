@@ -18,18 +18,69 @@ namespace Team_3_HMS.Controllers
         {
             _context = context;
         }
+        private int? GetCurrentUserId()
+        {
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            return int.TryParse(userIdClaim, out int uid) ? uid : null;
+        }
+
+        private IQueryable<MedicalRecord> GetUserScopedMedicalRecordsQuery()
+        {
+            var query = _context.MedicalRecords
+                .Include(m => m.Appointment)
+                    .ThenInclude(a => a!.PatientProfile)
+                        .ThenInclude(p => p!.user)
+                .Include(m => m.Appointment)
+                    .ThenInclude(a => a!.DoctorProfile)
+                        .ThenInclude(d => d!.userid)
+                .AsQueryable();
+
+            if (User.IsInRole("Admin"))
+            {
+                return query;
+            }
+
+            int? currentUserId = GetCurrentUserId();
+            if (!currentUserId.HasValue)
+            {
+                return query.Where(m => false);
+            }
+
+            if (User.IsInRole("Doctor"))
+            {
+                return query.Where(m => m.Appointment != null && m.Appointment.DoctorProfile != null && m.Appointment.DoctorProfile.userID == currentUserId.Value);
+            }
+
+            if (User.IsInRole("Patient"))
+            {
+                return query.Where(m => m.Appointment != null && m.Appointment.PatientProfile != null && m.Appointment.PatientProfile.userID == currentUserId.Value);
+            }
+
+            return query.Where(m => false);
+        }
+
         // Case 1: 
         [HttpPost]
         [Authorize(Roles = "Doctor,Admin")]
         public async Task<ActionResult<MedicalRecord>> CreateMedicalRecord(
             MedicalRecord medicalRecord)
         {
-            var appointmentExists = await _context.Appointments
-                .AnyAsync(a => a.AppointmentId == medicalRecord.AppointmentId);
+            var appointment = await _context.Appointments
+                .Include(a => a.DoctorProfile)
+                .FirstOrDefaultAsync(a => a.AppointmentId == medicalRecord.AppointmentId);
 
-            if (!appointmentExists)
+            if (appointment == null)
             {
                 return BadRequest("Appointment not found.");
+            }
+
+            if (User.IsInRole("Doctor"))
+            {
+                int? currentUserId = GetCurrentUserId();
+                if (!currentUserId.HasValue || appointment.DoctorProfile?.userID != currentUserId.Value)
+                {
+                    return Forbid();
+                }
             }
 
             _context.MedicalRecords.Add(medicalRecord);
@@ -37,6 +88,7 @@ namespace Team_3_HMS.Controllers
 
             return Created($"/api/MedicalRecord/{medicalRecord.MedicalRecordID}", medicalRecord);
         }
+
         // Case 2: 
         [HttpPut("{id}")]
         [Authorize(Roles = "Doctor,Admin")]
@@ -49,16 +101,27 @@ namespace Team_3_HMS.Controllers
                 return BadRequest("Medical record ID does not match.");
             }
 
-            var existingRecord = await _context.MedicalRecords.FindAsync(id);
+            var existingRecord = await _context.MedicalRecords
+                .Include(m => m.Appointment)
+                    .ThenInclude(a => a!.DoctorProfile)
+                .FirstOrDefaultAsync(m => m.MedicalRecordID == id);
 
             if (existingRecord == null)
             {
                 return NotFound("Medical record not found.");
             }
 
+            if (User.IsInRole("Doctor"))
+            {
+                int? currentUserId = GetCurrentUserId();
+                if (!currentUserId.HasValue || existingRecord.Appointment?.DoctorProfile?.userID != currentUserId.Value)
+                {
+                    return Forbid();
+                }
+            }
+
             var appointmentExists = await _context.Appointments
-                .AnyAsync(a =>
-                    a.AppointmentId == updatedMedicalRecord.AppointmentId);
+                .AnyAsync(a => a.AppointmentId == updatedMedicalRecord.AppointmentId);
 
             if (!appointmentExists)
             {
@@ -75,6 +138,7 @@ namespace Team_3_HMS.Controllers
 
             return NoContent();
         }
+
         // Case 3:
         [HttpPatch("{id}/diagnosis")]
         [Authorize(Roles = "Doctor,Admin")]
@@ -82,11 +146,23 @@ namespace Team_3_HMS.Controllers
             int id,
             UpdateDiagnosisRequest request)
         {
-            var existingRecord = await _context.MedicalRecords.FindAsync(id);
+            var existingRecord = await _context.MedicalRecords
+                .Include(m => m.Appointment)
+                    .ThenInclude(a => a!.DoctorProfile)
+                .FirstOrDefaultAsync(m => m.MedicalRecordID == id);
 
             if (existingRecord == null)
             {
                 return NotFound("Medical record not found.");
+            }
+
+            if (User.IsInRole("Doctor"))
+            {
+                int? currentUserId = GetCurrentUserId();
+                if (!currentUserId.HasValue || existingRecord.Appointment?.DoctorProfile?.userID != currentUserId.Value)
+                {
+                    return Forbid();
+                }
             }
 
             if (string.IsNullOrWhiteSpace(request.Diagnosis) ||
@@ -103,17 +179,30 @@ namespace Team_3_HMS.Controllers
 
             return NoContent();
         }
+
         // Case 4: 
         [HttpDelete("{id}")]
         [HttpDelete("delete/{id}")]
         [Authorize(Roles = "Doctor,Admin")]
         public async Task<IActionResult> DeleteMedicalRecord(int id)
         {
-            var medicalRecord = await _context.MedicalRecords.FindAsync(id);
+            var medicalRecord = await _context.MedicalRecords
+                .Include(m => m.Appointment)
+                    .ThenInclude(a => a!.DoctorProfile)
+                .FirstOrDefaultAsync(m => m.MedicalRecordID == id);
 
             if (medicalRecord == null)
             {
                 return NotFound("Medical record not found.");
+            }
+
+            if (User.IsInRole("Doctor"))
+            {
+                int? currentUserId = GetCurrentUserId();
+                if (!currentUserId.HasValue || medicalRecord.Appointment?.DoctorProfile?.userID != currentUserId.Value)
+                {
+                    return Forbid();
+                }
             }
 
             // 1. Delete associated lab tests
@@ -139,37 +228,13 @@ namespace Team_3_HMS.Controllers
 
             return NoContent();
         }
+
         // Case 5: 
         [HttpGet]
         [Authorize]
         public async Task<IActionResult> GetMedicalRecords()
         {
-            var query = _context.MedicalRecords
-                .Include(m => m.Appointment)
-                .ThenInclude(a => a!.PatientProfile)
-                .AsQueryable();
-
-            // Patients can only view their own medical records
-            if (User.IsInRole("Patient"))
-            {
-                var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-
-                if (!int.TryParse(userIdClaim, out int userId))
-                {
-                    return Unauthorized("User ID was not found in the token.");
-                }
-
-                query = query.Where(m =>
-                    m.Appointment != null &&
-                    m.Appointment.PatientProfile != null &&
-                    m.Appointment.PatientProfile.userID == userId);
-            }
-            else if (!User.IsInRole("Doctor") && !User.IsInRole("Admin"))
-            {
-                return Forbid();
-            }
-
-            var records = await query
+            var records = await GetUserScopedMedicalRecordsQuery()
                 .Select(m => new
                 {
                     m.MedicalRecordID,
@@ -185,47 +250,23 @@ namespace Team_3_HMS.Controllers
                         {
                             m.Appointment.AppointmentDateTime,
                             m.Appointment.ReasonForVisit,
-                            m.Appointment.PatientProfileID
+                            m.Appointment.PatientProfileID,
+                            PatientName = m.Appointment.PatientProfile != null && m.Appointment.PatientProfile.user != null ? m.Appointment.PatientProfile.user.Fullname : null,
+                            DoctorName = m.Appointment.DoctorProfile != null && m.Appointment.DoctorProfile.userid != null ? m.Appointment.DoctorProfile.userid.Fullname : null
                         }
                 })
                 .ToListAsync();
 
             return Ok(records);
         }
+
         // Case 6: 
         [HttpGet("{id}")]
         [Authorize]
         public async Task<IActionResult> GetMedicalRecordById(int id)
         {
-            var query = _context.MedicalRecords
-                .Include(m => m.Appointment)
-                .ThenInclude(a => a!.PatientProfile)
-                .Where(m => m.MedicalRecordID == id);
-
-            // Patient can only view their own medical record
-            if (User.IsInRole("Patient"))
-            {
-                var userIdClaim =
-                    User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-
-                if (!int.TryParse(userIdClaim, out int userId))
-                {
-                    return Unauthorized(
-                        "User ID was not found in the token.");
-                }
-
-                query = query.Where(m =>
-                    m.Appointment != null &&
-                    m.Appointment.PatientProfile != null &&
-                    m.Appointment.PatientProfile.userID == userId);
-            }
-            else if (!User.IsInRole("Doctor") &&
-                     !User.IsInRole("Admin"))
-            {
-                return Forbid();
-            }
-
-            var medicalRecord = await query
+            var medicalRecord = await GetUserScopedMedicalRecordsQuery()
+                .Where(m => m.MedicalRecordID == id)
                 .Select(m => new
                 {
                     m.MedicalRecordID,
@@ -241,7 +282,9 @@ namespace Team_3_HMS.Controllers
                         {
                             m.Appointment.AppointmentDateTime,
                             m.Appointment.ReasonForVisit,
-                            m.Appointment.PatientProfileID
+                            m.Appointment.PatientProfileID,
+                            PatientName = m.Appointment.PatientProfile != null && m.Appointment.PatientProfile.user != null ? m.Appointment.PatientProfile.user.Fullname : null,
+                            DoctorName = m.Appointment.DoctorProfile != null && m.Appointment.DoctorProfile.userid != null ? m.Appointment.DoctorProfile.userid.Fullname : null
                         }
                 })
                 .FirstOrDefaultAsync();
@@ -254,6 +297,7 @@ namespace Team_3_HMS.Controllers
 
             return Ok(medicalRecord);
         }
+
         // Case 7: 
         [HttpGet("filter")]
         [Authorize]
@@ -264,35 +308,7 @@ namespace Team_3_HMS.Controllers
                 return BadRequest("Diagnosis is required.");
             }
 
-            var query = _context.MedicalRecords
-                .Include(m => m.Appointment)
-                .ThenInclude(a => a!.PatientProfile)
-                .AsQueryable();
-
-            // Patient can only filter their own medical records
-            if (User.IsInRole("Patient"))
-            {
-                var userIdClaim =
-                    User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-
-                if (!int.TryParse(userIdClaim, out int userId))
-                {
-                    return Unauthorized(
-                        "User ID was not found in the token.");
-                }
-
-                query = query.Where(m =>
-                    m.Appointment != null &&
-                    m.Appointment.PatientProfile != null &&
-                    m.Appointment.PatientProfile.userID == userId);
-            }
-            else if (!User.IsInRole("Doctor") &&
-                     !User.IsInRole("Admin"))
-            {
-                return Forbid();
-            }
-
-            var records = await query
+            var records = await GetUserScopedMedicalRecordsQuery()
                 .Where(m => m.Diagnosis.Contains(diagnosis))
                 .Select(m => new
                 {
@@ -309,7 +325,9 @@ namespace Team_3_HMS.Controllers
                         {
                             m.Appointment.AppointmentDateTime,
                             m.Appointment.ReasonForVisit,
-                            m.Appointment.PatientProfileID
+                            m.Appointment.PatientProfileID,
+                            PatientName = m.Appointment.PatientProfile != null && m.Appointment.PatientProfile.user != null ? m.Appointment.PatientProfile.user.Fullname : null,
+                            DoctorName = m.Appointment.DoctorProfile != null && m.Appointment.DoctorProfile.userid != null ? m.Appointment.DoctorProfile.userid.Fullname : null
                         }
                 })
                 .ToListAsync();
@@ -321,38 +339,13 @@ namespace Team_3_HMS.Controllers
 
             return Ok(records);
         }
+
         // Case 8: 
         [HttpGet("summary")]
         [Authorize]
         public async Task<IActionResult> GetMedicalRecordsSummary()
         {
-            var query = _context.MedicalRecords
-                .Include(m => m.Appointment)
-                .ThenInclude(a => a!.PatientProfile)
-                .AsQueryable();
-
-            // Patient can only view the summary of their own records
-            if (User.IsInRole("Patient"))
-            {
-                var userIdClaim =
-                    User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-
-                if (!int.TryParse(userIdClaim, out int userId))
-                {
-                    return Unauthorized(
-                        "User ID was not found in the token.");
-                }
-
-                query = query.Where(m =>
-                    m.Appointment != null &&
-                    m.Appointment.PatientProfile != null &&
-                    m.Appointment.PatientProfile.userID == userId);
-            }
-            else if (!User.IsInRole("Doctor") &&
-                     !User.IsInRole("Admin"))
-            {
-                return Forbid();
-            }
+            var query = GetUserScopedMedicalRecordsQuery();
 
             var totalRecords = await query.CountAsync();
 

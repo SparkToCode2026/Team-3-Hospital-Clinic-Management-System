@@ -103,6 +103,12 @@ namespace Team_3_HMS.Controllers
         }
 
        
+        private int? GetCurrentUserId()
+        {
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            return int.TryParse(userIdClaim, out int uid) ? uid : null;
+        }
+
         public class UpdateUserDto
         {
             public string? Fullname { get; set; }
@@ -114,6 +120,15 @@ namespace Team_3_HMS.Controllers
         [HttpPut("update/{id}")]
         public IActionResult UpdateUser(int id, [FromBody] UpdateUserDto updatedData)
         {
+            if (!User.IsInRole("Admin"))
+            {
+                int? currentUserId = GetCurrentUserId();
+                if (!currentUserId.HasValue || id != currentUserId.Value)
+                {
+                    return Forbid();
+                }
+            }
+
             var user = _context.Users.Find(id);
             if (user == null)
             {
@@ -131,7 +146,6 @@ namespace Team_3_HMS.Controllers
             return Ok(new { message = "User details updated successfully." });
         }
 
-       
         public class ChangePasswordDto
         {
             public string? OldPassword { get; set; }
@@ -143,6 +157,15 @@ namespace Team_3_HMS.Controllers
         [HttpPut("change-password/{id}")]
         public IActionResult ChangePassword(int id, [FromQuery] string? oldPassword = null, [FromQuery] string? newPassword = null)
         {
+            if (!User.IsInRole("Admin"))
+            {
+                int? currentUserId = GetCurrentUserId();
+                if (!currentUserId.HasValue || id != currentUserId.Value)
+                {
+                    return Forbid();
+                }
+            }
+
             string oldPwd = oldPassword ?? string.Empty;
             string newPwd = newPassword ?? string.Empty;
 
@@ -178,7 +201,6 @@ namespace Team_3_HMS.Controllers
             return Ok(new { message = "Password updated successfully." });
         }
 
-        
         // 5. DELETE: Remove user account (Admin only)
         [Authorize(Roles = "Admin")]
         [HttpDelete("delete/{id}")]
@@ -270,9 +292,7 @@ namespace Team_3_HMS.Controllers
             _context.Appointments.RemoveRange(appointments);
         }
 
-        
         // 6. GET: Retrieve all users (Admin only)
-        
         [Authorize(Roles = "Admin")]
         [HttpGet("all")]
         public IActionResult GetAllUsers()
@@ -281,13 +301,20 @@ namespace Team_3_HMS.Controllers
             return Ok(users);
         }
 
-        
         // 7. GET: Find user by Id
-       
         [Authorize]
         [HttpGet("find/{id}")]
         public IActionResult GetUserById(int id)
         {
+            if (!User.IsInRole("Admin"))
+            {
+                int? currentUserId = GetCurrentUserId();
+                if (!currentUserId.HasValue || id != currentUserId.Value)
+                {
+                    return Forbid();
+                }
+            }
+
             var user = _context.Users.FirstOrDefault(u => u.userID == id);
             if (user == null)
             {

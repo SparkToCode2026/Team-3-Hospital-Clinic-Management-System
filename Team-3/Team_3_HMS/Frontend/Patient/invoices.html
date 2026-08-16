@@ -331,8 +331,8 @@
 
       list.forEach((inv, idx) => {
         const id = inv.invoiceID || inv.InvoiceID || inv.id || (idx + 1);
-        const apptId = inv.appointmentID || inv.AppointmentID || (inv.appointment?.appointmentId || 'N/A');
-        const date = inv.issuedDate ? (inv.issuedDate.includes('T') ? inv.issuedDate.split('T')[0] : inv.issuedDate) : 'N/A';
+        const apptId = inv.appointmentID || inv.AppointmentID || inv.appointmentId || inv.AppointmentId || (inv.appointment?.appointmentId || 'N/A');
+        const date = inv.issuedDate || inv.IssuedDate ? ((inv.issuedDate || inv.IssuedDate).includes('T') ? (inv.issuedDate || inv.IssuedDate).split('T')[0] : (inv.issuedDate || inv.IssuedDate)) : 'N/A';
         const method = inv.paymentmethod || inv.Paymentmethod || 'Card';
         const amount = parseFloat(inv.totalAmount || inv.TotalAmount || 0).toFixed(2);
         const rawStatus = inv.paymentStatus || inv.PaymentStatus || 'Pending';
@@ -395,15 +395,18 @@
       });
 
       const id = inv.invoiceID || inv.InvoiceID || inv.id;
-      const apptId = inv.appointmentID || inv.AppointmentID || (inv.appointment?.appointmentId || 'N/A');
+      const apptId = inv.appointmentID || inv.AppointmentID || inv.appointmentId || inv.AppointmentId || (inv.appointment?.appointmentId || 'N/A');
       const amount = parseFloat(inv.totalAmount || inv.TotalAmount || 0);
       const status = inv.paymentStatus || inv.PaymentStatus || 'Pending';
       const isPaid = status.toLowerCase() === 'paid';
 
       document.getElementById('detail-inv-id').innerText = `ID: #INV-${String(id).padStart(4, '0')}`;
       document.getElementById('detail-apt-ref').innerText = `#APT-${String(apptId).padStart(4, '0')}`;
-      document.getElementById('detail-doctor').innerText = 'Attending Physician';
-      document.getElementById('detail-dept').innerText = 'Clinical Consultation';
+      
+      const docName = inv.appointment?.doctorProfile?.userid?.fullname || inv.appointment?.doctorProfile?.user?.fullname || 'Attending Physician';
+      const reasonOrDept = inv.appointment?.reasonForVisit || 'Clinical Consultation';
+      document.getElementById('detail-doctor').innerText = docName;
+      document.getElementById('detail-dept').innerText = reasonOrDept;
 
       const disc = (amount * 0.10);
       const finalTotal = isPaid ? 0.00 : (amount - disc);
@@ -417,7 +420,7 @@
         servicesEl.innerHTML = `
           <div class="service-item">
             <div>
-              <div class="service-name">Medical Care & Clinical Consultation</div>
+              <div class="service-name">${escapeHtml(reasonOrDept)}</div>
               <div class="service-qty">Appointment Ref: #APT-${String(apptId).padStart(4, '0')}</div>
             </div>
             <div class="service-price">OMR ${amount.toFixed(2)}</div>
@@ -472,9 +475,9 @@
       }
 
       const id = selectedInvoiceObj.invoiceID || selectedInvoiceObj.InvoiceID || selectedInvoiceObj.id;
-      const apptId = selectedInvoiceObj.appointmentID || selectedInvoiceObj.AppointmentID;
+      const apptId = selectedInvoiceObj.appointmentID || selectedInvoiceObj.AppointmentID || selectedInvoiceObj.appointmentId || selectedInvoiceObj.AppointmentId;
       const totalAmt = selectedInvoiceObj.totalAmount || selectedInvoiceObj.TotalAmount;
-      const issued = selectedInvoiceObj.issuedDate || new Date().toISOString().slice(0, 10);
+      const issued = selectedInvoiceObj.issuedDate || selectedInvoiceObj.IssuedDate || new Date().toISOString().slice(0, 10);
 
       const btn = document.getElementById('btnPayCard');
       if (btn) {
@@ -488,8 +491,10 @@
             method: 'POST',
             body: JSON.stringify({
               invoiceID: id,
+              appointmentID: apptId,
               paymentmethod: 'Card',
-              paymentStatus: 'Paid'
+              paymentStatus: 'Paid',
+              totalAmount: totalAmt
             })
           });
         } catch {

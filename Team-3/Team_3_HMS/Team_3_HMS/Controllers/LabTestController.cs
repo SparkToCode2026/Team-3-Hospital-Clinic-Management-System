@@ -18,18 +18,71 @@ namespace Team_3_HMS.Controllers
         {
             _context = context;
         }
+        private int? GetCurrentUserId()
+        {
+            var userIdClaim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+            return int.TryParse(userIdClaim, out int uid) ? uid : null;
+        }
+
+        private IQueryable<LabTest> GetUserScopedLabTestsQuery()
+        {
+            var query = _context.LabTests
+                .Include(l => l.record)
+                    .ThenInclude(r => r!.Appointment)
+                        .ThenInclude(a => a!.PatientProfile)
+                            .ThenInclude(p => p!.user)
+                .Include(l => l.record)
+                    .ThenInclude(r => r!.Appointment)
+                        .ThenInclude(a => a!.DoctorProfile)
+                            .ThenInclude(d => d!.userid)
+                .AsQueryable();
+
+            if (User.IsInRole("Admin"))
+            {
+                return query;
+            }
+
+            int? currentUserId = GetCurrentUserId();
+            if (!currentUserId.HasValue)
+            {
+                return query.Where(l => false);
+            }
+
+            if (User.IsInRole("Doctor"))
+            {
+                return query.Where(l => l.record != null && l.record.Appointment != null && l.record.Appointment.DoctorProfile != null && l.record.Appointment.DoctorProfile.userID == currentUserId.Value);
+            }
+
+            if (User.IsInRole("Patient"))
+            {
+                return query.Where(l => l.record != null && l.record.Appointment != null && l.record.Appointment.PatientProfile != null && l.record.Appointment.PatientProfile.userID == currentUserId.Value);
+            }
+
+            return query.Where(l => false);
+        }
+
         // Case 1: 
         [HttpPost]
         [Authorize(Roles = "Doctor,Admin")]
         public async Task<ActionResult<LabTest>> CreateLabTest(LabTest labTest)
         {
-            var medicalRecordExists = await _context.MedicalRecords
-                .AnyAsync(m =>
-                    m.MedicalRecordID == labTest.MedicalRecordId);
+            var medicalRecord = await _context.MedicalRecords
+                .Include(m => m.Appointment)
+                    .ThenInclude(a => a!.DoctorProfile)
+                .FirstOrDefaultAsync(m => m.MedicalRecordID == labTest.MedicalRecordId);
 
-            if (!medicalRecordExists)
+            if (medicalRecord == null)
             {
                 return BadRequest("Medical record not found.");
+            }
+
+            if (User.IsInRole("Doctor"))
+            {
+                int? currentUserId = GetCurrentUserId();
+                if (!currentUserId.HasValue || medicalRecord.Appointment?.DoctorProfile?.userID != currentUserId.Value)
+                {
+                    return Forbid();
+                }
             }
 
             if (labTest.Cost < 0)
@@ -44,6 +97,7 @@ namespace Team_3_HMS.Controllers
                 $"/api/LabTest/{labTest.LabTestId}",
                 labTest);
         }
+
         // Case 2: 
         [HttpPut("{id}")]
         [Authorize(Roles = "Doctor,Admin")]
@@ -56,11 +110,24 @@ namespace Team_3_HMS.Controllers
                 return BadRequest("Lab test ID does not match.");
             }
 
-            var existingLabTest = await _context.LabTests.FindAsync(id);
+            var existingLabTest = await _context.LabTests
+                .Include(l => l.record)
+                    .ThenInclude(r => r!.Appointment)
+                        .ThenInclude(a => a!.DoctorProfile)
+                .FirstOrDefaultAsync(l => l.LabTestId == id);
 
             if (existingLabTest == null)
             {
                 return NotFound("Lab test not found.");
+            }
+
+            if (User.IsInRole("Doctor"))
+            {
+                int? currentUserId = GetCurrentUserId();
+                if (!currentUserId.HasValue || existingLabTest.record?.Appointment?.DoctorProfile?.userID != currentUserId.Value)
+                {
+                    return Forbid();
+                }
             }
 
             var medicalRecordExists = await _context.MedicalRecords
@@ -89,6 +156,7 @@ namespace Team_3_HMS.Controllers
 
             return NoContent();
         }
+
         // Case 3:
         [HttpPatch("{id}/result")]
         [Authorize(Roles = "Doctor,Admin")]
@@ -96,11 +164,24 @@ namespace Team_3_HMS.Controllers
             int id,
             UpdateLabTestResultRequest request)
         {
-            var existingLabTest = await _context.LabTests.FindAsync(id);
+            var existingLabTest = await _context.LabTests
+                .Include(l => l.record)
+                    .ThenInclude(r => r!.Appointment)
+                        .ThenInclude(a => a!.DoctorProfile)
+                .FirstOrDefaultAsync(l => l.LabTestId == id);
 
             if (existingLabTest == null)
             {
                 return NotFound("Lab test not found.");
+            }
+
+            if (User.IsInRole("Doctor"))
+            {
+                int? currentUserId = GetCurrentUserId();
+                if (!currentUserId.HasValue || existingLabTest.record?.Appointment?.DoctorProfile?.userID != currentUserId.Value)
+                {
+                    return Forbid();
+                }
             }
 
             if (string.IsNullOrWhiteSpace(request.Result))
@@ -114,16 +195,30 @@ namespace Team_3_HMS.Controllers
 
             return NoContent();
         }
+
         // Case 4: 
         [HttpDelete("{id}")]
         [Authorize(Roles = "Doctor,Admin")]
         public async Task<IActionResult> DeleteLabTest(int id)
         {
-            var labTest = await _context.LabTests.FindAsync(id);
+            var labTest = await _context.LabTests
+                .Include(l => l.record)
+                    .ThenInclude(r => r!.Appointment)
+                        .ThenInclude(a => a!.DoctorProfile)
+                .FirstOrDefaultAsync(l => l.LabTestId == id);
 
             if (labTest == null)
             {
                 return NotFound("Lab test not found.");
+            }
+
+            if (User.IsInRole("Doctor"))
+            {
+                int? currentUserId = GetCurrentUserId();
+                if (!currentUserId.HasValue || labTest.record?.Appointment?.DoctorProfile?.userID != currentUserId.Value)
+                {
+                    return Forbid();
+                }
             }
 
             _context.LabTests.Remove(labTest);
@@ -131,13 +226,13 @@ namespace Team_3_HMS.Controllers
 
             return NoContent();
         }
+
         // Case 5: 
         [HttpGet]
-        [Authorize(Roles = "Doctor,Admin")]
+        [Authorize]
         public async Task<IActionResult> GetLabTests()
         {
-            var labTests = await _context.LabTests
-                .Include(l => l.record)
+            var labTests = await GetUserScopedLabTestsQuery()
                 .Select(l => new
                 {
                     l.LabTestId,
@@ -162,13 +257,13 @@ namespace Team_3_HMS.Controllers
 
             return Ok(labTests);
         }
+
         // Case 6: 
         [HttpGet("{id}")]
-        [Authorize(Roles = "Doctor,Admin")]
+        [Authorize]
         public async Task<IActionResult> GetLabTestById(int id)
         {
-            var labTest = await _context.LabTests
-                .Include(l => l.record)
+            var labTest = await GetUserScopedLabTestsQuery()
                 .Where(l => l.LabTestId == id)
                 .Select(l => new
                 {
@@ -195,14 +290,15 @@ namespace Team_3_HMS.Controllers
 
             if (labTest == null)
             {
-                return NotFound("Lab test not found.");
+                return NotFound("Lab test not found or access denied.");
             }
 
             return Ok(labTest);
         }
+
         // Case 7: 
         [HttpGet("filter")]
-        [Authorize(Roles = "Doctor,Admin")]
+        [Authorize]
         public async Task<IActionResult> FilterLabTests(string category)
         {
             if (string.IsNullOrWhiteSpace(category))
@@ -210,8 +306,7 @@ namespace Team_3_HMS.Controllers
                 return BadRequest("Lab test category is required.");
             }
 
-            var labTests = await _context.LabTests
-                .Include(l => l.record)
+            var labTests = await GetUserScopedLabTestsQuery()
                 .Where(l => l.Category.Contains(category))
                 .Select(l => new
                 {
@@ -241,17 +336,20 @@ namespace Team_3_HMS.Controllers
 
             return Ok(labTests);
         }
+
         // Case 8: 
         [HttpGet("summary")]
-        [Authorize(Roles = "Doctor,Admin")]
+        [Authorize]
         public async Task<IActionResult> GetLabTestSummary()
         {
-            var totalLabTests = await _context.LabTests.CountAsync();
+            var query = GetUserScopedLabTestsQuery();
 
-            var totalCost = await _context.LabTests
+            var totalLabTests = await query.CountAsync();
+
+            var totalCost = await query
                 .SumAsync(l => (decimal?)l.Cost) ?? 0;
 
-            var labTests = await _context.LabTests
+            var labTests = await query
                 .OrderByDescending(l => l.TestDate)
                 .Select(l => new
                 {

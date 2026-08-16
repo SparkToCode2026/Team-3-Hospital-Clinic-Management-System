@@ -18,6 +18,12 @@ namespace Team_3_HMS.Controllers
             _context = context;
         }
 
+        private int? GetCurrentUserId()
+        {
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            return int.TryParse(userIdClaim, out int uid) ? uid : null;
+        }
+
         // 1. GET ALL PROFILES
         // GET: api/PatientProfile/all
         [Authorize(Roles = "Admin,Doctor")]
@@ -30,18 +36,28 @@ namespace Team_3_HMS.Controllers
             return Ok(profiles);
         }
 
-
         // 2. FIND PROFILE BY PATIENT ID
         // GET: api/PatientProfile/find/1
         [Authorize]
         [HttpGet("find/{id}")]
         public IActionResult GetById(int id)
         {
-            var profile = _context.PatientProfiles.Find(id);
+            var profile = _context.PatientProfiles
+                .Include(p => p.user)
+                .FirstOrDefault(p => p.PatientProfileID == id);
 
             if (profile == null)
             {
                 return NotFound("Patient profile not found.");
+            }
+
+            if (User.IsInRole("Patient"))
+            {
+                int? currentUserId = GetCurrentUserId();
+                if (!currentUserId.HasValue || profile.userID != currentUserId.Value)
+                {
+                    return Forbid();
+                }
             }
 
             return Ok(profile);
@@ -53,7 +69,18 @@ namespace Team_3_HMS.Controllers
         [HttpGet("user/{userId}")]
         public IActionResult GetByUserId(int userId)
         {
-            var profile = _context.PatientProfiles.FirstOrDefault(p => p.userID == userId);
+            if (User.IsInRole("Patient"))
+            {
+                int? currentUserId = GetCurrentUserId();
+                if (!currentUserId.HasValue || userId != currentUserId.Value)
+                {
+                    return Forbid();
+                }
+            }
+
+            var profile = _context.PatientProfiles
+                .Include(p => p.user)
+                .FirstOrDefault(p => p.userID == userId);
 
             if (profile == null)
             {
@@ -69,12 +96,18 @@ namespace Team_3_HMS.Controllers
         [HttpPost("create")]
         public IActionResult Create([FromBody] PatientProfile profile)
         {
+            if (User.IsInRole("Patient"))
+            {
+                int? currentUserId = GetCurrentUserId();
+                if (!currentUserId.HasValue) return Unauthorized();
+                profile.userID = currentUserId.Value;
+            }
+
             _context.PatientProfiles.Add(profile);
             _context.SaveChanges();
 
             return Ok("Patient profile created successfully.");
         }
-
 
         // 5. UPDATE PATIENT PROFILE BY ID
         // PUT: api/PatientProfile/update/1
@@ -87,6 +120,15 @@ namespace Team_3_HMS.Controllers
             if (existing == null)
             {
                 return NotFound("Patient profile not found.");
+            }
+
+            if (User.IsInRole("Patient"))
+            {
+                int? currentUserId = GetCurrentUserId();
+                if (!currentUserId.HasValue || existing.userID != currentUserId.Value)
+                {
+                    return Forbid();
+                }
             }
 
             existing.DateOfBirth = updatedData.DateOfBirth;

@@ -19,24 +19,67 @@ namespace Team_3_HMS.Controllers
             _context = context;
         }
 
+        private int? GetCurrentUserId()
+        {
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            return int.TryParse(userIdClaim, out int uid) ? uid : null;
+        }
+
+        private IQueryable<Invoice> GetUserScopedInvoicesQuery()
+        {
+            var query = _context.Invoices
+                .Include(i => i.Appointment)
+                    .ThenInclude(a => a!.PatientProfile)
+                        .ThenInclude(p => p!.user)
+                .Include(i => i.Appointment)
+                    .ThenInclude(a => a!.DoctorProfile)
+                        .ThenInclude(d => d!.userid)
+                .AsQueryable();
+
+            if (User.IsInRole("Admin"))
+            {
+                return query;
+            }
+
+            int? currentUserId = GetCurrentUserId();
+            if (!currentUserId.HasValue)
+            {
+                return query.Where(i => false);
+            }
+
+            if (User.IsInRole("Doctor"))
+            {
+                return query.Where(i => i.Appointment != null && i.Appointment.DoctorProfile != null && i.Appointment.DoctorProfile.userID == currentUserId.Value);
+            }
+
+            if (User.IsInRole("Patient"))
+            {
+                return query.Where(i => i.Appointment != null && i.Appointment.PatientProfile != null && i.Appointment.PatientProfile.userID == currentUserId.Value);
+            }
+
+            return query.Where(i => false);
+        }
+
         // 0. GET INVOICES (ROLE-AWARE DEFAULT ROUTE)
         // GET: api/Invoice
         [HttpGet]
         public IActionResult GetInvoices()
         {
-            var isUserAdmin = User.IsInRole("Admin");
-            if (isUserAdmin)
+            if (User.IsInRole("Admin"))
             {
-                var allInvoices = _context.Invoices
-                    .Include(i => i.Appointment)
-                    .ToList();
+                var allInvoices = GetUserScopedInvoicesQuery().ToList();
                 return Ok(allInvoices);
             }
 
-            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            if (userIdClaim != null && int.TryParse(userIdClaim, out int currentUserId))
+            int? currentUserId = GetCurrentUserId();
+            if (!currentUserId.HasValue)
             {
-                var patientProfile = _context.PatientProfiles.FirstOrDefault(p => p.userID == currentUserId);
+                return Unauthorized("User ID not found in token.");
+            }
+
+            if (User.IsInRole("Patient"))
+            {
+                var patientProfile = _context.PatientProfiles.FirstOrDefault(p => p.userID == currentUserId.Value);
                 if (patientProfile != null)
                 {
                     // Ensure any appointments without an invoice get an invoice created automatically
@@ -61,18 +104,11 @@ namespace Team_3_HMS.Controllers
                     {
                         _context.SaveChanges();
                     }
-
-                    var myInvoices = _context.Invoices
-                        .Include(i => i.Appointment)
-                        .Where(i => i.Appointment != null && i.Appointment.PatientProfileID == patientProfile.PatientProfileID)
-                        .ToList();
-                    
-                    return Ok(myInvoices);
                 }
-                return Ok(new List<Invoice>());
             }
 
-            return Ok(_context.Invoices.Include(i => i.Appointment).ToList());
+            var invoices = GetUserScopedInvoicesQuery().ToList();
+            return Ok(invoices);
         }
 
         // 1. GET ALL INVOICES
@@ -90,12 +126,13 @@ namespace Team_3_HMS.Controllers
         // 2. FIND INVOICE BY ID
         // GET: api/Invoice/find/{id}
         [HttpGet("find/{id}")]
+        [HttpGet("{id}")]
         public IActionResult GetById(int id)
         {
-            var invoice = _context.Invoices.Find(id);
+            var invoice = GetUserScopedInvoicesQuery().FirstOrDefault(i => i.InvoiceID == id);
             if (invoice == null)
             {
-                return NotFound("Invoice not found.");
+                return NotFound("Invoice not found or access denied.");
             }
             return Ok(invoice);
         }
@@ -126,6 +163,24 @@ namespace Team_3_HMS.Controllers
                 return BadRequest(ModelState);
             }
 
+            if (!_context.Appointments.Any(a => a.AppointmentId == invoice.AppointmentID))
+            {
+                return BadRequest("Appointment ID does not exist.");
+            }
+
+            if (User.IsInRole("Doctor"))
+            {
+                int? currentUserId = GetCurrentUserId();
+                var appt = _context.Appointments
+                    .Include(a => a.DoctorProfile)
+                    .FirstOrDefault(a => a.AppointmentId == invoice.AppointmentID);
+
+                if (appt == null || appt.DoctorProfile?.userID != currentUserId)
+                {
+                    return Forbid();
+                }
+            }
+
             _context.Invoices.Add(invoice);
             _context.SaveChanges();
 
@@ -142,19 +197,82 @@ namespace Team_3_HMS.Controllers
         [HttpPatch("pay/{id}")]
         public IActionResult Update(int id, [FromBody] Invoice? updatedData)
         {
-            var existing = _context.Invoices.Find(id);
+            var existing = _context.Invoices
+                .Include(i => i.Appointment)
+                    .ThenInclude(a => a!.PatientProfile)
+                .Include(i => i.Appointment)
+                    .ThenInclude(a => a!.DoctorProfile)
+                .FirstOrDefault(i => i.InvoiceID == id);
+
             if (existing == null)
             {
                 return NotFound("Invoice not found.");
             }
 
+            if (!User.IsInRole("Admin"))
+            {
+                int? currentUserId = GetCurrentUserId();
+                if (!currentUserId.HasValue) return Unauthorized();
+
+                if (User.IsInRole("Patient"))
+                {
+                    int patientUserId = existing.Appointment?.PatientProfile?.userID ?? 0;
+                    if (patientUserId == 0 && existing.AppointmentID > 0)
+                    {
+                        var appt = _context.Appointments
+                            .Include(a => a.PatientProfile)
+                            .FirstOrDefault(a => a.AppointmentId == existing.AppointmentID);
+                        patientUserId = appt?.PatientProfile?.userID ?? 0;
+                    }
+
+                    if (patientUserId != currentUserId.Value)
+                    {
+                        return Forbid();
+                    }
+
+                    // Patients can only pay their invoice
+                    existing.PaymentStatus = "Paid";
+                    if (updatedData != null && !string.IsNullOrWhiteSpace(updatedData.Paymentmethod))
+                    {
+                        existing.Paymentmethod = updatedData.Paymentmethod;
+                    }
+                    else
+                    {
+                        existing.Paymentmethod = "Card";
+                    }
+
+                    _context.SaveChanges();
+                    return Ok(existing);
+                }
+
+                if (User.IsInRole("Doctor"))
+                {
+                    int doctorUserId = existing.Appointment?.DoctorProfile?.userID ?? 0;
+                    if (doctorUserId == 0 && existing.AppointmentID > 0)
+                    {
+                        var appt = _context.Appointments
+                            .Include(a => a.DoctorProfile)
+                            .FirstOrDefault(a => a.AppointmentId == existing.AppointmentID);
+                        doctorUserId = appt?.DoctorProfile?.userID ?? 0;
+                    }
+
+                    if (doctorUserId != currentUserId.Value)
+                    {
+                        return Forbid();
+                    }
+                }
+            }
+
             if (updatedData != null)
             {
-                if (updatedData.TotalAmount > 0) existing.TotalAmount = updatedData.TotalAmount;
+                if (updatedData.TotalAmount >= 0) existing.TotalAmount = updatedData.TotalAmount;
                 if (!string.IsNullOrWhiteSpace(updatedData.Paymentmethod)) existing.Paymentmethod = updatedData.Paymentmethod;
                 if (!string.IsNullOrWhiteSpace(updatedData.PaymentStatus)) existing.PaymentStatus = updatedData.PaymentStatus;
                 if (!string.IsNullOrWhiteSpace(updatedData.IssuedDate)) existing.IssuedDate = updatedData.IssuedDate;
-                if (updatedData.AppointmentID > 0) existing.AppointmentID = updatedData.AppointmentID;
+                if (updatedData.AppointmentID > 0 && _context.Appointments.Any(a => a.AppointmentId == updatedData.AppointmentID))
+                {
+                    existing.AppointmentID = updatedData.AppointmentID;
+                }
             }
             else
             {
@@ -171,31 +289,14 @@ namespace Team_3_HMS.Controllers
         [HttpGet("my-invoices")]
         public IActionResult GetMyInvoices()
         {
-            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            if (userIdClaim == null || !int.TryParse(userIdClaim, out int currentUserId))
-            {
-                return Ok(_context.Invoices.Include(i => i.Appointment).ToList());
-            }
-
-            var patientProfile = _context.PatientProfiles.FirstOrDefault(p => p.userID == currentUserId);
-            if (patientProfile != null)
-            {
-                var myInvoices = _context.Invoices
-                    .Include(i => i.Appointment)
-                    .Where(i => i.Appointment != null &&
-                                i.Appointment.PatientProfileID == patientProfile.PatientProfileID)
-                    .ToList();
-
-                return Ok(myInvoices);
-            }
-
-            return Ok(new List<Invoice>());
+            return GetInvoices();
         }
 
         // 7. DELETE INVOICE
         // DELETE: api/Invoice/delete/{id}
         [Authorize(Roles = "Admin")]
         [HttpDelete("delete/{id}")]
+        [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
             var invoice = _context.Invoices.Find(id);

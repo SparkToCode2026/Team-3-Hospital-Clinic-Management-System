@@ -20,6 +20,46 @@ namespace Team_3_HMS.Controllers
             _emailService = emailService;
         }
 
+        private int? GetCurrentUserId()
+        {
+            var userIdClaim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+            return int.TryParse(userIdClaim, out int uid) ? uid : null;
+        }
+
+        private IQueryable<Appointment> GetUserScopedAppointmentsQuery()
+        {
+            var query = _context.Appointments
+                .Include(a => a.room)
+                .Include(a => a.PatientProfile)
+                    .ThenInclude(p => p!.user)
+                .Include(a => a.DoctorProfile)
+                    .ThenInclude(d => d!.userid)
+                .AsQueryable();
+
+            if (User.IsInRole("Admin"))
+            {
+                return query;
+            }
+
+            int? currentUserId = GetCurrentUserId();
+            if (!currentUserId.HasValue)
+            {
+                return query.Where(a => false);
+            }
+
+            if (User.IsInRole("Doctor"))
+            {
+                return query.Where(a => a.DoctorProfile != null && a.DoctorProfile.userID == currentUserId.Value);
+            }
+
+            if (User.IsInRole("Patient"))
+            {
+                return query.Where(a => a.PatientProfile != null && a.PatientProfile.userID == currentUserId.Value);
+            }
+
+            return query.Where(a => false);
+        }
+
         [HttpPost]
         public async Task<IActionResult> CreateAppointment([FromBody] Appointment appointment)
         {
@@ -33,32 +73,46 @@ namespace Team_3_HMS.Controllers
                 return BadRequest("AppointmentDateTime must be a valid date/time string, e.g. 2026-08-15T14:30:00");
             }
 
+            int? currentUserId = GetCurrentUserId();
+
             // 1. Resolve & Validate PatientProfileID
-            if (appointment.PatientProfileID <= 0 || !_context.PatientProfiles.Any(p => p.PatientProfileID == appointment.PatientProfileID))
+            if (User.IsInRole("Patient"))
             {
-                // Try resolving from authenticated token
-                var userIdClaim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
-                if (userIdClaim != null && int.TryParse(userIdClaim, out int currentUserId))
+                if (!currentUserId.HasValue)
                 {
-                    var userPatientProfile = await _context.PatientProfiles.FirstOrDefaultAsync(p => p.userID == currentUserId);
-                    if (userPatientProfile == null)
-                    {
-                        var user = await _context.Users.FindAsync(currentUserId);
-                        userPatientProfile = new PatientProfile
-                        {
-                            userID = currentUserId,
-                            DateOfBirth = "2000-01-01",
-                            gender = "Not Specified",
-                            BloodGroup = "O+",
-                            Address = "Hospital Clinic",
-                            emergencyContact = user?.Phone ?? "99999999"
-                        };
-                        _context.PatientProfiles.Add(userPatientProfile);
-                        await _context.SaveChangesAsync();
-                    }
-                    appointment.PatientProfileID = userPatientProfile.PatientProfileID;
+                    return Unauthorized("User ID not found in token.");
                 }
-                else
+
+                var userPatientProfile = await _context.PatientProfiles.FirstOrDefaultAsync(p => p.userID == currentUserId.Value);
+                if (userPatientProfile == null)
+                {
+                    var user = await _context.Users.FindAsync(currentUserId.Value);
+                    userPatientProfile = new PatientProfile
+                    {
+                        userID = currentUserId.Value,
+                        DateOfBirth = "2000-01-01",
+                        gender = "Not Specified",
+                        BloodGroup = "O+",
+                        Address = "Hospital Clinic",
+                        emergencyContact = user?.Phone ?? "99999999"
+                    };
+                    _context.PatientProfiles.Add(userPatientProfile);
+                    await _context.SaveChangesAsync();
+                }
+                appointment.PatientProfileID = userPatientProfile.PatientProfileID;
+            }
+            else if (appointment.PatientProfileID <= 0 || !_context.PatientProfiles.Any(p => p.PatientProfileID == appointment.PatientProfileID))
+            {
+                if (currentUserId.HasValue)
+                {
+                    var userPatientProfile = await _context.PatientProfiles.FirstOrDefaultAsync(p => p.userID == currentUserId.Value);
+                    if (userPatientProfile != null)
+                    {
+                        appointment.PatientProfileID = userPatientProfile.PatientProfileID;
+                    }
+                }
+
+                if (appointment.PatientProfileID <= 0 || !_context.PatientProfiles.Any(p => p.PatientProfileID == appointment.PatientProfileID))
                 {
                     var firstPatient = await _context.PatientProfiles.FirstOrDefaultAsync();
                     if (firstPatient != null)
@@ -69,12 +123,19 @@ namespace Team_3_HMS.Controllers
             }
 
             // 2. Resolve & Validate DoctorProfileId
-            if (appointment.DoctorProfileId <= 0 || !_context.DoctorProfiles.Any(d => d.DoctorProfileId == appointment.DoctorProfileId))
+            if (User.IsInRole("Doctor") && currentUserId.HasValue)
             {
-                var userIdClaim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
-                if (userIdClaim != null && int.TryParse(userIdClaim, out int currentUserId))
+                var docProfile = await _context.DoctorProfiles.FirstOrDefaultAsync(d => d.userID == currentUserId.Value);
+                if (docProfile != null)
                 {
-                    var docProfile = await _context.DoctorProfiles.FirstOrDefaultAsync(d => d.userID == currentUserId);
+                    appointment.DoctorProfileId = docProfile.DoctorProfileId;
+                }
+            }
+            else if (appointment.DoctorProfileId <= 0 || !_context.DoctorProfiles.Any(d => d.DoctorProfileId == appointment.DoctorProfileId))
+            {
+                if (currentUserId.HasValue)
+                {
+                    var docProfile = await _context.DoctorProfiles.FirstOrDefaultAsync(d => d.userID == currentUserId.Value);
                     if (docProfile != null)
                     {
                         appointment.DoctorProfileId = docProfile.DoctorProfileId;
@@ -230,8 +291,27 @@ namespace Team_3_HMS.Controllers
                 return BadRequest("AppointmentDateTime must be a valid date/time string, e.g. 2026-08-15T14:30:00");
             }
 
-            var appointment = await _context.Appointments.FindAsync(id);
-            if (appointment == null) return NotFound();
+            var appointment = await _context.Appointments
+                .Include(a => a.PatientProfile)
+                .Include(a => a.DoctorProfile)
+                .FirstOrDefaultAsync(a => a.AppointmentId == id);
+
+            if (appointment == null) return NotFound("Appointment not found.");
+
+            if (!User.IsInRole("Admin"))
+            {
+                int? currentUserId = GetCurrentUserId();
+                if (!currentUserId.HasValue) return Unauthorized();
+
+                if (User.IsInRole("Doctor") && appointment.DoctorProfile?.userID != currentUserId.Value)
+                {
+                    return Forbid();
+                }
+                if (User.IsInRole("Patient") && appointment.PatientProfile?.userID != currentUserId.Value)
+                {
+                    return Forbid();
+                }
+            }
 
             appointment.AppointmentDateTime = updated.AppointmentDateTime;
             appointment.ReasonForVisit = updated.ReasonForVisit;
@@ -244,8 +324,27 @@ namespace Team_3_HMS.Controllers
         [HttpPatch("{id}/status")]
         public async Task<IActionResult> UpdateStatus(int id, [FromBody] string status)
         {
-            var appointment = await _context.Appointments.FindAsync(id);
-            if (appointment == null) return NotFound();
+            var appointment = await _context.Appointments
+                .Include(a => a.PatientProfile)
+                .Include(a => a.DoctorProfile)
+                .FirstOrDefaultAsync(a => a.AppointmentId == id);
+
+            if (appointment == null) return NotFound("Appointment not found.");
+
+            if (!User.IsInRole("Admin"))
+            {
+                int? currentUserId = GetCurrentUserId();
+                if (!currentUserId.HasValue) return Unauthorized();
+
+                if (User.IsInRole("Doctor") && appointment.DoctorProfile?.userID != currentUserId.Value)
+                {
+                    return Forbid();
+                }
+                if (User.IsInRole("Patient") && appointment.PatientProfile?.userID != currentUserId.Value)
+                {
+                    return Forbid();
+                }
+            }
 
             appointment.Status = status;
             await _context.SaveChangesAsync();
@@ -256,8 +355,27 @@ namespace Team_3_HMS.Controllers
         [HttpDelete("delete/{id}")]
         public async Task<IActionResult> DeleteAppointment(int id)
         {
-            var appointment = await _context.Appointments.FindAsync(id);
-            if (appointment == null) return NotFound();
+            var appointment = await _context.Appointments
+                .Include(a => a.PatientProfile)
+                .Include(a => a.DoctorProfile)
+                .FirstOrDefaultAsync(a => a.AppointmentId == id);
+
+            if (appointment == null) return NotFound("Appointment not found.");
+
+            if (!User.IsInRole("Admin"))
+            {
+                int? currentUserId = GetCurrentUserId();
+                if (!currentUserId.HasValue) return Unauthorized();
+
+                if (User.IsInRole("Doctor") && appointment.DoctorProfile?.userID != currentUserId.Value)
+                {
+                    return Forbid();
+                }
+                if (User.IsInRole("Patient") && appointment.PatientProfile?.userID != currentUserId.Value)
+                {
+                    return Forbid();
+                }
+            }
 
             // 1. Delete associated invoices
             var invoices = _context.Invoices.Where(i => i.AppointmentID == id).ToList();
@@ -296,26 +414,22 @@ namespace Team_3_HMS.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAppointments()
         {
-            var appointments = await _context.Appointments
-                .Include(a => a.room)
-                .Include(a => a.PatientProfile)
-                    .ThenInclude(p => p.user)
-                .ToListAsync();
+            var appointments = await GetUserScopedAppointmentsQuery().ToListAsync();
             return Ok(appointments);
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetAppointment(int id)
         {
-            var appointment = await _context.Appointments.FindAsync(id);
-            if (appointment == null) return NotFound();
+            var appointment = await GetUserScopedAppointmentsQuery().FirstOrDefaultAsync(a => a.AppointmentId == id);
+            if (appointment == null) return NotFound("Appointment not found or access denied.");
             return Ok(appointment);
         }
 
         [HttpGet("by-status/{status}")]
         public async Task<IActionResult> GetByStatus(string status)
         {
-            var results = await _context.Appointments
+            var results = await GetUserScopedAppointmentsQuery()
                 .Where(a => a.Status == status)
                 .ToListAsync();
             return Ok(results);
@@ -324,7 +438,7 @@ namespace Team_3_HMS.Controllers
         [HttpGet("sorted")]
         public async Task<IActionResult> GetSortedByDate()
         {
-            var appointments = await _context.Appointments.ToListAsync();
+            var appointments = await GetUserScopedAppointmentsQuery().ToListAsync();
 
             var sorted = appointments
                 .OrderByDescending(a => DateTime.TryParse(a.AppointmentDateTime, out var dt) ? dt : DateTime.MinValue)
@@ -336,7 +450,7 @@ namespace Team_3_HMS.Controllers
         [HttpGet("count")]
         public async Task<IActionResult> GetAppointmentCount()
         {
-            var count = await _context.Appointments.CountAsync();
+            var count = await GetUserScopedAppointmentsQuery().CountAsync();
             return Ok(count);
         }
     }
