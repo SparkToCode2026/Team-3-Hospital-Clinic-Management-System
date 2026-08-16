@@ -90,9 +90,11 @@ namespace Team_3_HMS.Controllers
         [Authorize(Roles = "Admin")]
         [HttpDelete("RemoveDepartment")]
         [HttpDelete("RemoveDepartment/{id}")]
-        public IActionResult RemoveDepartment([FromQuery] int? id, [FromRoute] int? routeId)
+        [HttpDelete("delete/{id}")]
+        [HttpDelete("{id}")]
+        public IActionResult RemoveDepartment([FromQuery] int? id, [FromRoute(Name = "id")] int? routeId)
         {
-            int targetId = id ?? routeId ?? 0;
+            int targetId = (id.HasValue && id.Value > 0) ? id.Value : (routeId ?? 0);
             Department? department = context.Departments
                 .FirstOrDefault(d => d.DepartmentId == targetId);
 

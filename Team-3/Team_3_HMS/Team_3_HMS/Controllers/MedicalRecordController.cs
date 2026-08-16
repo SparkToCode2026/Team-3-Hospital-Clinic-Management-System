@@ -105,6 +105,7 @@ namespace Team_3_HMS.Controllers
         }
         // Case 4: 
         [HttpDelete("{id}")]
+        [HttpDelete("delete/{id}")]
         [Authorize(Roles = "Doctor,Admin")]
         public async Task<IActionResult> DeleteMedicalRecord(int id)
         {
@@ -114,6 +115,24 @@ namespace Team_3_HMS.Controllers
             {
                 return NotFound("Medical record not found.");
             }
+
+            // 1. Delete associated lab tests
+            var labTests = _context.LabTests.Where(l => l.MedicalRecordId == id).ToList();
+            _context.LabTests.RemoveRange(labTests);
+
+            // 2. Delete associated prescriptions and their medication links
+            var prescriptions = _context.Prescriptions
+                .Include(p => p.Medications)
+                .Where(p => p.MedicalRecordId == id)
+                .ToList();
+            foreach (var prescription in prescriptions)
+            {
+                if (prescription.Medications != null)
+                {
+                    prescription.Medications.Clear();
+                }
+            }
+            _context.Prescriptions.RemoveRange(prescriptions);
 
             _context.MedicalRecords.Remove(medicalRecord);
             await _context.SaveChangesAsync();

@@ -325,6 +325,7 @@
     let patientProfilesList = [];
     let roomsList = [];
     let selectedApptId = null;
+    let currentDoctorProfileId = null;
 
     async function initDoctorAppointments() {
       const user = getAuthUser();
@@ -338,6 +339,21 @@
       }
       const sidebarRole = document.querySelector('.sidebar-user-role');
       if (sidebarRole) sidebarRole.textContent = `Physician · ID ${user.userId}`;
+
+      // Resolve doctor profile ID
+      try {
+        let doc = null;
+        try {
+          doc = await apiFetch(`/DoctorProfile/user/${user.userId}`);
+        } catch {
+          doc = await apiFetch(`/DoctorProfile/GetDoctorProfileByUserId/${user.userId}`);
+        }
+        if (doc) {
+          currentDoctorProfileId = doc.doctorProfileId || doc.DoctorProfileId || doc.id;
+        }
+      } catch (e) {
+        console.log('Doctor profile note:', e.message);
+      }
 
       await Promise.all([
         loadAppointmentsData(),
@@ -610,6 +626,7 @@
           method: 'POST',
           body: JSON.stringify({
             patientProfileID: ptId,
+            doctorProfileId: currentDoctorProfileId || 1,
             appointmentDateTime: dtVal,
             roomId: roomId,
             reasonForVisit: reason,

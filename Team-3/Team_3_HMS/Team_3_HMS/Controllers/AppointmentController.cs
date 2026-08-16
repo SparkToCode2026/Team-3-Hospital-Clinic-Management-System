@@ -23,25 +23,200 @@ namespace Team_3_HMS.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateAppointment([FromBody] Appointment appointment)
         {
+            if (appointment == null)
+            {
+                return BadRequest("Appointment data is required.");
+            }
+
             if (!DateTime.TryParse(appointment.AppointmentDateTime, out _))
             {
                 return BadRequest("AppointmentDateTime must be a valid date/time string, e.g. 2026-08-15T14:30:00");
             }
 
+            // 1. Resolve & Validate PatientProfileID
+            if (appointment.PatientProfileID <= 0 || !_context.PatientProfiles.Any(p => p.PatientProfileID == appointment.PatientProfileID))
+            {
+                // Try resolving from authenticated token
+                var userIdClaim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+                if (userIdClaim != null && int.TryParse(userIdClaim, out int currentUserId))
+                {
+                    var userPatientProfile = await _context.PatientProfiles.FirstOrDefaultAsync(p => p.userID == currentUserId);
+                    if (userPatientProfile == null)
+                    {
+                        var user = await _context.Users.FindAsync(currentUserId);
+                        userPatientProfile = new PatientProfile
+                        {
+                            userID = currentUserId,
+                            DateOfBirth = "2000-01-01",
+                            gender = "Not Specified",
+                            BloodGroup = "O+",
+                            Address = "Hospital Clinic",
+                            emergencyContact = user?.Phone ?? "99999999"
+                        };
+                        _context.PatientProfiles.Add(userPatientProfile);
+                        await _context.SaveChangesAsync();
+                    }
+                    appointment.PatientProfileID = userPatientProfile.PatientProfileID;
+                }
+                else
+                {
+                    var firstPatient = await _context.PatientProfiles.FirstOrDefaultAsync();
+                    if (firstPatient != null)
+                    {
+                        appointment.PatientProfileID = firstPatient.PatientProfileID;
+                    }
+                }
+            }
+
+            // 2. Resolve & Validate DoctorProfileId
+            if (appointment.DoctorProfileId <= 0 || !_context.DoctorProfiles.Any(d => d.DoctorProfileId == appointment.DoctorProfileId))
+            {
+                var userIdClaim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+                if (userIdClaim != null && int.TryParse(userIdClaim, out int currentUserId))
+                {
+                    var docProfile = await _context.DoctorProfiles.FirstOrDefaultAsync(d => d.userID == currentUserId);
+                    if (docProfile != null)
+                    {
+                        appointment.DoctorProfileId = docProfile.DoctorProfileId;
+                    }
+                }
+
+                if (appointment.DoctorProfileId <= 0 || !_context.DoctorProfiles.Any(d => d.DoctorProfileId == appointment.DoctorProfileId))
+                {
+                    var firstDoc = await _context.DoctorProfiles.FirstOrDefaultAsync();
+                    if (firstDoc != null)
+                    {
+                        appointment.DoctorProfileId = firstDoc.DoctorProfileId;
+                    }
+                }
+            }
+
+            // 3. Resolve & Validate RoomId
+            if (appointment.RoomId <= 0 || !_context.Rooms.Any(r => r.RoomId == appointment.RoomId))
+            {
+                var firstRoom = await _context.Rooms.FirstOrDefaultAsync();
+                if (firstRoom != null)
+                {
+                    appointment.RoomId = firstRoom.RoomId;
+                }
+            }
+
+            if (string.IsNullOrWhiteSpace(appointment.Status))
+            {
+                appointment.Status = "Confirmed";
+            }
+
+            if (string.IsNullOrWhiteSpace(appointment.ReasonForVisit))
+            {
+                appointment.ReasonForVisit = "General Clinical Consultation";
+            }
+
             _context.Appointments.Add(appointment);
             await _context.SaveChangesAsync();
 
-            var patient = await _context.PatientProfiles
-                .Include(p => p.user)
-                .FirstOrDefaultAsync(p => p.PatientProfileID == appointment.PatientProfileID);
-
-            if (patient?.user?.email != null)
+            // Automatically generate pending invoice for the appointment
+            try
             {
-                await _emailService.SendEmailAsync(
-                    patient.user.email,
-                    "Appointment Confirmation",
-                    $"Your appointment is confirmed for {appointment.AppointmentDateTime} in Room {appointment.RoomId}."
-                );
+                var doc = await _context.DoctorProfiles.FindAsync(appointment.DoctorProfileId);
+                double fee = (doc != null && doc.ConsultationFee > 0) ? doc.ConsultationFee : 15.00;
+
+                var initialInvoice = new Invoice
+                {
+                    AppointmentID = appointment.AppointmentId,
+                    TotalAmount = fee,
+                    Paymentmethod = "Card",
+                    PaymentStatus = "Pending",
+                    IssuedDate = DateTime.Now.ToString("yyyy-MM-dd")
+                };
+                _context.Invoices.Add(initialInvoice);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception exInv)
+            {
+                Console.WriteLine($"[AppointmentController Invoice Note]: {exInv.Message}");
+            }
+
+            try
+            {
+                var patient = await _context.PatientProfiles
+                    .Include(p => p.user)
+                    .FirstOrDefaultAsync(p => p.PatientProfileID == appointment.PatientProfileID);
+                var patientUser = patient?.user ?? (patient != null ? await _context.Users.FindAsync(patient.userID) : null);
+
+                var doctor = await _context.DoctorProfiles
+                    .Include(d => d.userid)
+                    .FirstOrDefaultAsync(d => d.DoctorProfileId == appointment.DoctorProfileId);
+                var doctorUser = doctor?.userid ?? (doctor != null ? await _context.Users.FindAsync(doctor.userID) : null);
+
+                var room = await _context.Rooms.FindAsync(appointment.RoomId);
+                string roomName = room != null ? $"Room {room.RoomNumber} ({room.Type})" : $"Room #{appointment.RoomId}";
+                string patientName = patientUser?.Fullname ?? "Patient";
+                string doctorName = doctorUser?.Fullname ?? "Doctor";
+
+                string emailHtml = $@"
+<div style=""font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 600px; margin: 0 auto; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);"">
+  <div style=""background: #2563eb; color: #ffffff; padding: 24px; text-align: center;"">
+    <h2 style=""margin: 0; font-size: 22px;"">🏥 MedCore HMS — Appointment Confirmed</h2>
+    <p style=""margin: 6px 0 0; opacity: 0.9; font-size: 14px;"">Ref ID: #APT-{appointment.AppointmentId:D4}</p>
+  </div>
+  <div style=""padding: 24px; color: #334155; line-height: 1.6;"">
+    <p style=""font-size: 16px;"">Hello <strong>{patientName}</strong>,</p>
+    <p>Your clinical appointment has been scheduled and confirmed in our hospital system. Here are your booking details:</p>
+    
+    <div style=""background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px; padding: 16px; margin: 20px 0;"">
+      <table style=""width: 100%; border-collapse: collapse; font-size: 14px;"">
+        <tr>
+          <td style=""padding: 6px 0; color: #64748b; font-weight: 600;"">📅 Date & Time:</td>
+          <td style=""padding: 6px 0; font-weight: 700; color: #0f172a;"">{appointment.AppointmentDateTime}</td>
+        </tr>
+        <tr>
+          <td style=""padding: 6px 0; color: #64748b; font-weight: 600;"">👨‍⚕️ Physician:</td>
+          <td style=""padding: 6px 0; font-weight: 600; color: #0f172a;"">{doctorName}</td>
+        </tr>
+        <tr>
+          <td style=""padding: 6px 0; color: #64748b; font-weight: 600;"">🚪 Location:</td>
+          <td style=""padding: 6px 0; font-weight: 600; color: #0f172a;"">{roomName}</td>
+        </tr>
+        <tr>
+          <td style=""padding: 6px 0; color: #64748b; font-weight: 600;"">📋 Reason:</td>
+          <td style=""padding: 6px 0; color: #0f172a;"">{appointment.ReasonForVisit}</td>
+        </tr>
+        <tr>
+          <td style=""padding: 6px 0; color: #64748b; font-weight: 600;"">⚡ Status:</td>
+          <td style=""padding: 6px 0; font-weight: 700; color: #16a34a;"">{appointment.Status}</td>
+        </tr>
+      </table>
+    </div>
+
+    <p style=""font-size: 13px; color: #64748b;"">Please arrive 10 minutes prior to your consultation. If you need to reschedule or cancel, please access the MedCore Patient Portal.</p>
+  </div>
+  <div style=""background: #f1f5f9; padding: 14px; text-align: center; font-size: 12px; color: #64748b; border-top: 1px solid #e2e8f0;"">
+    MedCore Hospital & Clinic Management System &bull; Automated Notification
+  </div>
+</div>";
+
+                if (!string.IsNullOrWhiteSpace(patientUser?.email))
+                {
+                    await _emailService.SendEmailAsync(
+                        patientUser.email,
+                        $"Appointment Confirmation (#APT-{appointment.AppointmentId:D4})",
+                        emailHtml
+                    );
+                }
+
+                if (!string.IsNullOrWhiteSpace(doctorUser?.email) && doctorUser.email != patientUser?.email)
+                {
+                    string docEmailHtml = emailHtml.Replace($"Hello <strong>{patientName}</strong>", $"Hello <strong>Dr. {doctorName}</strong>");
+                    await _emailService.SendEmailAsync(
+                        doctorUser.email,
+                        $"New Scheduled Appointment (#APT-{appointment.AppointmentId:D4})",
+                        docEmailHtml
+                    );
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"[AppointmentController Warning] Simulated email note: {ex.Message}");
             }
 
             return CreatedAtAction(nameof(GetAppointment), new { id = appointment.AppointmentId }, appointment);
@@ -78,10 +253,40 @@ namespace Team_3_HMS.Controllers
         }
 
         [HttpDelete("{id}")]
+        [HttpDelete("delete/{id}")]
         public async Task<IActionResult> DeleteAppointment(int id)
         {
             var appointment = await _context.Appointments.FindAsync(id);
             if (appointment == null) return NotFound();
+
+            // 1. Delete associated invoices
+            var invoices = _context.Invoices.Where(i => i.AppointmentID == id).ToList();
+            _context.Invoices.RemoveRange(invoices);
+
+            // 2. Delete associated medical records and their child records
+            var medicalRecords = _context.MedicalRecords.Where(m => m.AppointmentId == id).ToList();
+            if (medicalRecords.Any())
+            {
+                var medRecordIds = medicalRecords.Select(m => m.MedicalRecordID).ToList();
+
+                var labTests = _context.LabTests.Where(l => medRecordIds.Contains(l.MedicalRecordId)).ToList();
+                _context.LabTests.RemoveRange(labTests);
+
+                var prescriptions = _context.Prescriptions
+                    .Include(p => p.Medications)
+                    .Where(p => medRecordIds.Contains(p.MedicalRecordId))
+                    .ToList();
+                foreach (var prescription in prescriptions)
+                {
+                    if (prescription.Medications != null)
+                    {
+                        prescription.Medications.Clear();
+                    }
+                }
+                _context.Prescriptions.RemoveRange(prescriptions);
+
+                _context.MedicalRecords.RemoveRange(medicalRecords);
+            }
 
             _context.Appointments.Remove(appointment);
             await _context.SaveChangesAsync();

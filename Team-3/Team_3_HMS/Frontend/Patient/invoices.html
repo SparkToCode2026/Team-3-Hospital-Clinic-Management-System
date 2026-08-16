@@ -214,7 +214,7 @@
               </div>
 
               <!-- Action Buttons -->
-              <button class="btn-stripe-pay" id="btnPayCard" onclick="payCurrentInvoice()">
+              <button class="btn-stripe-pay" id="btnPayCard" onclick="payCurrentInvoiceDirectly()">
                 <i class="bi bi-credit-card me-1"></i> Pay via Card
               </button>
               <button class="btn-print-inv" onclick="window.print()">
@@ -231,6 +231,63 @@
 
   </div><!-- /portal-wrapper -->
 
+  <!-- ══════════════════ THANK YOU SUCCESS POPUP MODAL ══════════════════ -->
+  <div id="thankYouModal"
+    style="display: none; position: fixed; inset: 0; background: rgba(15,23,42,0.65); z-index: 1100; align-items: center; justify-content: center; backdrop-filter: blur(4px);">
+    <div
+      style="background: #ffffff; border-radius: 24px; width: 92%; max-width: 440px; padding: 2.25rem 2rem; text-align: center; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.3); border: 1px solid #e2e8f0; animation: modalPop 0.25s cubic-bezier(0.16, 1, 0.3, 1);">
+      
+      <!-- Animated Check Icon -->
+      <div style="width: 72px; height: 72px; background: #dcfce7; color: #16a34a; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; margin: 0 auto 1.25rem; box-shadow: 0 0 0 8px rgba(22, 163, 74, 0.1);">
+        <i class="bi bi-check-lg"></i>
+      </div>
+
+      <h3 style="font-size: 1.4rem; font-weight: 800; color: #0f172a; margin: 0 0 0.5rem;">Thank You for Your Payment!</h3>
+      <p style="font-size: 0.88rem; color: #64748b; margin: 0 0 1.5rem; line-height: 1.5;">
+        Your medical invoice has been processed and paid in full. A confirmation receipt has been recorded in your patient file.
+      </p>
+
+      <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 14px; padding: 1.15rem; margin-bottom: 1.5rem; text-align: left; font-size: 0.85rem;">
+        <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+          <span style="color: #64748b;">Invoice Reference:</span>
+          <span style="font-weight: 700; color: #2563eb;" id="tyModalInvId">#INV-0000</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+          <span style="color: #64748b;">Appointment Ref:</span>
+          <span style="font-weight: 600; color: #0f172a;" id="tyModalApptId">#APT-0000</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+          <span style="color: #64748b;">Amount Paid:</span>
+          <span style="font-weight: 700; color: #16a34a;" id="tyModalAmount">OMR 0.00</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+          <span style="color: #64748b;">Payment Method:</span>
+          <span style="font-weight: 600; color: #0f172a;">Card (Online Checkout)</span>
+        </div>
+        <div style="display: flex; justify-content: space-between;">
+          <span style="color: #64748b;">Payment Status:</span>
+          <span class="badge" style="background: #dcfce7; color: #16a34a; font-weight: 700; padding: 0.2rem 0.5rem; border-radius: 6px;">Paid in Full</span>
+        </div>
+      </div>
+
+      <div style="display: flex; gap: 0.75rem;">
+        <button onclick="window.print()" style="flex: 1; padding: 0.75rem; border-radius: 10px; border: 1px solid #cbd5e1; background: #ffffff; color: #475569; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.4rem;">
+          <i class="bi bi-printer"></i> Print Receipt
+        </button>
+        <button onclick="closeThankYouModal()" style="flex: 1.2; padding: 0.75rem; border-radius: 10px; border: none; background: #16a34a; color: #ffffff; font-weight: 700; cursor: pointer; box-shadow: 0 4px 12px rgba(22, 163, 74, 0.25);">
+          Done
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <style>
+    @keyframes modalPop {
+      0% { transform: scale(0.92); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+  </style>
+
   <script src="../Assets/api.js"></script>
   <script>
     let myInvoices = [];
@@ -243,9 +300,13 @@
       try {
         let res = [];
         try {
-          res = await apiFetch('/Invoice');
+          res = await apiFetch('/Invoice/my-invoices');
         } catch (e1) {
-          res = await apiFetch('/api/Invoice');
+          try {
+            res = await apiFetch('/Invoice');
+          } catch (e2) {
+            res = await apiFetch('/api/Invoice');
+          }
         }
         myInvoices = Array.isArray(res) ? res : [];
       } catch (err) {
@@ -398,32 +459,75 @@
       }
     }
 
-    async function payCurrentInvoice() {
-      if (!selectedInvoiceObj) return;
+    async function payCurrentInvoiceDirectly() {
+      if (!selectedInvoiceObj) {
+        alert('Please select an invoice from the table first.');
+        return;
+      }
+
+      const status = (selectedInvoiceObj.paymentStatus || selectedInvoiceObj.PaymentStatus || '').toLowerCase();
+      if (status === 'paid') {
+        alert('This invoice is already paid in full.');
+        return;
+      }
 
       const id = selectedInvoiceObj.invoiceID || selectedInvoiceObj.InvoiceID || selectedInvoiceObj.id;
       const apptId = selectedInvoiceObj.appointmentID || selectedInvoiceObj.AppointmentID;
       const totalAmt = selectedInvoiceObj.totalAmount || selectedInvoiceObj.TotalAmount;
-      const issued = selectedInvoiceObj.issuedDate;
+      const issued = selectedInvoiceObj.issuedDate || new Date().toISOString().slice(0, 10);
+
+      const btn = document.getElementById('btnPayCard');
+      if (btn) {
+        btn.disabled = true;
+        btn.innerHTML = '<i class="bi bi-hourglass-split me-1"></i> Processing Payment...';
+      }
 
       try {
-        await apiFetch(`/api/Invoice/update/${id}`, {
-          method: 'PUT',
-          body: JSON.stringify({
-            invoiceID: id,
-            appointmentID: apptId,
-            issuedDate: issued,
-            paymentmethod: 'Card',
-            totalAmount: totalAmt,
-            paymentStatus: 'Paid'
-          })
-        });
+        try {
+          await apiFetch(`/Invoice/pay/${id}`, {
+            method: 'POST',
+            body: JSON.stringify({
+              invoiceID: id,
+              paymentmethod: 'Card',
+              paymentStatus: 'Paid'
+            })
+          });
+        } catch {
+          await apiFetch(`/Invoice/update/${id}`, {
+            method: 'PUT',
+            body: JSON.stringify({
+              invoiceID: id,
+              appointmentID: apptId,
+              issuedDate: issued,
+              paymentmethod: 'Card',
+              totalAmount: totalAmt,
+              paymentStatus: 'Paid'
+            })
+          });
+        }
 
-        alert(`Payment for Invoice #INV-${String(id).padStart(4, '0')} has been successfully processed!`);
+        // Populate Thank You Modal
+        const amount = parseFloat(totalAmt || 0);
+        const disc = (amount * 0.10);
+        const finalTotal = (amount - disc);
+
+        document.getElementById('tyModalInvId').textContent = `#INV-${String(id).padStart(4, '0')}`;
+        document.getElementById('tyModalApptId').textContent = `#APT-${String(apptId).padStart(4, '0')}`;
+        document.getElementById('tyModalAmount').textContent = `OMR ${finalTotal.toFixed(2)}`;
+
+        document.getElementById('thankYouModal').style.display = 'flex';
         await loadPatientInvoices();
       } catch (err) {
         alert('Payment processing failed: ' + err.message);
+        if (btn) {
+          btn.disabled = false;
+          btn.innerHTML = '<i class="bi bi-credit-card me-1"></i> Pay via Card';
+        }
       }
+    }
+
+    function closeThankYouModal() {
+      document.getElementById('thankYouModal').style.display = 'none';
     }
 
     function escapeHtml(text) {

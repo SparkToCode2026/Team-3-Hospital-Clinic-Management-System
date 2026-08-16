@@ -137,6 +137,7 @@ namespace Team_3_HMS.Controllers
         // DELETE: api/PatientProfile/delete/1
         [Authorize(Roles = "Admin")]
         [HttpDelete("delete/{id}")]
+        [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
             var profile = _context.PatientProfiles.Find(id);
@@ -146,10 +147,46 @@ namespace Team_3_HMS.Controllers
                 return NotFound("Patient profile not found.");
             }
 
+            // Cascade delete appointments of this patient
+            var patientAppointments = _context.Appointments.Where(a => a.PatientProfileID == id).ToList();
+            if (patientAppointments.Any())
+            {
+                var apptIds = patientAppointments.Select(a => a.AppointmentId).ToList();
+
+                var invoices = _context.Invoices.Where(i => apptIds.Contains(i.AppointmentID)).ToList();
+                _context.Invoices.RemoveRange(invoices);
+
+                var medicalRecords = _context.MedicalRecords.Where(m => apptIds.Contains(m.AppointmentId)).ToList();
+                if (medicalRecords.Any())
+                {
+                    var medRecordIds = medicalRecords.Select(m => m.MedicalRecordID).ToList();
+
+                    var labTests = _context.LabTests.Where(l => medRecordIds.Contains(l.MedicalRecordId)).ToList();
+                    _context.LabTests.RemoveRange(labTests);
+
+                    var prescriptions = _context.Prescriptions
+                        .Include(p => p.Medications)
+                        .Where(p => medRecordIds.Contains(p.MedicalRecordId))
+                        .ToList();
+                    foreach (var prescription in prescriptions)
+                    {
+                        if (prescription.Medications != null)
+                        {
+                            prescription.Medications.Clear();
+                        }
+                    }
+                    _context.Prescriptions.RemoveRange(prescriptions);
+
+                    _context.MedicalRecords.RemoveRange(medicalRecords);
+                }
+
+                _context.Appointments.RemoveRange(patientAppointments);
+            }
+
             _context.PatientProfiles.Remove(profile);
             _context.SaveChanges();
 
-            return Ok("Patient profile deleted successfully.");
+            return Ok(new { message = "Patient profile deleted successfully." });
         }
 
         // 8. SEARCH PROFILES BY BLOOD GROUP OR GENDER

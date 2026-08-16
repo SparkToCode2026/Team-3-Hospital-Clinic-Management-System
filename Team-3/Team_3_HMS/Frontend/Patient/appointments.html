@@ -214,6 +214,13 @@
         </div>
 
         <div class="form-group">
+          <label class="form-label">Consulting Doctor</label>
+          <select id="bookDoctorSelect" class="form-control">
+            <option value="">Loading clinic doctors...</option>
+          </select>
+        </div>
+
+        <div class="form-group">
           <label class="form-label">Preferred Date &amp; Time</label>
           <input type="datetime-local" id="bookDateTime" class="form-control" required />
         </div>
@@ -314,8 +321,38 @@
 
       await Promise.all([
         loadPatientApptsData(),
-        loadAvailableRoomsDropdown()
+        loadAvailableRoomsDropdown(),
+        loadAvailableDoctorsDropdown()
       ]);
+    }
+
+    async function loadAvailableDoctorsDropdown() {
+      const select = document.getElementById('bookDoctorSelect');
+      if (!select) return;
+
+      try {
+        let docs = [];
+        try {
+          docs = await apiFetch('/DoctorProfile/GetAllDoctors');
+        } catch (e1) {
+          docs = await apiFetch('/DoctorProfile/GetAllDoctorProfiles');
+        }
+
+        const docList = Array.isArray(docs) ? docs : [];
+        if (docList.length === 0) {
+          select.innerHTML = '<option value="1">Dr. Clinic Physician (General)</option>';
+        } else {
+          select.innerHTML = docList.map(d => {
+            const id = d.doctorProfileId || d.DoctorProfileId || d.id;
+            const name = d.user?.fullname || d.userid?.fullname || d.user?.Fullname || ('Doctor #' + id);
+            const fee = d.consultationFee ? ` · OMR ${d.consultationFee.toFixed(2)}` : '';
+            return `<option value="${id}">${escapeHtml(name)}${fee}</option>`;
+          }).join('');
+        }
+      } catch (err) {
+        console.error('Error loading doctors dropdown:', err);
+        select.innerHTML = '<option value="1">Primary Clinic Physician</option>';
+      }
     }
 
     async function loadPatientApptsData() {
@@ -499,7 +536,8 @@
     async function confirmBookAppointment() {
       const reason = document.getElementById('bookReason').value.trim();
       const dtVal = document.getElementById('bookDateTime').value;
-      const roomId = parseInt(document.getElementById('bookRoomSelect').value) || 1;
+      const docId = parseInt(document.getElementById('bookDoctorSelect')?.value) || 1;
+      const roomId = parseInt(document.getElementById('bookRoomSelect')?.value) || 1;
 
       if (!reason || !dtVal) {
         alert('Please fill in both consultation reason and preferred date/time.');
@@ -511,6 +549,7 @@
           method: 'POST',
           body: JSON.stringify({
             patientProfileID: patientProfileId || 1,
+            doctorProfileId: docId,
             appointmentDateTime: dtVal,
             roomId: roomId,
             reasonForVisit: reason,

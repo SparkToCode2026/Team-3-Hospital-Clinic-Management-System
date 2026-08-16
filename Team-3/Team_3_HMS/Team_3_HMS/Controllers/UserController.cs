@@ -180,9 +180,9 @@ namespace Team_3_HMS.Controllers
 
         
         // 5. DELETE: Remove user account (Admin only)
-        
         [Authorize(Roles = "Admin")]
         [HttpDelete("delete/{id}")]
+        [HttpDelete("{id}")]
         public IActionResult DeleteUser(int id)
         {
             var user = _context.Users.Find(id);
@@ -191,10 +191,83 @@ namespace Team_3_HMS.Controllers
                 return NotFound("User not found.");
             }
 
+            // 1. Cascade delete if user is a Patient
+            var patientProfiles = _context.PatientProfiles.Where(p => p.userID == id).ToList();
+            foreach (var patient in patientProfiles)
+            {
+                var patientAppointments = _context.Appointments.Where(a => a.PatientProfileID == patient.PatientProfileID).ToList();
+                DeleteAppointmentsCascade(patientAppointments);
+                _context.PatientProfiles.Remove(patient);
+            }
+
+            // 2. Cascade delete if user is a Doctor
+            var doctorProfiles = _context.DoctorProfiles
+                .Include(d => d.specializations)
+                .Where(d => d.userID == id)
+                .ToList();
+
+            foreach (var doctor in doctorProfiles)
+            {
+                var doctorAppointments = _context.Appointments.Where(a => a.DoctorProfileId == doctor.DoctorProfileId).ToList();
+                DeleteAppointmentsCascade(doctorAppointments);
+
+                // Handle departments where doctor is assigned
+                var departments = _context.Departments.Where(d => d.DoctorProfileId == doctor.DoctorProfileId).ToList();
+                _context.Departments.RemoveRange(departments);
+
+                // Clear many-to-many specializations
+                if (doctor.specializations != null)
+                {
+                    doctor.specializations.Clear();
+                }
+
+                _context.DoctorProfiles.Remove(doctor);
+            }
+
             _context.Users.Remove(user);
             _context.SaveChanges();
 
             return Ok(new { message = "User account deleted successfully." });
+        }
+
+        private void DeleteAppointmentsCascade(List<Appointment> appointments)
+        {
+            if (appointments == null || !appointments.Any()) return;
+
+            var apptIds = appointments.Select(a => a.AppointmentId).ToList();
+
+            // Delete Invoices for these appointments
+            var invoices = _context.Invoices.Where(i => apptIds.Contains(i.AppointmentID)).ToList();
+            _context.Invoices.RemoveRange(invoices);
+
+            // Delete MedicalRecords (and their related Prescriptions & LabTests)
+            var medicalRecords = _context.MedicalRecords.Where(m => apptIds.Contains(m.AppointmentId)).ToList();
+            if (medicalRecords.Any())
+            {
+                var medRecordIds = medicalRecords.Select(m => m.MedicalRecordID).ToList();
+
+                // Delete LabTests
+                var labTests = _context.LabTests.Where(l => medRecordIds.Contains(l.MedicalRecordId)).ToList();
+                _context.LabTests.RemoveRange(labTests);
+
+                // Delete Prescriptions
+                var prescriptions = _context.Prescriptions
+                    .Include(p => p.Medications)
+                    .Where(p => medRecordIds.Contains(p.MedicalRecordId))
+                    .ToList();
+                foreach (var prescription in prescriptions)
+                {
+                    if (prescription.Medications != null)
+                    {
+                        prescription.Medications.Clear();
+                    }
+                }
+                _context.Prescriptions.RemoveRange(prescriptions);
+
+                _context.MedicalRecords.RemoveRange(medicalRecords);
+            }
+
+            _context.Appointments.RemoveRange(appointments);
         }
 
         

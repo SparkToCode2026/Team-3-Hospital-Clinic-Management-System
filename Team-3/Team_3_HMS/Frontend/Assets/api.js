@@ -75,11 +75,40 @@ async function apiFetch(endpoint, options = {}) {
       if (res.status === 401) {
         console.warn('Unauthorized request. Token may be expired.');
       }
-      const data = await res.json().catch(() => null);
-      if (!res.ok) {
-        const errMessage = typeof data === 'string' ? data : (data?.message || res.statusText);
-        throw new Error(errMessage || `HTTP ${res.status}`);
+
+      if (res.status === 204) {
+        if (url.includes('/api')) {
+          detectedBaseUrl = url.substring(0, url.indexOf('/api') + 4);
+        }
+        return null;
       }
+
+      let data = null;
+      const text = await res.text().catch(() => '');
+      if (text) {
+        try {
+          data = JSON.parse(text);
+        } catch {
+          data = text;
+        }
+      }
+
+      if (!res.ok) {
+        let errMessage = '';
+        if (typeof data === 'string') {
+          errMessage = data;
+        } else if (data && typeof data === 'object') {
+          if (data.message) {
+            errMessage = data.message;
+          } else if (data.title) {
+            errMessage = data.title;
+          } else if (data.errors && typeof data.errors === 'object') {
+            errMessage = Object.values(data.errors).flat().join(', ');
+          }
+        }
+        throw new Error(errMessage || res.statusText || `HTTP ${res.status}`);
+      }
+
       // Remember successful base URL
       if (url.includes('/api')) {
         detectedBaseUrl = url.substring(0, url.indexOf('/api') + 4);
@@ -88,7 +117,7 @@ async function apiFetch(endpoint, options = {}) {
     } catch (err) {
       lastErr = err;
       // If it's a 4xx/5xx HTTP error from server response, don't retry other ports
-      if (err.message && (err.message.startsWith('HTTP ') || err.message.includes('Unauthorized') || err.message.includes('registered') || err.message.includes('not found'))) {
+      if (err.message && !err.message.includes('Failed to fetch') && !err.message.includes('NetworkError') && !err.message.includes('Load failed')) {
         throw err;
       }
     }

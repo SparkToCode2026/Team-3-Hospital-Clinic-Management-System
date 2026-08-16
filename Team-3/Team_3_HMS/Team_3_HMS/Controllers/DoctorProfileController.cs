@@ -92,18 +92,73 @@ namespace Team_3_HMS.Controllers
         // Method: DELETE to remove doctor profile by ID
         [Authorize(Roles = "Admin")]
         [HttpDelete("RemoveDoctorProfile")]
-        public IActionResult RemoveDoctorProfile(int id)
+        [HttpDelete("RemoveDoctorProfile/{id}")]
+        [HttpDelete("delete/{id}")]
+        [HttpDelete("{id}")]
+        public IActionResult RemoveDoctorProfile([FromQuery] int? id, [FromRoute(Name = "id")] int? routeId)
         {
-            DoctorProfile doctor = context.DoctorProfiles
-           .FirstOrDefault(d => d.DoctorProfileId == id);
+            int targetId = (id.HasValue && id.Value > 0) ? id.Value : (routeId ?? 0);
+            DoctorProfile? doctor = context.DoctorProfiles
+                .Include(d => d.specializations)
+                .FirstOrDefault(d => d.DoctorProfileId == targetId);
+
             if (doctor == null)
             {
-                return NotFound("doctor Profile not found");
+                return NotFound("Doctor profile not found");
             }
+
             var deletedDoctor = doctor;
-            // remove doctor profile from database
+
+            // 1. Delete all appointments for this doctor and their cascade dependencies
+            var doctorAppointments = context.Appointments.Where(a => a.DoctorProfileId == targetId).ToList();
+            if (doctorAppointments.Any())
+            {
+                var apptIds = doctorAppointments.Select(a => a.AppointmentId).ToList();
+
+                var invoices = context.Invoices.Where(i => apptIds.Contains(i.AppointmentID)).ToList();
+                context.Invoices.RemoveRange(invoices);
+
+                var medicalRecords = context.MedicalRecords.Where(m => apptIds.Contains(m.AppointmentId)).ToList();
+                if (medicalRecords.Any())
+                {
+                    var medRecordIds = medicalRecords.Select(m => m.MedicalRecordID).ToList();
+
+                    var labTests = context.LabTests.Where(l => medRecordIds.Contains(l.MedicalRecordId)).ToList();
+                    context.LabTests.RemoveRange(labTests);
+
+                    var prescriptions = context.Prescriptions
+                        .Include(p => p.Medications)
+                        .Where(p => medRecordIds.Contains(p.MedicalRecordId))
+                        .ToList();
+                    foreach (var prescription in prescriptions)
+                    {
+                        if (prescription.Medications != null)
+                        {
+                            prescription.Medications.Clear();
+                        }
+                    }
+                    context.Prescriptions.RemoveRange(prescriptions);
+
+                    context.MedicalRecords.RemoveRange(medicalRecords);
+                }
+
+                context.Appointments.RemoveRange(doctorAppointments);
+            }
+
+            // 2. Unassign or remove from departments
+            var departments = context.Departments.Where(d => d.DoctorProfileId == targetId).ToList();
+            context.Departments.RemoveRange(departments);
+
+            // 3. Clear specialization links
+            if (doctor.specializations != null)
+            {
+                doctor.specializations.Clear();
+            }
+
+            // 4. Remove doctor profile from database
             context.DoctorProfiles.Remove(doctor);
             context.SaveChanges();
+
             return Ok(new
             {
                 message = "Doctor profile deleted successfully",

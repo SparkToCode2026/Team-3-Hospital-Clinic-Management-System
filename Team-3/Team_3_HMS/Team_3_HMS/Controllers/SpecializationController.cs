@@ -89,10 +89,13 @@ namespace Team_3_HMS.Controllers
         [Authorize(Roles = "Admin")]
         [HttpDelete("RemoveSpecialization")]
         [HttpDelete("RemoveSpecialization/{id}")]
-        public IActionResult RemoveSpecialization([FromQuery] int? id, [FromRoute] int? routeId)
+        [HttpDelete("delete/{id}")]
+        [HttpDelete("{id}")]
+        public IActionResult RemoveSpecialization([FromQuery] int? id, [FromRoute(Name = "id")] int? routeId)
         {
-            int targetId = id ?? routeId ?? 0;
+            int targetId = (id.HasValue && id.Value > 0) ? id.Value : (routeId ?? 0);
             Specialization? specialization = context.Specializations
+                .Include(s => s.doctors)
                 .FirstOrDefault(s => s.SpecializationId == targetId);
 
             if (specialization == null)
@@ -101,6 +104,13 @@ namespace Team_3_HMS.Controllers
             }
 
             var deletedSpecialization = specialization;
+
+            // Clear doctor associations
+            if (specialization.doctors != null)
+            {
+                specialization.doctors.Clear();
+            }
+
             context.Specializations.Remove(specialization);
             context.SaveChanges();
             return Ok(new

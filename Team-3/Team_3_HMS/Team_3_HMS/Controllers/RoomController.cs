@@ -54,11 +54,22 @@ namespace Team_3_HMS.Controllers
         }
 
         [HttpDelete("{id}")]
+        [HttpDelete("delete/{id}")]
         [Authorize(Roles = "Admin,Doctor")]
         public async Task<IActionResult> DeleteRoom(int id)
         {
             var room = await _context.Rooms.FindAsync(id);
             if (room == null) return NotFound();
+
+            var otherRoom = await _context.Rooms.FirstOrDefaultAsync(r => r.RoomId != id);
+            var appointments = await _context.Appointments.Where(a => a.RoomId == id).ToListAsync();
+            if (appointments.Any() && otherRoom != null)
+            {
+                foreach (var appt in appointments)
+                {
+                    appt.RoomId = otherRoom.RoomId;
+                }
+            }
 
             _context.Rooms.Remove(room);
             await _context.SaveChangesAsync();

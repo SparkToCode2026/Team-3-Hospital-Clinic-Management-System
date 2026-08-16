@@ -39,19 +39,37 @@ namespace Team_3_HMS.Controllers
                 var patientProfile = _context.PatientProfiles.FirstOrDefault(p => p.userID == currentUserId);
                 if (patientProfile != null)
                 {
+                    // Ensure any appointments without an invoice get an invoice created automatically
+                    var apptsWithoutInvoice = _context.Appointments
+                        .Where(a => a.PatientProfileID == patientProfile.PatientProfileID && !_context.Invoices.Any(i => i.AppointmentID == a.AppointmentId))
+                        .ToList();
+
+                    foreach (var appt in apptsWithoutInvoice)
+                    {
+                        var doc = _context.DoctorProfiles.Find(appt.DoctorProfileId);
+                        _context.Invoices.Add(new Invoice
+                        {
+                            AppointmentID = appt.AppointmentId,
+                            TotalAmount = doc?.ConsultationFee > 0 ? doc.ConsultationFee : 15.00,
+                            Paymentmethod = "Card",
+                            PaymentStatus = "Pending",
+                            IssuedDate = DateTime.Now.ToString("yyyy-MM-dd")
+                        });
+                    }
+
+                    if (apptsWithoutInvoice.Any())
+                    {
+                        _context.SaveChanges();
+                    }
+
                     var myInvoices = _context.Invoices
                         .Include(i => i.Appointment)
                         .Where(i => i.Appointment != null && i.Appointment.PatientProfileID == patientProfile.PatientProfileID)
                         .ToList();
                     
-                    if (myInvoices.Any())
-                    {
-                        return Ok(myInvoices);
-                    }
+                    return Ok(myInvoices);
                 }
-
-                // Fallback: return all invoices if no specific appointment mapping is restricting
-                return Ok(_context.Invoices.Include(i => i.Appointment).ToList());
+                return Ok(new List<Invoice>());
             }
 
             return Ok(_context.Invoices.Include(i => i.Appointment).ToList());
@@ -99,7 +117,7 @@ namespace Team_3_HMS.Controllers
 
         // 4. CREATE INVOICE
         // POST: api/Invoice/create
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin,Doctor")]
         [HttpPost("create")]
         public IActionResult Create([FromBody] Invoice invoice)
         {
@@ -114,11 +132,15 @@ namespace Team_3_HMS.Controllers
             return Ok(invoice);
         }
 
-        // 5. UPDATE INVOICE BY ID
-        // PUT: api/Invoice/update/{id}
-        [Authorize(Roles = "Admin")]
+        // 5. UPDATE OR PAY INVOICE BY ID
+        // PUT: api/Invoice/update/{id}, api/Invoice/{id}, api/Invoice/pay/{id}
+        [Authorize]
         [HttpPut("update/{id}")]
-        public IActionResult Update(int id, [FromBody] Invoice updatedData)
+        [HttpPut("{id}")]
+        [HttpPost("pay/{id}")]
+        [HttpPut("pay/{id}")]
+        [HttpPatch("pay/{id}")]
+        public IActionResult Update(int id, [FromBody] Invoice? updatedData)
         {
             var existing = _context.Invoices.Find(id);
             if (existing == null)
@@ -126,11 +148,19 @@ namespace Team_3_HMS.Controllers
                 return NotFound("Invoice not found.");
             }
 
-            existing.TotalAmount = updatedData.TotalAmount;
-            existing.Paymentmethod = updatedData.Paymentmethod;
-            existing.PaymentStatus = updatedData.PaymentStatus;
-            existing.IssuedDate = updatedData.IssuedDate;
-            existing.AppointmentID = updatedData.AppointmentID;
+            if (updatedData != null)
+            {
+                if (updatedData.TotalAmount > 0) existing.TotalAmount = updatedData.TotalAmount;
+                if (!string.IsNullOrWhiteSpace(updatedData.Paymentmethod)) existing.Paymentmethod = updatedData.Paymentmethod;
+                if (!string.IsNullOrWhiteSpace(updatedData.PaymentStatus)) existing.PaymentStatus = updatedData.PaymentStatus;
+                if (!string.IsNullOrWhiteSpace(updatedData.IssuedDate)) existing.IssuedDate = updatedData.IssuedDate;
+                if (updatedData.AppointmentID > 0) existing.AppointmentID = updatedData.AppointmentID;
+            }
+            else
+            {
+                existing.PaymentStatus = "Paid";
+                existing.Paymentmethod = "Card";
+            }
 
             _context.SaveChanges();
             return Ok(existing);
@@ -142,20 +172,24 @@ namespace Team_3_HMS.Controllers
         public IActionResult GetMyInvoices()
         {
             var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            if (userIdClaim == null)
+            if (userIdClaim == null || !int.TryParse(userIdClaim, out int currentUserId))
             {
-                return Unauthorized("User ID not found in token.");
+                return Ok(_context.Invoices.Include(i => i.Appointment).ToList());
             }
 
-            int currentUserId = int.Parse(userIdClaim);
+            var patientProfile = _context.PatientProfiles.FirstOrDefault(p => p.userID == currentUserId);
+            if (patientProfile != null)
+            {
+                var myInvoices = _context.Invoices
+                    .Include(i => i.Appointment)
+                    .Where(i => i.Appointment != null &&
+                                i.Appointment.PatientProfileID == patientProfile.PatientProfileID)
+                    .ToList();
 
-            var myInvoices = _context.Invoices
-                .Where(i => i.Appointment != null &&
-                            i.Appointment.PatientProfile != null &&
-                            i.Appointment.PatientProfile.userID == currentUserId)
-                .ToList();
+                return Ok(myInvoices);
+            }
 
-            return Ok(myInvoices);
+            return Ok(new List<Invoice>());
         }
 
         // 7. DELETE INVOICE

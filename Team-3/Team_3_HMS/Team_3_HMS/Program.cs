@@ -144,12 +144,14 @@ namespace Team_3_HMS
 
         public async Task SendEmailAsync(string toEmail, string subject, string body)
         {
+            if (string.IsNullOrWhiteSpace(toEmail)) return;
+
             var senderEmail = _config["EmailSettings:SenderEmail"];
             var password = _config["EmailSettings:Password"];
 
             if (string.IsNullOrWhiteSpace(senderEmail) || senderEmail == "test@gmail.com" || password == "password")
             {
-                Console.WriteLine($"[EmailService] Simulated Email to <{toEmail}> | Subject: {subject} | Body: {body}");
+                Console.WriteLine($"[EmailService] Simulated Email to <{toEmail}> | Subject: {subject}");
                 return;
             }
 
@@ -157,26 +159,39 @@ namespace Team_3_HMS
             {
                 var message = new MimeKit.MimeMessage();
                 message.From.Add(new MimeKit.MailboxAddress(
-                    _config["EmailSettings:SenderName"] ?? "HMS Clinic",
+                    _config["EmailSettings:SenderName"] ?? "MedCore HMS Clinic",
                     senderEmail));
                 message.To.Add(MimeKit.MailboxAddress.Parse(toEmail));
                 message.Subject = subject;
-                message.Body = new MimeKit.TextPart("plain") { Text = body };
+
+                var bodyBuilder = new MimeKit.BodyBuilder
+                {
+                    HtmlBody = body.Contains("<div") || body.Contains("<p>") ? body : $"<div style='font-family: Arial, sans-serif; line-height: 1.6; color: #333;'>{body.Replace("\n", "<br/>")}</div>",
+                    TextBody = System.Text.RegularExpressions.Regex.Replace(body, "<.*?>", string.Empty)
+                };
+                message.Body = bodyBuilder.ToMessageBody();
 
                 using var client = new MailKit.Net.Smtp.SmtpClient();
+                // Bypass TLS certificate validation issues in dev environments
+                client.ServerCertificateValidationCallback = (s, c, h, e) => true;
+
+                int port = int.TryParse(_config["EmailSettings:Port"], out int p) ? p : 587;
                 await client.ConnectAsync(
                     _config["EmailSettings:SmtpServer"] ?? "smtp.gmail.com",
-                    int.Parse(_config["EmailSettings:Port"] ?? "587"),
-                    MailKit.Security.SecureSocketOptions.StartTls);
+                    port,
+                    MailKit.Security.SecureSocketOptions.Auto);
+
+                // Remove XOAUTH2 so standard App Password authentication succeeds reliably
+                client.AuthenticationMechanisms.Remove("XOAUTH2");
 
                 await client.AuthenticateAsync(senderEmail, password);
                 await client.SendAsync(message);
                 await client.DisconnectAsync(true);
-                Console.WriteLine($"[EmailService] Successfully sent email to <{toEmail}>.");
+                Console.WriteLine($"[EmailService] Successfully sent email to <{toEmail}> | Subject: {subject}");
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"[EmailService Warning] Failed to send email via SMTP: {ex.Message}");
+                Console.WriteLine($"[EmailService Warning] Failed to send email via SMTP to <{toEmail}>: {ex.Message}");
             }
         }
     }
